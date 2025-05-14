@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-texto: #FFFFFF;
+  --color-fondo: #121212;
+  --color-primario: #0047D6;
+  --color-secundario: #1F2A40;
+  --color-acento: #FB8531;
+}
+
+@layer utilities {
+  .bg-fondo {
+    background-color: var(--color-fondo);
+  }
+
+  .text-texto {
+    color: var(--color-texto);
+  }
+
+  .bg-primario {
+    background-color: var(--color-primario);
+  }
+
+  .bg-secundario {
+    background-color: var(--color-secundario);
+  }
+
+  .text-acento {
+    color: var(--color-acento);
+  }
+}
+
