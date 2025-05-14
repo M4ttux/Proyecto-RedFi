@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const faqs = [
   {
@@ -19,19 +20,26 @@ const faqs = [
 ];
 
 const Soporte = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Soporte";
+  }, []);
   return (
     <div className="min-h-screen text-texto px-6 py-12 max-w-4xl mx-auto space-y-12">
       <section>
-        <h2 className="text-3xl font-bold text-primario mb-6">Soporte técnico</h2>
+        <h2 className="text-3xl font-bold text-primario mb-6">
+          Soporte técnico
+        </h2>
         <p className="mb-4">
-          Si estás teniendo problemas con tu conexión, podés revisar nuestras preguntas frecuentes
-          o contactar al proveedor directamente.
+          Si estás teniendo problemas con tu conexión, podés revisar nuestras
+          preguntas frecuentes o contactar al proveedor directamente.
         </p>
 
         <div className="space-y-6">
           {faqs.map((faq, i) => (
             <div key={i} className="bg-secundario p-4 rounded shadow">
-              <h3 className="font-semibold text-lg text-acento">{faq.titulo}</h3>
+              <h3 className="font-semibold text-lg text-acento">
+                {faq.titulo}
+              </h3>
               <p className="text-sm mt-2">{faq.descripcion}</p>
             </div>
           ))}

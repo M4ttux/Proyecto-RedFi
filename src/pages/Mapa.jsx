@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MapaInteractivo from "../components/MapaInteractivo";
 import FiltrosZona from "../components/FiltrosZona";
 
 const Mapa = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Mapa";
+  }, []);
   const [filtros, setFiltros] = useState(null);
 
   return (

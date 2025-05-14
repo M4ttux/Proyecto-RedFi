@@ -8,11 +8,11 @@ export default defineConfig({
     preprocessorOptions: {
       css: {
         variables: {
-          texto: 'var(--color-texto)',
-          fondo: 'var(--color-fondo)',
-          primario: 'var(--color-primario)',
-          secundario: 'var(--color-secundario)',
-          acento: 'var(--color-acento)',
+          texto: "rgb(var(--color-texto) / <alpha-value>)",
+          fondo: "rgb(var(--color-fondo) / <alpha-value>)",
+          primario: "rgb(var(--color-primario) / <alpha-value>)",
+          secundario: "rgb(var(--color-secundario) / <alpha-value>)",
+          acento: "rgb(var(--color-acento) / <alpha-value>)",
         },
       },
     },

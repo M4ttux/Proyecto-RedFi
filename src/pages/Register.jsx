@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase/client";
 import { crearPerfil } from "../services/userService";
 
 const Register = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Registro";
+  }, []);
   const [form, setForm] = useState({
     email: "",
     password: "",
     nombre: "",
-    proveedor_preferido: ""
+    proveedor_preferido: "",
   });
 
   const [error, setError] = useState(null);

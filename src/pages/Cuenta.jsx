@@ -3,6 +3,9 @@ import { useAuth } from "../context/AuthContext";
 import { getPerfil } from "../services/userService";
 
 const Cuenta = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Mi Perfil";
+  }, []);
   const { usuario, logout } = useAuth();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +26,9 @@ const Cuenta = () => {
   }, [usuario]);
 
   if (!usuario) {
-    return <p className="text-center mt-10 text-texto">No has iniciado sesión.</p>;
+    return (
+      <p className="text-center mt-10 text-texto">No has iniciado sesión.</p>
+    );
   }
 
   if (loading) {
@@ -33,8 +38,12 @@ const Cuenta = () => {
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-secundario text-white rounded shadow">
       <h2 className="text-2xl font-bold mb-4 text-acento">Mi cuenta</h2>
-      <p><strong>Email:</strong> {usuario.email}</p>
-      <p><strong>Nombre:</strong> {perfil?.nombre || "Sin nombre definido"}</p>
+      <p>
+        <strong>Email:</strong> {usuario.email}
+      </p>
+      <p>
+        <strong>Nombre:</strong> {perfil?.nombre || "Sin nombre definido"}
+      </p>
 
       <button
         onClick={logout}

@@ -94,7 +94,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full bg-transparent text-white px-6 py-4">
+    <nav className="w-full bg-texto/5 text-white px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold text-primario">

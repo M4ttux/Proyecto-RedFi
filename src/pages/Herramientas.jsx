@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const herramientas = [
   {
     titulo: "Test de velocidad",
@@ -14,11 +16,17 @@ const herramientas = [
 ];
 
 const Herramientas = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Herramientas";
+  }, []);
   return (
     <div className="min-h-screen px-6 py-12 max-w-4xl mx-auto space-y-10">
-      <h2 className="text-3xl font-bold text-primario text-center">Herramientas de Red-Fi</h2>
+      <h2 className="text-3xl font-bold text-primario text-center">
+        Herramientas de Red-Fi
+      </h2>
       <p className="text-center text-gray-400 max-w-xl mx-auto">
-        Usá nuestras herramientas para analizar tu conexión a Internet y mejorar tu experiencia. Más funciones estarán disponibles pronto.
+        Usá nuestras herramientas para analizar tu conexión a Internet y mejorar
+        tu experiencia. Más funciones estarán disponibles pronto.
       </p>
 
       <div className="grid md:grid-cols-2 gap-8">
@@ -28,7 +36,9 @@ const Herramientas = () => {
             className="bg-secundario p-6 rounded shadow flex flex-col justify-between"
           >
             <div>
-              <h3 className="text-xl font-semibold text-acento mb-2">{tool.titulo}</h3>
+              <h3 className="text-xl font-semibold text-acento mb-2">
+                {tool.titulo}
+              </h3>
               <p className="text-sm">{tool.descripcion}</p>
             </div>
             <button

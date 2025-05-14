@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Login";
+  }, []);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const { login } = useAuth();
