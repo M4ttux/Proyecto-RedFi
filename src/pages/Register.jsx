@@ -53,7 +53,7 @@ const Register = () => {
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full px-3 py-2 rounded bg-fondo text-texto"
+          className="w-full px-3 py-2 rounded text-texto"
         />
         <input
           type="password"
@@ -62,7 +62,7 @@ const Register = () => {
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full px-3 py-2 rounded bg-fondo text-texto"
+          className="w-full px-3 py-2 rounded text-texto"
         />
         <input
           type="text"
@@ -71,7 +71,7 @@ const Register = () => {
           value={form.nombre}
           onChange={handleChange}
           required
-          className="w-full px-3 py-2 rounded bg-fondo text-texto"
+          className="w-full px-3 py-2 rounded text-texto"
         />
         <input
           type="text"
@@ -79,7 +79,7 @@ const Register = () => {
           placeholder="Proveedor preferido (opcional)"
           value={form.proveedor_preferido}
           onChange={handleChange}
-          className="w-full px-3 py-2 rounded bg-fondo text-texto"
+          className="w-full px-3 py-2 rounded text-texto"
         />
         <button className="bg-primario text-white px-4 py-2 rounded hover:bg-acento">
           Registrarse

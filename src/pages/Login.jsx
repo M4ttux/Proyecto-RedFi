@@ -31,7 +31,7 @@ const Login = () => {
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full bg-fondo border border-gray-600 text-white px-3 py-2 rounded"
+          className="w-full border border-gray-600 text-white px-3 py-2 rounded"
         />
         <input
           type="password"
@@ -40,7 +40,7 @@ const Login = () => {
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full bg-fondo border border-gray-600 text-white px-3 py-2 rounded"
+          className="w-full border border-gray-600 text-white px-3 py-2 rounded"
         />
         <button className="bg-primario text-white px-4 py-2 rounded hover:bg-acento w-full">
           Iniciar sesión

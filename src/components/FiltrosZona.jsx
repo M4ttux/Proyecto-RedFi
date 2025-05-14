@@ -24,7 +24,7 @@ const FiltrosZona = ({ onFiltrar }) => {
   return (
     <div className="mb-4 bg-secundario p-4 rounded-md shadow">
       <h3 className="font-semibold mb-2">Filtrar resultados</h3>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-col gap-4">
         {/* Proveedor */}
         <select
           name="proveedor"

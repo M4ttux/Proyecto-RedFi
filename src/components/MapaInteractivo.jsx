@@ -21,7 +21,7 @@ const MapaInteractivo = () => {
   }, []);
 
   return (
-    <div className="h-[800px] max-h-full w-full rounded-lg overflow-hidden shadow-md">
+    <div className="h-full w-full">
       <div ref={mapContainer} className="w-full h-full" />
     </div>
   );

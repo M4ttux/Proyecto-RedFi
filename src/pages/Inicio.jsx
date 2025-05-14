@@ -61,7 +61,7 @@ const Inicio = () => {
   return (
     <div>
       <HeroSection />
-      <section className="bg-fondo text-texto py-16 px-6 max-w-6xl mx-auto space-y-10">
+      <section className="text-texto py-16 px-6 max-w-6xl mx-auto space-y-10">
         <h2 className="text-3xl font-bold text-center text-primario">¿Por qué usar Red-Fi?</h2>
 
         <div className="grid md:grid-cols-3 gap-8 mt-10">
@@ -91,7 +91,7 @@ const Inicio = () => {
         </div>
       </section>
 
-      <section className="bg-fondo text-texto py-16 px-6 max-w-6xl mx-auto">
+      <section className="text-texto py-16 px-6 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-primario mb-10">Lo que dicen nuestros usuarios</h2>
 
         <div className="grid md:grid-cols-2 gap-8">

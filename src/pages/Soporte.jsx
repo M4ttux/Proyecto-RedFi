@@ -20,7 +20,7 @@ const faqs = [
 
 const Soporte = () => {
   return (
-    <div className="min-h-screen bg-fondo text-texto px-6 py-12 max-w-4xl mx-auto space-y-12">
+    <div className="min-h-screen text-texto px-6 py-12 max-w-4xl mx-auto space-y-12">
       <section>
         <h2 className="text-3xl font-bold text-primario mb-6">Soporte técnico</h2>
         <p className="mb-4">

@@ -15,7 +15,7 @@ const herramientas = [
 
 const Herramientas = () => {
   return (
-    <div className="min-h-screen bg-fondo text-texto px-6 py-12 max-w-4xl mx-auto space-y-10">
+    <div className="min-h-screen px-6 py-12 max-w-4xl mx-auto space-y-10">
       <h2 className="text-3xl font-bold text-primario text-center">Herramientas de Red-Fi</h2>
       <p className="text-center text-gray-400 max-w-xl mx-auto">
         Usá nuestras herramientas para analizar tu conexión a Internet y mejorar tu experiencia. Más funciones estarán disponibles pronto.
