@@ -2,7 +2,7 @@
 
 @theme {
   --color-texto: #FFFFFF;
-  --color-fondo: #121212;
+  --color-fondo: #161616;
   --color-primario: #0047D6;
   --color-secundario: #1F2A40;
   --color-acento: #FB8531;
@@ -28,5 +28,7 @@
   .text-acento {
     color: var(--color-acento);
   }
+
+  
 }
 
