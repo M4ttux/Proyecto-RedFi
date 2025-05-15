@@ -8,6 +8,7 @@ export const obtenerProveedores = async () => {
       nombre,
       tecnologia,
       color,
+      zona_id,
       zonas (
         geom
       )
