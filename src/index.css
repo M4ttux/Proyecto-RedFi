@@ -28,7 +28,9 @@
   .text-acento {
     color: var(--color-acento);
   }
+}
 
-  
+select option {
+  background-color: var(--color-secundario);
 }
 

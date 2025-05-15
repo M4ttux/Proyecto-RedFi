@@ -1,12 +1,27 @@
-import { useState } from "react";
-import { proveedores } from "../data/proveedoresMock";
+import { useState, useEffect } from "react";
+import { getZonas } from "../services/zonaService";
+import { obtenerProveedores } from "../services/proveedorService";
 
 const FiltrosZona = ({ onFiltrar }) => {
   const [filtros, setFiltros] = useState({
     proveedor: "",
     tecnologia: "",
     valoracionMin: 0,
+    zona: "",
   });
+
+  const [zonas, setZonas] = useState([]);
+  const [proveedores, setProveedores] = useState([]);
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      const zonasSupabase = await getZonas();
+      const proveedoresSupabase = await obtenerProveedores();
+      setZonas(zonasSupabase);
+      setProveedores(proveedoresSupabase);
+    };
+    cargarDatos();
+  }, []);
 
   const tecnologiasUnicas = [
     ...new Set(proveedores.map((p) => p.tecnologia)),
@@ -25,6 +40,21 @@ const FiltrosZona = ({ onFiltrar }) => {
     <div className="mb-4 bg-secundario p-4 rounded-md shadow">
       <h3 className="font-semibold mb-2">Filtrar resultados</h3>
       <div className="flex flex-col gap-4">
+        {/* Zona */}
+        <select
+          name="zona"
+          value={filtros.zona}
+          onChange={handleChange}
+          className="border px-2 py-1 rounded"
+        >
+          <option value="">Todas las zonas</option>
+          {zonas.map((z) => (
+            <option key={z.id} value={z.id}>
+              {z.departamento} - {z.cabecera}
+            </option>
+          ))}
+        </select>
+
         {/* Proveedor */}
         <select
           name="proveedor"

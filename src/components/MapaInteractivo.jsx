@@ -4,22 +4,22 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { obtenerProveedores } from "../services/proveedorService";
 
-const MapaInteractivo = () => {
+const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
   const navigate = useNavigate();
-
+  const [proveedorActivo, setProveedorActivo] = useState(null);
+  const proveedoresRef = useRef([]);
   const bounds = [
     [-60.9, -31.1],
     [-54.1, -26.1],
   ];
 
-  const [proveedorActivo, setProveedorActivo] = useState(null);
-
   useEffect(() => {
     const map = new maplibregl.Map({
       container: mapContainer.current,
-      style: "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=911tGzxLSAMvhDUnyhXL",
+      style:
+        "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=911tGzxLSAMvhDUnyhXL",
       center: [-58.95, -28.65],
       zoom: 2,
       maxBounds: bounds,
@@ -31,9 +31,12 @@ const MapaInteractivo = () => {
     map.on("load", async () => {
       try {
         const proveedores = await obtenerProveedores();
-        console.log("📦 Proveedores:", proveedores);
+        proveedoresRef.current = proveedores.map((p) => ({
+          ...p,
+          visible: true, // default visible
+        }));
 
-        proveedores.forEach((prov) => {
+        proveedoresRef.current.forEach((prov) => {
           if (!prov.zonas || !prov.zonas.geom) return;
 
           const sourceId = `zona-${prov.id}`;
@@ -56,6 +59,7 @@ const MapaInteractivo = () => {
             paint: {
               "fill-color": prov.color || "#888888",
               "fill-opacity": 0.4,
+              "fill-opacity-transition": { duration: 300 },
             },
           });
 
@@ -66,29 +70,26 @@ const MapaInteractivo = () => {
             paint: {
               "line-color": prov.color || "#000000",
               "line-width": 2,
+              "line-opacity": 1,
+              "line-opacity-transition": { duration: 300 },
             },
           });
 
-          // Evento click por zona
+          // Eventos con verificación de visibilidad actual
           map.on("click", fillLayerId, () => {
-            setProveedorActivo(prov);
+            if (prov.visible) setProveedorActivo(prov);
           });
 
-          // Efecto hover: cambia la opacidad y escala el área
           map.on("mouseenter", fillLayerId, () => {
+            if (!prov.visible) return;
             map.getCanvas().style.cursor = "pointer";
             map.setPaintProperty(fillLayerId, "fill-opacity", 0.6);
-            map.setPaintProperty(fillLayerId, "fill-outline-color", "#ffffff");
           });
 
           map.on("mouseleave", fillLayerId, () => {
+            if (!prov.visible) return;
             map.getCanvas().style.cursor = "";
             map.setPaintProperty(fillLayerId, "fill-opacity", 0.4);
-            map.setPaintProperty(
-              fillLayerId,
-              "fill-outline-color",
-              prov.color || "#000000"
-            );
           });
         });
       } catch (error) {
@@ -96,8 +97,40 @@ const MapaInteractivo = () => {
       }
     });
 
-    return () => map.remove();
+    return () => {
+      map.remove();
+    };
   }, []);
+
+  // Actualizar visibilidad (opacidad) con transición
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    proveedoresRef.current.forEach((prov) => {
+      const fillLayerId = `fill-${prov.id}`;
+      const lineLayerId = `line-${prov.id}`;
+      const visible = getVisible(prov);
+      prov.visible = visible; // actualizar estado actual
+
+      if (map.getLayer(fillLayerId)) {
+        map.setPaintProperty(fillLayerId, "fill-opacity", visible ? 0.4 : 0);
+      }
+
+      if (map.getLayer(lineLayerId)) {
+        map.setPaintProperty(lineLayerId, "line-opacity", visible ? 1 : 0);
+      }
+    });
+  }, [filtros]);
+
+  const getVisible = (prov) => {
+    if (!filtros) return true;
+    if (filtros.proveedor && prov.id != filtros.proveedor) return false;
+    if (filtros.zona && prov.zona_id != filtros.zona) return false;
+    if (filtros.tecnologia && prov.tecnologia !== filtros.tecnologia)
+      return false;
+    return true;
+  };
 
   return (
     <div className="h-full w-full relative">
