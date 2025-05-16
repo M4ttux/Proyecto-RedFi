@@ -5,21 +5,18 @@ import { AuthProvider } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
 
 const Layout = () => {
-
   const location = useLocation();
   const esVistaMapa = location.pathname === "/mapa";
 
   return (
     <AuthProvider>
-      <div className="bg-fondo text-texto min-h-screen flex flex-col overflow-x-hidden">
-        <header>
-          <Navbar />
-        </header>
-        <main className="flex-grow">
-          <Outlet />
-        </main>
-        {!esVistaMapa && <Footer />}
-      </div>
+      <header>
+        <Navbar />
+      </header>
+      <main className="flex-grow flex items-center justify-center">
+        <Outlet />
+      </main>
+      {!esVistaMapa && <Footer />}
     </AuthProvider>
   );
 };

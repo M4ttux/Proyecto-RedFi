@@ -5,7 +5,7 @@ const reseñas = [
 
 const ReseñasDestacadas = () => {
   return (
-    <section className="py-16 px-6 bg-fondo">
+    <section className="py-16 px-6">
       <div className="max-w-5xl mx-auto space-y-10 text-center">
         <h2 className="text-3xl font-bold text-texto">Reseñas destacadas</h2>
         <div className="grid md:grid-cols-2 gap-8">

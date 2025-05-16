@@ -20,7 +20,7 @@ const Herramientas = () => {
     document.title = "Red-Fi | Herramientas";
   }, []);
   return (
-    <div className="min-h-screen px-6 py-12 max-w-4xl mx-auto space-y-10">
+    <div className="px-6 py-12 max-w-4xl mx-auto h-full">
       <h2 className="text-3xl font-bold text-primario text-center">
         Herramientas de Red-Fi
       </h2>

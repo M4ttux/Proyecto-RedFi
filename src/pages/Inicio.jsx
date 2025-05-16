@@ -10,7 +10,7 @@ const Inicio = () => {
     document.title = "Red-Fi | Inicio";
   }, []);
   return (
-    <div>
+    <div className="w-full">
       <HeroSection />
       <Caracteristicas />
       <ComoFunciona />
