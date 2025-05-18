@@ -45,12 +45,12 @@ const ComoFunciona = () => {
                 className="w-full text-left px-5 py-4 font-medium text-texto flex justify-between items-center hover:bg-white/10 transition"
               >
                 {item.titulo}
-                <span className="text-xl">
+                <span className="text-xl text-acento">
                   {abierta === i ? "−" : "+"}
                 </span>
               </button>
               {abierta === i && (
-                <div className="px-5 pb-4 text-sm text-texto/70">
+                <div className="p-5 pb-4 text-sm text-texto/70">
                   {item.contenido}
                 </div>
               )}

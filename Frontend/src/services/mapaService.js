@@ -115,3 +115,93 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
     }
   });
 };
+
+/**
+ * Ajusta el mapa a los límites de las zonas de los proveedores.
+ */
+export const estaEnCorrientes = (lng, lat, bounds) => {
+  return (
+    lng >= bounds.west &&
+    lng <= bounds.east &&
+    lat >= bounds.south &&
+    lat <= bounds.north
+  );
+};
+
+/**
+ * Maneja la ubicación actual del usuario y ajusta el mapa.
+ */
+export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        const { latitude, longitude } = coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await response.json();
+          const address = data.address;
+          const ciudad =
+            address.city || address.town || address.village || "una ciudad desconocida";
+          const provincia = address.state || "una provincia desconocida";
+
+          if (provincia.toLowerCase() === "corrientes") {
+            setAlerta("");
+            map.flyTo({ center: [longitude, latitude], zoom: 13 });
+          } else {
+            setAlerta(
+              `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${provincia}.`
+            );
+          }
+          resolve();
+        } catch (error) {
+          console.error("Error al obtener datos de ubicación:", error);
+          setAlerta("No se pudo obtener tu ubicación exacta.");
+          resolve();
+        }
+      },
+      () => {
+        setAlerta("No se pudo obtener tu ubicación.");
+        resolve();
+      }
+    );
+  });
+};
+
+/**
+ * Busca una ubicación ingresada por el usuario y ajusta el mapa.
+ */
+export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
+  if (!input.trim()) return;
+
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        input + ", Corrientes, Argentina"
+      )}&limit=1`
+    );
+    const resultados = await response.json();
+
+    if (resultados.length === 0) {
+      setAlerta("No se encontró la ubicación ingresada.");
+      return;
+    }
+
+    const lugar = resultados[0];
+    const lat = parseFloat(lugar.lat);
+    const lon = parseFloat(lugar.lon);
+
+    if (estaEnCorrientes(lon, lat, bounds)) {
+      setAlerta("");
+      map.flyTo({ center: [lon, lat], zoom: 13 });
+    } else {
+      setAlerta(
+        `La ubicación encontrada (${lugar.display_name}) no está dentro de Corrientes.`
+      );
+    }
+  } catch (error) {
+    console.error("Error en la búsqueda:", error);
+    setAlerta("Ocurrió un error al buscar la ubicación.");
+  }
+};
