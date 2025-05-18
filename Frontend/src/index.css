@@ -1,24 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-texto: #FFFFFF;
+  --color-texto: #ffffff;
   --color-fondo: #161616;
-  --color-primario: #0047D6;
-  --color-secundario: #1F2A40;
-  --color-acento: #FB8531;
+  --color-primario: #0047d6;
+  --color-secundario: #1f2a40;
+  --color-acento: #fb8531;
 }
 
 @layer base {
   body {
-    font-family: 'Quicksand', sans-serif;
+    font-family: "Quicksand", sans-serif;
     background-color: var(--color-fondo);
     color: var(--color-texto);
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Nunito', sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Nunito", sans-serif;
     font-weight: 700;
   }
 }
@@ -54,4 +59,22 @@ html {
   overflow-x: hidden;
 }
 
+.maplibregl-popup-content {
+  background-color: var(--color-secundario) !important;
+  color: var(--color-texto) !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  position: relative;
+}
 
+.maplibregl-popup-close-button {
+  color: var(--color-texto);
+  top: 0.5rem !important;
+  right: 0.5rem !important;
+  font-size: 1.25rem;
+}
+
+.maplibregl-popup-close-button:hover {
+  color: red;
+}

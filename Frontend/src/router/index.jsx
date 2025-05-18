@@ -16,14 +16,8 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Inicio /> },
-      {
-        path: "mapa",
-        element: (
-          <RequireAuth>
-            <Mapa />
-          </RequireAuth>
-        ),
-      },
+      /* { path: "mapa", element: ( <RequireAuth> <Mapa /> </RequireAuth> ), }, */
+      { path: "mapa", element: <Mapa /> },
       {
         path: "herramientas",
         element: (

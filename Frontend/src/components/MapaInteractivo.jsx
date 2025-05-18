@@ -9,8 +9,12 @@ import {
   estaEnCorrientes,
   manejarUbicacionActual,
   buscarUbicacion,
+  cargarReseñasEnMapa,
 } from "../services/mapaService";
 import { IconCurrentLocation } from "@tabler/icons-react";
+import ModalProveedor from "./modals/ModalProveedor";
+import ModalReseña from "./modals/ModalReseña";
+
 
 const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
@@ -19,6 +23,7 @@ const MapaInteractivo = ({ filtros }) => {
   const [alerta, setAlerta] = useState("");
   const proveedoresRef = useRef([]);
   const [proveedorActivo, setProveedorActivo] = useState(null);
+  const [reseñaActiva, setReseñaActiva] = useState(null);
   const navigate = useNavigate();
 
   const [sugerencias, setSugerencias] = useState([]);
@@ -46,6 +51,7 @@ const MapaInteractivo = ({ filtros }) => {
         filtros,
         setProveedorActivo
       );
+      await cargarReseñasEnMapa(map, setReseñaActiva);
     });
 
     return () => map.remove();
@@ -148,36 +154,16 @@ const MapaInteractivo = ({ filtros }) => {
 
       <div ref={mapContainer} className="w-full h-full" />
 
-      {proveedorActivo && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
-          <div className="bg-secundario p-6 rounded-lg max-w-md w-full relative shadow-lg">
-            <button
-              onClick={() => setProveedorActivo(null)}
-              className="absolute top-2 right-2 text-white text-lg"
-            >
-              ✖
-            </button>
-            <h2 className="text-2xl font-bold mb-2">
-              {proveedorActivo.nombre}
-            </h2>
-            <p>
-              <strong>Tecnología:</strong> {proveedorActivo.tecnologia}
-            </p>
-            <p>
-              <strong>Color:</strong> {proveedorActivo.color}
-            </p>
-            <button
-              className="mt-4 bg-primario px-4 py-2 rounded hover:bg-acento transition"
-              onClick={() => {
-                setProveedorActivo(null);
-                navigate(`/proveedores/${proveedorActivo.id}`);
-              }}
-            >
-              Más información
-            </button>
-          </div>
-        </div>
-      )}
+      <ModalProveedor
+        proveedor={proveedorActivo}
+        onClose={() => setProveedorActivo(null)}
+        navigate={navigate}
+      />
+
+      <ModalReseña
+        reseña={reseñaActiva}
+        onClose={() => setReseñaActiva(null)}
+      />
     </div>
   );
 };

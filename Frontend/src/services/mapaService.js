@@ -1,5 +1,6 @@
 import maplibregl from "maplibre-gl";
 import { obtenerProveedores } from "./proveedorService";
+import { obtenerReseñas } from "./reseñaService";
 
 /**
  * Inicializa el mapa de MapLibre con configuración base.
@@ -7,7 +8,8 @@ import { obtenerProveedores } from "./proveedorService";
 export const crearMapaBase = (mapContainer, bounds) => {
   return new maplibregl.Map({
     container: mapContainer,
-    style: "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=911tGzxLSAMvhDUnyhXL",
+    style:
+      "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=911tGzxLSAMvhDUnyhXL",
     center: [-58.95, -28.65],
     zoom: 2,
     maxBounds: bounds,
@@ -29,7 +31,11 @@ export const getVisible = (prov, filtros) => {
 /**
  * Carga proveedores y los agrega al mapa con sus capas.
  */
-export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) => {
+export const cargarProveedoresEnMapa = async (
+  map,
+  filtros,
+  setProveedorActivo
+) => {
   const proveedores = await obtenerProveedores();
 
   const proveedoresConEstado = proveedores.map((p) => ({
@@ -96,6 +102,31 @@ export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) 
   return proveedoresConEstado;
 };
 
+export const cargarReseñasEnMapa = async (map, setReseñaActiva) => {
+  const reseñas = await obtenerReseñas();
+
+  reseñas.forEach((r) => {
+    const coord = r.proveedores?.zonas?.geom?.coordinates?.[0]?.[0];
+    if (!coord) return;
+
+    const [lng, lat] = coord;
+
+    const markerEl = document.createElement("div");
+    markerEl.className =
+      "w-4 h-4 bg-[#FB8531] rounded-full border border-white shadow-md hover:shadow-xl hover:ring-2 hover:ring-white/40 transition-all duration-300 ease-out cursor-pointer";
+
+    markerEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setReseñaActiva(r);
+    });
+
+    new maplibregl.Marker({ element: markerEl, anchor: "center" })
+      .setLngLat([lng, lat])
+      .addTo(map);
+  });
+};
+
+
 /**
  * Actualiza la visibilidad visual de las capas en el mapa según filtros.
  */
@@ -143,7 +174,10 @@ export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
           const data = await response.json();
           const address = data.address;
           const ciudad =
-            address.city || address.town || address.village || "una ciudad desconocida";
+            address.city ||
+            address.town ||
+            address.village ||
+            "una ciudad desconocida";
           const provincia = address.state || "una provincia desconocida";
 
           if (provincia.toLowerCase() === "corrientes") {
