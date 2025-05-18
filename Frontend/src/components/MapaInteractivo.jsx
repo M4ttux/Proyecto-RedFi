@@ -6,7 +6,7 @@ import {
   crearMapaBase,
   cargarProveedoresEnMapa,
   actualizarVisibilidadEnMapa,
-  estaEnCorrientes,
+  /* estaEnCorrientes, */
   manejarUbicacionActual,
   buscarUbicacion,
   cargarReseñasEnMapa,
@@ -14,7 +14,6 @@ import {
 import { IconCurrentLocation } from "@tabler/icons-react";
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
-
 
 const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
@@ -36,6 +35,8 @@ const MapaInteractivo = ({ filtros }) => {
     north: -26.1,
   };
 
+  const [cargandoMapa, setCargandoMapa] = useState(true);
+
   useEffect(() => {
     const map = crearMapaBase(mapContainer.current, [
       [boundsCorrientes.west, boundsCorrientes.south],
@@ -51,7 +52,8 @@ const MapaInteractivo = ({ filtros }) => {
         filtros,
         setProveedorActivo
       );
-      await cargarReseñasEnMapa(map, setReseñaActiva);
+      await cargarReseñasEnMapa(map, setReseñaActiva); // modificala si hace falta
+      setCargandoMapa(false);
     });
 
     return () => map.remove();
@@ -85,7 +87,9 @@ const MapaInteractivo = ({ filtros }) => {
                   )
                     .then((res) => res.json())
                     .then((data) => setSugerencias(data))
-                    .catch((err) => console.error("Error en autocompletar:", err));
+                    .catch((err) =>
+                      console.error("Error en autocompletar:", err)
+                    );
                 } else {
                   setSugerencias([]);
                 }
@@ -151,6 +155,12 @@ const MapaInteractivo = ({ filtros }) => {
 
         {alerta && <p className="text-sm text-red-400">{alerta}</p>}
       </div>
+
+      {cargandoMapa && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 text-white text-lg font-semibold">
+          Cargando mapa...
+        </div>
+      )}
 
       <div ref={mapContainer} className="w-full h-full" />
 

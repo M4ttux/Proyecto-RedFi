@@ -126,7 +126,6 @@ export const cargarReseñasEnMapa = async (map, setReseñaActiva) => {
   });
 };
 
-
 /**
  * Actualiza la visibilidad visual de las capas en el mapa según filtros.
  */
@@ -145,18 +144,6 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
       map.setPaintProperty(lineLayerId, "line-opacity", visible ? 1 : 0);
     }
   });
-};
-
-/**
- * Ajusta el mapa a los límites de las zonas de los proveedores.
- */
-export const estaEnCorrientes = (lng, lat, bounds) => {
-  return (
-    lng >= bounds.west &&
-    lng <= bounds.east &&
-    lat >= bounds.south &&
-    lat <= bounds.north
-  );
 };
 
 /**
