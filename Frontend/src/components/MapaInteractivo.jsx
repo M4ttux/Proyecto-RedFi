@@ -8,7 +8,7 @@ import {
   actualizarVisibilidadEnMapa,
   estaEnCorrientes,
   manejarUbicacionActual,
-  buscarUbicacion
+  buscarUbicacion,
 } from "../services/mapaService";
 import { IconCurrentLocation } from "@tabler/icons-react";
 
@@ -20,6 +20,9 @@ const MapaInteractivo = ({ filtros }) => {
   const proveedoresRef = useRef([]);
   const [proveedorActivo, setProveedorActivo] = useState(null);
   const navigate = useNavigate();
+
+  const [sugerencias, setSugerencias] = useState([]);
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
 
   const boundsCorrientes = {
     west: -60.9,
@@ -60,7 +63,29 @@ const MapaInteractivo = ({ filtros }) => {
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setInput(value);
+
+            if (debounceTimeout) clearTimeout(debounceTimeout);
+
+            setDebounceTimeout(
+              setTimeout(() => {
+                if (value.trim().length > 2) {
+                  fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                      value + ", Corrientes, Argentina"
+                    )}&addressdetails=1&limit=5`
+                  )
+                    .then((res) => res.json())
+                    .then((data) => setSugerencias(data))
+                    .catch((err) => console.error("Error en autocompletar:", err));
+                } else {
+                  setSugerencias([]);
+                }
+              }, 150)
+            );
+          }}
           onKeyDown={(e) =>
             e.key === "Enter" &&
             buscarUbicacion(input, boundsCorrientes, setAlerta, mapRef.current)
@@ -68,6 +93,26 @@ const MapaInteractivo = ({ filtros }) => {
           placeholder="Buscar en Corrientes..."
           className="px-3 py-2 rounded w-full bg-fondo text-sm text-texto placeholder-gray-400"
         />
+
+        {input && sugerencias.length > 0 && (
+          <ul className="bg-fondo border border-white/10 rounded-md mt-1 max-h-40 overflow-auto text-sm">
+            {sugerencias.map((sug, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  setInput(sug.display_name);
+                  setSugerencias([]);
+                  const lat = parseFloat(sug.lat);
+                  const lon = parseFloat(sug.lon);
+                  mapRef.current.flyTo({ center: [lon, lat], zoom: 13 });
+                }}
+                className="px-3 py-2 cursor-pointer hover:bg-white/10"
+              >
+                {sug.display_name}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div className="flex items-center gap-2">
           <button
