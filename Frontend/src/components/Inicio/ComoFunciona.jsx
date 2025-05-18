@@ -3,15 +3,18 @@ import { useState } from "react";
 const preguntas = [
   {
     titulo: "¿Necesito habilitar la ubicación?",
-    contenido: "No es obligatorio. También podés buscar proveedores escribiendo manualmente tu zona.",
+    contenido:
+      "No es obligatorio. También podés buscar proveedores escribiendo manualmente tu zona.",
   },
   {
     titulo: "¿Los datos de velocidad son reales?",
-    contenido: "Sí, se obtienen en tiempo real mediante herramientas de test integradas en la plataforma.",
+    contenido:
+      "Sí, se obtienen en tiempo real mediante herramientas de test integradas en la plataforma.",
   },
   {
     titulo: "¿Red-Fi cobra por el servicio?",
-    contenido: "No. Red-Fi es una plataforma gratuita pensada para ayudarte a tomar decisiones informadas.",
+    contenido:
+      "No. Red-Fi es una plataforma gratuita pensada para ayudarte a tomar decisiones informadas.",
   },
 ];
 
@@ -29,7 +32,10 @@ const ComoFunciona = () => {
         <div className="lg:w-1/2 space-y-6">
           <h2 className="text-4xl font-bold">¿Cómo funciona Red-Fi?</h2>
           <p className="text-texto/80 text-lg leading-relaxed">
-            Usamos tu ubicación (o la que elijas) para mostrarte los proveedores disponibles en tu zona. Además, accedés a opiniones verificadas, test de velocidad y herramientas útiles para tomar decisiones inteligentes sobre tu conexión.
+            Usamos tu ubicación (o la que elijas) para mostrarte los
+            proveedores disponibles en tu zona. Además, accedés a opiniones
+            verificadas, test de velocidad y herramientas útiles para tomar
+            decisiones inteligentes sobre tu conexión.
           </p>
         </div>
 
@@ -49,11 +55,16 @@ const ComoFunciona = () => {
                   {abierta === i ? "−" : "+"}
                 </span>
               </button>
-              {abierta === i && (
+
+              <div
+                className={`transition-[max-height] duration-300 ease-in-out overflow-hidden ${
+                  abierta === i ? "max-h-40" : "max-h-0"
+                }`}
+              >
                 <div className="p-5 pb-4 text-sm text-texto/70">
                   {item.contenido}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
