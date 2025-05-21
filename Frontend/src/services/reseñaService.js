@@ -14,6 +14,8 @@ export const obtenerReseñas = async () => {
       ),
       proveedores (
         nombre,
+        zona_id,
+        tecnologia,
         zonas ( geom )
       )
     `);
@@ -21,6 +23,7 @@ export const obtenerReseñas = async () => {
   if (error) throw error;
   return data;
 };
+
 
 
 

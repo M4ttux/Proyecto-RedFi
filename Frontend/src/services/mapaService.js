@@ -113,19 +113,31 @@ export const cargarProveedoresEnMapa = async (
   return proveedoresConEstado;
 };
 
-export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}) => {
+export const cargarReseñasEnMapa = async (
+  map,
+  setReseñaActiva,
+  filtros = {}
+) => {
   const reseñas = await obtenerReseñas();
 
   // Generamos lista de reseñas con estado de visibilidad
   const reseñasConEstado = reseñas.map((r) => {
-    const visible = (!filtros?.proveedor || r.proveedor_id === filtros.proveedor) &&
-                    (!filtros?.valoracionMin || r.estrellas >= parseInt(filtros.valoracionMin));
+    const visible =
+      (!filtros?.proveedor || r.proveedor_id === filtros.proveedor) &&
+      (!filtros?.valoracionMin ||
+        r.estrellas >= parseInt(filtros.valoracionMin)) &&
+      (!filtros?.zona || r.proveedores?.zona_id === filtros.zona) &&
+      (!filtros?.tecnologia ||
+        r.proveedores?.tecnologia === filtros.tecnologia);
+
     return { ...r, visible };
   });
 
   // Eliminamos solo los marcadores que ya no deben mostrarse
   marcadoresReseñas.forEach(({ marker, element, reseña }) => {
-    const sigueVisible = reseñasConEstado.find(r => r.id === reseña.id && r.visible);
+    const sigueVisible = reseñasConEstado.find(
+      (r) => r.id === reseña.id && r.visible
+    );
     if (!sigueVisible) {
       element.style.opacity = "0";
       setTimeout(() => marker.remove(), 300);
@@ -134,7 +146,7 @@ export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}) 
 
   // Filtramos marcadores actuales
   marcadoresReseñas = marcadoresReseñas.filter(({ reseña }) =>
-    reseñasConEstado.find(r => r.id === reseña.id && r.visible)
+    reseñasConEstado.find((r) => r.id === reseña.id && r.visible)
   );
 
   // Agregamos nuevas reseñas visibles que no estén ya dibujadas
@@ -148,27 +160,28 @@ export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}) 
 
     const markerEl = document.createElement("div");
     markerEl.className =
-      "w-4 h-4 bg-[#FB8531] rounded-full border border-white shadow-md hover:shadow-xl hover:ring-2 hover:ring-white/40 cursor-pointer";
-    markerEl.style.transition = "opacity 0.3s ease";
-    markerEl.style.opacity = "0";
+      "w-4 h-4 bg-[#FB8531] rounded-full border border-white shadow-md opacity-0 hover:shadow-xl hover:ring-2 hover:ring-white/40 cursor-pointer transition-all duration-300";
 
     markerEl.addEventListener("click", (e) => {
       e.stopPropagation();
       setReseñaActiva(r);
     });
 
-    const marker = new maplibregl.Marker({ element: markerEl, anchor: "center" })
+    const marker = new maplibregl.Marker({
+      element: markerEl,
+      anchor: "center",
+    })
       .setLngLat([lng, lat])
       .addTo(map);
 
     setTimeout(() => {
-      markerEl.style.opacity = "1";
+      markerEl.classList.remove("opacity-0");
+      markerEl.classList.add("opacity-100");
     }, 10);
 
     marcadoresReseñas.push({ marker, element: markerEl, reseña: r });
   });
 };
-
 
 /**
  * Actualiza la visibilidad visual de las capas en el mapa según filtros.
