@@ -2,6 +2,16 @@ import maplibregl from "maplibre-gl";
 import { obtenerProveedores } from "./proveedorService";
 import { obtenerReseñas } from "./reseñaService";
 
+export const estaEnCorrientes = (lng, lat, bounds) => {
+  return (
+    lng >= bounds.west &&
+    lng <= bounds.east &&
+    lat >= bounds.south &&
+    lat <= bounds.north
+  );
+};
+
+
 /**
  * Inicializa el mapa de MapLibre con configuración base.
  */
@@ -147,6 +157,48 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
 };
 
 /**
+ * Agrega un marcador de ubicación al mapa.
+ */
+export const colocarMarcadorUbicacion = (map, coords) => {
+  try {
+    console.log("📍 Intentando colocar marcador en:", coords);
+
+    if (!map || typeof map.setCenter !== "function") {
+      console.warn("❌ map inválido:", map);
+      return;
+    }
+
+    const markerEl = document.createElement("div");
+    markerEl.style.width = "16px";
+    markerEl.style.height = "16px";
+    markerEl.style.backgroundColor = "#0047D6";
+    markerEl.style.borderRadius = "50%";
+    markerEl.style.border = "2px solid white";
+    markerEl.style.boxShadow = "0 0 6px rgba(0,0,0,0.3)";
+    markerEl.style.pointerEvents = "none";
+
+    if (map.__marcadorUbicacion) {
+      map.__marcadorUbicacion.remove();
+    }
+
+    const marker = new maplibregl.Marker({
+      element: markerEl,
+      anchor: "center",
+    })
+      .setLngLat(coords)
+      .addTo(map);
+
+    map.__marcadorUbicacion = marker;
+
+    console.log("✅ Marcador colocado en:", coords);
+  } catch (error) {
+    console.error("❌ Error colocando marcador:", error);
+  }
+};
+
+
+
+/**
  * Maneja la ubicación actual del usuario y ajusta el mapa.
  */
 export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
@@ -170,6 +222,7 @@ export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
           if (provincia.toLowerCase() === "corrientes") {
             setAlerta("");
             map.flyTo({ center: [longitude, latitude], zoom: 13 });
+            colocarMarcadorUbicacion(map, [longitude, latitude]);
           } else {
             setAlerta(
               `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${provincia}.`
@@ -199,7 +252,7 @@ export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
   try {
     const response = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-        input + ", Corrientes, Argentina"
+        input
       )}&limit=1`
     );
     const resultados = await response.json();
@@ -216,6 +269,8 @@ export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
     if (estaEnCorrientes(lon, lat, bounds)) {
       setAlerta("");
       map.flyTo({ center: [lon, lat], zoom: 13 });
+      console.log("✅ Llamando colocarMarcadorUbicacion");
+      colocarMarcadorUbicacion(map, [lon, lat]);
     } else {
       setAlerta(
         `La ubicación encontrada (${lugar.display_name}) no está dentro de Corrientes.`
@@ -226,3 +281,5 @@ export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
     setAlerta("Ocurrió un error al buscar la ubicación.");
   }
 };
+
+

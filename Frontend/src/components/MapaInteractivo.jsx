@@ -6,7 +6,8 @@ import {
   crearMapaBase,
   cargarProveedoresEnMapa,
   actualizarVisibilidadEnMapa,
-  /* estaEnCorrientes, */
+  estaEnCorrientes,
+  colocarMarcadorUbicacion,
   manejarUbicacionActual,
   buscarUbicacion,
   cargarReseñasEnMapa,
@@ -110,12 +111,16 @@ const MapaInteractivo = ({ filtros }) => {
               <li
                 key={index}
                 onClick={() => {
-                  setInput(sug.display_name);
-                  setSugerencias([]);
-                  const lat = parseFloat(sug.lat);
-                  const lon = parseFloat(sug.lon);
-                  mapRef.current.flyTo({ center: [lon, lat], zoom: 13 });
-                }}
+  setInput(sug.display_name);
+  setSugerencias([]);
+  buscarUbicacion(
+    sug.display_name,
+    boundsCorrientes,
+    setAlerta,
+    mapRef.current
+  );
+}}
+
                 className="px-3 py-2 cursor-pointer hover:bg-white/10"
               >
                 {sug.display_name}
@@ -139,12 +144,16 @@ const MapaInteractivo = ({ filtros }) => {
             Buscar ubicación
           </button>
           <button
-            onClick={() =>
+            onClick={() => {
+              console.log("🧭 mapRef.current:", mapRef.current);
               manejarUbicacionActual(
                 boundsCorrientes,
                 setAlerta,
                 mapRef.current
-              )
+              );
+            }
+              
+              
             }
             className="p-2 bg-fondo text-texto rounded hover:bg-white/10 transition"
             title="Usar mi ubicación actual"
