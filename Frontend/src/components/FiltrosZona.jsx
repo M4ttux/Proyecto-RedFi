@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
+import { obtenerReseñas } from "../services/reseñaService";
 
 const FiltrosZona = ({ onFiltrar }) => {
   const [filtros, setFiltros] = useState({
@@ -12,20 +13,21 @@ const FiltrosZona = ({ onFiltrar }) => {
 
   const [zonas, setZonas] = useState([]);
   const [proveedores, setProveedores] = useState([]);
+  const [valoraciones, setValoraciones] = useState([]);
 
   useEffect(() => {
     const cargarDatos = async () => {
       const zonasSupabase = await getZonas();
       const proveedoresSupabase = await obtenerProveedores();
+      const valoracionesSupabase = await obtenerReseñas();
       setZonas(zonasSupabase);
       setProveedores(proveedoresSupabase);
+      setValoraciones(valoracionesSupabase);
     };
     cargarDatos();
   }, []);
 
-  const tecnologiasUnicas = [
-    ...new Set(proveedores.map((p) => p.tecnologia)),
-  ];
+  const tecnologiasUnicas = [...new Set(proveedores.map((p) => p.tecnologia))];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,10 +96,12 @@ const FiltrosZona = ({ onFiltrar }) => {
         >
           {[0, 1, 2, 3, 4, 5].map((v) => (
             <option key={v} value={v}>
-              {v}★ o más
+              {v === 0 ? "Todas las reseñas" : `${v}★ o más`}
             </option>
           ))}
         </select>
+
+        {console.log("Filtros aplicados:", filtros)}
 
         <button
           onClick={aplicarFiltros}

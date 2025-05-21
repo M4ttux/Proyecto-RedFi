@@ -53,18 +53,20 @@ const MapaInteractivo = ({ filtros }) => {
         filtros,
         setProveedorActivo
       );
-      await cargarReseñasEnMapa(map, setReseñaActiva); // modificala si hace falta
+      /* await cargarReseñasEnMapa(map, setReseñaActiva, filtros); */ // modificala si hace falta
       setCargandoMapa(false);
+      
     });
 
     return () => map.remove();
   }, []);
 
   useEffect(() => {
-    if (mapRef.current) {
+    if (!cargandoMapa && mapRef.current) {
       actualizarVisibilidadEnMapa(mapRef.current, proveedoresRef, filtros);
+      cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros);
     }
-  }, [filtros]);
+  }, [cargandoMapa, proveedoresRef, filtros]);
 
   return (
     <div className="h-full w-full relative">
@@ -111,16 +113,15 @@ const MapaInteractivo = ({ filtros }) => {
               <li
                 key={index}
                 onClick={() => {
-  setInput(sug.display_name);
-  setSugerencias([]);
-  buscarUbicacion(
-    sug.display_name,
-    boundsCorrientes,
-    setAlerta,
-    mapRef.current
-  );
-}}
-
+                  setInput(sug.display_name);
+                  setSugerencias([]);
+                  buscarUbicacion(
+                    sug.display_name,
+                    boundsCorrientes,
+                    setAlerta,
+                    mapRef.current
+                  );
+                }}
                 className="px-3 py-2 cursor-pointer hover:bg-white/10"
               >
                 {sug.display_name}
@@ -151,10 +152,7 @@ const MapaInteractivo = ({ filtros }) => {
                 setAlerta,
                 mapRef.current
               );
-            }
-              
-              
-            }
+            }}
             className="p-2 bg-fondo text-texto rounded hover:bg-white/10 transition"
             title="Usar mi ubicación actual"
           >
@@ -171,7 +169,12 @@ const MapaInteractivo = ({ filtros }) => {
         </div>
       )}
 
-      <div ref={mapContainer} className="w-full h-full" />
+      <div
+  ref={mapContainer}
+  className={`w-full h-full transition-opacity duration-700 ease-in-out ${
+    cargandoMapa ? "opacity-0" : "opacity-100"
+  }`}
+/>
 
       <ModalProveedor
         proveedor={proveedorActivo}

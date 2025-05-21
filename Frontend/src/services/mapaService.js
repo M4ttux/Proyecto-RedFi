@@ -2,6 +2,8 @@ import maplibregl from "maplibre-gl";
 import { obtenerProveedores } from "./proveedorService";
 import { obtenerReseñas } from "./reseñaService";
 
+let marcadoresReseñas = [];
+
 export const estaEnCorrientes = (lng, lat, bounds) => {
   return (
     lng >= bounds.west &&
@@ -10,7 +12,6 @@ export const estaEnCorrientes = (lng, lat, bounds) => {
     lat <= bounds.north
   );
 };
-
 
 /**
  * Inicializa el mapa de MapLibre con configuración base.
@@ -112,29 +113,62 @@ export const cargarProveedoresEnMapa = async (
   return proveedoresConEstado;
 };
 
-export const cargarReseñasEnMapa = async (map, setReseñaActiva) => {
+export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}) => {
   const reseñas = await obtenerReseñas();
 
-  reseñas.forEach((r) => {
+  // Generamos lista de reseñas con estado de visibilidad
+  const reseñasConEstado = reseñas.map((r) => {
+    const visible = (!filtros?.proveedor || r.proveedor_id === filtros.proveedor) &&
+                    (!filtros?.valoracionMin || r.estrellas >= parseInt(filtros.valoracionMin));
+    return { ...r, visible };
+  });
+
+  // Eliminamos solo los marcadores que ya no deben mostrarse
+  marcadoresReseñas.forEach(({ marker, element, reseña }) => {
+    const sigueVisible = reseñasConEstado.find(r => r.id === reseña.id && r.visible);
+    if (!sigueVisible) {
+      element.style.opacity = "0";
+      setTimeout(() => marker.remove(), 300);
+    }
+  });
+
+  // Filtramos marcadores actuales
+  marcadoresReseñas = marcadoresReseñas.filter(({ reseña }) =>
+    reseñasConEstado.find(r => r.id === reseña.id && r.visible)
+  );
+
+  // Agregamos nuevas reseñas visibles que no estén ya dibujadas
+  reseñasConEstado.forEach((r) => {
+    const yaExiste = marcadoresReseñas.find((m) => m.reseña.id === r.id);
+    if (!r.visible || yaExiste) return;
+
     const coord = r.proveedores?.zonas?.geom?.coordinates?.[0]?.[0];
     if (!coord) return;
-
     const [lng, lat] = coord;
 
     const markerEl = document.createElement("div");
     markerEl.className =
-      "w-4 h-4 bg-[#FB8531] rounded-full border border-white shadow-md hover:shadow-xl hover:ring-2 hover:ring-white/40 transition-all duration-300 ease-out cursor-pointer";
+      "w-4 h-4 bg-[#FB8531] rounded-full border border-white shadow-md hover:shadow-xl hover:ring-2 hover:ring-white/40 cursor-pointer";
+    markerEl.style.transition = "opacity 0.3s ease";
+    markerEl.style.opacity = "0";
 
     markerEl.addEventListener("click", (e) => {
       e.stopPropagation();
       setReseñaActiva(r);
     });
 
-    new maplibregl.Marker({ element: markerEl, anchor: "center" })
+    const marker = new maplibregl.Marker({ element: markerEl, anchor: "center" })
       .setLngLat([lng, lat])
       .addTo(map);
+
+    setTimeout(() => {
+      markerEl.style.opacity = "1";
+    }, 10);
+
+    marcadoresReseñas.push({ marker, element: markerEl, reseña: r });
   });
 };
+
 
 /**
  * Actualiza la visibilidad visual de las capas en el mapa según filtros.
@@ -195,8 +229,6 @@ export const colocarMarcadorUbicacion = (map, coords) => {
     console.error("❌ Error colocando marcador:", error);
   }
 };
-
-
 
 /**
  * Maneja la ubicación actual del usuario y ajusta el mapa.
@@ -281,5 +313,3 @@ export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
     setAlerta("Ocurrió un error al buscar la ubicación.");
   }
 };
-
-

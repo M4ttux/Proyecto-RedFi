@@ -1,7 +1,8 @@
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;
 
-  const estrellas = "★".repeat(reseña.estrellas) + "☆".repeat(5 - reseña.estrellas);
+  const estrellas =
+    "★".repeat(reseña.estrellas) + "P".repeat(5 - reseña.estrellas);
   const nombre = reseña.user_profiles?.nombre || "Usuario anónimo";
   const proveedor = reseña.proveedores?.nombre || "Proveedor desconocido";
 
@@ -14,7 +15,9 @@ const ModalReseña = ({ reseña, onClose }) => {
         >
           ✖
         </button>
-        <p className="text-xs uppercase tracking-wide text-acento mb-2">Reseña destacada</p>
+        <p className="text-xs uppercase tracking-wide text-acento mb-2">
+          Reseña destacada
+        </p>
         <div className="flex items-center gap-2 mb-2">
           <img
             src={`https://i.pravatar.cc/40?u=${reseña.usuario_id}`}
@@ -26,7 +29,9 @@ const ModalReseña = ({ reseña, onClose }) => {
           </div>
         </div>
         <div className="text-yellow-400 text-sm mb-2">{estrellas}</div>
-        <p className="text-texto/80 italic leading-snug">“{reseña.comentario}”</p>
+        <p className="text-texto/80 italic leading-snug">
+          “{reseña.comentario}”
+        </p>
       </div>
     </div>
   );
