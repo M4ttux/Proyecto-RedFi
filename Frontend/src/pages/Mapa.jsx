@@ -9,7 +9,7 @@ const Mapa = () => {
   const [filtros, setFiltros] = useState(null);
 
   return (
-    <div className="h-[calc(100vh-64px)] w-full">
+    <div className="h-[calc(100vh-72px)] w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 mx-auto h-full">
         {/* Sidebar - Filtros */}
         <aside className="lg:col-span-3 bg-secundario p-4 shadow-md h-full ">
