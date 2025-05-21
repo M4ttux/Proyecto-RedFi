@@ -15,7 +15,7 @@ const HeroSection = () => {
         {/* 📄 Texto a la izquierda */}
         <div className="flex-1 text-left pt-8">
           <h1 className="text-5xl lg:text-6xl leading-tight drop-shadow">
-            Encontrá el mejor <span className="text-shadow-lg text-shadow-acento">proveedor</span> de <span className="text-shadow-lg text-shadow-acento">Internet</span> <br /> según tu <span class="text-shadow-lg text-shadow-acento">ubicación</span>
+            Encontrá el mejor <span className="text-shadow-lg text-shadow-acento">proveedor</span> de <span className="text-shadow-lg text-shadow-acento">Internet</span> <br /> según tu <span className="text-shadow-lg text-shadow-acento">ubicación</span>
           </h1>
           <p className="mt-6 text-lg drop-shadow">
             Visualizá qué empresas operan cerca tuyo, conocé la experiencia de otros usuarios y tomá decisiones con confianza.
