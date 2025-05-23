@@ -47,7 +47,7 @@ const FiltrosZona = ({ onFiltrar }) => {
           name="zona"
           value={filtros.zona}
           onChange={handleChange}
-          className="border px-2 py-1 rounded"
+          className="border px-2 py-1 rounded "
         >
           <option value="">Todas las zonas</option>
           {zonas.map((z) => (

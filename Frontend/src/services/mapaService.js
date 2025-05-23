@@ -273,6 +273,11 @@ export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
               `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${provincia}.`
             );
           }
+
+          /* setAlerta(""); // podés mostrar una advertencia si querés
+          map.flyTo({ center: [longitude, latitude], zoom: 13 });
+          colocarMarcadorUbicacion(map, [longitude, latitude]); */
+
           resolve();
         } catch (error) {
           console.error("Error al obtener datos de ubicación:", error);
@@ -283,6 +288,11 @@ export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
       () => {
         setAlerta("No se pudo obtener tu ubicación.");
         resolve();
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
       }
     );
   });
