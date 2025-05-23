@@ -6,25 +6,26 @@ import {
   crearMapaBase,
   cargarProveedoresEnMapa,
   actualizarVisibilidadEnMapa,
-  estaEnCorrientes,
-  colocarMarcadorUbicacion,
   manejarUbicacionActual,
   buscarUbicacion,
   cargarReseñasEnMapa,
 } from "../services/mapaService";
-import { IconCurrentLocation, IconSearch } from "@tabler/icons-react";
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
+import { DURACION_ALERTA } from "../constantes";
 
 const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
+  const navControlRef = useRef(null);
   const [input, setInput] = useState("");
   const [alerta, setAlerta] = useState("");
   const proveedoresRef = useRef([]);
   const [proveedorActivo, setProveedorActivo] = useState(null);
   const [reseñaActiva, setReseñaActiva] = useState(null);
-  const [mostrarBarraBusqueda, setMostrarBarraBusqueda] = useState(false);
+  const [mostrarAlerta, setMostrarAlerta] = useState(false);
+  const [animarAlerta, setAnimarAlerta] = useState(false);
+
   const navigate = useNavigate();
 
   const [sugerencias, setSugerencias] = useState([]);
@@ -46,7 +47,19 @@ const MapaInteractivo = ({ filtros }) => {
     ]);
     mapRef.current = map;
 
-    map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+    const navControl = new maplibregl.NavigationControl();
+    navControlRef.current = navControl;
+
+    const setNavPosition = () => {
+      const isMobile = window.innerWidth < 1024;
+      try {
+        map.removeControl(navControl);
+      } catch (e) {}
+      map.addControl(navControl, isMobile ? "bottom-left" : "bottom-right");
+    };
+
+    setNavPosition();
+    window.addEventListener("resize", setNavPosition);
 
     map.on("load", async () => {
       proveedoresRef.current = await cargarProveedoresEnMapa(
@@ -57,7 +70,23 @@ const MapaInteractivo = ({ filtros }) => {
       setCargandoMapa(false);
     });
 
-    return () => map.remove();
+    return () => {
+      map.remove();
+      window.removeEventListener("resize", setNavPosition);
+    };
+  }, []);
+
+  useEffect(() => {
+    const manejarEvento = () => {
+      if (mapRef.current) {
+        manejarUbicacionActual(boundsCorrientes, setAlerta, mapRef.current);
+      }
+    };
+
+    window.addEventListener("solicitarUbicacion", manejarEvento);
+    return () => {
+      window.removeEventListener("solicitarUbicacion", manejarEvento);
+    };
   }, []);
 
   useEffect(() => {
@@ -67,76 +96,92 @@ const MapaInteractivo = ({ filtros }) => {
     }
   }, [cargandoMapa, proveedoresRef, filtros]);
 
+  useEffect(() => {
+    if (alerta) {
+      setMostrarAlerta(true); // Renderiza el <p>
+      const fadeIn = setTimeout(() => setAnimarAlerta(true), 10); // Activa fade-in
+      const fadeOut = setTimeout(() => setAnimarAlerta(false), DURACION_ALERTA); // Activa fade-out
+      const remove = setTimeout(
+        () => setMostrarAlerta(false),
+        DURACION_ALERTA + 500
+      ); // Lo remueve del DOM
+
+      return () => {
+        clearTimeout(fadeIn);
+        clearTimeout(fadeOut);
+        clearTimeout(remove);
+      };
+    }
+  }, [alerta]);
+
   return (
     <div className="h-full w-full relative">
-      {/* Botones flotantes móviles */}
-      <div className="fixed bottom-4 left-4 z-30 flex gap-2 lg:hidden">
-        <button
-          onClick={() => setMostrarBarraBusqueda(true)}
-          className="bg-primario text-white p-3 rounded-full shadow-lg"
-          title="Buscar ubicación"
-        >
-          <IconSearch size={24} />
-        </button>
-        <button
-          onClick={() =>
-            manejarUbicacionActual(
-              boundsCorrientes,
-              setAlerta,
-              mapRef.current
-            )
+      {/* Barra de búsqueda visible siempre */}
+      <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-xl shadow-lg space-y-2">
+        <div className="flex justify-between items-center">
+          <p className="font-semibold text-sm text-texto">Buscar ubicación</p>
+        </div>
+
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => {
+            const value = e.target.value;
+            setInput(value);
+            if (debounceTimeout) clearTimeout(debounceTimeout);
+            setDebounceTimeout(
+              setTimeout(() => {
+                if (value.trim().length > 2) {
+                  fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                      value + ", Corrientes, Argentina"
+                    )}&addressdetails=1&limit=5`
+                  )
+                    .then((res) => res.json())
+                    .then((data) => setSugerencias(data))
+                    .catch((err) =>
+                      console.error("Error en autocompletar:", err)
+                    );
+                } else {
+                  setSugerencias([]);
+                }
+              }, 150)
+            );
+          }}
+          onKeyDown={(e) =>
+            e.key === "Enter" &&
+            buscarUbicacion(input, boundsCorrientes, setAlerta, mapRef.current)
           }
-          className="bg-acento text-texto p-3 rounded-full shadow-lg"
-          title="Mi ubicación"
-        >
-          <IconCurrentLocation size={24} />
-        </button>
-      </div>
+          placeholder="Buscar en Corrientes..."
+          className="px-3 py-2 rounded w-full bg-fondo text-sm text-texto placeholder-gray-400"
+        />
 
-      {(mostrarBarraBusqueda || window.innerWidth >= 1024) && (
-        <div
-          className={`absolute z-20 top-4 left-4 w-[90vw] max-w-md bg-secundario/90 p-4 rounded-xl shadow-lg space-y-2 ${
-            mostrarBarraBusqueda ? "block lg:block" : "hidden lg:block"
-          }`}
-        >
-          <div className="flex justify-between items-center">
-            <p className="font-semibold text-sm text-texto">Buscar ubicación</p>
-            <button
-              onClick={() => setMostrarBarraBusqueda(false)}
-              className="lg:hidden text-texto text-sm px-2 py-1 hover:bg-white/10 rounded"
-            >
-              Cerrar
-            </button>
-          </div>
+        {input && sugerencias.length > 0 && (
+          <ul className="bg-fondo border border-white/10 rounded-md mt-1 max-h-40 overflow-auto text-sm">
+            {sugerencias.map((sug, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  setInput(sug.display_name);
+                  setSugerencias([]);
+                  buscarUbicacion(
+                    sug.display_name,
+                    boundsCorrientes,
+                    setAlerta,
+                    mapRef.current
+                  );
+                }}
+                className="px-3 py-2 cursor-pointer hover:bg-white/10"
+              >
+                {sug.display_name}
+              </li>
+            ))}
+          </ul>
+        )}
 
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => {
-              const value = e.target.value;
-              setInput(value);
-              if (debounceTimeout) clearTimeout(debounceTimeout);
-              setDebounceTimeout(
-                setTimeout(() => {
-                  if (value.trim().length > 2) {
-                    fetch(
-                      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                        value + ", Corrientes, Argentina"
-                      )}&addressdetails=1&limit=5`
-                    )
-                      .then((res) => res.json())
-                      .then((data) => setSugerencias(data))
-                      .catch((err) =>
-                        console.error("Error en autocompletar:", err)
-                      );
-                  } else {
-                    setSugerencias([]);
-                  }
-                }, 150)
-              );
-            }}
-            onKeyDown={(e) =>
-              e.key === "Enter" &&
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() =>
               buscarUbicacion(
                 input,
                 boundsCorrientes,
@@ -144,73 +189,31 @@ const MapaInteractivo = ({ filtros }) => {
                 mapRef.current
               )
             }
-            placeholder="Buscar en Corrientes..."
-            className="px-3 py-2 rounded w-full bg-fondo text-sm text-texto placeholder-gray-400"
-          />
-
-          {input && sugerencias.length > 0 && (
-            <ul className="bg-fondo border border-white/10 rounded-md mt-1 max-h-40 overflow-auto text-sm">
-              {sugerencias.map((sug, index) => (
-                <li
-                  key={index}
-                  onClick={() => {
-                    setInput(sug.display_name);
-                    setSugerencias([]);
-                    buscarUbicacion(
-                      sug.display_name,
-                      boundsCorrientes,
-                      setAlerta,
-                      mapRef.current
-                    );
-                    setMostrarBarraBusqueda(false);
-                  }}
-                  className="px-3 py-2 cursor-pointer hover:bg-white/10"
-                >
-                  {sug.display_name}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() =>
-                buscarUbicacion(
-                  input,
-                  boundsCorrientes,
-                  setAlerta,
-                  mapRef.current
-                )
-              }
-              className="flex-1 bg-primario text-white px-3 py-2 rounded hover:bg-acento transition text-sm"
-            >
-              Buscar ubicación
-            </button>
-            <button
-              onClick={() =>
-                manejarUbicacionActual(
-                  boundsCorrientes,
-                  setAlerta,
-                  mapRef.current
-                )
-              }
-              className="p-2 bg-acento text-texto rounded hover:bg-white/10 transition"
-              title="Usar mi ubicación actual"
-            >
-              <IconCurrentLocation size={20} />
-            </button>
-          </div>
-
-          {alerta && <p className="text-sm text-red-400">{alerta}</p>}
+            className="flex-1 bg-primario text-white px-3 py-2 rounded hover:bg-acento transition text-sm"
+          >
+            Buscar ubicación
+          </button>
         </div>
-      )}
 
+        {mostrarAlerta && (
+          <p
+            className={`text-sm text-red-400 transition-opacity duration-500 ${
+              animarAlerta ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {alerta}
+          </p>
+        )}
+      </div>
+
+      {/* Cargando mapa */}
       {cargandoMapa && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 text-white text-lg font-semibold">
           Cargando mapa...
         </div>
       )}
 
+      {/* Contenedor del mapa */}
       <div
         ref={mapContainer}
         className={`w-full h-full transition-opacity duration-700 ease-in-out ${
@@ -218,12 +221,12 @@ const MapaInteractivo = ({ filtros }) => {
         }`}
       />
 
+      {/* Modales */}
       <ModalProveedor
         proveedor={proveedorActivo}
         onClose={() => setProveedorActivo(null)}
         navigate={navigate}
       />
-
       <ModalReseña
         reseña={reseñaActiva}
         onClose={() => setReseñaActiva(null)}

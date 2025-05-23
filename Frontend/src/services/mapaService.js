@@ -24,6 +24,7 @@ export const crearMapaBase = (mapContainer, bounds) => {
     center: [-58.95, -28.65],
     zoom: 2,
     maxBounds: bounds,
+    attributionControl: false,
   });
 };
 
@@ -269,24 +270,29 @@ export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
             map.flyTo({ center: [longitude, latitude], zoom: 13 });
             colocarMarcadorUbicacion(map, [longitude, latitude]);
           } else {
-            setAlerta(
-              `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${provincia}.`
-            );
+            setAlerta("");
+            setTimeout(() => {
+              setAlerta(
+                `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${provincia}.`
+              );
+            }, 10);
           }
-
-          /* setAlerta(""); // podés mostrar una advertencia si querés
-          map.flyTo({ center: [longitude, latitude], zoom: 13 });
-          colocarMarcadorUbicacion(map, [longitude, latitude]); */
 
           resolve();
         } catch (error) {
           console.error("Error al obtener datos de ubicación:", error);
-          setAlerta("No se pudo obtener tu ubicación exacta.");
+          setAlerta("");
+          setTimeout(() => {
+            setAlerta("No se pudo obtener tu ubicación exacta.");
+          }, 10);
           resolve();
         }
       },
       () => {
-        setAlerta("No se pudo obtener tu ubicación.");
+        setAlerta("");
+        setTimeout(() => {
+          setAlerta("No se pudo obtener tu ubicación.");
+        }, 10);
         resolve();
       },
       {

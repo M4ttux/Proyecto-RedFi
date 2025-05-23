@@ -1,0 +1,1 @@
+export const DURACION_ALERTA = 3000;
