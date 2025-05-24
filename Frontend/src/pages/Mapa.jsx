@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import MapaInteractivo from "../components/MapaInteractivo";
 import FiltrosZona from "../components/FiltrosZona";
-import { IconSettings, IconCurrentLocation } from "@tabler/icons-react";
+import { IconX, IconSettings, IconCurrentLocation } from "@tabler/icons-react";
 import { DURACION_ALERTA } from "../constantes";
 
 const Mapa = () => {
@@ -69,7 +69,7 @@ const Mapa = () => {
                   onClick={() => setMostrarFiltros(false)}
                   className="text-acento font-bold"
                 >
-                  Cerrar
+                  <IconX size={24} />
                 </button>
               </div>
               <FiltrosZona

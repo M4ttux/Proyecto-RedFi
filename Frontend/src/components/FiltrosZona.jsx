@@ -9,6 +9,7 @@ import {
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
 import { obtenerReseñas } from "../services/reseñaService";
+import { IconChevronDown } from "@tabler/icons-react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -62,7 +63,8 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
     placeholder
   ) => {
     const abreArriba =
-      abrirHaciaArriba && (label === "Tecnología" || label === "Valoración mínima");
+      abrirHaciaArriba &&
+      (label === "Tecnología" || label === "Valoración mínima");
 
     return (
       <div className="space-y-1">
@@ -70,10 +72,17 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
         <Listbox value={value} onChange={setValue}>
           {({ open }) => (
             <div className="relative">
-              <ListboxButton className="relative w-full cursor-pointer rounded-t bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md ring-2 ring-acento text-sm">
+              <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg focus:outline-none text-sm">
                 <span className="block truncate">
                   {value ? renderOption(value) : placeholder}
                 </span>
+                <div
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${
+                    open ? "rotate-180" : ""
+                  }`}
+                >
+                  <IconChevronDown />
+                </div>
               </ListboxButton>
 
               <Transition
@@ -85,7 +94,7 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
               >
                 <ListboxOptions
                   className={classNames(
-                    "absolute z-10 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg ring-2 ring-acento focus:outline-none text-sm",
+                    "absolute z-10 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none text-sm scrollbar-thin",
                     abreArriba ? "bottom-full mb-2" : "top-full mt-1"
                   )}
                 >
