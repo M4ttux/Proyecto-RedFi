@@ -13,6 +13,7 @@ import {
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
 import { DURACION_ALERTA } from "../constantes";
+import { IconCurrentLocation } from "@tabler/icons-react";
 
 const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
@@ -25,6 +26,7 @@ const MapaInteractivo = ({ filtros }) => {
   const [reseñaActiva, setReseñaActiva] = useState(null);
   const [mostrarAlerta, setMostrarAlerta] = useState(false);
   const [animarAlerta, setAnimarAlerta] = useState(false);
+  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
 
   const navigate = useNavigate();
 
@@ -192,6 +194,30 @@ const MapaInteractivo = ({ filtros }) => {
             className="flex-1 bg-primario text-white px-3 py-2 rounded hover:bg-acento transition text-sm"
           >
             Buscar ubicación
+          </button>
+          {/* Botón solo visible en desktop */}
+          <button
+            onClick={() => {
+              setCargandoUbicacion(true);
+              const evento = new CustomEvent("solicitarUbicacion");
+              window.dispatchEvent(evento);
+
+              // Reestablece después de un delay de seguridad
+              setTimeout(
+                () => setCargandoUbicacion(false),
+                DURACION_ALERTA + 1000
+              );
+            }}
+            className={`hidden lg:inline-flex items-center gap-1 px-3 py-1.5 rounded text-sm shadow-md transition
+    ${
+      cargandoUbicacion
+        ? "bg-gray-500 cursor-not-allowed"
+        : "bg-primario hover:bg-acento"
+    }`}
+            disabled={cargandoUbicacion}
+            title="Ubicación actual"
+          >
+            <IconCurrentLocation size={24} className="text-white" />
           </button>
         </div>
 

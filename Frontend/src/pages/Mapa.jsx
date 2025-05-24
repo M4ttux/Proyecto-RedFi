@@ -48,11 +48,11 @@ const Mapa = () => {
                 );
               }}
               className={`p-3 rounded-full shadow-md transition
-    ${
-      cargandoUbicacion
-        ? "bg-gray-500 cursor-not-allowed"
-        : "bg-primario hover:bg-acento"
-    }`}
+                ${
+                  cargandoUbicacion
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-primario hover:bg-acento"
+                }`}
               disabled={cargandoUbicacion}
               title="Ubicación actual"
             >
@@ -77,6 +77,7 @@ const Mapa = () => {
                   setFiltros(f);
                   setMostrarFiltros(false);
                 }}
+                abrirHaciaArriba={true}
               />
             </div>
           )}

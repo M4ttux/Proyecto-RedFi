@@ -69,7 +69,7 @@ const Navbar = () => {
               </Link>
               <button
                 onClick={logout}
-                className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold cursor-pointer"
+                className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold"
               >
                 Cerrar sesión
               </button>
@@ -148,7 +148,7 @@ const Navbar = () => {
                     logout();
                     setMenuAbierto(false);
                   }}
-                  className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold cursor-pointer"
+                  className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold"
                 >
                   Cerrar sesión
                 </button>
