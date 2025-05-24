@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getPerfil } from "../services/userService";
+import { Link } from "react-router-dom"; // 👈 AÑADIDO
 
 const Cuenta = () => {
   useEffect(() => {
     document.title = "Red-Fi | Mi Perfil";
   }, []);
+  
   const { usuario, logout } = useAuth();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,9 +47,17 @@ const Cuenta = () => {
         <strong>Nombre:</strong> {perfil?.nombre || "Sin nombre definido"}
       </p>
 
+      {/* ✅ Botón nuevo para ir a la gestión de boletas */}
+      <Link
+        to="/boletas"
+        className="mt-6 block w-full text-center bg-white text-primario font-semibold px-4 py-2 rounded hover:bg-acento hover:text-white transition mb-4"
+      >
+        Gestionar Boletas de Servicio
+      </Link>
+
       <button
         onClick={logout}
-        className="mt-6 bg-primario text-texto px-4 py-2 rounded hover:bg-acento"
+        className="w-full bg-primario text-texto px-4 py-2 rounded hover:bg-acento"
       >
         Cerrar sesión
       </button>
