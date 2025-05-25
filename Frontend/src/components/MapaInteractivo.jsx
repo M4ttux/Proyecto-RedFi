@@ -9,6 +9,7 @@ import {
   manejarUbicacionActual,
   buscarUbicacion,
   cargarReseñasEnMapa,
+  limpiarMarcadoresReseñas,
 } from "../services/mapaService";
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
@@ -69,12 +70,18 @@ const MapaInteractivo = ({ filtros }) => {
         filtros,
         setProveedorActivo
       );
+
+      // 👇 Cargar reseñas directamente cuando el mapa está listo
+      await cargarReseñasEnMapa(map, setReseñaActiva, filtros);
+
       setCargandoMapa(false);
     });
 
     return () => {
       map.remove();
       window.removeEventListener("resize", setNavPosition);
+      limpiarMarcadoresReseñas();
+      proveedoresRef.current = [];
     };
   }, []);
 
@@ -92,11 +99,26 @@ const MapaInteractivo = ({ filtros }) => {
   }, []);
 
   useEffect(() => {
-    if (!cargandoMapa && mapRef.current) {
-      actualizarVisibilidadEnMapa(mapRef.current, proveedoresRef, filtros);
-      cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros);
+    if (!mapRef.current) return;
+
+    const map = mapRef.current;
+
+    const handleLoad = async () => {
+      console.log("📍 Mapa listo, cargando datos...");
+      proveedoresRef.current = await cargarProveedoresEnMapa(
+        map,
+        filtros,
+        setProveedorActivo
+      );
+      await cargarReseñasEnMapa(map, setReseñaActiva, filtros);
+    };
+
+    if (map.loaded()) {
+      handleLoad();
+    } else {
+      map.once("load", handleLoad);
     }
-  }, [cargandoMapa, proveedoresRef, filtros]);
+  }, [filtros]);
 
   useEffect(() => {
     if (alerta) {

@@ -62,14 +62,21 @@ export const cargarProveedoresEnMapa = async (
     const fillLayerId = `fill-${prov.id}`;
     const lineLayerId = `line-${prov.id}`;
 
-    map.addSource(sourceId, {
-      type: "geojson",
-      data: {
-        type: "Feature",
-        geometry: prov.zonas.geom,
-        properties: {},
-      },
-    });
+    if (map.getSource(sourceId)) {
+  map.removeLayer(fillLayerId);
+  map.removeLayer(lineLayerId);
+  map.removeSource(sourceId);
+}
+
+map.addSource(sourceId, {
+  type: "geojson",
+  data: {
+    type: "Feature",
+    geometry: prov.zonas.geom,
+    properties: {},
+  },
+});
+
 
     map.addLayer({
       id: fillLayerId,
@@ -119,17 +126,17 @@ export const cargarReseñasEnMapa = async (
   setReseñaActiva,
   filtros = {}
 ) => {
+  if (!filtros) filtros = {};
+
   const reseñas = await obtenerReseñas();
 
   // Generamos lista de reseñas con estado de visibilidad
   const reseñasConEstado = reseñas.map((r) => {
     const visible =
       (!filtros?.proveedor || r.proveedor_id === filtros.proveedor) &&
-      (!filtros?.valoracionMin ||
-        r.estrellas >= parseInt(filtros.valoracionMin)) &&
+      (!filtros?.valoracionMin || r.estrellas >= parseInt(filtros.valoracionMin)) &&
       (!filtros?.zona || r.proveedores?.zona_id === filtros.zona) &&
-      (!filtros?.tecnologia ||
-        r.proveedores?.tecnologia === filtros.tecnologia);
+      (!filtros?.tecnologia || r.proveedores?.tecnologia === filtros.tecnologia);
 
     return { ...r, visible };
   });
@@ -155,9 +162,11 @@ export const cargarReseñasEnMapa = async (
     const yaExiste = marcadoresReseñas.find((m) => m.reseña.id === r.id);
     if (!r.visible || yaExiste) return;
 
-    const coord = r.proveedores?.zonas?.geom?.coordinates?.[0]?.[0];
-    if (!coord) return;
-    const [lng, lat] = coord;
+    const coords = r.proveedores?.zonas?.geom?.coordinates?.flat(2);
+    if (!Array.isArray(coords) || coords.length < 2) return;
+
+    const [lng, lat] = coords;
+
 
     const markerEl = document.createElement("div");
     markerEl.className =
@@ -342,3 +351,9 @@ export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
     setAlerta("Ocurrió un error al buscar la ubicación.");
   }
 };
+
+export const limpiarMarcadoresReseñas = () => {
+  marcadoresReseñas.forEach(({ marker }) => marker.remove());
+  marcadoresReseñas = [];
+};
+
