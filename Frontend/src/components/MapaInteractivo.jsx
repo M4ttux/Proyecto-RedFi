@@ -13,8 +13,10 @@ import {
 } from "../services/mapaService";
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
-import { DURACION_ALERTA } from "../constantes";
 import { IconCurrentLocation } from "@tabler/icons-react";
+import ModalAgregarReseña from "./modals/ModalAgregarReseña";
+import { useAuth } from "../context/AuthContext";
+import { useAlertaAnimada } from "../hooks/useAlertaAnimada";
 
 const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
@@ -25,14 +27,12 @@ const MapaInteractivo = ({ filtros }) => {
   const proveedoresRef = useRef([]);
   const [proveedorActivo, setProveedorActivo] = useState(null);
   const [reseñaActiva, setReseñaActiva] = useState(null);
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
-  const [animarAlerta, setAnimarAlerta] = useState(false);
   const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
-
-  const navigate = useNavigate();
-
+  const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
   const [sugerencias, setSugerencias] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
+  const { usuario } = useAuth();
+  const navigate = useNavigate();
 
   const boundsCorrientes = {
     west: -60.9,
@@ -42,6 +42,9 @@ const MapaInteractivo = ({ filtros }) => {
   };
 
   const [cargandoMapa, setCargandoMapa] = useState(true);
+
+  // 👉 Aquí usamos el hook
+  const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
 
   useEffect(() => {
     const map = crearMapaBase(mapContainer.current, [
@@ -71,9 +74,7 @@ const MapaInteractivo = ({ filtros }) => {
         setProveedorActivo
       );
 
-      // 👇 Cargar reseñas directamente cuando el mapa está listo
       await cargarReseñasEnMapa(map, setReseñaActiva, filtros);
-
       setCargandoMapa(false);
     });
 
@@ -100,7 +101,6 @@ const MapaInteractivo = ({ filtros }) => {
 
   useEffect(() => {
     if (!mapRef.current) return;
-
     const map = mapRef.current;
 
     const handleLoad = async () => {
@@ -120,23 +120,25 @@ const MapaInteractivo = ({ filtros }) => {
     }
   }, [filtros]);
 
-  useEffect(() => {
-    if (alerta) {
-      setMostrarAlerta(true); // Renderiza el <p>
-      const fadeIn = setTimeout(() => setAnimarAlerta(true), 10); // Activa fade-in
-      const fadeOut = setTimeout(() => setAnimarAlerta(false), DURACION_ALERTA); // Activa fade-out
-      const remove = setTimeout(
-        () => setMostrarAlerta(false),
-        DURACION_ALERTA + 500
-      ); // Lo remueve del DOM
-
-      return () => {
-        clearTimeout(fadeIn);
-        clearTimeout(fadeOut);
-        clearTimeout(remove);
-      };
+  const handleAgregarReseña = async ({
+    ubicacion,
+    proveedorId,
+    comentario,
+    estrellas,
+  }) => {
+    try {
+      console.log("Reseña a enviar:", {
+        ubicacion,
+        proveedorId,
+        comentario,
+        estrellas,
+      });
+      setModalAgregarOpen(false);
+      await cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros);
+    } catch (error) {
+      console.error("Error al enviar reseña:", error);
     }
-  }, [alerta]);
+  };
 
   return (
     <div className="h-full w-full relative">
@@ -213,24 +215,21 @@ const MapaInteractivo = ({ filtros }) => {
                 mapRef.current
               )
             }
-            className="flex-1 bg-primario text-white px-3 py-2 rounded hover:bg-acento transition text-sm"
+            className="flex-1 bg-primario text-white font-semibold px-4 py-2 rounded hover:bg-acento transition"
           >
             Buscar ubicación
           </button>
-          {/* Botón solo visible en desktop */}
           <button
             onClick={() => {
               setCargandoUbicacion(true);
               const evento = new CustomEvent("solicitarUbicacion");
               window.dispatchEvent(evento);
-
-              // Reestablece después de un delay de seguridad
               setTimeout(
                 () => setCargandoUbicacion(false),
-                DURACION_ALERTA + 1000
+                4000
               );
             }}
-            className={`hidden lg:inline-flex items-center gap-1 px-3 py-1.5 rounded text-sm shadow-md transition
+            className={`hidden lg:inline-flex items-center gap-1 px-4 py-2 rounded shadow-md transition
     ${
       cargandoUbicacion
         ? "bg-gray-500 cursor-not-allowed"
@@ -243,6 +242,17 @@ const MapaInteractivo = ({ filtros }) => {
           </button>
         </div>
 
+        {usuario && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setModalReseñaAbierto(true)}
+              className="w-full z-50 bg-primario rounded font-semibold text-white px-4 py-2 hover:bg-acento"
+            >
+              Agregar Reseña
+            </button>
+          </div>
+        )}
+
         {mostrarAlerta && (
           <p
             className={`text-sm text-red-400 transition-opacity duration-500 ${
@@ -254,14 +264,12 @@ const MapaInteractivo = ({ filtros }) => {
         )}
       </div>
 
-      {/* Cargando mapa */}
       {cargandoMapa && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 text-white text-lg font-semibold">
           Cargando mapa...
         </div>
       )}
 
-      {/* Contenedor del mapa */}
       <div
         ref={mapContainer}
         className={`w-full h-full transition-opacity duration-700 ease-in-out ${
@@ -269,7 +277,6 @@ const MapaInteractivo = ({ filtros }) => {
         }`}
       />
 
-      {/* Modales */}
       <ModalProveedor
         proveedor={proveedorActivo}
         onClose={() => setProveedorActivo(null)}
@@ -278,6 +285,15 @@ const MapaInteractivo = ({ filtros }) => {
       <ModalReseña
         reseña={reseñaActiva}
         onClose={() => setReseñaActiva(null)}
+      />
+
+      <ModalAgregarReseña
+        isOpen={modalReseñaAbierto}
+        onClose={() => setModalReseñaAbierto(false)}
+        onEnviar={handleAgregarReseña}
+        mapRef={mapRef}
+        boundsCorrientes={boundsCorrientes}
+        setAlerta={setAlerta}
       />
     </div>
   );

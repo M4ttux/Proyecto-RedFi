@@ -93,6 +93,7 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
                 leaveTo="opacity-0"
               >
                 <ListboxOptions
+                modal={false}
                   className={classNames(
                     "absolute z-10 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none text-sm scrollbar-thin",
                     abreArriba ? "bottom-full mb-2" : "top-full mt-1"
@@ -197,7 +198,7 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
 
         <button
           onClick={aplicarFiltros}
-          className="bg-primario px-4 py-2 rounded hover:bg-acento text-white text-sm font-semibold"
+          className="bg-primario px-4 py-2 rounded hover:bg-acento text-white font-semibold"
         >
           Aplicar filtros
         </button>
