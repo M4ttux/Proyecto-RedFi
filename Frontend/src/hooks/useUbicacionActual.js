@@ -1,7 +1,16 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { manejarUbicacionActual } from "../services/mapa";
 
-const useUbicacionActual = (mapRef, setAlerta, boundsCorrientes) => {
+export const useUbicacionActual = (boundsCorrientes, setAlerta, mapRef) => {
+  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+
+  const handleUbicacionActual = () => {
+    setCargandoUbicacion(true);
+    const evento = new CustomEvent("solicitarUbicacion");
+    window.dispatchEvent(evento);
+    setTimeout(() => setCargandoUbicacion(false), 4000);
+  };
+
   useEffect(() => {
     const manejarEvento = () => {
       if (mapRef.current) {
@@ -13,11 +22,13 @@ const useUbicacionActual = (mapRef, setAlerta, boundsCorrientes) => {
     };
 
     window.addEventListener("solicitarUbicacion", manejarEvento);
-
     return () => {
       window.removeEventListener("solicitarUbicacion", manejarEvento);
     };
-  }, [mapRef, setAlerta, boundsCorrientes]);
-};
+  }, [boundsCorrientes, setAlerta, mapRef]);
 
-export default useUbicacionActual;
+  return {
+    cargandoUbicacion,
+    handleUbicacionActual,
+  };
+};
