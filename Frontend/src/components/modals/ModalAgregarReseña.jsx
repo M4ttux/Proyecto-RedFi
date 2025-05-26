@@ -7,7 +7,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import { obtenerProveedores } from "../../services/proveedorService";
-import { estaEnCorrientes } from "../../services/mapaService";
+import { estaEnCorrientes } from "../../services/mapa/mapaBase";
 import {
   IconX,
   IconCurrentLocation,

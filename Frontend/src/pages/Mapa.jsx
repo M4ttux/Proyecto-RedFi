@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MapaInteractivo from "../components/MapaInteractivo";
 import FiltrosZona from "../components/FiltrosZona";
 import { IconX, IconSettings, IconCurrentLocation } from "@tabler/icons-react";
 import { DURACION_ALERTA } from "../constantes";
 
 const Mapa = () => {
+  const mapContainerRef = useRef(null);
+
   useEffect(() => {
     document.title = "Red-Fi | Mapa";
   }, []);
@@ -23,7 +25,7 @@ const Mapa = () => {
 
         {/* Mapa principal */}
         <section className="col-span-1 lg:col-span-9 h-full relative">
-          <MapaInteractivo filtros={filtros} />
+          <MapaInteractivo filtros={filtros} mapContainerRef={mapContainerRef} />
 
           {/* Botones flotantes mobile */}
           <div className="lg:hidden absolute bottom-4 right-4 flex flex-col gap-3 z-30">

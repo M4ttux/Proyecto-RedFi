@@ -10,7 +10,7 @@ import {
   limpiarMarcadoresReseñas,
   manejarUbicacionActual,
   buscarUbicacion,
-} from "../services/mapaService";
+} from "../services/mapa";
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
 import { IconCurrentLocation } from "@tabler/icons-react";
@@ -23,7 +23,7 @@ const MapaInteractivo = ({ filtros }) => {
   const mapRef = useRef(null);
   const navControlRef = useRef(null);
   const isMapLoaded = useRef(false);
-  const marcadoresReseñasRef = useRef([]); // Controlado
+  const marcadoresReseñasRef = useRef([]);
 
   const [input, setInput] = useState("");
   const [alerta, setAlerta] = useState("");
@@ -76,11 +76,7 @@ const MapaInteractivo = ({ filtros }) => {
 
     map.on("load", async () => {
       isMapLoaded.current = true;
-      proveedoresRef.current = await cargarProveedoresEnMapa(
-        map,
-        filtros,
-        setProveedorActivo
-      );
+      proveedoresRef.current = await cargarProveedoresEnMapa(map, filtros, setProveedorActivo);
       await cargarReseñasEnMapa(map, setReseñaActiva, filtros, marcadoresReseñasRef);
       setCargandoMapa(false);
     });
@@ -124,7 +120,7 @@ const MapaInteractivo = ({ filtros }) => {
   useEffect(() => {
     const manejarEvento = () => {
       if (mapRef.current) {
-        setAlerta(""); // Reinicia el mensaje para que el hook lo tome como nuevo
+        setAlerta("");
         setTimeout(() => {
           manejarUbicacionActual(boundsCorrientes, setAlerta, mapRef.current);
         }, 50);
