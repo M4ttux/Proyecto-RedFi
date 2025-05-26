@@ -1,15 +1,15 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   crearMapaBase,
   cargarProveedoresEnMapa,
   actualizarVisibilidadEnMapa,
-  manejarUbicacionActual,
-  buscarUbicacion,
   cargarReseñasEnMapa,
   limpiarMarcadoresReseñas,
+  manejarUbicacionActual,
+  buscarUbicacion,
 } from "../services/mapaService";
 import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
@@ -22,6 +22,9 @@ const MapaInteractivo = ({ filtros }) => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
   const navControlRef = useRef(null);
+  const isMapLoaded = useRef(false);
+  const marcadoresReseñasRef = useRef([]); // Controlado
+
   const [input, setInput] = useState("");
   const [alerta, setAlerta] = useState("");
   const proveedoresRef = useRef([]);
@@ -33,6 +36,9 @@ const MapaInteractivo = ({ filtros }) => {
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const { usuario } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [cargandoMapa, setCargandoMapa] = useState(true);
+  const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
 
   const boundsCorrientes = {
     west: -60.9,
@@ -41,10 +47,11 @@ const MapaInteractivo = ({ filtros }) => {
     north: -26.1,
   };
 
-  const [cargandoMapa, setCargandoMapa] = useState(true);
-
-  // 👉 Aquí usamos el hook
-  const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
+  const recargarReseñas = useCallback(() => {
+    if (mapRef.current && isMapLoaded.current) {
+      cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros, marcadoresReseñasRef);
+    }
+  }, [filtros]);
 
   useEffect(() => {
     const map = crearMapaBase(mapContainer.current, [
@@ -68,28 +75,59 @@ const MapaInteractivo = ({ filtros }) => {
     window.addEventListener("resize", setNavPosition);
 
     map.on("load", async () => {
+      isMapLoaded.current = true;
       proveedoresRef.current = await cargarProveedoresEnMapa(
         map,
         filtros,
         setProveedorActivo
       );
-
-      await cargarReseñasEnMapa(map, setReseñaActiva, filtros);
+      await cargarReseñasEnMapa(map, setReseñaActiva, filtros, marcadoresReseñasRef);
       setCargandoMapa(false);
     });
 
     return () => {
       map.remove();
       window.removeEventListener("resize", setNavPosition);
-      limpiarMarcadoresReseñas();
+      limpiarMarcadoresReseñas(marcadoresReseñasRef);
       proveedoresRef.current = [];
     };
   }, []);
 
   useEffect(() => {
+    if (location.pathname === "/mapa") {
+      recargarReseñas();
+    }
+  }, [location.pathname, recargarReseñas]);
+
+  useEffect(() => {
+    if (!mapRef.current || !isMapLoaded.current) return;
+    actualizarVisibilidadEnMapa(mapRef.current, proveedoresRef, filtros);
+    recargarReseñas();
+  }, [filtros, recargarReseñas]);
+
+  const handleAgregarReseña = async ({ ubicacion, proveedorId, comentario, estrellas }) => {
+    try {
+      setModalReseñaAbierto(false);
+      await cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros, marcadoresReseñasRef);
+    } catch (error) {
+      console.error("Error al enviar reseña:", error);
+    }
+  };
+
+  const handleUbicacionActual = () => {
+    setCargandoUbicacion(true);
+    const evento = new CustomEvent("solicitarUbicacion");
+    window.dispatchEvent(evento);
+    setTimeout(() => setCargandoUbicacion(false), 4000);
+  };
+
+  useEffect(() => {
     const manejarEvento = () => {
       if (mapRef.current) {
-        manejarUbicacionActual(boundsCorrientes, setAlerta, mapRef.current);
+        setAlerta(""); // Reinicia el mensaje para que el hook lo tome como nuevo
+        setTimeout(() => {
+          manejarUbicacionActual(boundsCorrientes, setAlerta, mapRef.current);
+        }, 50);
       }
     };
 
@@ -99,50 +137,8 @@ const MapaInteractivo = ({ filtros }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!mapRef.current) return;
-    const map = mapRef.current;
-
-    const handleLoad = async () => {
-      console.log("📍 Mapa listo, cargando datos...");
-      proveedoresRef.current = await cargarProveedoresEnMapa(
-        map,
-        filtros,
-        setProveedorActivo
-      );
-      await cargarReseñasEnMapa(map, setReseñaActiva, filtros);
-    };
-
-    if (map.loaded()) {
-      handleLoad();
-    } else {
-      map.once("load", handleLoad);
-    }
-  }, [filtros]);
-
-  const handleAgregarReseña = async ({
-    ubicacion,
-    proveedorId,
-    comentario,
-    estrellas,
-  }) => {
-    try {
-      console.log("Reseña a enviar:", {
-        ubicacion,
-        proveedorId,
-        comentario,
-        estrellas,
-      });
-      setModalAgregarOpen(false);
-      await cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros);
-    } catch (error) {
-      console.error("Error al enviar reseña:", error);
-    }
-  };
-
   return (
     <div className="h-full w-full relative">
-      {/* Barra de búsqueda visible siempre */}
       <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-xl shadow-lg space-y-2">
         <div className="flex justify-between items-center">
           <p className="font-semibold text-sm text-texto">Buscar ubicación</p>
@@ -220,21 +216,12 @@ const MapaInteractivo = ({ filtros }) => {
             Buscar ubicación
           </button>
           <button
-            onClick={() => {
-              setCargandoUbicacion(true);
-              const evento = new CustomEvent("solicitarUbicacion");
-              window.dispatchEvent(evento);
-              setTimeout(
-                () => setCargandoUbicacion(false),
-                4000
-              );
-            }}
-            className={`hidden lg:inline-flex items-center gap-1 px-4 py-2 rounded shadow-md transition
-    ${
-      cargandoUbicacion
-        ? "bg-gray-500 cursor-not-allowed"
-        : "bg-primario hover:bg-acento"
-    }`}
+            onClick={handleUbicacionActual}
+            className={`hidden lg:inline-flex items-center gap-1 px-4 py-2 rounded shadow-md transition ${
+              cargandoUbicacion
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-primario hover:bg-acento"
+            }`}
             disabled={cargandoUbicacion}
             title="Ubicación actual"
           >

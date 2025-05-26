@@ -108,6 +108,6 @@ html {
   color: red;
 }
 
-.maplibregl-canvas-container {
-  overflow: hidden;
+.maplibregl-canvas {
+  overflow: hidden !important;
 }
