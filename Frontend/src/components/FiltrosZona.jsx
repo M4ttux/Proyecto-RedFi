@@ -8,7 +8,6 @@ import {
 } from "@headlessui/react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
-import { obtenerReseñas } from "../services/reseñaService";
 import { IconChevronDown } from "@tabler/icons-react";
 
 function classNames(...classes) {
@@ -20,8 +19,8 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
   const [proveedores, setProveedores] = useState([]);
   const [tecnologiasUnicas, setTecnologiasUnicas] = useState([]);
   const [filtros, setFiltros] = useState({
-    zona: "",
-    proveedor: "",
+    zona: { id: "", nombre: "Todas las zonas" },
+    proveedor: { id: "", nombre: "Todos los proveedores" },
     tecnologia: "",
     valoracionMin: 0,
   });
@@ -38,10 +37,9 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
   }, []);
 
   const aplicarFiltros = () => {
-    // Enviamos los valores como strings o números simples, no objetos completos
     onFiltrar({
-      zona: filtros.zona || "",
-      proveedor: filtros.proveedor || "",
+      zona: filtros.zona.id || "",
+      proveedor: filtros.proveedor.id || "",
       tecnologia: filtros.tecnologia || "",
       valoracionMin: filtros.valoracionMin || 0,
     });
@@ -100,7 +98,7 @@ const FiltrosZona = ({ onFiltrar, abrirHaciaArriba = false }) => {
                           "relative cursor-pointer select-none py-2 pl-3 pr-4"
                         )
                       }
-                      value={option.id !== undefined ? option.id : option}
+                      value={option}
                     >
                       {({ selected }) => (
                         <span
