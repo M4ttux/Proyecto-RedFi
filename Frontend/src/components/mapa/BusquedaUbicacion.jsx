@@ -32,14 +32,14 @@ const BusquedaUbicacion = ({
       />
       
       {input && sugerencias.length > 0 && (
-        <ul className="bg-fondo border border-white/10 rounded-md mt-1 max-h-40 overflow-auto text-sm">
+        <ul className="bg-fondo border border-white/10 rounded-md mt-1 max-h-40 overflow-auto text-sm text-texto">
           {sugerencias.map((sug, index) => (
             <li
               key={index}
               onClick={() => handleSeleccionarSugerencia(sug)}
               className="px-3 py-2 cursor-pointer hover:bg-white/10"
             >
-              {sug.display_name}
+              {sug.formatted}
             </li>
           ))}
         </ul>

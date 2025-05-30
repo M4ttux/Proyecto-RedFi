@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
 import { buscarUbicacion } from "../services/mapa";
 
+const API_KEY = "195f05dc4c614f52ac0ac882ee570395";
+
 export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
   const [input, setInput] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
@@ -13,12 +15,12 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
       setTimeout(() => {
         if (value.trim().length > 2) {
           fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-              value + ", Corrientes, Argentina"
-            )}&addressdetails=1&limit=5`
+            `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(value + ", Corrientes, Argentina")}&key=${API_KEY}&limit=5`
           )
             .then((res) => res.json())
-            .then((data) => setSugerencias(data))
+            .then((data) => {
+              setSugerencias(data.results || []);
+            })
             .catch((err) => console.error("Error en autocompletar:", err));
         } else {
           setSugerencias([]);
@@ -37,9 +39,9 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
   };
 
   const handleSeleccionarSugerencia = (sugerencia) => {
-    setInput(sugerencia.display_name);
+    setInput(sugerencia.formatted);
     setSugerencias([]);
-    buscarUbicacion(sugerencia.display_name, boundsCorrientes, setAlerta, mapRef.current);
+    buscarUbicacion(sugerencia.formatted, boundsCorrientes, setAlerta, mapRef.current);
   };
 
   return {
