@@ -1,12 +1,12 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect } from "react";
+import { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { cargarReseñasEnMapa } from "../services/mapa";
 import { useMapaInteractivo } from "../hooks/useMapaInteractivo";
 import { useUbicacionActual } from "../hooks/useUbicacionActual";
 import { useSeleccionUbicacion } from "../hooks/useSeleccionUbicacion"; //   NUEVO
 import { BOUNDS_CORRIENTES } from "../constantes";
+
 import CargandoMapa from "./mapa/CargandoMapa";
 import PanelControlMapa from "./mapa/PanelControlMapa";
 import ModalProveedor from "./modals/ModalProveedor";
@@ -145,4 +145,4 @@ const MapaInteractivo = ({ filtros }) => {
   );
 };
 
-export default MapaInteractivo;
+export default memo(MapaInteractivo);
