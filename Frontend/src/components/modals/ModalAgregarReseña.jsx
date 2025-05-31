@@ -20,17 +20,17 @@ const ModalAgregarReseña = ({
   onEnviar,
   mapRef,
   boundsCorrientes,
-  coordenadasSeleccionadas, 
-  onSeleccionarUbicacion,   
+  coordenadasSeleccionadas,
+  onSeleccionarUbicacion,
 }) => {
   const [proveedores, setProveedores] = useState([]);
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
   const [comentario, setComentario] = useState("");
-  const [ubicacionTexto, setUbicacionTexto] = useState(""); //   RENOMBRADO
+  const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
   const [alerta, setAlerta] = useState("");
-
   const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
+
   const estrellasOptions = [1, 2, 3, 4, 5];
 
   useEffect(() => {
@@ -44,7 +44,6 @@ const ModalAgregarReseña = ({
   // Efecto para manejar coordenadas seleccionadas
   useEffect(() => {
     if (coordenadasSeleccionadas) {
-      // Convertir coordenadas a texto legible
       convertirCoordenadasATexto(coordenadasSeleccionadas);
     }
   }, [coordenadasSeleccionadas]);
@@ -56,7 +55,7 @@ const ModalAgregarReseña = ({
         `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json`
       );
       const data = await response.json();
-      
+
       if (data && data.display_name) {
         setUbicacionTexto(data.display_name);
       } else {
@@ -69,20 +68,45 @@ const ModalAgregarReseña = ({
     }
   };
 
-  // Manejar selección en mapa
-  const handleSeleccionarEnMapa = () => {
+  // 🔧 Manejar selección en mapa con prevención de propagación
+  const handleSeleccionarEnMapa = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setAlerta("");
-    onSeleccionarUbicacion(); // Cerrar modal y activar modo selección
+    
+    // 🔧 Usar setTimeout para evitar conflictos de eventos
+    setTimeout(() => {
+      onSeleccionarUbicacion();
+    }, 100);
+  };
+
+  // 🔧 Manejar cierre de modal con prevención de propagación
+  const handleClose = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  };
+
+  // 🔧 Prevenir propagación en el contenido de la modal
+  const handleModalContentClick = (e) => {
+    e.stopPropagation();
+  };
+
+  // 🔧 Manejar clic en el overlay (fondo)
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleClose(e);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    e.stopPropagation();
+
     if (!comentario.trim() || !proveedorSeleccionado) {
       setAlerta("Debes completar todos los campos.");
       return;
     }
-
     if (!coordenadasSeleccionadas) {
       setAlerta("Debes seleccionar una ubicación en el mapa.");
       return;
@@ -92,8 +116,8 @@ const ModalAgregarReseña = ({
       comentario,
       estrellas,
       proveedor_id: proveedorSeleccionado.id,
-      ubicacion: coordenadasSeleccionadas, // Enviar coordenadas
-      ubicacionTexto, // Enviar texto de ubicación
+      ubicacion: coordenadasSeleccionadas,
+      ubicacionTexto,
     });
 
     // Limpiar formulario
@@ -104,20 +128,47 @@ const ModalAgregarReseña = ({
     onClose();
   };
 
+  // 🔧 Efecto para manejar tecla Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        handleClose(e);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // 🔧 Prevenir scroll del body cuando la modal está abierta
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
-      <div className="bg-fondo p-6 rounded-xl w-[95vw] max-w-md relative">
+    <div 
+      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center"
+      onClick={handleOverlayClick}
+    >
+      <div 
+        className="bg-fondo p-6 rounded-xl w-[95vw] max-w-md relative"
+        onClick={handleModalContentClick}
+      >
         <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-texto hover:text-acento"
+          onClick={handleClose}
+          className="absolute top-2 right-2 text-texto hover:text-acento transition-colors"
+          type="button"
         >
           <IconX size={24} />
         </button>
-        
+
         <h2 className="text-xl font-bold mb-4 text-texto">Agregar Reseña</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Select Proveedor */}
           <div className="space-y-1">
@@ -184,7 +235,7 @@ const ModalAgregarReseña = ({
           {/* SECCIÓN: Selección de Ubicación */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-texto">Ubicación</label>
-            
+
             {/* Mostrar ubicación seleccionada */}
             {coordenadasSeleccionadas ? (
               <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">

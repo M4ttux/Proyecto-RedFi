@@ -1,10 +1,11 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
+import { crearReseña } from "../services/reseñaService";
 import { cargarReseñasEnMapa } from "../services/mapa";
 import { useMapaInteractivo } from "../hooks/useMapaInteractivo";
 import { useUbicacionActual } from "../hooks/useUbicacionActual";
-import { useSeleccionUbicacion } from "../hooks/useSeleccionUbicacion"; //   NUEVO
+import { useSeleccionUbicacion } from "../hooks/useSeleccionUbicacion";
 import { BOUNDS_CORRIENTES } from "../constantes";
 
 import CargandoMapa from "./mapa/CargandoMapa";
@@ -43,10 +44,10 @@ const MapaInteractivo = ({ filtros }) => {
     activarSeleccion,
     desactivarSeleccion,
     limpiarSeleccion,
-  } = useSeleccionUbicacion(mapRef, boundsCorrientes);
+  } = useSeleccionUbicacion(mapRef, boundsCorrientes, setModalReseñaAbierto);
 
   const handleAbrirModalReseña = () => {
-    limpiarSeleccion(); 
+    limpiarSeleccion();
     setModalReseñaAbierto(true);
   };
 
@@ -55,20 +56,35 @@ const MapaInteractivo = ({ filtros }) => {
     activarSeleccion(); // Activar modo selección
   };
 
-
   useEffect(() => {
     if (coordenadasSeleccionadas && !modalReseñaAbierto) {
       setModalReseñaAbierto(true); // Reabrir modal con coordenadas
     }
   }, [coordenadasSeleccionadas, modalReseñaAbierto]);
 
-  const handleAgregarReseña = async ({ ubicacion, proveedorId, comentario, estrellas }) => {
+  const handleAgregarReseña = async (reseñaData) => {
     try {
+      console.log("📤 Datos recibidos para guardar:", reseñaData);
+
+      // 🔧 GUARDAR en Supabase con formato JSON
+      const nuevaReseña = await crearReseña(reseñaData); // o crearReseñaSinAuth
+      console.log("✅ Reseña guardada exitosamente:", nuevaReseña);
+
+      // 🔧 Cerrar modal y limpiar después de guardar exitosamente
       setModalReseñaAbierto(false);
-      limpiarSeleccion(); 
-      await cargarReseñasEnMapa(mapRef.current, setReseñaActiva, filtros, marcadoresReseñasRef);
+      limpiarSeleccion();
+
+      // 🔧 Recargar reseñas en el mapa
+      await cargarReseñasEnMapa(
+        mapRef.current,
+        setReseñaActiva,
+        filtros,
+        marcadoresReseñasRef
+      );
     } catch (error) {
-      console.error("Error al enviar reseña:", error);
+      console.error("❌ Error al enviar reseña:", error);
+      // La modal manejará el error y no se cerrará
+      throw error;
     }
   };
 
@@ -85,7 +101,9 @@ const MapaInteractivo = ({ filtros }) => {
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-white px-4 py-2 rounded-lg shadow-lg">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">Haz clic en el mapa para seleccionar ubicación</span>
+            <span className="text-sm font-medium">
+              Haz clic en el mapa para seleccionar ubicación
+            </span>
             <button
               onClick={desactivarSeleccion}
               className="ml-2 text-white hover:text-red-200"
@@ -114,9 +132,9 @@ const MapaInteractivo = ({ filtros }) => {
           cargandoMapa ? "opacity-0" : "opacity-100"
         } ${modoSeleccion ? "cursor-crosshair" : ""}`}
         style={{
-          overflow: 'hidden',
-          position: 'relative',
-          touchAction: 'none'
+          overflow: "hidden",
+          position: "relative",
+          touchAction: "none",
         }}
       />
 
@@ -133,13 +151,13 @@ const MapaInteractivo = ({ filtros }) => {
 
       <ModalAgregarReseña
         isOpen={modalReseñaAbierto}
-        onClose={handleCerrarModal} 
+        onClose={handleCerrarModal}
         onEnviar={handleAgregarReseña}
         mapRef={mapRef}
         boundsCorrientes={boundsCorrientes}
         setAlerta={setAlerta}
-        coordenadasSeleccionadas={coordenadasSeleccionadas} 
-        onSeleccionarUbicacion={handleSeleccionarUbicacion} 
+        coordenadasSeleccionadas={coordenadasSeleccionadas}
+        onSeleccionarUbicacion={handleSeleccionarUbicacion}
       />
     </div>
   );
