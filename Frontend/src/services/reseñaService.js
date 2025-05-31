@@ -28,16 +28,12 @@ export const crearReseña = async (reseñaData) => {
   try {
     console.log("📤 Creando reseña en Supabase:", reseñaData);
 
-    // 🔧 Obtener usuario actual (si tienes autenticación)
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const { data: { user } } = await supabase.auth.getUser();
+    
     if (!user) {
       throw new Error("Usuario no autenticado");
     }
 
-    // 🔧 Preparar datos con coordenadas en formato JSON
     const datosReseña = {
       comentario: reseñaData.comentario,
       estrellas: reseñaData.estrellas,
@@ -45,17 +41,26 @@ export const crearReseña = async (reseñaData) => {
       usuario_id: user.id,
       ubicacion: {
         lat: reseñaData.ubicacion.lat,
-        lng: reseñaData.ubicacion.lng,
-      }, // 🔧 Guardar como objeto JSON
+        lng: reseñaData.ubicacion.lng
+      },
     };
 
-    console.log("📋 Datos preparados para insertar:", datosReseña);
-
-    const { data, error } = await supabase
+    // 🔧 Primero insertar
+    const { data: insertData, error: insertError } = await supabase
       .from("reseñas")
       .insert([datosReseña])
-      .select(
-        `
+      .select('id')
+      .single();
+
+    if (insertError) {
+      console.error("❌ Error insertando:", insertError);
+      throw insertError;
+    }
+
+    // 🔧 Luego hacer select completo con todas las relaciones
+    const { data: reseñaCompleta, error: selectError } = await supabase
+      .from("reseñas")
+      .select(`
         id,
         comentario,
         estrellas,
@@ -68,19 +73,21 @@ export const crearReseña = async (reseñaData) => {
         proveedores (
           nombre,
           zona_id,
-          tecnologia
+          tecnologia,
+          zonas ( geom )
         )
-      `
-      )
+      `)
+      .eq('id', insertData.id)
       .single();
 
-    if (error) {
-      console.error("❌ Error de Supabase:", error);
-      throw error;
+    if (selectError) {
+      console.error("❌ Error obteniendo reseña completa:", selectError);
+      throw selectError;
     }
 
-    console.log("✅ Reseña creada exitosamente:", data);
-    return data;
+    console.log("✅ Reseña creada exitosamente:", reseñaCompleta);
+    return reseñaCompleta;
+
   } catch (error) {
     console.error("❌ Error en crearReseña:", error);
     throw error;

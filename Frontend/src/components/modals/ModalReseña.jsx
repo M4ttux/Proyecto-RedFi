@@ -5,20 +5,23 @@ const ModalReseña = ({ reseña, onClose }) => {
   console.log("📊 Reseña recibida en modal:", reseña);
 
   const estrellas = "★".repeat(reseña.estrellas) + "☆".repeat(5 - reseña.estrellas);
-  
-  // 🔧 Acceso más robusto a los datos
+
+  // 🔧 Acceso más robusto a los datos (ahora incluye los nuevos campos)
   const nombre = 
-    reseña.user_profiles?.nombre || 
-    reseña.usuarios?.nombre || 
+    reseña.nombre_usuario ||           // 🔧 Nuevo campo directo
+    reseña.user_profiles?.nombre ||
+    reseña.usuarios?.nombre ||
     reseña.usuario?.nombre ||
-    reseña.nombre_usuario ||
     `Usuario ${reseña.usuario_id}`;
 
   const proveedor = 
-    reseña.proveedores?.nombre || 
+    reseña.nombre_proveedor ||         // 🔧 Nuevo campo directo
+    reseña.proveedores?.nombre ||
     reseña.proveedor?.nombre ||
-    reseña.nombre_proveedor ||
     `Proveedor ID: ${reseña.proveedor_id}`;
+
+  console.log("👤 Nombre usuario:", nombre); // Debug
+  console.log("🏢 Nombre proveedor:", proveedor); // Debug
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
@@ -29,11 +32,11 @@ const ModalReseña = ({ reseña, onClose }) => {
         >
           ✖
         </button>
-        
+
         <p className="text-xs uppercase tracking-wide text-acento mb-2">
           Reseña destacada
         </p>
-        
+
         <div className="flex items-center gap-2 mb-2">
           <img
             src={`https://i.pravatar.cc/40?u=${reseña.usuario_id}`}
@@ -45,13 +48,12 @@ const ModalReseña = ({ reseña, onClose }) => {
             <p className="text-texto/60 text-xs">Proveedor: {proveedor}</p>
           </div>
         </div>
-        
+
         <div className="text-yellow-400 text-sm mb-2">{estrellas}</div>
-        
+
         <p className="text-texto/80 italic leading-snug">
           "{reseña.comentario}"
         </p>
-
       </div>
     </div>
   );

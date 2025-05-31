@@ -1,16 +1,27 @@
 import { obtenerReseñas } from "../reseñaService";
 
-export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}, reseñasSourceId = "reseñas-source", reseñasLayerId = "reseñas-layer") => {
+export const cargarReseñasEnMapa = async (
+  map,
+  setReseñaActiva,
+  filtros = {},
+  reseñasSourceId = "reseñas-source",
+  reseñasLayerId = "reseñas-layer"
+) => {
   try {
     const reseñas = await obtenerReseñas();
+
+    console.log("📊 Reseñas obtenidas:", reseñas); // Debug
+
     const features = reseñas
       .map((r) => {
         const coords = r.ubicacion ? [r.ubicacion.lng, r.ubicacion.lat] : null;
         if (!coords || isNaN(coords[0]) || isNaN(coords[1])) return null;
+
         return {
           type: "Feature",
           geometry: { type: "Point", coordinates: coords },
           properties: {
+            // 🔧 Datos básicos
             id: r.id,
             proveedor_id: r.proveedor_id,
             usuario_id: r.usuario_id,
@@ -18,9 +29,20 @@ export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}, 
             comentario: r.comentario,
             zona_id: r.proveedores?.zona_id || "",
             tecnologia: r.proveedores?.tecnologia || "",
+
+            // 🔧 AGREGAR datos de relaciones completos
+            user_profiles: r.user_profiles || null,
+            proveedores: r.proveedores || null,
+
+            // 🔧 También agregar nombres directamente para fácil acceso
+            nombre_usuario:
+              r.user_profiles?.nombre || `Usuario ${r.usuario_id}`,
+            nombre_proveedor:
+              r.proveedores?.nombre || `Proveedor ID: ${r.proveedor_id}`,
           },
         };
-      }).filter(Boolean);
+      })
+      .filter(Boolean);
 
     const geojson = { type: "FeatureCollection", features };
 
@@ -44,27 +66,35 @@ export const cargarReseñasEnMapa = async (map, setReseñaActiva, filtros = {}, 
       map.on("mouseenter", reseñasLayerId, () => {
         map.getCanvas().style.cursor = "pointer";
       });
-
       map.on("mouseleave", reseñasLayerId, () => {
         map.getCanvas().style.cursor = "";
       });
     }
 
     actualizarVisibilidadReseñas(map, filtros, reseñasLayerId);
+
+    console.log("✅ Reseñas cargadas en mapa con datos completos"); // Debug
   } catch (error) {
     console.error("❌ Error en cargarReseñasEnMapa:", error);
     throw error;
   }
 };
 
-export const actualizarVisibilidadReseñas = (map, filtros, layerId = "reseñas-layer") => {
+export const actualizarVisibilidadReseñas = (
+  map,
+  filtros,
+  layerId = "reseñas-layer"
+) => {
   if (!map.getLayer(layerId)) return;
 
   const filter = ["all"];
-  if (filtros.proveedor) filter.push(["==", ["get", "proveedor_id"], filtros.proveedor]);
+  if (filtros.proveedor)
+    filter.push(["==", ["get", "proveedor_id"], filtros.proveedor]);
   if (filtros.zona) filter.push(["==", ["get", "zona_id"], filtros.zona]);
-  if (filtros.tecnologia) filter.push(["==", ["get", "tecnologia"], filtros.tecnologia]);
-  if (filtros.valoracionMin && !isNaN(filtros.valoracionMin)) filter.push([">=", ["get", "estrellas"], filtros.valoracionMin]);
+  if (filtros.tecnologia)
+    filter.push(["==", ["get", "tecnologia"], filtros.tecnologia]);
+  if (filtros.valoracionMin && !isNaN(filtros.valoracionMin))
+    filter.push([">=", ["get", "estrellas"], filtros.valoracionMin]);
 
   map.setFilter(layerId, filter);
 };

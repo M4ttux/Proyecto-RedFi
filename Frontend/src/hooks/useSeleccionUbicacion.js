@@ -15,11 +15,18 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
     // Cambiar cursor del mapa
     mapRef.current.getCanvas().style.cursor = 'crosshair';
     
+    // 🔧 Deshabilitar interacciones con marcadores durante selección
+    const map = mapRef.current;
+    
     // Crear listener para el click
     const handleMapClick = (e) => {
+      // 🔧 Prevenir que el evento llegue a otros elementos
+      e.preventDefault();
+      e.originalEvent?.stopPropagation();
+      
       const { lng, lat } = e.lngLat;
       
-      console.log("📍 Click en mapa:", { lat, lng });
+      console.log("📍 Click en mapa durante selección:", { lat, lng });
       
       // Verificar que esté dentro de los bounds de Corrientes
       if (
@@ -37,17 +44,22 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
           if (setModalReseñaAbierto) {
             setModalReseñaAbierto(true);
           }
-        }, 100);
+        }, 150); // Aumentar el delay un poco
         
       } else {
         console.warn("❌ Ubicación fuera de Corrientes");
-        // Opcional: podrías agregar una alerta visual aquí
       }
     };
 
-    // Agregar listener
-    mapRef.current.on('click', handleMapClick);
+    // 🔧 Agregar listener con alta prioridad
+    map.on('click', handleMapClick);
     setClickListener(() => handleMapClick);
+    
+    // 🔧 Opcional: Deshabilitar interacciones con marcadores
+    if (map.getLayer('proveedores-layer')) {
+      map.setLayoutProperty('proveedores-layer', 'visibility', 'none');
+    }
+    
   }, [mapRef, boundsCorrientes, setModalReseñaAbierto]);
 
   const desactivarSeleccion = useCallback(() => {
@@ -56,12 +68,19 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
     console.log("🔄 Desactivando modo selección...");
     setModoSeleccion(false);
     
+    const map = mapRef.current;
+    
     // Restaurar cursor
-    mapRef.current.getCanvas().style.cursor = '';
+    map.getCanvas().style.cursor = '';
+    
+    // 🔧 Restaurar visibilidad de marcadores
+    if (map.getLayer('proveedores-layer')) {
+      map.setLayoutProperty('proveedores-layer', 'visibility', 'visible');
+    }
     
     // Remover listener si existe
     if (clickListener) {
-      mapRef.current.off('click', clickListener);
+      map.off('click', clickListener);
       setClickListener(null);
     }
   }, [mapRef, clickListener]);
