@@ -18,12 +18,6 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
   const [zonas, setZonas] = useState([]);
   const [proveedores, setProveedores] = useState([]);
   const [tecnologiasUnicas, setTecnologiasUnicas] = useState([]);
-  /* const [filtros, setFiltros] = useState({
-    zona: { id: "", nombre: "Todas las zonas" },
-    proveedor: { id: "", nombre: "Todos los proveedores" },
-    tecnologia: "",
-    valoracionMin: 0,
-  }); */
 
   useEffect(() => {
     const cargarDatos = async () => {
