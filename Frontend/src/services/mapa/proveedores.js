@@ -32,8 +32,12 @@ export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) 
       source: sourceId,
       paint: {
         "fill-color": prov.color || "#888888",
-        "fill-opacity": prov.visible ? 0.4 : 0,
+        "fill-opacity": 0.4, // 🔧 Opacidad fija, sin transiciones
       },
+      // 🔧 Usar layout visibility en lugar de paint opacity
+      layout: {
+        "visibility": prov.visible ? "visible" : "none"
+      }
     });
 
     map.addLayer({
@@ -43,21 +47,25 @@ export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) 
       paint: {
         "line-color": prov.color || "#000000",
         "line-width": 2,
-        "line-opacity": prov.visible ? 1 : 0,
+        "line-opacity": 1, // 🔧 Opacidad fija, sin transiciones
       },
+      // 🔧 Usar layout visibility en lugar de paint opacity
+      layout: {
+        "visibility": prov.visible ? "visible" : "none"
+      }
     });
 
     // 🔄 Solo agregar eventos de hover, NO de click (se maneja globalmente)
     map.on("mouseenter", fillLayerId, () => {
       if (!prov.visible) return;
       map.getCanvas().style.cursor = "pointer";
-      map.setPaintProperty(fillLayerId, "fill-opacity", 0.6);
+      map.setPaintProperty(fillLayerId, "fill-opacity", 0.6); // Solo hover effect
     });
 
     map.on("mouseleave", fillLayerId, () => {
       if (!prov.visible) return;
       map.getCanvas().style.cursor = "";
-      map.setPaintProperty(fillLayerId, "fill-opacity", 0.4);
+      map.setPaintProperty(fillLayerId, "fill-opacity", 0.4); // Solo hover effect
     });
   });
 
@@ -69,14 +77,15 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
     const fillLayerId = `fill-${prov.id}`;
     const lineLayerId = `line-${prov.id}`;
     const visible = getVisible(prov, filtros);
-
+    
     prov.visible = visible;
 
+    // 🔧 Usar setLayoutProperty en lugar de setPaintProperty para eliminar transiciones
     if (map.getLayer(fillLayerId)) {
-      map.setPaintProperty(fillLayerId, "fill-opacity", visible ? 0.4 : 0);
+      map.setLayoutProperty(fillLayerId, "visibility", visible ? "visible" : "none");
     }
     if (map.getLayer(lineLayerId)) {
-      map.setPaintProperty(lineLayerId, "line-opacity", visible ? 1 : 0);
+      map.setLayoutProperty(lineLayerId, "visibility", visible ? "visible" : "none");
     }
   });
 };
