@@ -3,7 +3,6 @@ import { getVisible } from "./mapaBase";
 
 export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) => {
   const proveedores = await obtenerProveedores();
-
   const proveedoresConEstado = proveedores.map((p) => ({
     ...p,
     visible: getVisible(p, filtros),
@@ -24,11 +23,7 @@ export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) 
 
     map.addSource(sourceId, {
       type: "geojson",
-      data: {
-        type: "Feature",
-        geometry: prov.zonas.geom,
-        properties: {},
-      },
+      data: { type: "Feature", geometry: prov.zonas.geom, properties: {} },
     });
 
     map.addLayer({
@@ -52,10 +47,7 @@ export const cargarProveedoresEnMapa = async (map, filtros, setProveedorActivo) 
       },
     });
 
-    map.on("click", fillLayerId, () => {
-      if (prov.visible) setProveedorActivo(prov);
-    });
-
+    // 🔄 Solo agregar eventos de hover, NO de click (se maneja globalmente)
     map.on("mouseenter", fillLayerId, () => {
       if (!prov.visible) return;
       map.getCanvas().style.cursor = "pointer";
@@ -77,6 +69,7 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
     const fillLayerId = `fill-${prov.id}`;
     const lineLayerId = `line-${prov.id}`;
     const visible = getVisible(prov, filtros);
+
     prov.visible = visible;
 
     if (map.getLayer(fillLayerId)) {

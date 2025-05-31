@@ -6,7 +6,7 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
       <div className="bg-secundario p-6 rounded-lg max-w-md w-full relative shadow-lg">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-white text-lg"
+          className="absolute top-2 right-2 text-white text-lg hover:text-acento transition-colors"
         >
           ✖
         </button>
