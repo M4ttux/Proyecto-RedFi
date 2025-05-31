@@ -1,70 +1,31 @@
 import { useState } from "react";
 import { supabase } from "../../supabase/client";
 import ModalEditarBoleta from "./ModalEditarBoleta";
+import Modal from "./ModalVerBoleta";
 
 const BoletaHistorial = ({ boletas, onActualizar }) => {
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
+  const [boletaParaVer, setBoletaParaVer] = useState(null);
 
   const eliminarBoleta = async (boleta) => {
-    const confirmacion = confirm("¿Estás seguro de eliminar esta boleta?");
-    if (!confirmacion) return;
-
-    const { error: deleteError } = await supabase
-      .from("boletas")
-      .delete()
-      .eq("id", boleta.id);
-
-    if (deleteError) {
+    if (!confirm("¿Estás seguro de eliminar esta boleta?")) return;
+    const { error } = await supabase.from("boletas").delete().eq("id", boleta.id);
+    if (error) {
       alert("Error al eliminar la boleta.");
-      console.error(deleteError);
+      console.error(error);
       return;
     }
-
     if (boleta.url_imagen) {
       const fileName = boleta.url_imagen.split("/").pop();
       await supabase.storage.from("boletas").remove([fileName]);
     }
-
     alert("Boleta eliminada correctamente.");
-    if (onActualizar) onActualizar();
+    onActualizar?.();
   };
 
-  const descargarBoleta = async (boleta) => {
-    const fileName = boleta.url_imagen.split("/").pop();
-
-    const { data, error } = await supabase.storage
-      .from("boletas")
-      .createSignedUrl(fileName, 60);
-
-    if (error) {
-      alert("Error al generar enlace de descarga.");
-      return;
-    }
-
-    const link = document.createElement("a");
-    link.href = data.signedUrl;
-    link.download = `boleta-${boleta.mes}-${boleta.anio}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const total = boletas.reduce((acc, b) => acc + parseFloat(b.monto), 0);
-
-  // ✅ Mapeo de nombres de mes a número
   const meses = {
-    enero: 1,
-    febrero: 2,
-    marzo: 3,
-    abril: 4,
-    mayo: 5,
-    junio: 6,
-    julio: 7,
-    agosto: 8,
-    septiembre: 9,
-    octubre: 10,
-    noviembre: 11,
-    diciembre: 12,
+    enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
+    julio: 7, agosto: 8, septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12,
   };
 
   const getFechaOrden = (boleta) => {
@@ -72,128 +33,89 @@ const BoletaHistorial = ({ boletas, onActualizar }) => {
     return new Date(`${boleta.anio}-${String(mesNum).padStart(2, "0")}-01`);
   };
 
-  // ✅ Ordenar correctamente por fecha
-  const boletasOrdenadas = [...boletas].sort((a, b) => {
-    return getFechaOrden(b) - getFechaOrden(a); // más reciente primero
-  });
+  const boletasOrdenadas = [...boletas].sort((a, b) => getFechaOrden(b) - getFechaOrden(a));
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4 mt-0 text-center w-full">
+      <h2 className="text-2xl font-semibold mb-6 text-center text-white">
         Historial de Boletas
       </h2>
 
       {boletas.length === 0 ? (
         <p className="text-white/60 text-center">No cargaste boletas aún.</p>
       ) : (
-        <>
-          <ul className="space-y-4">
-            {boletasOrdenadas.map((b, index) => {
-              const actual = parseFloat(b.monto);
-              const anterior = boletasOrdenadas[index + 1]
-                ? parseFloat(boletasOrdenadas[index + 1].monto)
-                : null;
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {boletasOrdenadas.map((b, index) => {
+            const actual = parseFloat(b.monto);
+            const anterior = boletasOrdenadas[index + 1]
+              ? parseFloat(boletasOrdenadas[index + 1].monto)
+              : null;
 
-              let diferenciaTexto = "";
-              if (index === 0 && anterior !== null) {
-                const diferencia = actual - anterior;
-                if (diferencia > 0) {
-                  diferenciaTexto = `📈 Subió $${diferencia.toFixed(
-                    2
-                  )} respecto al mes anterior`;
-                } else if (diferencia < 0) {
-                  diferenciaTexto = `📉 Bajó $${Math.abs(diferencia).toFixed(
-                    2
-                  )} respecto al mes anterior`;
-                } else {
-                  diferenciaTexto = `🟰 Se mantuvo igual al mes anterior`;
-                }
+            let diferenciaTexto = "";
+            if (index === 0 && anterior !== null) {
+              const diferencia = actual - anterior;
+              if (diferencia > 0) {
+                diferenciaTexto = `📈 Subió $${diferencia.toFixed(2)}`;
+              } else if (diferencia < 0) {
+                diferenciaTexto = `📉 Bajó $${Math.abs(diferencia).toFixed(2)}`;
+              } else {
+                diferenciaTexto = `🟰 Sin cambios`;
               }
+            }
 
-              return (
-                <li
-                  key={b.id}
-                  className="bg-white/5 p-4 rounded-lg border border-white/10 text-white"
-                >
-                  <div className="flex justify-between">
-                    <span>
-                      {b.mes} {b.anio}
-                    </span>
-                    <span className="font-semibold text-green-400">
-                      ${actual.toFixed(2)}
-                    </span>
-                  </div>
+            return (
+              <div key={b.id} className="bg-white/5 text-white p-5 rounded-lg border border-white/10 max-w-2xl w-full">
+                <div className="flex justify-between text-base mb-2">
+                  <span className="font-semibold">{b.mes} {b.anio}</span>
+                  <span className="text-green-400 font-bold">${actual.toFixed(2)}</span>
+                </div>
 
-                  <div className="text-sm text-white/60 mb-1">
-                    {b.proveedor} — vence el{" "}
-                    {new Date(b.vencimiento).toLocaleDateString("es-AR", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </div>
+                <p className="text-sm text-white/70 mb-1">
+                  Proveedor: <span className="text-white">{b.proveedor}</span>
+                </p>
+                <p className="text-sm text-white/70 mb-1">
+                  Vence el: {new Date(b.vencimiento).toLocaleDateString("es-AR", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
 
-                  {diferenciaTexto && (
-                    <div className="text-sm mb-2 italic text-white/80">
-                      {diferenciaTexto}
-                    </div>
-                  )}
+                {diferenciaTexto && (
+                  <p className="text-sm italic text-white/80 mb-3">{diferenciaTexto}</p>
+                )}
 
-                  {b.url_imagen && (
-                    <div className="mt-3">
-                      <img
-                        src={b.url_imagen}
-                        alt="Boleta"
-                        className="max-w-xs rounded border border-white/10 mb-2"
-                      />
-                      <div className="flex flex-wrap gap-3">
-                        <a
-                          href={b.url_imagen}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Ver boleta"
-                        >
-                          <button className="p-2 bg-blue-600 rounded hover:bg-blue-700">
-                            Ver
-                          </button>
-                        </a>
+                <div className="flex justify-start gap-3 mt-2">
+                  <button onClick={() => setBoletaParaVer(b)} className="bg-blue-600 p-2 rounded hover:bg-blue-700 font-semibold" title="Ver">
+                    Ver
+                  </button>
 
-                        <button
-                          onClick={() => descargarBoleta(b)}
-                          title="Descargar boleta"
-                          className="p-2 bg-green-600 rounded hover:bg-green-700"
-                        >
-                          Descargar
-                        </button>
+                  <button onClick={() => eliminarBoleta(b)} className="bg-red-600 p-2 rounded hover:bg-red-700 font-semibold" title="Eliminar">
+                    Eliminar
+                  </button>
+                  <button onClick={() => setBoletaSeleccionada(b)} className="bg-yellow-500 p-2 rounded hover:bg-yellow-600 text-black font-semibold" title="Modificar">
+                    Editar
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
-                        <button
-                          onClick={() => eliminarBoleta(b)}
-                          title="Eliminar boleta"
-                          className="p-2 bg-red-600 rounded hover:bg-red-700"
-                        >
-                          Eliminar
-                        </button>
-
-                        <button
-                          onClick={() => setBoletaSeleccionada(b)}
-                          title="Modificar boleta"
-                          className="p-2 bg-yellow-500 rounded hover:bg-yellow-600 text-black"
-                        >
-                          Modificar
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* ✅ Total al final */}
-          <p className="text-center text-white mt-8 mb-16 font-semibold">
-            💰 Total gastado: ${total.toFixed(2)}
-          </p>
-        </>
+      {boletaParaVer && (
+        <Modal
+          boleta={boletaParaVer}
+          onClose={() => setBoletaParaVer(null)}
+          onEditar={(b) => {
+            setBoletaSeleccionada(b);
+            setBoletaParaVer(null);
+          }}
+          onEliminar={(b) => {
+            eliminarBoleta(b);
+            setBoletaParaVer(null);
+          }}
+        />
       )}
 
       {boletaSeleccionada && (

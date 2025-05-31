@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../supabase/client";
 
-const BoletaForm = ({ onBoletaAgregada }) => {
+const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
   const [form, setForm] = useState({
     mes: "",
     anio: "",
@@ -11,13 +11,20 @@ const BoletaForm = ({ onBoletaAgregada }) => {
   });
 
   const [archivo, setArchivo] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleFileChange = (e) => {
-    setArchivo(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setArchivo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result);
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -66,12 +73,19 @@ const BoletaForm = ({ onBoletaAgregada }) => {
         vencimiento: "",
       });
       setArchivo(null);
+      setPreviewUrl(null);
+
       if (onBoletaAgregada) onBoletaAgregada();
+      if (onActualizarNotificaciones) onActualizarNotificaciones();
+      window.dispatchEvent(new Event("nueva-boleta")); // 🚀 Notificar al Navbar
     }
   };
 
   return (
     <div>
+      <h2 className="text-2xl font-semibold mb-6 text-center text-white">
+        Carga de Boletas
+      </h2>
       <form
         onSubmit={handleSubmit}
         className="space-y-6 bg-white/5 p-6 rounded-xl"
@@ -142,7 +156,6 @@ const BoletaForm = ({ onBoletaAgregada }) => {
 
           <div className="md:col-span-2 text-center">
             <label className="block text-white mb-1">Imagen de la boleta</label>
-
             <label className="inline-block bg-white text-black font-semibold px-6 py-2 rounded cursor-pointer hover:bg-gray-200 transition">
               Seleccionar imagen
               <input
@@ -154,7 +167,32 @@ const BoletaForm = ({ onBoletaAgregada }) => {
             </label>
 
             {archivo && (
-              <p className="text-white text-sm mt-2">{archivo.name}</p>
+              <div className="mt-2 text-white text-sm flex flex-col items-center">
+                <div className="flex items-center gap-2">
+                  <span>{archivo.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setArchivo(null);
+                      setPreviewUrl(null);
+                    }}
+                    className="bg-red-600 hover:bg-red-600 text-white rounded-full px-2 py-1 text-xs"
+                    title="Eliminar imagen"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {previewUrl && (
+                  <div className="mt-3">
+                    <img
+                      src={previewUrl}
+                      alt="Previsualización"
+                      className="max-h-48 rounded border"
+                    />
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

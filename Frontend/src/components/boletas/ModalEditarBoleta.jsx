@@ -4,13 +4,25 @@ import { supabase } from "../../supabase/client";
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   const [form, setForm] = useState({ ...boleta });
   const [archivoNuevo, setArchivoNuevo] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleFileChange = (e) => {
-    setArchivoNuevo(e.target.files[0]);
+    const file = e.target.files[0];
+    setArchivoNuevo(file);
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    } else {
+      setPreview(null);
+    }
+  };
+
+  const borrarArchivoNuevo = () => {
+    setArchivoNuevo(null);
+    setPreview(null);
   };
 
   const handleGuardarCambios = async () => {
@@ -100,8 +112,9 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onChange={handleChange}
             className="border p-2 rounded col-span-1 md:col-span-2"
           />
-          <div className="md:col-span-2 text-center">
-            <label className="block text-black mb-1">
+
+          <div className="md:col-span-2 text-center space-y-2">
+            <label className="block text-black mb-1 font-medium">
               Nueva imagen (opcional)
             </label>
 
@@ -115,16 +128,38 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
               />
             </label>
 
-            {archivoNuevo && (
-              <p className="text-sm mt-2 text-black/80">{archivoNuevo.name}</p>
+            {preview && (
+              <div className="mt-3">
+                <img
+                  src={preview}
+                  alt="Previsualización"
+                  className="mx-auto max-h-40 object-contain border rounded"
+                />
+                <button
+                  onClick={borrarArchivoNuevo}
+                  className="text-sm text-red-600 mt-1 hover:underline"
+                >
+                  Quitar imagen seleccionada
+                </button>
+              </div>
+            )}
+
+            {!preview && boleta.url_imagen && (
+              <div className="mt-3">
+                <p className="text-sm text-gray-600 mb-1">Imagen actual:</p>
+                <img
+                  src={boleta.url_imagen}
+                  alt="Boleta actual"
+                  className="mx-auto max-h-40 object-contain border rounded"
+                />
+              </div>
             )}
           </div>
         </div>
-
-        <div className="flex justify-end gap-4 pt-4">
+        <div className="flex justify-center gap-4 pt-4">
           <button
             onClick={onClose}
-            className="bg-gray-400 hover:bg-gray-500 px-4 py-2 rounded text-white"
+            className="bg-gray-400 hover:bg-gray-500 px-4 py-2 rounded text-white font-semibold"
           >
             Cancelar
           </button>
@@ -132,7 +167,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onClick={handleGuardarCambios}
             className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded text-white font-semibold"
           >
-            Guardar cambios
+            Guardar Cambios
           </button>
         </div>
       </div>
