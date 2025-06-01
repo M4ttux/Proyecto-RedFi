@@ -1,186 +1,160 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
+const flujoConversacion = {
+  inicio: {
+    mensaje: "Hola 👋, soy el asistente de Red-Fi. ¿Cómo estás?",
+    opciones: [
+      { texto: "Tengo dudas", siguiente: "dudas" },
+      { texto: "Tengo problemas", siguiente: "problemas" },
+    ],
+  },
+  dudas: {
+    mensaje: "Claro, ¿sobre qué querés saber más?",
+    opciones: [
+      {
+        texto: "¿Qué es Red-Fi?",
+        respuesta:
+          "Red-Fi es una plataforma que te ayuda a conocer la cobertura y calidad de proveedores de Internet en tu zona. Te permite comparar servicios y mejorar tu conexión.",
+      },
+      {
+        texto: "¿Qué herramientas tiene Red-Fi?",
+        respuesta:
+          "Red-Fi ofrece un mapa interactivo, test de velocidad, reseñas de usuarios y buscador de proveedores.",
+      },
+      {
+        texto: "¿Cómo puedo registrarme?",
+        respuesta:
+          "Registrarte es fácil: solo necesitas tu correo electrónico y una contraseña. ¡Es gratis!",
+      },
+      { texto: "Volver al inicio", siguiente: "inicio" },
+    ],
+  },
+  problemas: {
+    mensaje: "Entiendo, ¿qué problema estás teniendo?",
+    opciones: [
+      {
+        texto: "Internet lento",
+        respuesta:
+          "Si tu internet está lento, reiniciá el router, desconectá dispositivos innecesarios y probá usar un cable de red si es posible.",
+      },
+      {
+        texto: "Sin conexión",
+        respuesta:
+          "Verificá cables, luces del router y probá reiniciarlo. Si sigue sin funcionar, contactá a tu proveedor.",
+      },
+      {
+        texto: "Problemas con el WiFi",
+        respuesta:
+          "Intentá reiniciar el router. Si el problema persiste, acercate al router, probá cambiar la banda (2.4GHz/5GHz) o revisá interferencias.",
+      },
+      {
+        texto: "Mejorar señal WiFi",
+        respuesta:
+          "Ubicá el router en un lugar alto y central. Evitá paredes gruesas o electrodomésticos cerca. Considerá un repetidor o un sistema Mesh.",
+      },
+      {
+        texto: "Corte de servicio",
+        respuesta:
+          "Consultá la página de tu proveedor o llamá al soporte. También podés preguntar a vecinos si están sin servicio.",
+      },
+      { texto: "Volver al inicio", siguiente: "inicio" },
+    ],
+  },
+};
 
 const Soporte = () => {
-  const [mensajes, setMensajes] = useState([]);
-  const [esperandoRespuesta, setEsperandoRespuesta] = useState(false);
-  const [modoEntradaLibre, setModoEntradaLibre] = useState(false);
-  const [inputUsuario, setInputUsuario] = useState("");
-  const [dialogoActivo, setDialogoActivo] = useState(null);
-  const chatEndRef = useRef(null);
+  const [mensajes, setMensajes] = useState([
+    { autor: "bot", texto: flujoConversacion.inicio.mensaje },
+  ]);
+  const [opciones, setOpciones] = useState(flujoConversacion.inicio.opciones);
+  const [escribiendo, setEscribiendo] = useState(false);
+  const chatRef = useRef(null);
 
-  useEffect(() => {
-    document.title = "Red-Fi | Soporte";
-    const mensajeInicial = {
-      emisor: "bot",
-      texto:
-        "¡Hola! Soy Juan, tu asistente virtual de Red-Fi. ¿En qué puedo ayudarte hoy?",
-      opciones: [
-        "Ver proveedores disponibles",
-        "Reportar un problema",
-        "Contactar con soporte humano",
-        "Saber más sobre Red-Fi",
-      ],
-    };
-    setMensajes([mensajeInicial]);
-  }, []);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [mensajes]);
-
-  const manejarOpcion = (opcion) => {
-    agregarMensaje("usuario", opcion);
-    setEsperandoRespuesta(true);
+  const manejarSeleccion = (opcion) => {
+    setMensajes((prev) => [...prev, { autor: "user", texto: opcion.texto }]);
+    setOpciones(null); // Ocultar botones temporalmente
+    setEscribiendo(true);
 
     setTimeout(() => {
-      let respuesta = "";
-
-      switch (opcion) {
-        case "Ver proveedores disponibles":
-          respuesta = "Podés ver los proveedores desde la sección Mapa.";
-          break;
-        case "Reportar un problema":
-          respuesta =
-            "Entiendo. Vamos a ayudarte paso a paso. Primero, ¿qué tipo de problema estás teniendo?";
-          setModoEntradaLibre(true);
-          setDialogoActivo({ paso: 1, datos: {} });
-          break;
-        case "Contactar con soporte humano":
-          respuesta =
-            "Un agente humano te contactará por correo en las próximas horas.";
-          break;
-        case "Saber más sobre Red-Fi":
-          respuesta =
-            "Red-Fi te ayuda a comparar proveedores de internet según tu zona, velocidad y experiencias de otros usuarios.";
-          break;
-        default:
-          respuesta = "No entendí tu respuesta. ¿Podés intentar de nuevo?";
+      if (opcion.siguiente) {
+        const siguientePaso = flujoConversacion[opcion.siguiente];
+        setMensajes((prev) => [
+          ...prev,
+          { autor: "bot", texto: siguientePaso.mensaje },
+        ]);
+        setOpciones(siguientePaso.opciones);
+      } else if (opcion.respuesta) {
+        setMensajes((prev) => [
+          ...prev,
+          { autor: "bot", texto: opcion.respuesta },
+        ]);
+        setOpciones([
+          { texto: "Volver al inicio", siguiente: "inicio" },
+          { texto: "Tengo otra duda", siguiente: "dudas" },
+          { texto: "Tengo otro problema", siguiente: "problemas" },
+        ]);
       }
-
-      agregarMensaje("bot", respuesta);
-      setEsperandoRespuesta(false);
-    }, 800);
+      setEscribiendo(false);
+    }, 800); // Tiempo de espera simulado
   };
 
-  const agregarMensaje = (emisor, texto) => {
-    setMensajes((prev) => [...prev, { emisor, texto }]);
-  };
-
-  const enviarMensajeLibre = () => {
-    if (!inputUsuario.trim()) return;
-    const texto = inputUsuario.trim();
-    agregarMensaje("usuario", texto);
-    setInputUsuario("");
-    setEsperandoRespuesta(true);
-
-    setTimeout(() => {
-      if (dialogoActivo) {
-        const { paso, datos } = dialogoActivo;
-
-        if (paso === 1) {
-          agregarMensaje("bot", "¿Desde cuándo tenés este problema?");
-          setDialogoActivo({ paso: 2, datos: { ...datos, tipo: texto } });
-        } else if (paso === 2) {
-          agregarMensaje(
-            "bot",
-            "¿Querés dejar tu correo para que te contactemos?"
-          );
-          setDialogoActivo({
-            paso: 3,
-            datos: { ...datos, desdeCuándo: texto },
-          });
-        } else if (paso === 3) {
-          agregarMensaje(
-            "bot",
-            "¡Gracias! Registramos tu problema y te contactaremos pronto. 🙌"
-          );
-          setDialogoActivo(null);
-          setModoEntradaLibre(false);
-        }
-      } else {
-        agregarMensaje(
-          "bot",
-          "Gracias por tu mensaje. Si querés reportar un problema, seleccioná esa opción."
-        );
-      }
-
-      setEsperandoRespuesta(false);
-    }, 1000);
-  };
+  useEffect(() => {
+    chatRef.current?.scrollTo({
+      top: chatRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [mensajes, escribiendo]);
 
   return (
-    <div className="flex flex-col bg-secundario text-texto mx-auto w-[400px] rounded-2xl">
-      <div className="bg-primario px-4 py-3 text-lg font-semibold shadow text-texto">
-        Soporte - Chat con Juan 🤖
-      </div>
+    <div className="w-full max-w-lg mx-auto bg-neutral-900 border border-neutral-700 rounded-xl shadow-lg p-2 sm:p-4 flex flex-col h-[70vh] sm:h-[700px]">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-4 text-center">
+        Asistente Red-Fi
+      </h2>
 
-      <div className="flex-1 overflow-y-auto px-4 py-3">
-        {mensajes.map((msg, i) => (
+      <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
+        {mensajes.map((m, index) => (
           <div
-            key={i}
-            className={`flex mt-3 ${
-              msg.emisor === "bot" ? "justify-start" : "justify-end"
+            key={index}
+            className={`flex ${
+              m.autor === "bot" ? "justify-start" : "justify-end"
             }`}
           >
-            {msg.emisor === "bot" && (
-              <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-400 mr-2" />
-            )}
-
-            <div className="max-w-xs">
-              <div
-                className={`p-3 text-sm ${
-                  msg.emisor === "bot"
-                    ? "bg-gray-300 text-black rounded-r-lg rounded-bl-lg"
-                    : "bg-primario text-texto rounded-l-lg rounded-br-lg"
-                }`}
-              >
-                <p>{msg.texto}</p>
-
-                {msg.opciones && (
-                  <div className="mt-3 space-y-2">
-                    {msg.opciones.map((op, idx) => (
-                      <button
-                        key={idx}
-                        disabled={esperandoRespuesta}
-                        onClick={() => manejarOpcion(op)}
-                        className="block w-full bg-white text-gray-900 text-left px-3 py-1 rounded hover:bg-gray-200 text-sm disabled:opacity-50 transition"
-                      >
-                        {op}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <span className="text-xs text-gray-500 leading-none mt-1 block text-right">
-                {msg.emisor === "bot" ? "Juan" : "Vos"}
-              </span>
+            <div
+              className={`p-3 rounded-lg max-w-[80%] ${
+                m.autor === "bot"
+                  ? "bg-neutral-800 text-texto text-left"
+                  : "bg-blue-700 text-white text-right"
+              }`}
+            >
+              {m.texto}
             </div>
-
-            {msg.emisor === "usuario" && (
-              <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-500 ml-2" />
-            )}
           </div>
         ))}
-        <div ref={chatEndRef} />
+
+        {escribiendo && (
+          <div className="flex justify-start">
+            <div className="p-3 rounded-lg bg-neutral-800 text-texto text-left animate-pulse">
+              Escribiendo...
+            </div>
+          </div>
+        )}
       </div>
 
-      {modoEntradaLibre && (
-        <div className="bg-gray-800 p-3 border-t border-gray-700 flex gap-2">
-          <input
-            type="text"
-            value={inputUsuario}
-            onChange={(e) => setInputUsuario(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && enviarMensajeLibre()}
-            placeholder="Escribí tu mensaje..."
-            className="flex-1 px-3 py-2 rounded-full border border-gray-600 bg-gray-900 text-texto placeholder-gray-400 focus:outline-none"
-          />
-          <button
-            onClick={enviarMensajeLibre}
-            className="bg-primario text-texto px-4 py-2 rounded-full hover:bg-acento disabled:opacity-50 transition"
-            disabled={!inputUsuario.trim() || esperandoRespuesta}
-          >
-            Enviar
-          </button>
+      {opciones && (
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {opciones.map((op, index) => (
+            <button
+              key={index}
+              onClick={() => manejarSeleccion(op)}
+              className={`py-2 px-3 rounded-lg text-sm ${
+                op.texto === "Volver al inicio"
+                  ? "bg-gray-700 hover:bg-gray-800 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }`}
+            >
+              {op.texto}
+            </button>
+          ))}
         </div>
       )}
     </div>
