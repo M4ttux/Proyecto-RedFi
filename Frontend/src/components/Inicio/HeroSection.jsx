@@ -10,7 +10,7 @@ const HeroSection = () => {
       />
 
       {/* 🧾 Contenido principal */}
-      <div className="z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-12">
+      <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-12">
         
         {/* 📄 Texto a la izquierda */}
         <div className="flex-1 text-center lg:text-left">

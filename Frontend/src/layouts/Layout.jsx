@@ -10,7 +10,7 @@ const Layout = () => {
 
   return (
     <AuthProvider>
-      <header>
+      <header className="drop-shadow-xl z-50">
         <Navbar />
       </header>
       <main className="flex-grow flex items-center justify-center">

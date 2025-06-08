@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getPerfil } from "../services/userService";
 import { Link } from "react-router-dom";
-import { IconUserCircle, IconMail, IconId, IconLogout } from "@tabler/icons-react";
+import {
+  IconMail,
+  IconId,
+  IconLogout,
+  IconUserCircle,
+} from "@tabler/icons-react";
 
 const Cuenta = () => {
   useEffect(() => {
@@ -39,38 +44,47 @@ const Cuenta = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-8 bg-secundario text-texto rounded-lg shadow-lg space-y-6">
-      <div className="text-center">
-        <IconUserCircle size={64} className="mx-auto text-acento" />
-        <h2 className="text-3xl lg:text-4xl font-bold mt-2 text-acento">
-          ¡Hola, {perfil?.nombre || "Usuario"}!
+    <div className="w-full bg-fondo px-4 sm:px-6">
+      {/* Info básica del usuario */}
+      <section className="max-w-7xl mx-auto text-center">
+        <div className="w-28 h-28 rounded-full bg-white/10 border-4 border-white/20 mx-auto mb-4 flex items-center justify-center shadow-lg">
+          <IconUserCircle size={80} className="text-acento" />
+        </div>
+
+        <h2 className="text-2xl lg:text-3xl font-bold text-texto">
+          {perfil?.nombre || "Usuario"}
         </h2>
-        <p className="text-white/70">Bienvenido a tu panel de usuario</p>
-      </div>
+        <p className="text-white/60 mt-1">{usuario.email}</p>
+        <p className="text-sm text-white/40 mt-2">Perfil de usuario de Red-Fi</p>
+      </section>
 
-      <div className="space-y-3 text-lg">
-        <p className="flex items-center gap-2">
-          <IconMail className="text-acento" /> <strong>Email:</strong> {usuario.email}
-        </p>
-        <p className="flex items-center gap-2">
-          <IconId className="text-acento" /> <strong>Nombre:</strong> {perfil?.nombre || "Sin nombre definido"}
-        </p>
-      </div>
-
-      <div className="space-y-3">
+      {/* Acciones */}
+      <section className="max-w-7xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Gestionar Boletas */}
         <Link
           to="/boletas"
-          className="block w-full text-center bg-white text-primario font-semibold px-4 py-2 rounded hover:bg-acento hover:text-white transition"
+          className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
         >
-          Gestionar Boletas de Servicio
+          <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
+            Gestionar Boletas de Servicio
+          </h3>
+          <p>
+            Visualizá y administrá tus boletas, recibí alertas antes del
+            vencimiento y revisá los aumentos mes a mes.
+          </p>
         </Link>
-        <button
-          onClick={logout}
-          className="w-full bg-primario text-texto px-4 py-2 rounded hover:bg-acento font-semibold flex items-center justify-center gap-2"
-        >
-          <IconLogout /> Cerrar sesión
-        </button>
-      </div>
+
+        {/* Ver Reseñas */}
+        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center opacity-70 cursor-not-allowed">
+          <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
+            Ver Reseñas
+          </h3>
+          <p>
+            Esta sección estará disponible próximamente. Aquí verás tus reseñas
+            publicadas y su estado.
+          </p>
+        </div>
+      </section>
     </div>
   );
 };

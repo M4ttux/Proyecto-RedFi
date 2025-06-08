@@ -76,7 +76,7 @@ const Navbar = () => {
   const linkClase = "hover:text-acento transition px-4 py-2 font-bold";
 
   return (
-    <nav className="bg-fondo px-4 py-4 shadow">
+    <nav className="bg-fondo px-4 py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center relative">
         <Link to="/" className="flex items-center gap-2">
           <Logo className="h-10" colorPrincipal="#FFFFFF" colorAcento="#FB8531" />
