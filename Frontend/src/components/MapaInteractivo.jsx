@@ -101,7 +101,7 @@ const MapaInteractivo = ({ filtros }) => {
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-white px-4 py-2 rounded-lg shadow-lg">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">
+            <span className="font-medium">
               Haz clic en el mapa para seleccionar ubicación
             </span>
             <button

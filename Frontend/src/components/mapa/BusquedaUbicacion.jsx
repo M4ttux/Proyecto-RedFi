@@ -19,7 +19,7 @@ const BusquedaUbicacion = ({
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <p className="font-semibold text-sm text-texto">Buscar ubicación</p>
+        <p className="font-semibold text-texto">Buscar ubicación</p>
       </div>
       
       <input
@@ -28,11 +28,11 @@ const BusquedaUbicacion = ({
         onChange={(e) => handleInputChange(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
         placeholder="Buscar en Corrientes..."
-        className="px-3 py-2 rounded w-full bg-fondo text-sm text-texto placeholder-gray-400"
+        className="px-3 py-2 rounded w-full bg-fondo text-texto placeholder-gray-400"
       />
       
       {input && sugerencias.length > 0 && (
-        <ul className="bg-fondo border border-white/10 rounded-md mt-1 max-h-40 overflow-auto text-sm text-texto">
+        <ul className="bg-fondo border border-white/10 rounded-lg mt-1 max-h-40 overflow-auto text-texto">
           {sugerencias.map((sug, index) => (
             <li
               key={index}

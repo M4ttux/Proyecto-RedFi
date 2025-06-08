@@ -83,12 +83,12 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6 text-center text-white">
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-6 text-center text-white">
         Carga de Boletas
       </h2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white/5 p-6 rounded-xl"
+        className="space-y-6 bg-white/5 p-6 rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
           <div>
@@ -167,7 +167,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
             </label>
 
             {archivo && (
-              <div className="mt-2 text-white text-sm flex flex-col items-center">
+              <div className="mt-2 text-white flex flex-col items-center">
                 <div className="flex items-center gap-2">
                   <span>{archivo.name}</span>
                   <button

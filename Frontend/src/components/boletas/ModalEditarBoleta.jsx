@@ -72,8 +72,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-white text-black p-6 rounded-xl w-full max-w-xl space-y-4">
-        <h2 className="text-xl font-bold text-center">Modificar Boleta</h2>
+      <div className="bg-white text-black p-6 rounded-lg w-full max-w-xl space-y-4">
+        <h2 className="text-3xl lg:text-4xl font-bold text-center">Modificar Boleta</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
@@ -137,7 +137,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
                 />
                 <button
                   onClick={borrarArchivoNuevo}
-                  className="text-sm text-red-600 mt-1 hover:underline"
+                  className="text-red-600 mt-1 hover:underline"
                 >
                   Quitar imagen seleccionada
                 </button>
@@ -146,7 +146,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
             {!preview && boleta.url_imagen && (
               <div className="mt-3">
-                <p className="text-sm text-gray-600 mb-1">Imagen actual:</p>
+                <p className="text-gray-600 mb-1">Imagen actual:</p>
                 <img
                   src={boleta.url_imagen}
                   alt="Boleta actual"

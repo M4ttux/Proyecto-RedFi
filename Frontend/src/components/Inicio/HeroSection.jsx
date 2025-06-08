@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="relative w-full min-h-[75vh] flex items-center justify-center px-8 py-20 overflow-hidden bg-secundario">
+    <section className="relative flex items-center justify-center px-4 sm:px-6 py-16 bg-secundario">
       {/* 🔳 Patrón decorativo en el fondo */}
       <div
         className="absolute inset-0 bg-[url('/imgs/diagonal-lines.svg')] opacity-10"
@@ -10,14 +10,14 @@ const HeroSection = () => {
       />
 
       {/* 🧾 Contenido principal */}
-      <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl gap-12">
+      <div className="z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-12">
         
         {/* 📄 Texto a la izquierda */}
-        <div className="flex-1 text-left pt-8">
-          <h1 className="text-5xl lg:text-6xl leading-tight drop-shadow">
+        <div className="flex-1 text-center lg:text-left">
+          <h1 className="text-5xl lg:text-6xl leading-tight">
             Encontrá el <span className="text-acento">mejor Internet</span> para tu zona.
           </h1>
-          <p className="mt-6 text-lg drop-shadow">
+          <p className="mt-6 text-lg">
             Visualizá qué empresas operan cerca tuyo, conocé la experiencia de otros usuarios y tomá decisiones con confianza.
           </p>
 
@@ -30,7 +30,7 @@ const HeroSection = () => {
         </div>
 
         {/* 🗺 Imagen del mapa */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-end">
           <img
             src="/imgs/hero-placeholder.jpg"
             alt="Mapa Red-Fi"

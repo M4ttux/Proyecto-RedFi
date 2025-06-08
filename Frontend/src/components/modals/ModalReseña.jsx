@@ -49,7 +49,7 @@ const ModalReseña = ({ reseña, onClose }) => {
           </div>
         </div>
 
-        <div className="text-yellow-400 text-sm mb-2">{estrellas}</div>
+        <div className="text-yellow-400 mb-2">{estrellas}</div>
 
         <p className="text-texto/80 italic leading-snug">
           "{reseña.comentario}"

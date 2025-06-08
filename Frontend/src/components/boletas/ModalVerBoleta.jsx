@@ -14,7 +14,7 @@ const ModalVerBoleta = ({ boleta, onClose, onEditar, onEliminar, onDescargar }) 
           ×
         </button>
 
-        <h2 className="text-2xl font-bold mb-6 text-center">Detalle de Boleta</h2>
+        <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-center">Detalle de Boleta</h2>
 
         {/* Contenido */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">

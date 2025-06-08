@@ -37,7 +37,7 @@ const BoletaHistorial = ({ boletas, onActualizar }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6 text-center text-white">
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-6 text-center text-white">
         Historial de Boletas
       </h2>
 
@@ -70,10 +70,10 @@ const BoletaHistorial = ({ boletas, onActualizar }) => {
                   <span className="text-green-400 font-bold">${actual.toFixed(2)}</span>
                 </div>
 
-                <p className="text-sm text-white/70 mb-1">
+                <p className="text-white/70 mb-1">
                   Proveedor: <span className="text-white">{b.proveedor}</span>
                 </p>
-                <p className="text-sm text-white/70 mb-1">
+                <p className="text-white/70 mb-1">
                   Vence el: {new Date(b.vencimiento).toLocaleDateString("es-AR", {
                     day: "2-digit",
                     month: "long",
@@ -82,7 +82,7 @@ const BoletaHistorial = ({ boletas, onActualizar }) => {
                 </p>
 
                 {diferenciaTexto && (
-                  <p className="text-sm italic text-white/80 mb-3">{diferenciaTexto}</p>
+                  <p className="italic text-white/80 mb-3">{diferenciaTexto}</p>
                 )}
 
                 <div className="flex justify-start gap-3 mt-2">

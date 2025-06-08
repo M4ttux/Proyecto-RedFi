@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-secundario py-6">
-      <div className="text-center text-sm text-texto/60">
+      <div className="text-center text-texto/60">
         <p className="mb-3">© {year} <span className="font-semibold text-texto">Red-Fi</span>. Todos los derechos reservados.</p>
 
         <div className="flex justify-center gap-4 mt-2">

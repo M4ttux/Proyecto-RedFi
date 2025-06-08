@@ -10,7 +10,7 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
         >
           ✖
         </button>
-        <h2 className="text-2xl font-bold mb-2">{proveedor.nombre}</h2>
+        <h2 className="text-3xl lg:text-4xl font-bold mb-2">{proveedor.nombre}</h2>
         <p>
           <strong>Tecnología:</strong> {proveedor.tecnologia}
         </p>

@@ -15,7 +15,7 @@ const PanelControlMapa = ({
   const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
 
   return (
-    <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-xl shadow-lg space-y-2">
+    <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-lg shadow-lg space-y-2">
       <BusquedaUbicacion
         boundsCorrientes={boundsCorrientes}
         setAlerta={setAlerta}
@@ -37,7 +37,7 @@ const PanelControlMapa = ({
       
       {mostrarAlerta && (
         <p
-          className={`text-sm text-red-400 transition-opacity duration-500 ${
+          className={`text-red-400 transition-opacity duration-500 ${
             animarAlerta ? "opacity-100" : "opacity-0"
           }`}
         >

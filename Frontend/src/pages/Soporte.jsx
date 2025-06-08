@@ -106,8 +106,8 @@ const Soporte = () => {
   }, [mensajes, escribiendo]);
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-neutral-900 border border-neutral-700 rounded-xl shadow-lg p-2 sm:p-4 flex flex-col h-[70vh] sm:h-[700px]">
-      <h2 className="text-lg sm:text-xl font-bold text-white mb-4 text-center">
+    <div className="w-full max-w-lg mx-auto bg-neutral-900 border border-neutral-700 rounded-lg shadow-lg p-2 sm:p-4 flex flex-col h-[70vh] sm:h-[700px]">
+      <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 text-center">
         Asistente Red-Fi
       </h2>
 
@@ -146,7 +146,7 @@ const Soporte = () => {
             <button
               key={index}
               onClick={() => manejarSeleccion(op)}
-              className={`py-2 px-3 rounded-lg text-sm ${
+              className={`py-2 px-3 rounded-lg ${
                 op.texto === "Volver al inicio"
                   ? "bg-gray-700 hover:bg-gray-800 text-white"
                   : "bg-blue-600 hover:bg-blue-700 text-white"

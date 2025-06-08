@@ -30,7 +30,7 @@ const Boletas = () => {
   return (
     <section className="py-20 px-6 text-white min-h-screen">
       <div className="max-w-6xl mx-auto space-y-12">
-        <h1 className="text-3xl font-bold text-center flex items-center justify-center gap-2">
+        <h1 className="text-5xl lg:text-6xl font-bold text-center flex items-center justify-center gap-2">
           📄 Mis Boletas
         </h1>
 

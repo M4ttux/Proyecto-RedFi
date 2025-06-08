@@ -52,11 +52,11 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
 
     return (
       <div className="space-y-1">
-        <p className="text-sm font-medium text-texto">{label}</p>
+        <p className="font-medium text-texto">{label}</p>
         <Listbox value={value} onChange={setValue}>
           {({ open }) => (
             <div className="relative">
-              <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg text-sm">
+              <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg">
                 <span className="block truncate">
                   {renderOption(value) || placeholder}
                 </span>
@@ -79,7 +79,7 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
                 <ListboxOptions
                   modal={false}
                   className={classNames(
-                    "absolute z-10 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none text-sm scrollbar-thin",
+                    "absolute z-10 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none scrollbar-thin",
                     abreArriba ? "bottom-full mb-2" : "top-full mt-1"
                   )}
                 >
@@ -116,8 +116,8 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
   };
 
   return (
-    <div className="mb-4 bg-secundario p-4 rounded-md shadow">
-      <h3 className="font-semibold mb-2 text-texto">Filtrar resultados</h3>
+    <div className="mb-4 bg-secundario p-4 rounded-lg shadow">
+      <h3 className="text-xl lg:text-2xl mb-2 text-texto">Filtrar resultados</h3>
       <div className="flex flex-col gap-4">
         {renderListbox(
           "Zona",

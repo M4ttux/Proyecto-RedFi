@@ -31,13 +31,13 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-16 px-8 py-10 bg-secundario rounded-2xl shadow-xl text-texto text-base">
-      <h2 className="text-3xl font-bold text-acento mb-8 flex items-center justify-center gap-2">
+    <div className="max-w-xl mx-auto mt-16 px-8 py-10 bg-secundario rounded-lg shadow-xl text-texto text-base">
+      <h2 className="text-3xl lg:text-4xl font-bold text-acento mb-8 flex items-center justify-center gap-2">
         🔐 Iniciar sesión
       </h2>
 
       {error && (
-        <div className="bg-red-500/10 text-red-400 border border-red-500 px-5 py-3 rounded mb-6 text-sm text-center">
+        <div className="bg-red-500/10 text-red-400 border border-red-500 px-5 py-3 rounded mb-6 text-center">
           {error}
         </div>
       )}

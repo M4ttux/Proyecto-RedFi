@@ -20,8 +20,8 @@ const SpeedTest = () => {
   };
 
   return (
-    <div className="bg-white shadow p-6 rounded-md max-w-md mx-auto text-center">
-      <h2 className="text-xl font-bold mb-4">Test de Velocidad</h2>
+    <div className="bg-white shadow p-6 rounded-lg max-w-md mx-auto text-center">
+      <h2 className="text-3xl lg:text-4xl font-bold mb-4">Test de Velocidad</h2>
       <button 
         className="bg-primario px-4 py-2 rounded hover:bg-primario/80" 
         onClick={medirVelocidad}

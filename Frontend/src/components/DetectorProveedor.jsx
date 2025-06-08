@@ -13,7 +13,7 @@ const DetectorProveedor = () => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 max-w-xl mx-auto text-center">
-      <h2 className="text-2xl font-bold mb-4 text-fondo">Tu conexión actual</h2>
+      <h3 className="text-xl lg:text-2xl font-bold mb-4 text-fondo">Tu conexión actual</h3>
 
       {error && <p className="text-red-600">{error}</p>}
 

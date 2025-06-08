@@ -39,10 +39,10 @@ const Cuenta = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-8 bg-secundario text-texto rounded-xl shadow-lg space-y-6">
+    <div className="max-w-xl mx-auto mt-10 p-8 bg-secundario text-texto rounded-lg shadow-lg space-y-6">
       <div className="text-center">
         <IconUserCircle size={64} className="mx-auto text-acento" />
-        <h2 className="text-3xl font-bold mt-2 text-acento">
+        <h2 className="text-3xl lg:text-4xl font-bold mt-2 text-acento">
           ¡Hola, {perfil?.nombre || "Usuario"}!
         </h2>
         <p className="text-white/70">Bienvenido a tu panel de usuario</p>

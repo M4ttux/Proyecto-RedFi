@@ -4,7 +4,7 @@ const CTASection = () => {
   return (
     <section className="bg-gradient-to-r from-acento to-primario text-texto py-20 text-center px-6">
       <div className="max-w-3xl mx-auto space-y-6">
-        <h2 className="text-4xl font-extrabold leading-tight">
+        <h2 className="text-3xl lg:text-4xl font-extrabold leading-tight">
           ¿Listo para mejorar tu conexión?
         </h2>
         <p className="text-lg text-texto/90">

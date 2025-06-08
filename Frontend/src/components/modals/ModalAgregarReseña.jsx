@@ -156,7 +156,7 @@ const ModalAgregarReseña = ({
       onClick={handleOverlayClick}
     >
       <div 
-        className="bg-fondo p-6 rounded-xl w-[95vw] max-w-md relative"
+        className="bg-fondo p-6 rounded-lg w-[95vw] max-w-md relative"
         onClick={handleModalContentClick}
       >
         <button
@@ -167,19 +167,19 @@ const ModalAgregarReseña = ({
           <IconX size={24} />
         </button>
 
-        <h2 className="text-xl font-bold mb-4 text-texto">Agregar Reseña</h2>
+        <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-texto">Agregar Reseña</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Select Proveedor */}
           <div className="space-y-1">
-            <p className="text-sm font-medium text-texto">Proveedor</p>
+            <p className="font-medium text-texto">Proveedor</p>
             <Listbox
               value={proveedorSeleccionado}
               onChange={setProveedorSeleccionado}
             >
               {({ open }) => (
                 <div className="relative">
-                  <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg text-sm">
+                  <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg">
                     <span className="block truncate">
                       {proveedorSeleccionado
                         ? proveedorSeleccionado.nombre
@@ -202,7 +202,7 @@ const ModalAgregarReseña = ({
                   >
                     <ListboxOptions
                       modal={false}
-                      className="absolute z-50 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none text-sm scrollbar-thin"
+                      className="absolute z-50 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none scrollbar-thin"
                     >
                       {proveedores.map((p) => (
                         <ListboxOption
@@ -234,16 +234,16 @@ const ModalAgregarReseña = ({
 
           {/* SECCIÓN: Selección de Ubicación */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-texto">Ubicación</label>
+            <label className="block font-medium text-texto">Ubicación</label>
 
             {/* Mostrar ubicación seleccionada */}
             {coordenadasSeleccionadas ? (
               <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
-                <div className="flex items-center gap-2 text-green-400 text-sm font-medium mb-1">
+                <div className="flex items-center gap-2 text-green-400 font-medium mb-1">
                   <IconMapPin size={16} />
                   Ubicación seleccionada
                 </div>
-                <p className="text-texto text-sm break-words">
+                <p className="text-texto break-words">
                   {ubicacionTexto || "Cargando dirección..."}
                 </p>
                 <p className="text-texto/60 text-xs mt-1">
@@ -252,7 +252,7 @@ const ModalAgregarReseña = ({
               </div>
             ) : (
               <div className="bg-texto/5 border border-texto/20 rounded-lg p-3">
-                <p className="text-texto/60 text-sm mb-2">
+                <p className="text-texto/60 mb-2">
                   No has seleccionado una ubicación
                 </p>
               </div>
@@ -272,7 +272,7 @@ const ModalAgregarReseña = ({
           {/* Alerta */}
           {mostrarAlerta && (
             <p
-              className={`text-sm text-red-400 transition-opacity duration-500 ${
+              className={`text-red-400 transition-opacity duration-500 ${
                 animarAlerta ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -282,11 +282,11 @@ const ModalAgregarReseña = ({
 
           {/* Select Estrellas */}
           <div className="space-y-1">
-            <p className="text-sm font-medium text-texto">Estrellas</p>
+            <p className="font-medium text-texto">Estrellas</p>
             <Listbox value={estrellas} onChange={setEstrellas}>
               {({ open }) => (
                 <div className="relative">
-                  <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg text-sm">
+                  <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg">
                     <span className="block truncate">{estrellas}★</span>
                     <div
                       className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${
@@ -305,7 +305,7 @@ const ModalAgregarReseña = ({
                   >
                     <ListboxOptions
                       modal={false}
-                      className="absolute z-50 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none text-sm scrollbar-thin"
+                      className="absolute z-50 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none scrollbar-thin"
                     >
                       {estrellasOptions.map((e) => (
                         <ListboxOption
@@ -337,7 +337,7 @@ const ModalAgregarReseña = ({
 
           {/* Comentario */}
           <div>
-            <label className="block text-sm mb-1 font-medium text-texto">Comentario</label>
+            <label className="block mb-1 font-medium text-texto">Comentario</label>
             <textarea
               value={comentario}
               onChange={(e) => setComentario(e.target.value)}
