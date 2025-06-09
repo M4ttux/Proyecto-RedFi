@@ -26,12 +26,24 @@ export const obtenerReseñas = async () => {
 // 🔧 Función corregida para guardar coordenadas como JSON
 export const crearReseña = async (reseñaData) => {
   try {
-    console.log("📤 Creando reseña en Supabase:", reseñaData);
+    // Obtener usuario autenticado
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error("Usuario no autenticado");
 
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      throw new Error("Usuario no autenticado");
+    // 🔎 Intentar obtener el nombre del usuario desde user_profiles
+    const { data: perfil, error: perfilError } = await supabase
+      .from("user_profiles")
+      .select("nombre")
+      .eq("id", user.id)
+      .single();
+
+    if (perfilError) {
+      console.warn(
+        "⚠️ No se pudo obtener nombre desde user_profiles:",
+        perfilError
+      );
     }
 
     const datosReseña = {
@@ -41,26 +53,16 @@ export const crearReseña = async (reseñaData) => {
       usuario_id: user.id,
       ubicacion: {
         lat: reseñaData.ubicacion.lat,
-        lng: reseñaData.ubicacion.lng
+        lng: reseñaData.ubicacion.lng,
       },
     };
 
-    // 🔧 Primero insertar
-    const { data: insertData, error: insertError } = await supabase
+    // Insertar y recuperar con relaciones
+    const { data: reseñaCompleta, error: insertError } = await supabase
       .from("reseñas")
       .insert([datosReseña])
-      .select('id')
-      .single();
-
-    if (insertError) {
-      console.error("❌ Error insertando:", insertError);
-      throw insertError;
-    }
-
-    // 🔧 Luego hacer select completo con todas las relaciones
-    const { data: reseñaCompleta, error: selectError } = await supabase
-      .from("reseñas")
-      .select(`
+      .select(
+        `
         id,
         comentario,
         estrellas,
@@ -76,18 +78,19 @@ export const crearReseña = async (reseñaData) => {
           tecnologia,
           zonas ( geom )
         )
-      `)
-      .eq('id', insertData.id)
+      `
+      )
       .single();
 
-    if (selectError) {
-      console.error("❌ Error obteniendo reseña completa:", selectError);
-      throw selectError;
+    if (insertError) {
+      console.error("❌ Error insertando reseña:", insertError);
+      throw insertError;
     }
 
-    console.log("✅ Reseña creada exitosamente:", reseñaCompleta);
-    return reseñaCompleta;
+    console.log("🧪 Reseña completa con relaciones Supabase:", reseñaCompleta);
 
+
+    return reseñaCompleta;
   } catch (error) {
     console.error("❌ Error en crearReseña:", error);
     throw error;

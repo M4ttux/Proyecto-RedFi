@@ -5,7 +5,7 @@ const RequireAuth = ({ children }) => {
   const { usuario, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) return null; // ⏳ Esperar antes de evaluar
+  if (loading) return null;
 
   return usuario ? children : <Navigate to="/login" state={{ from: location }} replace />;
 };

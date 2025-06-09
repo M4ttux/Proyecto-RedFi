@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import BoletaForm from "../components/boletas/BoletaForm";
 import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import { supabase } from "../supabase/client";
-import { useNotificaciones } from "../components/Navbar"; // Asegurate de que la ruta sea correcta
+import { useNotificaciones } from "../components/Navbar";
 
 const Boletas = () => {
   const [boletas, setBoletas] = useState([]);
@@ -30,7 +31,7 @@ const Boletas = () => {
   return (
     <section className="py-20 px-6 text-white min-h-screen">
       <div className="max-w-6xl mx-auto space-y-12">
-        <h1 className="text-5xl lg:text-6xl font-bold text-center flex items-center justify-center gap-2">
+        <h1 className="text-5xl lg:text-5xl font-bold text-center flex items-center justify-center gap-2">
           📄 Mis Boletas
         </h1>
 
@@ -50,6 +51,16 @@ const Boletas = () => {
               onActualizar={cargarBoletas}
             />
           </div>
+        </div>
+
+        {/* 🔙 Botón volver al perfil al final */}
+        <div className="text-center mt-10">
+          <Link
+            to="/cuenta"
+            className="inline-block bg-white/10 text-white font-semibold px-6 py-3 rounded hover:bg-white/20 transition"
+          >
+            ← Volver al perfil
+          </Link>
         </div>
       </div>
     </section>

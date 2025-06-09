@@ -55,14 +55,14 @@ const Caracteristicas = () => {
               className="w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0 bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-lg"
             >
               <div className="flex justify-center mb-4 sm:mb-5 text-acento">
-                {f.icono}
+                <div className="transition-transform transform hover:scale-110 duration-300">
+                  {f.icono}
+                </div>
               </div>
               <h3 className="text-xl lg:text-2xl font-bold text-acento mb-2">
                 {f.titulo}
               </h3>
-              <p className="text-texto leading-relaxed">
-                {f.descripcion}
-              </p>
+              <p className="text-texto leading-relaxed">{f.descripcion}</p>
             </div>
           ))}
         </div>

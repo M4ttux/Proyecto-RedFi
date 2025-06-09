@@ -8,7 +8,6 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
   const activarSeleccion = useCallback(() => {
     if (!mapRef.current) return;
     
-    console.log("🎯 Activando modo selección...");
     setModoSeleccion(true);
     setCoordenadasSeleccionadas(null);
     
@@ -26,8 +25,6 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
       
       const { lng, lat } = e.lngLat;
       
-      console.log("📍 Click en mapa durante selección:", { lat, lng });
-      
       // Verificar que esté dentro de los bounds de Corrientes
       if (
         lng >= boundsCorrientes.west &&
@@ -35,7 +32,6 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
         lat >= boundsCorrientes.south &&
         lat <= boundsCorrientes.north
       ) {
-        console.log("✅ Ubicación válida seleccionada");
         setCoordenadasSeleccionadas({ lat, lng });
         desactivarSeleccion();
         
@@ -86,7 +82,6 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
   }, [mapRef, clickListener]);
 
   const limpiarSeleccion = useCallback(() => {
-    console.log("🧹 Limpiando selección...");
     setCoordenadasSeleccionadas(null);
     desactivarSeleccion();
   }, [desactivarSeleccion]);

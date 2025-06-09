@@ -9,7 +9,12 @@ import Login from "../pages/Login";
 import Proveedores from "../pages/Proveedores";
 import Mapa from "../pages/Mapa";
 import Boletas from "../pages/Boletas";
-import RequireAuth from "../components/RequireAuth"; // ⬅️ IMPORTANTE
+import RequireAuth from "../components/RequireAuth";
+import AcademyHome from "../pages/Academy/AcademyHome";
+import Curso1 from '../pages/Academy/Curso1';
+import Curso2 from '../pages/Academy/Curso2';
+import Curso3 from '../pages/Academy/Curso3';
+
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +30,10 @@ export const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "proveedores/:id", element: <Proveedores /> },
       { path: "boletas", element: ( <RequireAuth> <Boletas /> </RequireAuth> ), },
+      { path: 'academy', element: ( <RequireAuth> <AcademyHome/> </RequireAuth> ),},
+      { path: 'academy/curso1', element: ( <RequireAuth> <Curso1 /> </RequireAuth> ),},
+      { path: 'academy/curso2', element: ( <RequireAuth> <Curso2 /> </RequireAuth> ),},
+      { path: 'academy/curso3', element: ( <RequireAuth> <Curso3 /> </RequireAuth> ),},
     ],
   },
 ]);

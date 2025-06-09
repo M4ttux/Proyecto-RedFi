@@ -10,8 +10,6 @@ export const cargarReseñasEnMapa = async (
   try {
     const reseñas = await obtenerReseñas();
 
-    console.log("📊 Reseñas obtenidas:", reseñas); // Debug
-
     const features = reseñas
       .map((r) => {
         const coords = r.ubicacion ? [r.ubicacion.lng, r.ubicacion.lat] : null;
@@ -73,7 +71,6 @@ export const cargarReseñasEnMapa = async (
 
     actualizarVisibilidadReseñas(map, filtros, reseñasLayerId);
 
-    console.log("✅ Reseñas cargadas en mapa con datos completos"); // Debug
   } catch (error) {
     console.error("❌ Error en cargarReseñasEnMapa:", error);
     throw error;

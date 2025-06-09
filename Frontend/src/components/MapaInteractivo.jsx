@@ -18,9 +18,9 @@ const MapaInteractivo = ({ filtros }) => {
   const [alerta, setAlerta] = useState("");
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
   const navigate = useNavigate();
-
   const boundsCorrientes = BOUNDS_CORRIENTES;
 
+  // Primero obtener el mapa y sus referencias
   const {
     mapContainer,
     mapRef,
@@ -29,15 +29,11 @@ const MapaInteractivo = ({ filtros }) => {
     setProveedorActivo,
     reseñaActiva,
     setReseñaActiva,
-    marcadoresReseñasRef,
+    cargarReseñasIniciales, // 🔧 Agregar esta línea
+    reseñasCompletasRef, // 🔧 Agregar esta línea
   } = useMapaInteractivo(filtros, boundsCorrientes);
 
-  const { cargandoUbicacion, handleUbicacionActual } = useUbicacionActual(
-    boundsCorrientes,
-    setAlerta,
-    mapRef
-  );
-
+  // Luego usar mapRef en selección de ubicación
   const {
     modoSeleccion,
     coordenadasSeleccionadas,
@@ -45,6 +41,20 @@ const MapaInteractivo = ({ filtros }) => {
     desactivarSeleccion,
     limpiarSeleccion,
   } = useSeleccionUbicacion(mapRef, boundsCorrientes, setModalReseñaAbierto);
+
+  // Sincronizar bandera global para evitar modal de proveedor
+  useEffect(() => {
+    window.modoSeleccionActivo = modoSeleccion;
+    return () => {
+      window.modoSeleccionActivo = false;
+    };
+  }, [modoSeleccion]);
+
+  const { cargandoUbicacion, handleUbicacionActual } = useUbicacionActual(
+    boundsCorrientes,
+    setAlerta,
+    mapRef
+  );
 
   const handleAbrirModalReseña = () => {
     limpiarSeleccion();
@@ -64,26 +74,15 @@ const MapaInteractivo = ({ filtros }) => {
 
   const handleAgregarReseña = async (reseñaData) => {
     try {
-      console.log("📤 Datos recibidos para guardar:", reseñaData);
+      const nuevaReseña = await crearReseña(reseñaData);
 
-      // 🔧 GUARDAR en Supabase con formato JSON
-      const nuevaReseña = await crearReseña(reseñaData); // o crearReseñaSinAuth
-      console.log("✅ Reseña guardada exitosamente:", nuevaReseña);
-
-      // 🔧 Cerrar modal y limpiar después de guardar exitosamente
       setModalReseñaAbierto(false);
       limpiarSeleccion();
 
-      // 🔧 Recargar reseñas en el mapa
-      await cargarReseñasEnMapa(
-        mapRef.current,
-        setReseñaActiva,
-        filtros,
-        marcadoresReseñasRef
-      );
+      // 🔧 Recargar reseñas completas después de agregar una nueva
+      await cargarReseñasIniciales(filtros);
     } catch (error) {
       console.error("❌ Error al enviar reseña:", error);
-      // La modal manejará el error y no se cerrará
       throw error;
     }
   };
@@ -91,7 +90,7 @@ const MapaInteractivo = ({ filtros }) => {
   const handleCerrarModal = () => {
     setModalReseñaAbierto(false);
     if (modoSeleccion) {
-      desactivarSeleccion(); // Desactivar modo selección si está activo
+      desactivarSeleccion();
     }
   };
 
