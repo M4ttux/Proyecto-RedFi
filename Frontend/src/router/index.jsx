@@ -9,11 +9,14 @@ import Login from "../pages/Login";
 import Proveedores from "../pages/Proveedores";
 import Mapa from "../pages/Mapa";
 import Boletas from "../pages/Boletas";
-import RequireAuth from "../components/RequireAuth";
+import Reseñas from "../pages/Reseñas";
 import AcademyHome from "../pages/Academy/AcademyHome";
 import Curso1 from '../pages/Academy/Curso1';
 import Curso2 from '../pages/Academy/Curso2';
 import Curso3 from '../pages/Academy/Curso3';
+import RequireAuth from "../components/RequireAuth";
+import EditarPerfil from "../pages/EditarPerfil";
+import CambiarContraseña from "../pages/CambiarContraseña";
 
 
 export const router = createBrowserRouter([
@@ -23,11 +26,14 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Inicio /> },
       { path: "mapa", element: <Mapa /> },
-      { path: "herramientas", element: ( <RequireAuth> <Herramientas /> </RequireAuth> ), },
+      { path: "herramientas", element: <Herramientas /> },
       { path: "cuenta", element: ( <RequireAuth> <Cuenta /> </RequireAuth> ), },
+      { path: "editar-perfil" , element: ( <RequireAuth><EditarPerfil /></RequireAuth>)},
+      { path: "cambiar-contraseña" , element: ( <RequireAuth><CambiarContraseña/></RequireAuth>)},
       { path: "soporte", element: <Soporte /> },
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
+      { path: "resenas", element: ( <RequireAuth> <Reseñas /> </RequireAuth> ), },
       { path: "proveedores/:id", element: <Proveedores /> },
       { path: "boletas", element: ( <RequireAuth> <Boletas /> </RequireAuth> ), },
       { path: 'academy', element: ( <RequireAuth> <AcademyHome/> </RequireAuth> ),},

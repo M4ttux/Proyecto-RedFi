@@ -1,5 +1,6 @@
 import { supabase } from "../supabase/client";
 
+// Funcion para obtener todas las reseñas
 export const obtenerReseñas = async () => {
   const { data, error } = await supabase.from("reseñas").select(`
       id,
@@ -23,7 +24,94 @@ export const obtenerReseñas = async () => {
   return data;
 };
 
-// 🔧 Función corregida para guardar coordenadas como JSON
+// Funcion para obtener las reseñas del usuario autenticado
+export const obtenerReseñasUsuario = async () => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Usuario no autenticado");
+
+    const { data, error } = await supabase
+      .from("reseñas")
+      .select(`
+        id,
+        comentario,
+        estrellas,
+        proveedor_id,
+        usuario_id,
+        ubicacion,
+        created_at,
+        proveedores (
+          nombre,
+          tecnologia
+        )
+      `)
+      .eq("usuario_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    throw new Error(`Error al obtener reseñas del usuario: ${error.message}`);
+  }
+};
+
+// Función para actualizar una reseña
+export const actualizarReseña = async (id, reseñaData) => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Usuario no autenticado");
+
+    const { data, error } = await supabase
+      .from("reseñas")
+      .update({
+        comentario: reseñaData.comentario,
+        estrellas: reseñaData.estrellas,
+        proveedor_id: reseñaData.proveedor_id,
+      })
+      .eq("id", id)
+      .eq("usuario_id", user.id) // Asegurar que solo pueda editar sus propias reseñas
+      .select(`
+        id,
+        comentario,
+        estrellas,
+        proveedor_id,
+        usuario_id,
+        ubicacion,
+        created_at,
+        proveedores (
+          nombre,
+          tecnologia
+        )
+      `)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    throw new Error(`Error al actualizar reseña: ${error.message}`);
+  }
+};
+
+// Función para eliminar una reseña
+export const eliminarReseña = async (id) => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Usuario no autenticado");
+
+    const { error } = await supabase
+      .from("reseñas")
+      .delete()
+      .eq("id", id)
+      .eq("usuario_id", user.id); // Asegurar que solo pueda eliminar sus propias reseñas
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    throw new Error(`Error al eliminar reseña: ${error.message}`);
+  }
+};
+
+// Función para crear reseñas
 export const crearReseña = async (reseñaData) => {
   try {
     // Obtener usuario autenticado

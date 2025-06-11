@@ -19,15 +19,18 @@ export const useNotificaciones = () => {
       .eq("user_id", usuario.id);
 
     if (!error) {
-      const hoy = new Date();
+      const ahora = new Date();
       const alertas = [];
 
       data.forEach((b) => {
         const vencimiento = new Date(b.vencimiento);
-        const dias = Math.floor((vencimiento - hoy) / (1000 * 60 * 60 * 24));
-        if (dias >= 0 && dias <= 3) {
+        const diferenciaMs = vencimiento - ahora;
+        const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+        const horas = Math.floor((diferenciaMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+        if (dias >= 0 && dias <= 2) {
           alertas.push(
-            `📅 ${b.proveedor} vence en ${dias} día${dias === 1 ? "" : "s"}`
+            `📅 ${b.proveedor} vence en ${dias} día${dias !== 1 ? 's' : ''} y ${horas} hora${horas !== 1 ? 's' : ''}`
           );
         }
       });
@@ -55,7 +58,6 @@ export const useNotificaciones = () => {
       cargarNotificaciones();
     };
 
-    // ✅ Se actualiza al escuchar el evento de nueva boleta
     window.addEventListener("nueva-boleta", handler);
 
     return () => {
@@ -104,7 +106,7 @@ const Navbar = () => {
           {!usuario ? (
             <>
               <Link to="/login" className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-110 transition font-bold cursor-pointer">Login</Link>
-              <Link to="/register" className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-110 transition font-bold cursor-pointer">Registro</Link>
+              {/* <Link to="/register" className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-110 transition font-bold cursor-pointer">Registro</Link> */}
             </>
           ) : (
             <>

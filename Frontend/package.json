@@ -13,7 +13,6 @@
     "@headlessui/react": "^2.2.4",
     "@supabase/supabase-js": "^2.49.4",
     "@tabler/icons-react": "^3.33.0",
-    "fast-speedtest-api": "^0.3.2",
     "maplibre-gl": "^5.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

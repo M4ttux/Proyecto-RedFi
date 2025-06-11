@@ -54,9 +54,13 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
       url_imagen = publicUrlData.publicUrl;
     }
 
+    // 💡 Corregimos desfase horario sumando hora media
+    const vencimientoAjustado = new Date(form.vencimiento + "T12:00:00").toISOString();
+
     const { error } = await supabase.from("boletas").insert({
       ...form,
       user_id: user.id,
+      vencimiento: vencimientoAjustado,
       url_imagen,
     });
 
@@ -77,7 +81,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
 
       if (onBoletaAgregada) onBoletaAgregada();
       if (onActualizarNotificaciones) onActualizarNotificaciones();
-      window.dispatchEvent(new Event("nueva-boleta")); // 🚀 Notificar al Navbar
+      window.dispatchEvent(new Event("nueva-boleta"));
     }
   };
 
