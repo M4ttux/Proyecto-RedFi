@@ -1,7 +1,7 @@
 import {
   IconMapPinCheck,
   IconTools,
-  IconQuote,
+  IconStars,
   IconReceipt,
 } from "@tabler/icons-react";
 
@@ -13,7 +13,7 @@ const features = [
       "Explorá el mapa interactivo de Corrientes y descubrí qué proveedores ofrecen servicio en tu zona exacta.",
   },
   {
-    icono: <IconQuote size={64} />,
+    icono: <IconStars size={64} />,
     titulo: "Opiniones Verificadas",
     descripcion:
       "Leé reseñas auténticas de usuarios reales y evitá sorpresas. Conocé las experiencias reales en tu barrio.",
