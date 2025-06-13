@@ -13,6 +13,13 @@ const PanelControlMapa = ({
 }) => {
   const { usuario } = useAuth();
   const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
+  const handleClickReseña = () => {
+    if (!usuario) {
+      setAlerta("Debes iniciar sesión para agregar una reseña");
+      return;
+    }
+    onAbrirModalReseña();
+  };
 
   return (
     <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-lg shadow-lg space-y-2">
@@ -24,16 +31,19 @@ const PanelControlMapa = ({
         onUbicacionActual={onUbicacionActual}
       />
       
-      {usuario && (
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onAbrirModalReseña}
-            className="w-full z-50 bg-primario rounded font-semibold text-white px-4 py-2 hover:bg-acento"
-          >
-            Agregar Reseña
-          </button>
-        </div>
-      )}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleClickReseña}
+          disabled={!usuario}
+          className={`w-full z-50 rounded font-semibold px-4 py-2 transition-colors ${
+            usuario
+              ? "bg-primario text-white hover:bg-acento"
+              : "bg-gray-400 text-gray-600 cursor-not-allowed"
+          }`}
+        >
+          Agregar Reseña
+        </button>
+      </div>
       
       {mostrarAlerta && (
         <p

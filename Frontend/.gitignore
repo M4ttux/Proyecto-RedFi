@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+/src/components/modals/ModalEditarPerfil.jsx
+/src/pages/Cuentav2.jsx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

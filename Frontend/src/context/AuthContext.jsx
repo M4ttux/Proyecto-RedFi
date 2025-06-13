@@ -11,7 +11,7 @@ export const useAuth = () => useContext(AuthContext);
 // Proveedor del contexto
 export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ NUEVO estado de carga
+  const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
 
   // Verificar sesión activa al cargar la app
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     const obtenerUsuario = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setUsuario(session?.user || null);
-      setLoading(false); // ✅ Marcar como completado
+      setLoading(false); // Marcar como completado
     };
     obtenerUsuario();
 
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   const login = async ({ email, password }) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    navigate("/cuenta"); // O reemplazá por 'navigate(from)' si lo preferís dinámico
+    navigate("/cuenta");
   };
 
   // Logout
