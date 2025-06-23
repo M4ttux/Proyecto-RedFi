@@ -24,18 +24,6 @@ const Herramientas = () => {
             <DetectorProveedor />
           </div>
           {/* Test de velocidad */}
-          {/* <div className="w-full bg-white/5 border-t border-white/10 p-8 rounded-lg">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Test de Velocidad
-            </h2>
-            <iframe
-              src="https://fast.com"
-              className="w-full h-[400px] lg:h-[700px] rounded-lg shadow-xl border border-white/10"
-              title="Test de Velocidad"
-              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-            />
-          </div> */}
-          {/* Test de velocidad */}
           <div className="w-full bg-white/5 border-t border-white/10 p-8 rounded-lg">
             <h2 className="text-3xl lg:text-4xl font-bold mb-6">
               Test de Velocidad

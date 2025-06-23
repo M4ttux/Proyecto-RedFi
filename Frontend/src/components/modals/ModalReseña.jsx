@@ -1,8 +1,7 @@
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;
 
-  const estrellas =
-    "★".repeat(reseña.estrellas) + "☆".repeat(5 - reseña.estrellas);
+  const estrellasLlenas = Math.round(reseña.estrellas);
 
   let nombreBruto =
     reseña?.user_profiles?.nombre || reseña?.user_profiles?.user?.nombre;
@@ -10,7 +9,7 @@ const ModalReseña = ({ reseña, onClose }) => {
   // Limpieza si viene como string tipo "Usuario {\"nombre\":\"Matías\"}"
   let nombre;
   try {
-    if (nombreBruto.includes("{")) {
+    if (nombreBruto?.includes("{")) {
       const match = nombreBruto.match(/Usuario (.*)/);
       const json = match ? JSON.parse(match[1]) : null;
       nombre = json?.nombre || nombreBruto;
@@ -29,7 +28,8 @@ const ModalReseña = ({ reseña, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
-      <div className="bg-secundario p-6 rounded-xl max-w-md w-full relative shadow-2xl border border-white/10">
+      <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-sm shadow-2xl relative border border-white/10">
+        {/* Botón cerrar */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-white text-xl hover:text-red-400 transition"
@@ -37,27 +37,32 @@ const ModalReseña = ({ reseña, onClose }) => {
           ✖
         </button>
 
-        <p className="text-xs uppercase tracking-wide text-acento mb-3">
-          Reseña destacada
-        </p>
-
-        <div className="flex items-center gap-4 mb-4">
+        {/* Avatar */}
+        <div className="flex justify-center mb-4">
           <img
-            src={`https://i.pravatar.cc/64?u=${reseña.usuario_id}`}
-            className="w-12 h-12 rounded-full border-2 border-acento shadow-md"
+            src={`https://i.pravatar.cc/80?u=${reseña.usuario_id}`}
+            className="w-20 h-20 rounded-full border-2 border-acento shadow-md"
             alt="Avatar del usuario"
           />
-          <div>
-            <p className="font-semibold text-white text-base">{nombre}</p>
-            <p className="text-texto/60 text-sm">Proveedor: {proveedor}</p>
-          </div>
         </div>
 
-        <div className="text-yellow-400 text-lg mb-3 tracking-wide">
-          {estrellas}
+        {/* Nombre */}
+        <h2 className="text-center text-lg font-semibold mb-1">{nombre}</h2>
+
+        {/* Proveedor */}
+        <p className="text-center text-xs text-texto/60 mb-3">
+          Proveedor: {proveedor}
+        </p>
+
+        {/* Estrellas */}
+        <div className="flex justify-center gap-1 text-yellow-400 text-2xl mb-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i}>{i < estrellasLlenas ? "★" : "☆"}</span>
+          ))}
         </div>
 
-        <p className="text-texto/90 italic bg-black/10 rounded-md px-4 py-3 text-sm leading-relaxed">
+        {/* Comentario */}
+        <p className="text-sm text-texto/90 bg-white/5 rounded-md px-4 py-3 text-center leading-relaxed">
           “{reseña.comentario}”
         </p>
       </div>

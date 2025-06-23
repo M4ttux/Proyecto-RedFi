@@ -40,7 +40,7 @@ const PreguntasFrecuentes = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         <h2 className="text-3xl lg:text-4xl font-bold text-texto text-center">Preguntas Frecuentes</h2>
 
-        <div className="grid gap-10 sm:grid-cols-2">
+        <div className="grid gap-16 sm:grid-cols-2">
           {preguntas.map((item, i) => (
             <div key={i} className="space-y-2">
               <h3 className="text-xl lg:text-2xl font-bold text-acento">{item.titulo}</h3>

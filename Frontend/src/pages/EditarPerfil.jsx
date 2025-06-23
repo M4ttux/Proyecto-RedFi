@@ -2,16 +2,22 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supabase/client";
 import { useAuth } from "../context/AuthContext";
+import { IconUserCircle } from "@tabler/icons-react";
+import { obtenerProveedores } from "../services/proveedorService";
 
 const EditarPerfil = () => {
   const { usuario } = useAuth();
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     nombre: "",
     proveedor_preferido: "",
     foto: null,
   });
+
   const [preview, setPreview] = useState(null);
+  const [proveedores, setProveedores] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const cargarDatosPerfil = async () => {
@@ -29,10 +35,22 @@ const EditarPerfil = () => {
         foto: null,
       });
 
-      setPreview(perfilDB?.foto_url || usuario.user_metadata?.foto_perfil || null);
+      setPreview(
+        perfilDB?.foto_url || usuario.user_metadata?.foto_perfil || null
+      );
+    };
+
+    const cargarProveedores = async () => {
+      try {
+        const data = await obtenerProveedores();
+        setProveedores(data);
+      } catch (error) {
+        console.error("Error al cargar proveedores:", error);
+      }
     };
 
     cargarDatosPerfil();
+    cargarProveedores();
   }, [usuario]);
 
   const handleInputChange = (e) => {
@@ -42,6 +60,7 @@ const EditarPerfil = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setForm({ ...form, foto: file });
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => setPreview(reader.result);
@@ -51,6 +70,7 @@ const EditarPerfil = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let nuevaUrl = preview;
 
@@ -65,6 +85,7 @@ const EditarPerfil = () => {
 
       if (uploadError) {
         alert("Error al subir la imagen");
+        setLoading(false);
         return;
       }
 
@@ -83,6 +104,7 @@ const EditarPerfil = () => {
 
     if (authError) {
       alert("Error al actualizar autenticación");
+      setLoading(false);
       return;
     }
 
@@ -97,6 +119,7 @@ const EditarPerfil = () => {
 
     if (perfilError) {
       alert("Error al guardar en base de datos");
+      setLoading(false);
       return;
     }
 
@@ -105,80 +128,118 @@ const EditarPerfil = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto text-white mt-10 px-4 pb-32">
-      <h2 className="text-3xl font-bold mb-6 text-center">Editar Perfil</h2>
+    <div className="w-full">
+      <section className="max-w-lg py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
+        <h1 className="text-4xl lg:text-5xl font-extrabold mb-8 text-center">
+          Editar Perfil
+        </h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/10 shadow-md"
-      >
-        <div className="flex justify-center mb-4">
-          {preview ? (
-            <img
-              src={preview}
-              alt="Foto de perfil"
-              className="rounded-full w-28 h-28 object-cover border-4 border-white/20 shadow"
-            />
-          ) : (
-            <div className="rounded-full w-28 h-28 bg-white/10 border-4 border-white/20 flex items-center justify-center text-3xl text-white shadow">
-              ?
-            </div>
-          )}
-        </div>
-
-        <div className="text-center">
-          <label htmlFor="foto" className="inline-block bg-acento hover:bg-orange-600 text-white font-bold py-2 px-4 rounded cursor-pointer transition">
-            Actualizar Foto
-          </label>
-          <input
-            id="foto"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 text-sm font-semibold">Nombre</label>
-          <input
-            name="nombre"
-            value={form.nombre}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-2 rounded text-white border border-white/30 bg-transparent"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 text-sm font-semibold">
-            Proveedor preferido
-          </label>
-          <input
-            name="proveedor_preferido"
-            value={form.proveedor_preferido}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 rounded text-white border border-white/30 bg-transparent"
-            placeholder="Ej: Fibertel, Telecentro, etc."
-          />
-        </div>
-
-        <div className="flex justify-center">
-          <button className="bg-acento hover:bg-orange-600 text-white px-6 py-2 rounded font-bold shadow">
-            Guardar Cambios
-          </button>
-        </div>
-      </form>
-
-      {/* 🔒 Link a cambio de contraseña */}
-      <div className="text-center mt-6">
-        <Link
-          to="/cambiar-contraseña"
-          className="inline-block text-acento hover:underline font-semibold text-sm"
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white/5 border border-white/20 rounded-lg p-6 space-y-6 shadow-md"
         >
-          Cambiar contraseña
-        </Link>
-      </div>
+          {/* Avatar */}
+          <div className="text-center">
+            <div className="w-30 h-30 rounded-full bg-white/10 border-2 border-white/20 mx-auto mb-3 flex items-center justify-center overflow-hidden">
+              {preview ? (
+                <img
+                  src={preview}
+                  alt="Foto de perfil"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <IconUserCircle size={120} className="text-acento" />
+              )}
+            </div>
+
+            <label
+              htmlFor="foto"
+              className="inline-block bg-acento hover:bg-orange-600 text-white font-bold py-2 px-4 rounded cursor-pointer transition"
+            >
+              Actualizar Foto
+            </label>
+            <input
+              id="foto"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
+
+          {/* Nombre */}
+          <div>
+            <label className="block text-sm font-medium text-texto mb-2">
+              Nombre *
+            </label>
+            <input
+              type="text"
+              name="nombre"
+              value={form.nombre}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento"
+              placeholder="Tu nombre completo"
+              disabled={loading}
+            />
+          </div>
+
+          {/* Proveedor preferido */}
+          <div>
+            <label className="block text-sm font-medium text-texto mb-2">
+              Proveedor Preferido
+            </label>
+            <select
+              name="proveedor_preferido"
+              value={form.proveedor_preferido}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto focus:outline-none focus:border-acento"
+              disabled={loading}
+            >
+              <option value="">Seleccionar proveedor</option>
+              {proveedores.map((proveedor) => (
+                <option
+                  key={proveedor.id}
+                  value={proveedor.nombre}
+                  className="bg-fondo"
+                >
+                  {proveedor.nombre}
+                  {proveedor.tecnologia && ` (${proveedor.tecnologia})`}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Botones */}
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/cuenta")}
+              disabled={loading}
+              className="flex-1 px-4 py-2 bg-white/10 text-texto rounded-lg hover:bg-white/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 px-4 py-2 bg-primario text-white rounded-lg hover:bg-acento transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Guardando..." : "Guardar"}
+            </button>
+          </div>
+        </form>
+
+        {/* Link a cambio de contraseña */}
+        <div className="text-center mt-6">
+          <Link
+            to="/cambiar-contraseña"
+            className="px-4 py-2 text-sm text-texto bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Cambiar contraseña
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };

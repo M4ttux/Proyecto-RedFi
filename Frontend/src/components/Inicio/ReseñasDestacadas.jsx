@@ -49,7 +49,7 @@ const ReseñasDestacadas = () => {
           {reseñas.map((r, i) => (
             <div
               key={i}
-              className="flex flex-col items-center bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-lg text-center"
+              className="flex flex-col items-center bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-lg text-center transition-transform transform hover:scale-110 duration-300"
             >
               <img
                 src={`https://randomuser.me/api/portraits/${

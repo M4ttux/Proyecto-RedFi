@@ -52,10 +52,10 @@ const Caracteristicas = () => {
           {features.map((f, i) => (
             <div
               key={i}
-              className="w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0 bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-lg"
+              className="w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0 bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-lg transition-transform transform hover:scale-110 duration-300"
             >
               <div className="flex justify-center mb-4 sm:mb-5 text-acento">
-                <div className="transition-transform transform hover:scale-110 duration-300">
+                <div>
                   {f.icono}
                 </div>
               </div>
