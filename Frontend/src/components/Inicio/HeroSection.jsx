@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="relative flex items-center justify-center px-4 sm:px-6 py-16 bg-secundario min-h-[80vh]">
+    <section className="relative flex items-center justify-center px-4 sm:px-6 py-42 bg-secundario">
       {/* 🔳 Patrón decorativo en el fondo */}
       <div
         className="absolute inset-0 bg-[url('/imgs/diagonal-lines.svg')] opacity-10 pointer-events-none z-0"
