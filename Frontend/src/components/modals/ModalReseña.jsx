@@ -25,6 +25,20 @@ const ModalReseña = ({ reseña, onClose }) => {
     reseña.proveedores?.nombre ||
     reseña.proveedor?.nombre ||
     `Proveedor ID: ${reseña.proveedor_id}`;
+  
+  const fotoUrl =
+  reseña?.user_profiles?.foto_url ||
+  reseña?.user_profiles?.user?.foto_perfil ||
+  null;
+
+  const iniciales = nombre
+    ? nombre
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "US";
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
@@ -37,13 +51,19 @@ const ModalReseña = ({ reseña, onClose }) => {
           ✖
         </button>
 
-        {/* Avatar */}
+         {/* Avatar */}
         <div className="flex justify-center mb-4">
-          <img
-            src={`https://i.pravatar.cc/80?u=${reseña.usuario_id}`}
-            className="w-20 h-20 rounded-full border-2 border-acento shadow-md"
-            alt="Avatar del usuario"
-          />
+          {fotoUrl ? (
+            <img
+              src={fotoUrl}
+              className="w-20 h-20 rounded-full border-2 border-acento shadow-md object-cover"
+              alt="Avatar del usuario"
+            />
+          ) : (
+            <div className="w-20 h-20 rounded-full border-2 border-acento shadow-md bg-white/10 flex items-center justify-center text-xl font-bold text-white">
+              {iniciales}
+            </div>
+          )}
         </div>
 
         {/* Nombre */}

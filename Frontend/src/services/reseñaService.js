@@ -10,7 +10,8 @@ export const obtenerReseñas = async () => {
       usuario_id,
       ubicacion,
       user_profiles:usuario_id (
-        nombre
+        nombre,
+        foto_url
       ),
       proveedores (
         nombre,
@@ -158,7 +159,8 @@ export const crearReseña = async (reseñaData) => {
         usuario_id,
         ubicacion,
         user_profiles:usuario_id (
-          nombre
+          nombre,
+          foto_url
         ),
         proveedores (
           nombre,
