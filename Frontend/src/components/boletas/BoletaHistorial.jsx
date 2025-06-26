@@ -74,19 +74,19 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                       <div className="flex flex-wrap gap-2 justify-center">
                         <button
                           onClick={() => setBoletaParaVer(b)}
-                          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm"
+                          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-bold"
                         >
                           Ver
                         </button>
                         <button
                           onClick={() => setBoletaSeleccionada(b)}
-                          className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-sm text-black"
+                          className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-sm text-black font-bold"
                         >
                           Editar
                         </button>
                         <button
                           onClick={() => eliminarBoleta(b)}
-                          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm"
+                          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-bold"
                         >
                           Eliminar
                         </button>

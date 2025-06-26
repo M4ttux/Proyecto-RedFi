@@ -31,19 +31,19 @@ const BoletaCard = ({ boleta, onEditar, onVer, onEliminar, diferenciaTexto }) =>
       <div className="flex justify-end gap-2">
         <button
           onClick={() => onVer(boleta)}
-          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
+          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm font-bold"
         >
           Ver
         </button>
         <button
           onClick={() => onEditar(boleta)}
-          className="bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded text-sm text-black"
+          className="bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded text-sm text-black font-bold"
         >
           Modificar
         </button>
         <button
           onClick={() => onEliminar(boleta)}
-          className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
+          className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm font-bold"
         >
           Eliminar
         </button>

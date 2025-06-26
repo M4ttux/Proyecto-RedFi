@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { IconX, IconStar } from "@tabler/icons-react";
+import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../services/proveedorService";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
@@ -104,11 +104,12 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
               </select>
             </div>
 
+            {/* Estrellas */}
             <div>
               <label className="block text-sm font-medium text-texto mb-2">
                 Calificación *
               </label>
-              <div className="flex gap-1">
+              <div className="flex gap-1 text-yellow-400">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
@@ -117,13 +118,11 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
                     className="text-2xl transition-colors"
                     disabled={loading}
                   >
-                    <IconStar
-                      className={
-                        star <= formData.estrellas
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-gray-400"
-                      }
-                    />
+                    {star <= formData.estrellas ? (
+                      <IconCarambolaFilled size={24} />
+                    ) : (
+                      <IconCarambola size={24} />
+                    )}
                   </button>
                 ))}
               </div>

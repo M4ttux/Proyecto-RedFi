@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { obtenerReseñasUsuario, actualizarReseña, eliminarReseña } from "../services/reseñaService";
-import { IconStar, IconEdit, IconTrash, IconCalendar } from "@tabler/icons-react";
+import { IconCarambolaFilled, IconCarambola, IconEdit, IconTrash, IconCalendar } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/ModalEditarReseña";
 
 const Reseñas = () => {
@@ -73,22 +73,20 @@ const Reseñas = () => {
   };
 
   const renderEstrellas = (estrellas) => {
-    return (
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <IconStar
-            key={star}
-            size={16}
-            className={
-              star <= estrellas
-                ? "text-yellow-400 fill-yellow-400"
-                : "text-gray-400"
-            }
-          />
-        ))}
-      </div>
-    );
-  };
+  const estrellasLlenas = Math.round(estrellas);
+  return (
+    <div className="flex gap-1 text-yellow-400">
+      {Array.from({ length: 5 }).map((_, i) =>
+        i < estrellasLlenas ? (
+          <IconCarambolaFilled key={i} size={16} />
+        ) : (
+          <IconCarambola key={i} size={16} />
+        )
+      )}
+    </div>
+  );
+};
+
 
   if (!usuario) {
     return (
