@@ -4,38 +4,38 @@ const reseñas = [
   {
     nombre: "Juan P.",
     comentario:
-      "Excelente velocidad y atención al cliente. Desde que me cambié, no tuve más interrupciones ni caídas.",
+      "Red-Fi me ayudó muchísimo a elegir el proveedor ideal para mi zona. La plataforma es clara y fácil de usar.",
     estrellas: 5,
   },
   {
     nombre: "Ana G.",
     comentario:
-      "En general anda bien, pero en horas pico suele bajar bastante la velocidad y tarda en cargar videos.",
+      "Muy útil para comparar proveedores. Sería genial si más personas dejaran reseñas, pero la idea es excelente.",
     estrellas: 4,
   },
   {
     nombre: "Martin M.",
     comentario:
-      "Se me corta todos los días alrededor de las 21 hs. Ya hice varios reclamos y no tuve respuesta.",
-    estrellas: 1,
+      "No encontraba buen internet en mi zona hasta que conocí Red-Fi. Me sirvió mucho el mapa y los comentarios de otros.",
+    estrellas: 5,
   },
   {
     nombre: "Agustina M.",
     comentario:
-      "Antes funcionaba muy bien, pero en los últimos meses hubo varios aumentos y el servicio bajó la calidad.",
-    estrellas: 2,
+      "Me gusta el diseño y lo intuitiva que es la página. A veces algunas zonas tardan en cargar, pero en general funciona bien.",
+    estrellas: 4,
   },
   {
     nombre: "Sofía T.",
     comentario:
-      "Me sorprendió la estabilidad. Incluso con varios dispositivos conectados, no se cae ni pierde velocidad.",
+      "Excelente iniciativa. Es justo lo que necesitábamos en Corrientes para elegir mejor a quién contratar.",
     estrellas: 5,
   },
   {
     nombre: "Lucas R.",
     comentario:
-      "El servicio es aceptable. Tiene buena cobertura en mi zona, aunque algunas veces se ralentiza con videollamadas.",
-    estrellas: 3,
+      "Buena plataforma. Las reseñas de otros me dieron más seguridad para contratar. Recomendado.",
+    estrellas: 5,
   },
 ];
 
@@ -43,7 +43,9 @@ const ReseñasDestacadas = () => {
   return (
     <section className="py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-12 text-center">
-        <h2 className="text-3xl lg:text-4xl font-bold text-texto">Reseñas destacadas</h2>
+        <h2 className="text-3xl lg:text-4xl font-bold text-texto">
+          Reseñas destacadas
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
           {reseñas.map((r, i) => (
@@ -60,9 +62,7 @@ const ReseñasDestacadas = () => {
               />
               <p className="text-acento font-bold mb-2">{r.nombre}</p>
 
-              <p className="text-texto italic mb-4">
-                “{r.comentario}”
-              </p>
+              <p className="text-texto italic mb-4">“{r.comentario}”</p>
 
               <div className="flex gap-1 text-yellow-400 justify-center">
                 {Array.from({ length: 5 }, (_, idx) =>
