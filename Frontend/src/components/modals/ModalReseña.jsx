@@ -1,3 +1,5 @@
+import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;
 
@@ -44,12 +46,13 @@ const ModalReseña = ({ reseña, onClose }) => {
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
       <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-sm shadow-2xl relative border border-white/10">
         {/* Botón cerrar */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-white text-xl hover:text-red-400 transition"
-        >
-          ✖
-        </button>
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 text-white/60 hover:text-red-400 transition"
+            title="Cerrar"
+          >
+            <IconX size={24} />
+          </button>
 
          {/* Avatar */}
         <div className="flex justify-center mb-4">
@@ -76,9 +79,13 @@ const ModalReseña = ({ reseña, onClose }) => {
 
         {/* Estrellas */}
         <div className="flex justify-center gap-1 text-yellow-400 text-2xl mb-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i}>{i < estrellasLlenas ? "★" : "☆"}</span>
-          ))}
+          {Array.from({ length: 5 }).map((_, i) =>
+            i < estrellasLlenas ? (
+              <IconCarambolaFilled key={i} size={24} />
+            ) : (
+              <IconCarambola key={i} size={24} />
+            )
+          )}
         </div>
 
         {/* Comentario */}

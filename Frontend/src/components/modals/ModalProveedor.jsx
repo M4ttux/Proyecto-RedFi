@@ -1,3 +1,5 @@
+
+import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   if (!proveedor) return null;
 
@@ -16,11 +18,12 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
       <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-sm shadow-2xl relative border border-white/10">
         {/* Botón cerrar */}
         <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-white text-xl hover:text-red-400 transition"
-        >
-          ✖
-        </button>
+            onClick={onClose}
+            className="absolute top-3 right-3 text-white/60 hover:text-red-400 transition"
+            title="Cerrar"
+          >
+            <IconX size={24} />
+          </button>
 
         {/* Imagen/ícono del proveedor */}
         <div className="flex justify-center mb-4">
@@ -37,11 +40,13 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
         {/* Estrellas */}
         <div className="flex flex-col items-center mb-4">
           <div className="flex gap-1 text-yellow-400 text-2xl">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i}>
-                {i < Math.round(promedioEstrellas) ? "★" : "☆"}
-              </span>
-            ))}
+            {Array.from({ length: 5 }).map((_, i) =>
+              i < Math.round(promedioEstrellas) ? (
+                <IconCarambolaFilled key={i} size={22} />
+              ) : (
+                <IconCarambola key={i} size={22} />
+              )
+            )}
           </div>
           <span className="mt-1 text-sm text-texto/80">
             {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseñas
