@@ -8,7 +8,7 @@ const FiltrosMobile = ({ filtrosTemporales, setFiltrosTemporales, setFiltrosApli
         <p className="font-bold text-texto text-lg">Filtros</p>
         <button
           onClick={() => setMostrarFiltros(false)}
-          className="text-acento font-bold"
+          className="text-white/60"
         >
           <IconX size={24} />
         </button>

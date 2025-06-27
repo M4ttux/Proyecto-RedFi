@@ -20,15 +20,37 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
   const [tecnologiasUnicas, setTecnologiasUnicas] = useState([]);
 
   useEffect(() => {
-    const cargarDatos = async () => {
-      const zonasSupabase = await getZonas();
-      const proveedoresSupabase = await obtenerProveedores();
-      setZonas([{ id: "", nombre: "Todas las zonas" }, ...zonasSupabase]);
-      setProveedores([{ id: "", nombre: "Todos los proveedores" }, ...proveedoresSupabase]);
-      setTecnologiasUnicas(["", ...new Set(proveedoresSupabase.map((p) => p.tecnologia))]);
-    };
-    cargarDatos();
-  }, []);
+  const cargarDatos = async () => {
+    const zonasSupabase = await getZonas();
+    const proveedoresSupabase = await obtenerProveedores();
+
+    // Obtener los IDs de zona usados por al menos un proveedor
+    const zonasConProveedor = new Set(
+      proveedoresSupabase.map((p) => p.zona_id).filter(Boolean)
+    );
+
+    // Filtrar las zonas que tienen proveedores
+    const zonasFiltradas = zonasSupabase.filter((z) =>
+      zonasConProveedor.has(z.id)
+    );
+
+    // Agregar la opción "Todas las zonas"
+    setZonas([{ id: "", nombre: "Todas las zonas" }, ...zonasFiltradas]);
+
+    setProveedores([
+      { id: "", nombre: "Todos los proveedores" },
+      ...proveedoresSupabase,
+    ]);
+
+    setTecnologiasUnicas([
+      "",
+      ...new Set(proveedoresSupabase.map((p) => p.tecnologia)),
+    ]);
+  };
+
+  cargarDatos();
+}, []);
+
 
   const aplicarFiltros = () => {
     onFiltrar({
@@ -48,7 +70,7 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
     placeholder
   ) => {
     const abreArriba =
-      abrirHaciaArriba && (label === "Tecnología" || label === "Valoración mínima");
+      abrirHaciaArriba && (label === "Tecnología" || label === "Valoración exacta");
 
     return (
       <div className="space-y-1">
@@ -119,6 +141,9 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
     <div className="mb-4 bg-secundario p-4 rounded-lg shadow">
       <h3 className="text-xl lg:text-2xl mb-2 text-texto">Filtrar resultados</h3>
       <div className="flex flex-col gap-4">
+        {/* Separador visual */}
+        <div className="border-t border-white/10 my-2" />
+        <p className="text-sm text-white/60 -mt-2 mb-1">Filtrar proveedores</p>
         {renderListbox(
           "Zona",
           filtros.zona,
@@ -146,13 +171,17 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
           "Todas las tecnologías"
         )}
 
+        {/* Separador visual */}
+        <div className="border-t border-white/10 my-2" />
+        <p className="text-sm text-white/60 -mt-2 mb-1">Filtrar reseñas</p>
+
         {renderListbox(
-          "Valoración mínima",
+          "Valoración exacta",
           filtros.valoracionMin,
           (valoracionMin) => setFiltros((prev) => ({ ...prev, valoracionMin })),
           [0, 1, 2, 3, 4, 5],
-          (v) => (v === 0 ? "Todas las reseñas" : `${v}★ o más`),
-          "Todas las reseñas"
+          (v) => (v === 0 ? "Todas las estrellas" : `${v}★`),
+          "Todas las estrellas"
         )}
 
         <button

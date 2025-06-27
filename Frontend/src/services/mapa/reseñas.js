@@ -91,7 +91,7 @@ export const actualizarVisibilidadReseñas = (
   if (filtros.tecnologia)
     filter.push(["==", ["get", "tecnologia"], filtros.tecnologia]);
   if (filtros.valoracionMin && !isNaN(filtros.valoracionMin))
-    filter.push([">=", ["get", "estrellas"], filtros.valoracionMin]);
+    filter.push(["==", ["get", "estrellas"], filtros.valoracionMin]);
 
   map.setFilter(layerId, filter);
 };
