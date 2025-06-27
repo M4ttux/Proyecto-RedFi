@@ -63,6 +63,10 @@ const flujoConversacion = {
 };
 
 const Soporte = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Soporte";
+  }, []);
+
   const [mensajes, setMensajes] = useState([
     { autor: "bot", texto: flujoConversacion.inicio.mensaje },
   ]);

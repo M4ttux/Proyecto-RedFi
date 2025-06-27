@@ -1,6 +1,12 @@
+import { useEffect } from "react";
 import DetectorProveedor from "../components/DetectorProveedor";
 
 const Herramientas = () => {
+
+  useEffect(() => {
+    document.title = "Red-Fi | Herramientas";
+  }, []);
+
   return (
     <div className="w-full">
       <section className="py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">

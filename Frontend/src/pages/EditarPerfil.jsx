@@ -6,6 +6,9 @@ import { IconUserCircle } from "@tabler/icons-react";
 import { obtenerProveedores } from "../services/proveedorService";
 
 const EditarPerfil = () => {
+  useEffect(() => {
+      document.title = "Red-Fi | Editar Perfil";
+    }, []);
   const { usuario } = useAuth();
   const navigate = useNavigate();
 

@@ -1,7 +1,10 @@
-import React from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const AcademyHome = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Academia";
+  }, []);
   const cursos = [
     {
       id: 1,
@@ -61,7 +64,9 @@ const AcademyHome = () => {
 
   return (
     <section className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">🎓 Cursos Destacados</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        🎓 Cursos Destacados
+      </h1>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {cursos.map((curso) => (

@@ -6,6 +6,9 @@ import BoletasLayout from "../components/boletas/BoletasLayout";
 import { useNotificaciones } from "../components/Navbar";
 
 const Boletas = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Boletas";
+  }, []);
   const [boletas, setBoletas] = useState([]);
   const [vista, setVista] = useState("historial"); // "formulario" o "historial"
   const { cargarNotificaciones } = useNotificaciones();
@@ -18,7 +21,7 @@ const Boletas = () => {
       .from("boletas")
       .select("*")
       .eq("user_id", user.id)
-       .order("fecha_carga", { ascending: false }); // 🔽 más nuevas arriba
+      .order("fecha_carga", { ascending: false }); // 🔽 más nuevas arriba
 
     if (!error) setBoletas(data);
   };
@@ -54,10 +57,7 @@ const Boletas = () => {
           onActualizarNotificaciones={cargarNotificaciones}
         />
       ) : (
-        <BoletaHistorial
-          boletas={boletas}
-          recargarBoletas={cargarBoletas}
-        />
+        <BoletaHistorial boletas={boletas} recargarBoletas={cargarBoletas} />
       )}
     </BoletasLayout>
   );
