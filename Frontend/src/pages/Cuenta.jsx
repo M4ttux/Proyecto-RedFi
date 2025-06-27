@@ -124,7 +124,7 @@ const Cuenta = () => {
 
         {/* Gestionar Plan */}
         <Link
-          to="/editar-perfil"
+          to="/planes"
           className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
         >
           <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">

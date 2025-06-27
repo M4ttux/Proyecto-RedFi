@@ -1,0 +1,115 @@
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
+import { IconCheck } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
+
+const beneficiosBasico = [
+  { texto: "Acceso a mapa interactivo", disponible: true },
+  { texto: "Ver reseñas de otros usuarios", disponible: true },
+  { texto: "Test de velocidad y cobertura", disponible: true },
+  { texto: "Acceso completo al historial de boletas", disponible: false },
+  { texto: "Carga y gestión de tus propias boletas", disponible: false },
+  { texto: "Sin anuncios ni banners promocionales", disponible: false },
+  { texto: "Notificaciones básicas", disponible: false },
+];
+
+const beneficiosPremium = [
+  { texto: "Acceso a mapa interactivo", disponible: true },
+  { texto: "Ver reseñas de otros usuarios", disponible: true },
+  { texto: "Test de velocidad y cobertura", disponible: true },
+  { texto: "Acceso completo al historial de boletas", disponible: true },
+  { texto: "Carga y gestión de tus propias boletas", disponible: true },
+  { texto: "Sin anuncios ni banners promocionales", disponible: true },
+  { texto: "Notificaciones básicas", disponible: true },
+];
+
+const Planes = () => {
+  const { usuario } = useAuth();
+
+  useEffect(() => {
+    document.title = "Red-Fi | Planes";
+  }, []);
+
+  const planActual = "premium"; // hardcodeado por ahora
+
+  const renderBeneficios = (lista) => (
+    <ul className="text-sm text-white/80 space-y-2 mb-6 text-left">
+      {lista.map((b, i) => (
+        <li
+          key={i}
+          className={`flex items-center ${!b.disponible ? "opacity-50" : ""}`}
+        >
+          <IconCheck
+            size={18}
+            className={`${b.disponible ? "text-acento" : "text-gray-400"} mr-2`}
+          />
+          {b.texto}
+        </li>
+      ))}
+    </ul>
+  );
+
+  return (
+    <div className="w-full">
+      <section className="py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
+        {/* Encabezado */}
+        <div className="w-full text-center">
+          <h1 className="text-5xl lg:text-6xl font-extrabold mb-4">
+            Elegí tu Plan Red-Fi
+          </h1>
+          <p className="mx-auto">
+            Compará los planes y seleccioná el que mejor se adapte a tus necesidades.
+          </p>
+        </div>
+        <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Plan Básico */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg flex flex-col justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-texto mb-2">Plan Básico</h2>
+              <p className="text-white/70 mb-4">
+                Ideal para usuarios que quieren explorar Red-Fi sin funciones avanzadas.
+              </p>
+              {renderBeneficios(beneficiosBasico)}
+            </div>
+            <Link to="/cuenta" className="mt-auto">
+              <button
+                className="w-full px-4 py-2 bg-primario hover:bg-acento text-white font-bold rounded-lg transition"
+              >
+                Adquirir Plan
+              </button>
+            </Link>
+          </div>
+
+          {/* Plan Premium */}
+          <div className="bg-white/5 border border-acento/50 rounded-xl p-6 shadow-lg flex flex-col justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-acento mb-2">Plan Premium</h2>
+              <p className="text-white/70 mb-4">
+                Accedé a todos los beneficios de Red-Fi sin límites de uso y sin anuncios.
+              </p>
+              {renderBeneficios(beneficiosPremium)}
+            </div>
+            {usuario && planActual === "premium" ? (
+              <button
+                disabled
+                className="mt-auto w-full px-4 py-2 bg-gray-400 text-gray-700 font-bold rounded-lg cursor-not-allowed"
+              >
+                Este es tu plan actual
+              </button>
+            ) : (
+              <Link to="/cuenta" className="mt-auto">
+                <button
+                  className="w-full px-4 py-2 bg-primario hover:bg-acento text-white font-bold rounded-lg transition"
+                >
+                  Adquirir Plan
+                </button>
+              </Link>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Planes;

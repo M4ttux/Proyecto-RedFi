@@ -17,6 +17,7 @@ import Curso3 from '../pages/Academy/Curso3';
 import RequireAuth from "../components/RequireAuth";
 import EditarPerfil from "../pages/EditarPerfil";
 import CambiarContraseña from "../pages/CambiarContraseña";
+import Planes from "../pages/Planes";
 
 
 export const router = createBrowserRouter([
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       { path: "editar-perfil" , element: ( <RequireAuth><EditarPerfil /></RequireAuth>)},
       { path: "cambiar-contraseña" , element: ( <RequireAuth><CambiarContraseña/></RequireAuth>)},
       { path: "soporte", element: <Soporte /> },
+      { path: "planes", element:  <Planes /> },
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
       { path: "resenas", element: ( <RequireAuth> <Reseñas /> </RequireAuth> ), },
