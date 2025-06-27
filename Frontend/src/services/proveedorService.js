@@ -30,8 +30,10 @@ export const obtenerProveedorPorId = async (id) => {
       reseñas:reseñas (
         comentario,
         estrellas,
+        created_at,
         user:user_profiles (
-          nombre
+          nombre,
+          foto_url
         )
       )
     `)

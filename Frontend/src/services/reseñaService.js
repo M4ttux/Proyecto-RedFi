@@ -8,6 +8,7 @@ export const obtenerReseñas = async () => {
       estrellas,
       proveedor_id,
       usuario_id,
+      created_at,
       ubicacion,
       user_profiles:usuario_id (
         nombre,

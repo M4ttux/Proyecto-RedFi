@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { obtenerProveedorPorId } from "../services/proveedorService";
-import { IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
+import {
+  IconCarambola,
+  IconCarambolaFilled,
+  IconExternalLink,
+} from "@tabler/icons-react";
 
-const VistaProveedor = () => {
+const Proveedores = () => {
   const { id } = useParams();
   const [proveedor, setProveedor] = useState(null);
 
@@ -15,48 +19,133 @@ const VistaProveedor = () => {
     fetchProveedor();
   }, [id]);
 
-  if (!proveedor) return <p className="text-center text-white mt-10">Cargando proveedor...</p>;
+  if (!proveedor) {
+    return (
+      <div className="text-center text-white mt-20">
+        <p className="text-lg animate-pulse">Cargando proveedor...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4 text-texto">
-      <h1 className="text-5xl lg:text-6xl font-bold mb-4">{proveedor.nombre}</h1>
-      <p><strong>Tecnología:</strong> {proveedor.tecnologia}</p>
-      <p><strong>Zona:</strong> {proveedor.zona_id}</p>
-      <p className="mb-6">
-        <strong>Color asignado:</strong>{" "}
-        <span style={{ color: proveedor.color }}>{proveedor.color}</span>
-      </p>
-
-      {/* Reseñas */}
-      <h2 className="text-3xl lg:text-4xl font-semibold mb-4">Reseñas</h2>
-      {proveedor.reseñas && proveedor.reseñas.length > 0 ? (
-        <div className="space-y-4">
-          {proveedor.reseñas.map((r) => (
-            <div
-              key={r.id}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 rounded-lg"
-            >
-              <p className="italic mb-2">“{r.comentario}”</p>
-              <div className="flex justify-between text-gray-300">
-                <span className="text-gray-300">— {r.user?.nombre || "Anónimo"}</span>
-                <div className="flex gap-1 text-yellow-400">
-                  {Array.from({ length: 5 }, (_, i) =>
-                    i < r.estrellas ? (
-                      <IconCarambolaFilled size={14} key={i} />
-                    ) : (
-                      <IconCarambola size={14} key={i} />
-                    )
-                  )}
-                </div>
-              </div>
+    <div className="w-full bg-fondo px-4 sm:px-6 py-16">
+      <div className="max-w-4xl mx-auto">
+        {/* Info principal del proveedor */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
+          {/* Avatar / ícono */}
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 rounded-full bg-white/10 text-3xl flex items-center justify-center">
+              🏢
             </div>
-          ))}
+          </div>
+
+          {/* Nombre */}
+          <h1 className="text-4xl font-bold text-texto">{proveedor.nombre}</h1>
+
+          {/* Tecnología */}
+          <p className="text-white/70 mt-2">
+            Tecnología:{" "}
+            <span className="font-medium text-texto">
+              {proveedor.tecnologia || "No especificada"}
+            </span>
+          </p>
+
+          {/* Descripción breve */}
+          <p className="text-sm text-white/70 mt-4 max-w-xl mx-auto leading-relaxed">
+            {proveedor.descripcion ||
+              "Proveedor destacado en Corrientes por su cobertura, estabilidad y servicio al cliente. Red-Fi lo destaca por su presencia activa en múltiples zonas urbanas y rurales."}
+          </p>
+
+          {/* Botón sitio web (siempre visible) */}
+          <a
+            href={proveedor.sitio_web || "https://www.google.com"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center mt-6 px-5 py-2 bg-primario hover:bg-acento transition text-white rounded-lg font-medium"
+          >
+            Visitar sitio oficial <IconExternalLink size={18} className="ml-2" />
+          </a>
         </div>
-      ) : (
-        <p className="text-gray-400">Este proveedor aún no tiene reseñas.</p>
-      )}
+
+        {/* Reseñas */}
+        <div>
+          <h2 className="text-3xl lg:text-4xl font-semibold text-texto mb-6">
+            Opiniones de usuarios
+          </h2>
+
+          {proveedor.reseñas && proveedor.reseñas.length > 0 ? (
+            <div className="space-y-6">
+              {proveedor.reseñas.map((r) => {
+                const nombre = r.user?.nombre || "Usuario";
+                const fotoUrl = r.user?.foto_url || null;
+                const iniciales = nombre
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase();
+
+                const fecha = r.created_at
+                  ? new Date(r.created_at).toLocaleDateString("es-AR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : "Fecha desconocida";
+
+                return (
+                  <div
+                    key={r.id}
+                    className="bg-white/5 border border-white/10 p-5 rounded-xl flex flex-col gap-3"
+                  >
+                    {/* Usuario + estrellas en una fila */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {fotoUrl ? (
+                          <img
+                            src={fotoUrl}
+                            alt={`Avatar de ${nombre}`}
+                            className="w-10 h-10 rounded-full object-cover border border-acento"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-white/10 text-white font-bold flex items-center justify-center text-sm border border-acento">
+                            {iniciales}
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-medium text-texto">{nombre}</p>
+                          <p className="text-xs text-white/60">{fecha}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-1 text-yellow-400 pl-2">
+                        {Array.from({ length: 5 }, (_, i) =>
+                          i < r.estrellas ? (
+                            <IconCarambolaFilled size={18} key={i} />
+                          ) : (
+                            <IconCarambola size={18} key={i} />
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Comentario */}
+                    <p className="text-texto/90 leading-relaxed">
+                      “{r.comentario}”
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-white/60 text-center">
+              Este proveedor aún no tiene reseñas.
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default VistaProveedor;
+export default Proveedores;
