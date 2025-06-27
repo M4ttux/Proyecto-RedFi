@@ -31,7 +31,7 @@ const PanelControlMapa = ({
         onUbicacionActual={onUbicacionActual}
       />
       
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col items-center gap-2 w-full">
         <button
           onClick={handleClickReseña}
           disabled={!usuario}
@@ -43,6 +43,11 @@ const PanelControlMapa = ({
         >
           Agregar Reseña
         </button>
+        {!usuario && (
+          <p className="text-sm text-white/60 italic animate-fade-in">
+            Debes estar logueado para usar esto
+          </p>
+        )}
       </div>
       
       {mostrarAlerta && (
