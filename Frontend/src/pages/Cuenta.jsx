@@ -49,7 +49,7 @@ const Cuenta = () => {
   return (
     <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
       {/* Info básica del usuario */}
-      <section className="max-w-7xl mx-auto text-center pt-16">
+      <section className="max-w-7xl mx-auto text-center pt-8">
         {foto ? (
           <img
             src={foto}
@@ -65,7 +65,7 @@ const Cuenta = () => {
         <h2 className="text-2xl lg:text-3xl font-bold text-texto">{nombre}</h2>
         <p className="text-white/60 mt-1">{usuario.email}</p>
         <p className="text-sm text-white/40 mt-2">
-          Perfil de usuario de Red-Fi
+          Usuario <span className="font-bold text-acento">Premium</span>
         </p>
       </section>
 
@@ -98,7 +98,6 @@ const Cuenta = () => {
           </div>
         </Link>
 
-        
         {/* Ver Reseñas */}
         <Link to="/resenas">
           <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition">
@@ -121,6 +120,17 @@ const Cuenta = () => {
             Editar Perfil
           </h3>
           <p>Cambiá tu foto, nombre y otros datos de tu cuenta Red-Fi.</p>
+        </Link>
+
+        {/* Gestionar Plan */}
+        <Link
+          to="/editar-perfil"
+          className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
+        >
+          <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
+            Gestionar Plan
+          </h3>
+          <p>Gestioná tu plan y descubrí nuestros beneficios.</p>
         </Link>
       </section>
     </div>
