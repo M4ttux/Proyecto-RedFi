@@ -70,7 +70,7 @@ const Cuenta = () => {
       </section>
 
       {/* Acciones */}
-      <section className="max-w-7xl mx-auto mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <section className="max-w-7xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
         {/* Gestionar Boletas */}
         <Link
           to="/boletas"
