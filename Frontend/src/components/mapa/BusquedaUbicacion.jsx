@@ -1,12 +1,12 @@
-import { IconCurrentLocation } from "@tabler/icons-react";
+import { IconX, IconCurrentLocation } from "@tabler/icons-react";
 import { useBusquedaUbicacion } from "../../hooks/useBusquedaUbicacion";
 
-const BusquedaUbicacion = ({ 
-  boundsCorrientes, 
-  setAlerta, 
-  mapRef, 
-  cargandoUbicacion, 
-  onUbicacionActual 
+const BusquedaUbicacion = ({
+  boundsCorrientes,
+  setAlerta,
+  mapRef,
+  cargandoUbicacion,
+  onUbicacionActual,
 }) => {
   const {
     input,
@@ -14,6 +14,7 @@ const BusquedaUbicacion = ({
     handleInputChange,
     handleBuscar,
     handleSeleccionarSugerencia,
+    handleLimpiarBusqueda,
   } = useBusquedaUbicacion(boundsCorrientes, setAlerta, mapRef);
 
   return (
@@ -21,16 +22,28 @@ const BusquedaUbicacion = ({
       <div className="flex justify-between items-center">
         <p className="font-semibold text-texto">Buscar ubicación</p>
       </div>
-      
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
-        placeholder="Buscar en Corrientes..."
-        className="px-3 py-2 rounded w-full bg-fondo text-texto placeholder-gray-400"
-      />
-      
+
+      <div className="relative w-full">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => handleInputChange(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
+          placeholder="Buscar en Corrientes..."
+          className="px-3 py-2 pr-10 rounded w-full bg-fondo text-texto placeholder-gray-400"
+        />
+        {input && (
+          <button
+            onClick={handleLimpiarBusqueda}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-texto/40 hover:text-red-500 transition"
+            title="Limpiar búsqueda"
+            type="button"
+          >
+            <IconX size={20} />
+          </button>
+        )}
+      </div>
+
       {input && sugerencias.length > 0 && (
         <ul className="bg-fondo border border-white/10 rounded-lg mt-1 max-h-40 overflow-auto text-texto">
           {sugerencias.map((sug, index) => (
@@ -44,7 +57,7 @@ const BusquedaUbicacion = ({
           ))}
         </ul>
       )}
-      
+
       <div className="flex items-center gap-2">
         <button
           onClick={handleBuscar}
@@ -52,7 +65,7 @@ const BusquedaUbicacion = ({
         >
           Buscar ubicación
         </button>
-        
+
         <button
           onClick={onUbicacionActual}
           className={`hidden lg:inline-flex items-center gap-1 px-4 py-2 rounded shadow-md transition ${

@@ -115,3 +115,11 @@ export const manejarUbicacionActual = async (bounds, setAlerta, map) => {
     );
   });
 };
+
+export const eliminarMarcadorUbicacion = (map) => {
+  if (map?.__marcadorUbicacion) {
+    map.__marcadorUbicacion.remove();
+    map.__marcadorUbicacion = null;
+  }
+};
+

@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { buscarUbicacion } from "../services/mapa";
+import { eliminarMarcadorUbicacion } from "../services/mapa/ubicacion";
 
 const API_KEY = "195f05dc4c614f52ac0ac882ee570395";
 
@@ -29,6 +30,13 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
     );
   }, [debounceTimeout]);
 
+  const handleLimpiarBusqueda = () => {
+    setInput("");
+    setSugerencias([]);
+    setAlerta("");
+    eliminarMarcadorUbicacion(mapRef.current);
+  };
+
   const handleInputChange = (value) => {
     setInput(value);
     buscarSugerencias(value);
@@ -50,5 +58,6 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
     handleInputChange,
     handleBuscar,
     handleSeleccionarSugerencia,
+    handleLimpiarBusqueda,
   };
 };
