@@ -84,24 +84,19 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-texto mb-2">
-                Proveedor *
+                Proveedor
               </label>
-              <select
-                name="proveedor_id"
-                value={formData.proveedor_id}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto focus:outline-none focus:border-acento"
-                disabled={loading}
-              >
-                <option value="">Seleccionar proveedor</option>
-                {proveedores.map((proveedor) => (
-                  <option key={proveedor.id} value={proveedor.id} className="bg-fondo">
-                    {proveedor.nombre}
-                    {proveedor.tecnologia && ` (${proveedor.tecnologia})`}
-                  </option>
-                ))}
-              </select>
+              <div className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto">
+                {(() => {
+                  const proveedor = proveedores.find(
+                    (p) => p.id === formData.proveedor_id
+                  );
+                  if (!proveedor) return "Cargando...";
+                  return `${proveedor.nombre}${
+                    proveedor.tecnologia ? ` (${proveedor.tecnologia})` : ""
+                  }`;
+                })()}
+              </div>
             </div>
 
             {/* Estrellas */}

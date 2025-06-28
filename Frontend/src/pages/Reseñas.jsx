@@ -201,14 +201,14 @@ const Reseñas = () => {
                               className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-400/20 rounded-lg transition"
                               title="Editar reseña"
                             >
-                              <IconEdit size={16} />
+                              <IconEdit size={24} />
                             </button>
                             <button
                               onClick={() => handleEliminarReseña(reseña.id)}
                               className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/20 rounded-lg transition"
                               title="Eliminar reseña"
                             >
-                              <IconTrash size={16} />
+                              <IconTrash size={24} />
                             </button>
                           </div>
                         </td>

@@ -4,21 +4,21 @@ import { IconCheck } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
 const beneficiosBasico = [
-  { texto: "Acceso a mapa interactivo", disponible: true },
-  { texto: "Ver reseñas de otros usuarios", disponible: true },
-  { texto: "Test de velocidad y cobertura", disponible: true },
-  { texto: "Acceso completo al historial de boletas", disponible: false },
-  { texto: "Carga y gestión de tus propias boletas", disponible: false },
+  { texto: "Acceso al mapa interactivo", disponible: true },
+  { texto: "Ver y agregar reseñas", disponible: true },
+  { texto: "Acceso a las herramientas", disponible: true },
+  { texto: "Acceso completo a la gestión de boletas", disponible: false },
+  { texto: "Acceso completo a Red-Fi Academy", disponible: false },
   { texto: "Sin anuncios ni banners promocionales", disponible: false },
   { texto: "Notificaciones básicas", disponible: false },
 ];
 
 const beneficiosPremium = [
-  { texto: "Acceso a mapa interactivo", disponible: true },
-  { texto: "Ver reseñas de otros usuarios", disponible: true },
-  { texto: "Test de velocidad y cobertura", disponible: true },
-  { texto: "Acceso completo al historial de boletas", disponible: true },
-  { texto: "Carga y gestión de tus propias boletas", disponible: true },
+  { texto: "Acceso al mapa interactivo", disponible: true },
+  { texto: "Ver y agregar reseñas", disponible: true },
+  { texto: "Acceso a las herramientas", disponible: true },
+  { texto: "Acceso completo a la gestión de boletas", disponible: true },
+  { texto: "Acceso completo a Red-Fi Academy", disponible: true },
   { texto: "Sin anuncios ni banners promocionales", disponible: true },
   { texto: "Notificaciones básicas", disponible: true },
 ];
