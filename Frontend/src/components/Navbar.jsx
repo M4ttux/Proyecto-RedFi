@@ -102,7 +102,7 @@ const Navbar = () => {
           <Link to="/mapa" className={linkClase}>Mapa</Link>
           <Link to="/herramientas" className={linkClase}>Herramientas</Link>
           <Link to="/soporte" className={linkClase}>Soporte</Link>
-          <Link to="/planes" className={linkClase}>Planes</Link>
+          {/* <Link to="/planes" className={linkClase}>Planes</Link> */}
 
           {!usuario ? (
             <>

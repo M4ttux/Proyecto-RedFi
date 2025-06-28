@@ -62,9 +62,11 @@ export const cargarReseñasEnMapa = async (
 
       // 🔄 Solo eventos de hover, NO de click (se maneja globalmente)
       map.on("mouseenter", reseñasLayerId, () => {
+        if (window.modoSeleccionActivo) return;
         map.getCanvas().style.cursor = "pointer";
       });
       map.on("mouseleave", reseñasLayerId, () => {
+        if (window.modoSeleccionActivo) return;
         map.getCanvas().style.cursor = "";
       });
     }

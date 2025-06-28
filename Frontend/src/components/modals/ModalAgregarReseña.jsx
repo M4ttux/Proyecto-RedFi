@@ -161,7 +161,7 @@ const ModalAgregarReseña = ({
       >
         <button
           onClick={handleClose}
-          className="absolute top-2 right-2 text-texto hover:text-acento transition-colors"
+          className="absolute top-2 right-2 text-texto hover:text-red-400 transition-colors"
           type="button"
         >
           <IconX size={24} />

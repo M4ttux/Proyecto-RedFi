@@ -39,7 +39,7 @@ const Register = () => {
 
     try {
       await crearPerfil({ nombre, proveedor_preferido });
-      navigate("/login");
+      navigate("/cuenta");
     } catch (e) {
       setError("❌ Error al crear perfil.");
     }

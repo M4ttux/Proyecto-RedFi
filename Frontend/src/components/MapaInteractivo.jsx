@@ -1,6 +1,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
+import { IconX } from "@tabler/icons-react";
 import { crearReseña } from "../services/reseñaService";
 import { cargarReseñasEnMapa } from "../services/mapa";
 import { useMapaInteractivo } from "../hooks/useMapaInteractivo";
@@ -17,6 +18,7 @@ import ModalAgregarReseña from "./modals/ModalAgregarReseña";
 const MapaInteractivo = ({ filtros }) => {
   const [alerta, setAlerta] = useState("");
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
+  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] = useState(false);
   const navigate = useNavigate();
   const boundsCorrientes = BOUNDS_CORRIENTES;
 
@@ -58,19 +60,22 @@ const MapaInteractivo = ({ filtros }) => {
 
   const handleAbrirModalReseña = () => {
     limpiarSeleccion();
+    setModalReseñaCerradaManual(false);
     setModalReseñaAbierto(true);
   };
 
   const handleSeleccionarUbicacion = () => {
+    limpiarSeleccion();
     setModalReseñaAbierto(false); // Cerrar modal
+    setModalReseñaCerradaManual(false);
     activarSeleccion(); // Activar modo selección
   };
 
   useEffect(() => {
-    if (coordenadasSeleccionadas && !modalReseñaAbierto) {
+    if (coordenadasSeleccionadas && !modalReseñaAbierto && !modalReseñaCerradaManual) {
       setModalReseñaAbierto(true); // Reabrir modal con coordenadas
     }
-  }, [coordenadasSeleccionadas, modalReseñaAbierto]);
+  }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]);
 
   const handleAgregarReseña = async (reseñaData) => {
     try {
@@ -89,6 +94,8 @@ const MapaInteractivo = ({ filtros }) => {
 
   const handleCerrarModal = () => {
     setModalReseñaAbierto(false);
+    setModalReseñaCerradaManual(true);
+    limpiarSeleccion();
     if (modoSeleccion) {
       desactivarSeleccion();
     }
@@ -104,11 +111,12 @@ const MapaInteractivo = ({ filtros }) => {
               Haz clic en el mapa para seleccionar ubicación
             </span>
             <button
-              onClick={desactivarSeleccion}
-              className="ml-2 text-white hover:text-red-200"
-            >
-              ✕
-            </button>
+            onClick={desactivarSeleccion}
+            className="ml-2 text-white/60 hover:text-red-400 transition"
+            title="Cerrar"
+          >
+            <IconX size={24} />
+          </button>
           </div>
         </div>
       )}

@@ -71,13 +71,13 @@ export const cargarProveedoresEnMapa = async (
 
     // 🔄 Solo agregar eventos de hover, NO de click (se maneja globalmente)
     map.on("mouseenter", fillLayerId, (e) => {
-      if (!prov.visible) return;
+      if (window.modoSeleccionActivo || !prov.visible) return;
       map.getCanvas().style.cursor = "pointer";
       map.setPaintProperty(fillLayerId, "fill-opacity", 0.6); // Solo hover effect;
     });
 
     map.on("mousemove", fillLayerId, (e) => {
-      if (!prov.visible) return;
+      if (window.modoSeleccionActivo || !prov.visible) return;
 
       lastMouseMove = Date.now();
 
@@ -90,22 +90,22 @@ export const cargarProveedoresEnMapa = async (
       // Si ya hay un timeout corriendo, reiniciarlo
       clearTimeout(popupTimeout);
 
-      // Esperar a que el mouse esté quieto por 250ms
+      // Esperar a que el mouse esté quieto por 350ms
       popupTimeout = setTimeout(() => {
         const now = Date.now();
-        const quiet = now - lastMouseMove >= 250; // 250ms quieto
+        const quiet = now - lastMouseMove >= 350; // 350ms quieto
 
-        if (quiet) {
+        if (quiet && !window.modoSeleccionActivo) {
           popup
             .setLngLat(e.lngLat)
             .setHTML(`<div class="text-sm font-semibold">${prov.nombre}</div>`)
             .addTo(map);
         }
-      }, 250);
+      }, 350);
     });
 
     map.on("mouseleave", fillLayerId, () => {
-      if (!prov.visible) return;
+      if (window.modoSeleccionActivo || !prov.visible) return;
       map.getCanvas().style.cursor = "";
       map.setPaintProperty(fillLayerId, "fill-opacity", 0.4); // Solo hover effect
       clearTimeout(popupTimeout);
