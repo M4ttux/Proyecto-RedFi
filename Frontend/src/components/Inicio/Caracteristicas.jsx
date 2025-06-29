@@ -14,7 +14,11 @@ const features = [
   },
   {
     icono: <IconStars size={64} />,
-    titulo: "Opiniones verificadas",
+    titulo: (
+      <>
+        Opiniones<br />verificadas
+      </>
+    ),
     descripcion:
       "Lee reseñas auténticas de usuarios reales y evita sorpresas. Conoce las experiencias reales en tu barrio.",
   },
@@ -26,9 +30,13 @@ const features = [
   },
   {
     icono: <IconReceipt size={64} />,
-    titulo: "Guardado de boletas",
+    titulo: (
+      <>
+        Guardado<br />de boletas
+      </>
+    ),
     descripcion:
-      "Guarda tus boletas y recibe notificaciones antes del vencimiento. Además, puedes verificar si hubo aumentos en el monto mes a mes.",
+      "Guarde sus boletas, reciba notificaciones antes del vencimiento y revise si hubo aumentos mes a mes.",
   },
 ];
 
