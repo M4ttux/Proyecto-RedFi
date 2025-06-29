@@ -64,7 +64,7 @@ const AcademyHome = () => {
 
   return (
     <section className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">
+      <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
         🎓 Cursos Destacados
       </h1>
 

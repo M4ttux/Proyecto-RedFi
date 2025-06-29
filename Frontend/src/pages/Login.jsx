@@ -37,7 +37,7 @@ const Login = () => {
           <div className="w-16 h-16 bg-acento/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <IconLogin size={32} className="text-acento" />
           </div>
-          <h1 className="text-3xl font-bold text-texto mb-2">
+          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
             Iniciar Sesión
           </h1>
           <p className="text-white/70">

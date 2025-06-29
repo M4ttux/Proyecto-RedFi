@@ -54,7 +54,7 @@ const Planes = () => {
       <section className="py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
         {/* Encabezado */}
         <div className="w-full text-center">
-          <h1 className="text-5xl lg:text-6xl font-extrabold mb-4">
+          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
             Elegí tu Plan Red-Fi
           </h1>
           <p className="mx-auto">

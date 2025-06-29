@@ -40,7 +40,7 @@ const Proveedores = () => {
           </div>
 
           {/* Nombre */}
-          <h1 className="text-4xl font-bold text-texto">{proveedor.nombre}</h1>
+          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">{proveedor.nombre}</h1>
 
           {/* Tecnología */}
           <p className="text-white/70 mt-2">

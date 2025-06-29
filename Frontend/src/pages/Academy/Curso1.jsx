@@ -83,7 +83,7 @@ const Curso1 = () => {
 
   return (
     <section className="p-6 max-w-4xl mx-auto space-y-10">
-      <h1 className="text-3xl font-bold text-center">
+      <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
         Mejorá tu Wi-Fi en casa
       </h1>
 

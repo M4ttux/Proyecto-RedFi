@@ -8,7 +8,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-secundario shadow-none py-6" style={{ boxShadow: '0 -20px 25px -5px rgba(0, 0, 0, 0.1), 0 -8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
+    <footer className="bg-fondo shadow-none py-6" style={{ boxShadow: '0 -20px 25px -5px rgba(0, 0, 0, 0.1), 0 -8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
       <div className="text-center text-texto/60">
         <p className="mb-3">© {year} <span className="font-semibold text-texto">Red-Fi</span>. Todos los derechos reservados.</p>
 

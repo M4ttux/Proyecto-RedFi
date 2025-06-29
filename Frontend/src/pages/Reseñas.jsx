@@ -113,7 +113,7 @@ const Reseñas = () => {
       <div className="max-w-7xl mx-auto pt-16">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-texto mb-4">
+          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
             Mis Reseñas
           </h1>
           <p className="text-white/70 text-lg">

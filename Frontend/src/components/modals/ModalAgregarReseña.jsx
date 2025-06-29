@@ -156,7 +156,7 @@ const ModalAgregarReseña = ({
       onClick={handleOverlayClick}
     >
       <div 
-        className="bg-fondo p-6 rounded-lg w-[95vw] max-w-md relative"
+        className="bg-gray-900 p-6 rounded-lg w-[95vw] max-w-md relative"
         onClick={handleModalContentClick}
       >
         <button
