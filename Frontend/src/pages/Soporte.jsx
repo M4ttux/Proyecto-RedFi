@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { IconMessageChatbot } from '@tabler/icons-react';
 
 const flujoConversacion = {
   inicio: {
@@ -9,7 +10,7 @@ const flujoConversacion = {
     ],
   },
   dudas: {
-    mensaje: "Claro, ¿sobre qué querés saber más?",
+    mensaje: "Claro, ¿sobre qué quieres saber más?",
     opciones: [
       {
         texto: "¿Qué es Red-Fi?",
@@ -35,27 +36,27 @@ const flujoConversacion = {
       {
         texto: "Internet lento",
         respuesta:
-          "Si tu internet está lento, reiniciá el router, desconectá dispositivos innecesarios y probá usar un cable de red si es posible.",
+          "Si tu internet está lento, reinicia el router, desconecta dispositivos innecesarios y prueba usar un cable de red si es posible.",
       },
       {
         texto: "Sin conexión",
         respuesta:
-          "Verificá cables, luces del router y probá reiniciarlo. Si sigue sin funcionar, contactá a tu proveedor.",
+          "Verifica cables, luces del router y prueba reiniciarlo. Si sigue sin funcionar, contacta a tu proveedor.",
       },
       {
         texto: "Problemas con el WiFi",
         respuesta:
-          "Intentá reiniciar el router. Si el problema persiste, acercate al router, probá cambiar la banda (2.4GHz/5GHz) o revisá interferencias.",
+          "Intenta reiniciar el router. Si el problema persiste, acércate al router, prueba cambiar la banda (2.4GHz/5GHz) o revisa interferencias.",
       },
       {
         texto: "Mejorar señal WiFi",
         respuesta:
-          "Ubicá el router en un lugar alto y central. Evitá paredes gruesas o electrodomésticos cerca. Considerá un repetidor o un sistema Mesh.",
+          "Ubica el router en un lugar alto y central. Evita paredes gruesas o electrodomésticos cerca. Considera un repetidor o un sistema Mesh.",
       },
       {
         texto: "Corte de servicio",
         respuesta:
-          "Consultá la página de tu proveedor o llamá al soporte. También podés preguntar a vecinos si están sin servicio.",
+          "Consulta la página de tu proveedor o llama al soporte. También puedes preguntar a vecinos si están sin servicio.",
       },
       { texto: "Volver al inicio", siguiente: "inicio" },
     ],
@@ -111,9 +112,10 @@ const Soporte = () => {
 
   return (
     <div className="w-full max-w-lg mx-auto bg-neutral-900 border border-neutral-700 rounded-lg shadow-lg p-2 sm:p-4 flex flex-col h-[70vh] sm:h-[700px]">
-      <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 text-center">
+      <h1 className="text-3xl lg:text-4xl font-bold text-white mb-4 text-center justify-center">
+        <IconMessageChatbot size={48} className="inline-block mr-2 text-acento" />
         Asistente Red-Fi
-      </h2>
+      </h1>
 
       <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
         {mensajes.map((m, index) => (

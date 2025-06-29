@@ -84,7 +84,7 @@ const Curso1 = () => {
   return (
     <section className="p-6 max-w-4xl mx-auto space-y-10">
       <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-        Mejorá tu Wi-Fi en casa
+        Mejora tu Wi-Fi en casa.
       </h1>
 
       {/* 🎥 VIDEO */}
@@ -100,7 +100,7 @@ const Curso1 = () => {
       {/* 📄 TEXTO EXPLICATIVO */}
       <div className="text-gray-300 space-y-4">
         <p>
-          ¿Tenés problemas de conexión en tu casa? Muchas veces, el problema no
+          ¿Tienes problemas de conexión en tu casa? Muchas veces, el problema no
           es el proveedor, sino cómo está distribuida la red Wi-Fi.
         </p>
         <p>
@@ -123,12 +123,12 @@ const Curso1 = () => {
           canales 1, 6 u 11 para 2.4 GHz, ya que no se superponen entre sí.
         </p>
         <p>
-          Para extender la cobertura podés usar repetidores, sistemas mesh o
+          Para extender la cobertura puedes usar repetidores, sistemas mesh o
           adaptadores PLC. No hace falta cambiar de proveedor si la solución
           está dentro del hogar.
         </p>
         <p>
-          Finalmente, recordá cambiar la contraseña predeterminada de tu router
+          Finalmente, recuerda cambiar la contraseña predeterminada de tu router
           para evitar accesos no deseados y optimizar el rendimiento de la red.
         </p>
         <p>

@@ -55,10 +55,10 @@ const Planes = () => {
         {/* Encabezado */}
         <div className="w-full text-center">
           <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Elegí tu Plan Red-Fi
+            Elija su plan Red-Fi
           </h1>
           <p className="mx-auto">
-            Compará los planes y seleccioná el que mejor se adapte a tus necesidades.
+            Compare los planes y seleccione el que mejor se adapte a sus necesidades.
           </p>
         </div>
         <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -85,7 +85,7 @@ const Planes = () => {
             <div>
               <h2 className="text-2xl font-bold text-acento mb-2">Plan Premium</h2>
               <p className="text-white/70 mb-4">
-                Accedé a todos los beneficios de Red-Fi sin límites de uso y sin anuncios.
+                Acceda a todos los beneficios de Red-Fi sin límites de uso y sin anuncios.
               </p>
               {renderBeneficios(beneficiosPremium)}
             </div>

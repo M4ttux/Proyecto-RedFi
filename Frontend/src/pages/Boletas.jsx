@@ -35,19 +35,19 @@ const Boletas = () => {
       <div className="flex gap-4 justify-center mb-8">
         <button
           onClick={() => setVista("formulario")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded font-bold ${
             vista === "formulario" ? "bg-blue-500" : "bg-gray-700"
           }`}
         >
-          ➕ Nueva Boleta
+          Nueva Boleta
         </button>
         <button
           onClick={() => setVista("historial")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded font-bold ${
             vista === "historial" ? "bg-blue-500" : "bg-gray-700"
           }`}
         >
-          📜 Ver Historial
+          Ver Historial
         </button>
       </div>
 

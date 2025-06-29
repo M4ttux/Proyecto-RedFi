@@ -34,7 +34,7 @@ const ModalVerBoleta = ({ boleta, onClose, onEditar, onEliminar, boletaAnterior 
             <IconX size={24} />
           </button>
         
-        <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-center">Detalle de Boleta</h2>
+        <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-center">Detalle de boleta</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div className="space-y-3 ml-10 mb-2 text-xl">

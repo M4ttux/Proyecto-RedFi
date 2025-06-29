@@ -111,7 +111,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/cuenta" className={linkClase}>Mi Cuenta</Link>
+              <Link to="/cuenta" className={linkClase}>Perfil</Link>
               <div className="relative ml-2">
                 <button
                   onClick={() => setMostrarNotis(!mostrarNotis)}
@@ -180,7 +180,7 @@ const Navbar = () => {
               </div>
             ) : (
               <>
-                <Link to="/cuenta" onClick={() => setMenuAbierto(false)} className={linkClase}>Mi Cuenta</Link>
+                <Link to="/cuenta" onClick={() => setMenuAbierto(false)} className={linkClase}>Perfil</Link>
                 <button
                   onClick={() => {
                     logout();

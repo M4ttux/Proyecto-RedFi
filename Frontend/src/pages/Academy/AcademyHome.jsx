@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { IconBook2 } from '@tabler/icons-react';
 
 const AcademyHome = () => {
   useEffect(() => {
@@ -8,9 +9,9 @@ const AcademyHome = () => {
   const cursos = [
     {
       id: 1,
-      titulo: "Solucioná problemas de Wi-Fi en casa",
+      titulo: "Soluciona problemas de Wi-Fi en casa",
       descripcion:
-        "Aprendé a resolver fallas de conexión y mejorar la señal en tu hogar.",
+        "Aprende a resolver fallas de conexión y mejorar la señal en tu hogar.",
       imagen:
         "https://d3puay5pkxu9s4.cloudfront.net/curso/12814/800_imagen.jpg",
     },
@@ -18,7 +19,7 @@ const AcademyHome = () => {
       id: 2,
       titulo: "Velocidad y Latencia",
       descripcion:
-        "Conocé cómo interpretar megas, ping y jitter en un test de velocidad.",
+        "Conoce cómo interpretar megas, ping y jitter en un test de velocidad.",
       imagen:
         "https://bitbr.tech/wp-content/uploads/2023/07/Tec-em-rede-de-computadores-1.jpg",
     },
@@ -26,7 +27,7 @@ const AcademyHome = () => {
       id: 3,
       titulo: "Elegí el mejor proveedor",
       descripcion:
-        "Compará cobertura, atención y estabilidad para elegir bien.",
+        "Compara cobertura, atención y estabilidad para elegir bien.",
       imagen:
         "https://bkpsitecpsnew.blob.core.windows.net/uploadsitecps/sites/1/2020/10/redes_de_computadores-2048x1365-1.jpeg",
     },
@@ -64,8 +65,9 @@ const AcademyHome = () => {
 
   return (
     <section className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-        🎓 Cursos Destacados
+      <h1 className="flex text-4xl lg:text-5xl font-extrabold mb-4 text-center justify-center">
+        <IconBook2 size={48} className="inline-block mr-2 text-acento" />
+        Cursos destacados
       </h1>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -101,18 +103,18 @@ const AcademyHome = () => {
       <div className="grid md:grid-cols-3 gap-4 mb-12 text-sm">
         <div className="bg-white/10 p-4 rounded">
           <h4 className="font-semibold text-texto">👨‍🏫 Instructores expertos</h4>
-          <p>Aprendé con profesionales con experiencia real en la industria.</p>
+          <p>Aprende con profesionales con experiencia real en la industria.</p>
         </div>
         <div className="bg-white/10 p-4 rounded">
           <h4 className="font-semibold text-texto">📅 Aprendizaje flexible</h4>
           <p>
-            Estudiá a tu ritmo desde cualquier dispositivo, en cualquier
+            Estudia a tu ritmo desde cualquier dispositivo, en cualquier
             momento.
           </p>
         </div>
         <div className="bg-white/10 p-4 rounded">
           <h4 className="font-semibold text-texto">🛠 Contenido práctico</h4>
-          <p>Aplicá lo aprendido con ejercicios reales y casos concretos.</p>
+          <p>Aplica lo aprendido con ejercicios reales y casos concretos.</p>
         </div>
       </div>
 

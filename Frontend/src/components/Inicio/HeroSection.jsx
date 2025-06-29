@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { IconMap2 } from "@tabler/icons-react";
 
 const HeroSection = () => {
   return (
@@ -14,19 +15,20 @@ const HeroSection = () => {
         {/* 📄 Texto a la izquierda */}
         <div className="flex-1 text-center lg:text-left">
           <h1 className="text-5xl lg:text-6xl leading-tight">
-            Encontrá el <span className="text-acento">mejor Internet</span> para
-            tu zona.
+            Encuentre el <span className="text-acento">mejor internet</span>{" "}
+            para su zona.
           </h1>
           <p className="mt-6 text-lg">
-            Visualizá qué empresas operan cerca tuyo, conocé la experiencia de
-            otros usuarios y tomá decisiones con confianza.
+            Visualice qué empresas operan cerca suyo, conozca la experiencia de
+            otros usuarios y tome decisiones con confianza.
           </p>
 
           <Link
             to="/mapa"
-            className="inline-block mt-8 px-6 py-3 bg-primario rounded-lg hover:bg-acento hover:scale-110 transition font-bold ease-in-out duration-300"
+            className="inline-flex items-center mt-8 gap-2 px-6 py-3 bg-primario rounded-lg hover:bg-acento hover:scale-110 transition font-bold ease-in-out duration-300"
           >
-            Ver Mapa
+            <IconMap2 />
+            Ver mapa
           </Link>
         </div>
 

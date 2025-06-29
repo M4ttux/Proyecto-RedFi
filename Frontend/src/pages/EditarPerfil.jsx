@@ -134,7 +134,7 @@ const EditarPerfil = () => {
     <div className="w-full">
       <section className="max-w-lg py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
         <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-          Editar Perfil
+          Editar perfil
         </h1>
 
         <form

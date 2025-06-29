@@ -54,7 +54,7 @@ const Register = () => {
             <IconUserPlus size={32} className="text-acento" />
           </div>
           <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Crear Cuenta
+            Crear cuenta
           </h1>
           <p className="text-white/70">
             Únete a la comunidad de Red-Fi

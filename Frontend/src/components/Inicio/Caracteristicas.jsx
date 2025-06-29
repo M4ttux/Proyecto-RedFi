@@ -8,27 +8,27 @@ import {
 const features = [
   {
     icono: <IconMapPinCheck size={64} />,
-    titulo: "Cobertura Geolocalizada",
+    titulo: "Cobertura geolocalizada",
     descripcion:
-      "Explorá el mapa interactivo de Corrientes y descubrí qué proveedores ofrecen servicio en tu zona exacta.",
+      "Explora el mapa interactivo de Corrientes y descubrí qué proveedores ofrecen servicio en tu zona exacta.",
   },
   {
     icono: <IconStars size={64} />,
-    titulo: "Opiniones Verificadas",
+    titulo: "Opiniones verificadas",
     descripcion:
-      "Leé reseñas auténticas de usuarios reales y evitá sorpresas. Conocé las experiencias reales en tu barrio.",
+      "Lee reseñas auténticas de usuarios reales y evita sorpresas. Conoce las experiencias reales en tu barrio.",
   },
   {
     icono: <IconTools size={64} />,
-    titulo: "Herramientas Inteligentes",
+    titulo: "Herramientas inteligentes",
     descripcion:
-      "Medí la velocidad de tu conexión, analizá la latencia y accedé a métricas clave para evaluar tu proveedor.",
+      "Mide la velocidad de tu conexión, analiza la latencia y accede a métricas clave para evaluar tu proveedor.",
   },
   {
     icono: <IconReceipt size={64} />,
-    titulo: "Guardado de Boletas",
+    titulo: "Guardado de boletas",
     descripcion:
-      "Guardá tus boletas y recibí notificaciones antes del vencimiento. Además, podés verificar si hubo aumentos en el monto mes a mes.",
+      "Guarda tus boletas y recibe notificaciones antes del vencimiento. Además, puedes verificar si hubo aumentos en el monto mes a mes.",
   },
 ];
 
@@ -44,7 +44,7 @@ const Caracteristicas = () => {
             Red-Fi te permite tomar decisiones informadas al momento de elegir
             un proveedor de internet. Ya sea que busques velocidad, estabilidad
             o una buena atención al cliente, acá vas a encontrar lo que
-            necesitás.
+            necesitas.
           </p>
         </div>
 

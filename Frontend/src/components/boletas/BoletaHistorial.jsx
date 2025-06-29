@@ -28,7 +28,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   return (
     <div className="max-w-7xl mx-auto">
       <h2 className="text-4xl font-semibold mb-8 text-center text-white">
-        Historial de Boletas
+        Historial de boletas
       </h2>
 
       {boletas.length === 0 ? (

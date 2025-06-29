@@ -31,7 +31,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
     e.preventDefault();
 
     const user = (await supabase.auth.getUser()).data.user;
-    if (!user) return alert("Debés iniciar sesión.");
+    if (!user) return alert("Debes iniciar sesión.");
 
     let url_imagen = null;
 
@@ -88,7 +88,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
   return (
     <div>
       <h2 className="text-3xl lg:text-4xl font-semibold mb-6 text-center text-white">
-        Carga de Boletas
+        Carga de boletas
       </h2>
       <form
         onSubmit={handleSubmit}
@@ -96,7 +96,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
           <div>
-            <label className="block text-white mb-1">Mes</label>
+            <label className="block text-white mb-1">Mes *</label>
             <input
               name="mes"
               value={form.mes}
@@ -108,7 +108,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
           </div>
 
           <div>
-            <label className="block text-white mb-1">Año</label>
+            <label className="block text-white mb-1">Año *</label>
             <input
               name="anio"
               value={form.anio}
@@ -120,7 +120,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
           </div>
 
           <div>
-            <label className="block text-white mb-1">Monto</label>
+            <label className="block text-white mb-1">Monto *</label>
             <input
               name="monto"
               type="number"
@@ -133,7 +133,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
           </div>
 
           <div>
-            <label className="block text-white mb-1">Proveedor</label>
+            <label className="block text-white mb-1">Proveedor *</label>
             <input
               name="proveedor"
               value={form.proveedor}
@@ -146,7 +146,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
 
           <div className="md:col-span-2">
             <label className="block text-white mb-1">
-              Fecha de vencimiento
+              Fecha de vencimiento *
             </label>
             <input
               name="vencimiento"
@@ -159,7 +159,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
           </div>
 
           <div className="md:col-span-2 text-center">
-            <label className="block text-white mb-1">Imagen de la boleta</label>
+            <label className="block text-white mb-1">Imagen de la boleta *</label>
             <label className="inline-block bg-white text-black font-semibold px-6 py-2 rounded cursor-pointer hover:bg-gray-200 transition">
               Seleccionar imagen
               <input

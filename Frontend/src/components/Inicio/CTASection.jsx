@@ -9,7 +9,7 @@ const CTASection = () => {
           ¿Listo para mejorar tu conexión?
         </h2>
         <p className="text-lg text-texto/90">
-          Explorá el mapa interactivo y descubrí qué proveedor se adapta mejor a
+          Explora el mapa interactivo y descubre qué proveedor se adapta mejor a
           tu zona.
         </p>
         <Link
@@ -17,7 +17,7 @@ const CTASection = () => {
           className="inline-flex items-center gap-2 px-6 py-3 bg-acento rounded-lg hover:bg-primario hover:scale-110 transition font-bold ease-in-out duration-300"
         >
           <IconMap2 />
-          Ver Mapa
+          Ver mapa
         </Link>
       </div>
     </section>

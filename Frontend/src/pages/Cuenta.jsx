@@ -77,11 +77,11 @@ const Cuenta = () => {
           className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
         >
           <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-            Gestionar Boletas de Servicio
+            Gestionar boletas
           </h3>
           <p>
-            Visualizá y administrá tus boletas, recibí alertas antes del
-            vencimiento y revisá los aumentos mes a mes.
+            Visualize y administre sus boletas, reciba alertas antes del
+            vencimiento y revise los aumentos mes a mes.
           </p>
         </Link>
 
@@ -92,7 +92,7 @@ const Cuenta = () => {
               Red-Fi Academy
             </h3>
             <p>
-              Accedé a nuestros mini cursos sobre redes, Wi-Fi y cómo mejorar tu
+              Accede a nuestros mini cursos sobre redes, Wi-Fi y cómo mejorar tu
               conexión.
             </p>
           </div>
@@ -102,10 +102,10 @@ const Cuenta = () => {
         <Link to="/resenas">
           <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition">
             <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-              Mis Reseñas
+              Mis reseñas
             </h3>
             <p>
-              Visualizá y administrá todas las reseñas que has publicado sobre
+              Visualize y administre todas las reseñas que has publicado sobre
               diferentes proveedores.
             </p>
           </div>
@@ -117,9 +117,9 @@ const Cuenta = () => {
           className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
         >
           <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-            Editar Perfil
+            Editar perfil
           </h3>
-          <p>Cambiá tu foto, nombre y otros datos de tu cuenta Red-Fi.</p>
+          <p>Cambie su foto, nombre y otros datos de su cuenta Red-Fi.</p>
         </Link>
 
         {/* Gestionar Plan */}
@@ -128,9 +128,9 @@ const Cuenta = () => {
           className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
         >
           <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-            Gestionar Plan
+            Gestionar plan
           </h3>
-          <p>Gestioná tu plan y descubrí nuestros beneficios.</p>
+          <p>Gestione su plan y descubra nuestros beneficios.</p>
         </Link>
       </section>
     </div>

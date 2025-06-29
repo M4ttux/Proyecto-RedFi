@@ -4,7 +4,7 @@ const preguntas = [
   {
     titulo: "¿Necesito habilitar la ubicación?",
     contenido:
-      "No es obligatorio. También podés buscar proveedores escribiendo manualmente tu zona.",
+      "No es obligatorio. También puedes buscar proveedores escribiendo manualmente tu zona.",
   },
   {
     titulo: "¿Cómo se validan las opiniones de usuarios?",
@@ -19,7 +19,7 @@ const preguntas = [
   {
     titulo: "¿Qué puedo hacer con las boletas?",
     contenido:
-      "Podés guardarlas para recibir notificaciones antes del vencimiento y ver si hubo aumentos en el monto mes a mes.",
+      "Puedes guardarlas para recibir notificaciones antes del vencimiento y ver si hubo aumentos en el monto mes a mes.",
   },
   {
     titulo: "¿Quiénes pueden dejar opiniones?",
@@ -38,7 +38,7 @@ const PreguntasFrecuentes = () => {
     <section className="py-16 px-4 sm:px-6 bg-white/5 text-texto">
       <div className="max-w-7xl mx-auto space-y-12">
         <h2 className="text-3xl lg:text-4xl font-bold text-texto text-center">
-          Preguntas Frecuentes
+          Preguntas frecuentes
         </h2>
 
         <div className="grid gap-16 sm:grid-cols-2">

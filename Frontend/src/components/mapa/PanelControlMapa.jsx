@@ -41,11 +41,11 @@ const PanelControlMapa = ({
               : "bg-gray-400 text-gray-600 cursor-not-allowed"
           }`}
         >
-          Agregar Reseña
+          Agregar reseña
         </button>
         {!usuario && (
           <p className="text-sm text-white/60 italic animate-fade-in">
-            Debes estar logueado para usar esto
+            Necesitas iniciar sesión para acceder a esta función.
           </p>
         )}
       </div>

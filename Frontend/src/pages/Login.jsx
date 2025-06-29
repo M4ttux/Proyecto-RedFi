@@ -38,7 +38,7 @@ const Login = () => {
             <IconLogin size={32} className="text-acento" />
           </div>
           <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Iniciar Sesión
+            Iniciar sesión
           </h1>
           <p className="text-white/70">
             Accede a tu cuenta para continuar
@@ -128,7 +128,7 @@ const Login = () => {
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-xs text-white/50">
-            Al iniciar sesión, aceptas nuestros términos y condiciones
+            Al iniciar sesión, aceptas nuestros términos y condiciones.
           </p>
         </div>
       </div>

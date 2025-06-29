@@ -114,10 +114,10 @@ const Reseñas = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Mis Reseñas
+            Mis reseñas
           </h1>
           <p className="text-white/70 text-lg">
-            Administrá todas las reseñas que has publicado
+            Administre todas las reseñas que ha publicado.
           </p>
         </div>
 
