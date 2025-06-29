@@ -3,7 +3,7 @@ import { IconMap2 } from "@tabler/icons-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative flex items-center justify-center px-4 sm:px-6 py-42 bg-secundario">
+    <section className="relative flex items-center justify-center px-4 sm:px-6 py-28 bg-secundario">
       {/* 🔳 Patrón decorativo en el fondo */}
       <div
         className="absolute inset-0 bg-[url('/imgs/diagonal-lines.svg')] opacity-10 pointer-events-none z-0"
@@ -35,9 +35,9 @@ const HeroSection = () => {
         {/* 🗺 Imagen del mapa */}
         <div className="flex-1 flex justify-end">
           <img
-            src="/imgs/hero-placeholder.jpg"
+            src="/imgs/hero-placeholder2.png"
             alt="Mapa Red-Fi"
-            className="w-full max-w-xl h-auto rounded-lg shadow-lg"
+            className="w-auto max-h-[500px] rounded-lg"
           />
         </div>
       </div>
