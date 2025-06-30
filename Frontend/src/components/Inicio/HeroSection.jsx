@@ -37,7 +37,7 @@ const HeroSection = () => {
           <img
             src="/imgs/hero-placeholder2.png"
             alt="Mapa Red-Fi"
-            className="w-auto max-h-[500px] rounded-lg"
+            className="w-auto max-h-[500px]"
           />
         </div>
       </div>
