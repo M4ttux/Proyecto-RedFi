@@ -13,6 +13,7 @@ import {
   IconChevronDown,
 } from "@tabler/icons-react";
 import { useAlertaAnimada } from "../../hooks/useAlertaAnimada";
+import MainH2 from "../ui/MainH2";
 
 const ModalAgregarReseña = ({
   isOpen,
@@ -167,7 +168,7 @@ const ModalAgregarReseña = ({
           <IconX size={24} />
         </button>
 
-        <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-texto">Agregar reseña</h2>
+        <MainH2>Agregar reseña</MainH2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Select Proveedor */}

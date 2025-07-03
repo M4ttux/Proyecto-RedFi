@@ -1,4 +1,5 @@
 import { useState } from "react";
+import MainH2 from "../ui/MainH2";
 import { supabase } from "../../supabase/client";
 
 const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
@@ -87,9 +88,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
 
   return (
     <div>
-      <h2 className="text-3xl lg:text-4xl font-semibold mb-6 text-center text-white">
-        Carga de boletas
-      </h2>
+      <MainH2 className="text-center">Carga de boletas</MainH2>
       <form
         onSubmit={handleSubmit}
         className="space-y-6 bg-white/5 p-6 rounded-lg"

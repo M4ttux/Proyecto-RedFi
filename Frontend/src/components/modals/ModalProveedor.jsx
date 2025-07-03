@@ -1,5 +1,6 @@
 
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+import MainH2 from "../ui/MainH2";
 const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   if (!proveedor) return null;
 
@@ -33,9 +34,7 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
         </div>
 
         {/* Nombre del proveedor */}
-        <h2 className="text-center text-2xl font-semibold mb-2">
-          {proveedor.nombre}
-        </h2>
+        <MainH2 className="text-center">{proveedor.nombre}</MainH2>
 
         {/* Estrellas */}
         <div className="flex flex-col items-center mb-4">
@@ -52,16 +51,6 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
             {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseñas
           </span>
         </div>
-
-        {/* Color */}
-        {/* <div className="text-center text-sm mb-4">
-          <span className="font-semibold text-acento">Color:</span>{" "}
-          {proveedor.color}
-          <span
-            className="inline-block w-4 h-4 rounded-full ml-2 align-middle border border-white/20"
-            style={{ backgroundColor: proveedor.color }}
-          />
-        </div> */}
 
         {/* Tecnologías */}
         <div className="flex flex-wrap justify-center gap-2 mb-4">

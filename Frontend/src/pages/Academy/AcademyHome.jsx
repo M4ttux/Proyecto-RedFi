@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { IconBook2 } from '@tabler/icons-react';
+import { IconBook2 } from "@tabler/icons-react";
+import MainH1 from "../../components/ui/MainH1";
+import MainH2 from "../../components/ui/MainH2";
 
 const AcademyHome = () => {
   useEffect(() => {
@@ -65,10 +67,7 @@ const AcademyHome = () => {
 
   return (
     <section className="p-6 max-w-6xl mx-auto">
-      <h1 className="flex text-4xl lg:text-5xl font-extrabold mb-4 text-center justify-center">
-        <IconBook2 size={48} className="inline-block mr-2 text-acento" />
-        Cursos destacados
-      </h1>
+      <MainH1 icon={IconBook2}>Cursos destacados</MainH1>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {cursos.map((curso) => (
@@ -91,9 +90,7 @@ const AcademyHome = () => {
       </div>
 
       <div className="text-center max-w-2xl mx-auto mb-6">
-        <h2 className="text-2xl font-bold mb-2">
-          ¿Por qué elegir Red-Fi Academy?
-        </h2>
+        <MainH2>¿Por qué elegir Red-Fi Academy?</MainH2>
         <p className="text-gray-300">
           En Red-Fi Academy te brindamos formación práctica y de calidad para
           que puedas mejorar tu experiencia con internet y redes.
@@ -118,30 +115,30 @@ const AcademyHome = () => {
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold mb-4 text-center">
-        Historias de estudiantes
-      </h2>
-      <div className="space-y-6 mb-12">
-        {testimonios.map((t, i) => (
-          <div
-            key={i}
-            className="bg-white/5 p-4 rounded-lg border border-white/10"
-          >
-            <div className="flex justify-between mb-2 text-sm">
-              <span className="font-semibold text-texto">{t.nombre}</span>
-              <span className="text-gray-400">{t.fecha}</span>
+      <div className="text-center mx-auto mb-6">
+        <MainH2>Historias de estudiantes</MainH2>
+        <div className="space-y-6 mb-12 w-full text-left">
+          {testimonios.map((t, i) => (
+            <div
+              key={i}
+              className="bg-white/5 p-4 rounded-lg border border-white/10"
+            >
+              <div className="flex justify-between mb-2 text-sm">
+                <span className="font-semibold text-texto">{t.nombre}</span>
+                <span className="text-gray-400">{t.fecha}</span>
+              </div>
+              <div className="text-yellow-400 mb-2">
+                {"★".repeat(t.estrellas)}
+                {"☆".repeat(5 - t.estrellas)}
+              </div>
+              <p className="text-gray-200">{t.mensaje}</p>
+              <div className="mt-2 text-sm text-gray-400 flex gap-4">
+                <span>👍 {t.likes}</span>
+                <span>💬 {t.comentarios}</span>
+              </div>
             </div>
-            <div className="text-yellow-400 mb-2">
-              {"★".repeat(t.estrellas)}
-              {"☆".repeat(5 - t.estrellas)}
-            </div>
-            <p className="text-gray-200">{t.mensaje}</p>
-            <div className="mt-2 text-sm text-gray-400 flex gap-4">
-              <span>👍 {t.likes}</span>
-              <span>💬 {t.comentarios}</span>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* 🔙 Botón volver al perfil */}

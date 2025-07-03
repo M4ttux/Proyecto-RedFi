@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MainH1 from "../../components/ui/MainH1";
+import MainH2 from "../../components/ui/MainH2";
 
 const Curso1 = () => {
   const navigate = useNavigate();
@@ -83,9 +85,7 @@ const Curso1 = () => {
 
   return (
     <section className="p-6 max-w-4xl mx-auto space-y-10">
-      <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-        Mejora tu Wi-Fi en casa.
-      </h1>
+      <MainH1>Mejora tu Wi-Fi en casa</MainH1>
 
       {/* 🎥 VIDEO */}
       <div className="aspect-video">
@@ -140,7 +140,7 @@ const Curso1 = () => {
 
       {/* ✅ QUIZ */}
       <div className="bg-white/5 p-6 rounded-lg border border-white/10">
-        <h2 className="text-2xl font-semibold mb-4 text-center">🧠 Quiz final</h2>
+        <MainH2 className="text-center">🧠 Quiz final</MainH2>
 
         <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
           {preguntas.map((p) => {
@@ -186,19 +186,20 @@ const Curso1 = () => {
 
           <div className="flex justify-center gap-4 flex-wrap mt-6">
             <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
-            >
-              Enviar respuestas
-            </button>
-
-            <button
               type="button"
               onClick={handleReset}
               className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded"
             >
               Reiniciar
             </button>
+
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
+            >
+              Enviar respuestas
+            </button>
+            
           </div>
 
           {mostrarResultados && (

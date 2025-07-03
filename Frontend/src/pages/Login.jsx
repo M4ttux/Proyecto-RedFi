@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { IconLogin, IconUserPlus, IconMail, IconLock } from "@tabler/icons-react";
+import MainH1 from "../components/ui/MainH1";
 
 const Login = () => {
   useEffect(() => {
@@ -37,9 +38,7 @@ const Login = () => {
           <div className="w-16 h-16 bg-acento/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <IconLogin size={32} className="text-acento" />
           </div>
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Iniciar sesión
-          </h1>
+          <MainH1>Iniciar sesión</MainH1>
           <p className="text-white/70">
             Accede a tu cuenta para continuar
           </p>

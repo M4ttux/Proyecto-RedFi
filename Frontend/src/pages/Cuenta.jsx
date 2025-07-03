@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getPerfil } from "../services/userService";
 import { Link } from "react-router-dom";
-import { IconUserCircle } from "@tabler/icons-react";
+import MainH2 from "../components/ui/MainH2";
 
 const Cuenta = () => {
   useEffect(() => {
@@ -47,9 +47,9 @@ const Cuenta = () => {
     .toUpperCase();
 
   return (
-    <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
+    <div className="w-full bg-fondo px-4 sm:px-6">
       {/* Info básica del usuario */}
-      <section className="max-w-7xl mx-auto text-center pt-8">
+      <section className="max-w-7xl mx-auto text-center">
         {foto ? (
           <img
             src={foto}
@@ -61,10 +61,9 @@ const Cuenta = () => {
             <span className="text-3xl font-bold text-white">{iniciales}</span>
           </div>
         )}
-
-        <h2 className="text-2xl lg:text-3xl font-bold text-texto">{nombre}</h2>
-        <p className="text-white/60 mt-1">{usuario.email}</p>
-        <p className="text-sm text-white/40 mt-2">
+        <MainH2>{nombre}</MainH2>
+        <p className="text-white/60 mb-4">{usuario.email}</p>
+        <p className="text-sm text-white/40 mb-4">
           Usuario <span className="font-bold text-acento">Premium</span>
         </p>
       </section>

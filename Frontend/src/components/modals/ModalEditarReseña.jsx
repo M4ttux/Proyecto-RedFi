@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../services/proveedorService";
+import MainH2 from "../ui/MainH2";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
   const [formData, setFormData] = useState({
@@ -70,7 +71,8 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-fondo border border-white/20 rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <h2 className="text-xl font-bold text-texto">Editar reseña</h2>
+          <MainH2 className="mb-0">Editar reseña</MainH2>
+
           <button
             onClick={onClose}
             className="text-white/60 hover:text-texto transition"

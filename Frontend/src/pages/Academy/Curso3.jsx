@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MainH1 from "../../components/ui/MainH1";
+import MainH2 from "../../components/ui/MainH2";
 
 const Curso3 = () => {
   const navigate = useNavigate();
@@ -82,9 +84,7 @@ const Curso3 = () => {
 
   return (
     <section className="p-6 max-w-4xl mx-auto space-y-10">
-      <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-        Cómo elegir tu proveedor de internet
-      </h1>
+      <MainH1>Cómo elegir tu proveedor de internet</MainH1>
 
       {/* 🎥 VIDEO */}
       <div className="aspect-video">
@@ -117,7 +117,7 @@ const Curso3 = () => {
 
       {/* ✅ QUIZ */}
       <div className="bg-white/5 p-6 rounded-lg border border-white/10">
-        <h2 className="text-2xl font-semibold mb-4 text-center">🧠 Quiz final</h2>
+        <MainH2 className="text-center">🧠 Quiz final</MainH2>
 
         <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
           {preguntas.map((p) => {

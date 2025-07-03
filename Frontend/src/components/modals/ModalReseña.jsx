@@ -1,4 +1,5 @@
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+import MainH2 from "../ui/MainH2";
 
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;
@@ -70,10 +71,11 @@ const ModalReseña = ({ reseña, onClose }) => {
         </div>
 
         {/* Nombre */}
-        <h2 className="text-center text-lg font-semibold mb-1">{nombre}</h2>
+        <MainH2 className="text-2xl lg:text-3xl text-center">{nombre}</MainH2>
+
 
         {/* Proveedor */}
-        <p className="text-center text-xs text-texto/60 mb-3">
+        <p className="text-center text-xs text-texto/60 mb-4">
           Proveedor: {proveedor}
         </p>
 
@@ -89,7 +91,7 @@ const ModalReseña = ({ reseña, onClose }) => {
         </div>
 
         {/* Comentario */}
-        <p className="text-sm text-texto/90 bg-white/5 rounded-md px-4 py-3 text-center leading-relaxed">
+        <p className="text-sm text-texto/90 bg-white/5 rounded-md px-4 py-4 text-center leading-relaxed">
           “{reseña.comentario}”
         </p>
       </div>

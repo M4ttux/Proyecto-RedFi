@@ -4,6 +4,7 @@ import {
   IconStars,
   IconReceipt,
 } from "@tabler/icons-react";
+import MainH2 from "../ui/MainH2";
 
 const features = [
   {
@@ -45,9 +46,7 @@ const Caracteristicas = () => {
     <section className="py-16 px-4 sm:px-6 bg-fondo">
       <div className="max-w-7xl mx-auto text-center space-y-12">
         <div className="space-y-5">
-          <h2 className="text-3xl lg:text-4xl font-bold text-texto">
-            ¿Por qué elegir <span className="text-acento">Red-Fi</span>?
-          </h2>
+          <MainH2>¿Por qué elegir <span className="text-acento">Red-Fi</span>?</MainH2>
           <p className="max-w-2xl mx-auto text-texto leading-relaxed">
             Red-Fi te permite tomar decisiones informadas al momento de elegir
             un proveedor de internet. Ya sea que busques velocidad, estabilidad

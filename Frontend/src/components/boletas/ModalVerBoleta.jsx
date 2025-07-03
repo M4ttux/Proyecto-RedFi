@@ -1,4 +1,5 @@
 import { IconX, IconEye, IconTrash, IconEdit } from "@tabler/icons-react";
+import MainH2 from "../ui/MainH2";
 
 const ModalVerBoleta = ({ boleta, onClose, onEditar, onEliminar, boletaAnterior }) => {
   if (!boleta) return null;
@@ -33,8 +34,8 @@ const ModalVerBoleta = ({ boleta, onClose, onEditar, onEliminar, boletaAnterior 
           >
             <IconX size={24} />
           </button>
-        
-        <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-center">Detalle de boleta</h2>
+
+        <MainH2 className="text-center">Detalle de boleta</MainH2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div className="space-y-3 ml-10 mb-2 text-xl">

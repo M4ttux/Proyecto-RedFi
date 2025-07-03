@@ -12,13 +12,13 @@ const DetectorProveedor = () => {
   }, []);
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 max-w-xl mx-auto text-center">
-      <h3 className="text-xl lg:text-2xl font-bold mb-4 text-fondo">Tu conexión actual</h3>
+    <div className="p-6 max-w-xl mx-auto text-center rounded-lg border border-white/10">
+      <h3 className="text-xl lg:text-2xl font-bold mb-4">Tu conexión actual</h3>
 
       {error && <p className="text-red-600">{error}</p>}
 
       {datos && (
-        <div className="space-y-2 text-gray-700">
+        <div className="space-y-2">
           <p>
             <strong>Proveedor (ISP):</strong> {datos.isp}
           </p>

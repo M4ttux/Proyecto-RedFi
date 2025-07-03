@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supabase/client";
 import { crearPerfil } from "../services/userService";
 import { IconUserPlus, IconLogin, IconMail, IconLock, IconUser, IconWifi } from "@tabler/icons-react";
+import MainH1 from "../components/ui/MainH1";
 
 const Register = () => {
   useEffect(() => {
@@ -53,9 +54,7 @@ const Register = () => {
           <div className="w-16 h-16 bg-acento/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <IconUserPlus size={32} className="text-acento" />
           </div>
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Crear cuenta
-          </h1>
+          <MainH1>Crear cuenta</MainH1>
           <p className="text-white/70">
             Únete a la comunidad de Red-Fi
           </p>

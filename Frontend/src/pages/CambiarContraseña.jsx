@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MainH1 from "../components/ui/MainH1";
 import { supabase } from "../supabase/client";
 
 const CambiarContraseña = () => {
@@ -52,9 +53,7 @@ const CambiarContraseña = () => {
   return (
     <div className="w-full">
       <section className="max-w-lg py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
-        <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-          Cambiar contraseña
-        </h1>
+        <MainH1>Cambiar contraseña</MainH1>
 
         <form
           onSubmit={handleSubmit}

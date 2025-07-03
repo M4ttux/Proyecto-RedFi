@@ -1,4 +1,4 @@
-import { useState } from "react";
+import MainH2 from "../ui/MainH2";
 
 const preguntas = [
   {
@@ -36,10 +36,8 @@ const preguntas = [
 const PreguntasFrecuentes = () => {
   return (
     <section className="py-16 px-4 sm:px-6 bg-white/5 text-texto">
-      <div className="max-w-7xl mx-auto space-y-12">
-        <h2 className="text-3xl lg:text-4xl font-bold text-texto text-center">
-          Preguntas frecuentes
-        </h2>
+      <div className="max-w-7xl mx-auto"> 
+        <MainH2 className="text-center">Preguntas frecuentes</MainH2>
 
         <div className="grid gap-16 sm:grid-cols-2">
           {preguntas.map((item, i) => (

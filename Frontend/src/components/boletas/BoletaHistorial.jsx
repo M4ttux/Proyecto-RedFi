@@ -1,4 +1,5 @@
 import { useState } from "react";
+import MainH2 from "../ui/MainH2";
 import { supabase } from "../../supabase/client";
 import ModalEditarBoleta from "./ModalEditarBoleta";
 import Modal from "./ModalVerBoleta";
@@ -27,9 +28,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl font-semibold mb-8 text-center text-white">
-        Historial de boletas
-      </h2>
+      <MainH2 className="text-center">Historial de boletas</MainH2>
 
       {boletas.length === 0 ? (
         <p className="text-white/60 text-center">No cargaste boletas aún.</p>

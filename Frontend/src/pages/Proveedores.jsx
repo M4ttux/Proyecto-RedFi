@@ -6,6 +6,8 @@ import {
   IconCarambolaFilled,
   IconExternalLink,
 } from "@tabler/icons-react";
+import MainH1 from "../components/ui/MainH1";
+import MainH2 from "../components/ui/MainH2";
 
 const Proveedores = () => {
   const { id } = useParams();
@@ -40,7 +42,7 @@ const Proveedores = () => {
           </div>
 
           {/* Nombre */}
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">{proveedor.nombre}</h1>
+          <MainH1>{proveedor.nombre}</MainH1>
 
           {/* Tecnología */}
           <p className="text-white/70 mt-2">
@@ -69,9 +71,7 @@ const Proveedores = () => {
 
         {/* Reseñas */}
         <div>
-          <h2 className="text-3xl lg:text-4xl font-semibold text-texto mb-6">
-            Opiniones de usuarios
-          </h2>
+          <MainH2>Opiniones de usuarios</MainH2>
 
           {proveedor.reseñas && proveedor.reseñas.length > 0 ? (
             <div className="space-y-6">

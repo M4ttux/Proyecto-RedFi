@@ -2,6 +2,8 @@ import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { IconCheck } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
+import MainH1 from "../components/ui/MainH1";
+import MainH2 from "../components/ui/MainH2";
 
 const beneficiosBasico = [
   { texto: "Acceso al mapa interactivo", disponible: true },
@@ -54,9 +56,7 @@ const Planes = () => {
       <section className="py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
         {/* Encabezado */}
         <div className="w-full text-center">
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Elija su plan Red-Fi
-          </h1>
+          <MainH1>Elija su plan Red-Fi</MainH1>
           <p className="mx-auto">
             Compare los planes y seleccione el que mejor se adapte a sus necesidades.
           </p>
@@ -65,7 +65,7 @@ const Planes = () => {
           {/* Plan Básico */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg flex flex-col justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-texto mb-2">Plan Básico</h2>
+              <MainH2>Plan Básico</MainH2>
               <p className="text-white/70 mb-4">
                 Ideal para usuarios que quieren explorar Red-Fi sin funciones avanzadas.
               </p>
@@ -83,7 +83,7 @@ const Planes = () => {
           {/* Plan Premium */}
           <div className="bg-white/5 border border-acento/50 rounded-xl p-6 shadow-lg flex flex-col justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-acento mb-2">Plan Premium</h2>
+              <MainH2 className="text-acento">Plan Premium</MainH2>
               <p className="text-white/70 mb-4">
                 Acceda a todos los beneficios de Red-Fi sin límites de uso y sin anuncios.
               </p>

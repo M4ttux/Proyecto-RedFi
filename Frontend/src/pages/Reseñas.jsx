@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { obtenerReseñasUsuario, actualizarReseña, eliminarReseña } from "../services/reseñaService";
 import { IconCarambolaFilled, IconCarambola, IconEdit, IconTrash, IconCalendar } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/ModalEditarReseña";
+import MainH1 from "../components/ui/MainH1";
 
 const Reseñas = () => {
   const { usuario } = useAuth();
@@ -113,9 +114,7 @@ const Reseñas = () => {
       <div className="max-w-7xl mx-auto pt-16">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
-            Mis reseñas
-          </h1>
+          <MainH1>Mis reseñas</MainH1>
           <p className="text-white/70 text-lg">
             Administre todas las reseñas que ha publicado.
           </p>

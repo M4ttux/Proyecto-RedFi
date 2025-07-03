@@ -1,4 +1,5 @@
 import { IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+import MainH2 from "../ui/MainH2";
 
 const reseñas = [
   {
@@ -42,10 +43,8 @@ const reseñas = [
 const ReseñasDestacadas = () => {
   return (
     <section className="py-16 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto space-y-12 text-center">
-        <h2 className="text-3xl lg:text-4xl font-bold text-texto">
-          Reseñas destacadas
-        </h2>
+      <div className="max-w-7xl mx-auto text-center">
+        <MainH2>Reseñas destacadas</MainH2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
           {reseñas.map((r, i) => (

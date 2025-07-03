@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { IconMap2 } from "@tabler/icons-react";
+import MainH1 from "../ui/MainH1";
+import MainLinkButton from "../ui/MainLinkButton";
 
 const HeroSection = () => {
   return (
@@ -14,22 +16,20 @@ const HeroSection = () => {
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-12">
         {/* 📄 Texto a la izquierda */}
         <div className="flex-1 text-center lg:text-left">
-          <h1 className="text-5xl lg:text-6xl leading-tight">
-            Encuentre el <span className="text-acento">mejor internet</span>{" "}
-            para su zona.
-          </h1>
+          <MainH1 variant="noflex" className="font-bold text-5xl lg:text-6xl leading-tight text-left">Encuentre el <span className="text-acento">mejor internet</span> para su zona.</MainH1>
           <p className="mt-6 text-lg">
             Visualice qué empresas operan cerca suyo, conozca la experiencia de
             otros usuarios y tome decisiones con confianza.
           </p>
-
-          <Link
+          <MainLinkButton
             to="/mapa"
-            className="inline-flex items-center mt-8 gap-2 px-6 py-3 bg-primario rounded-lg hover:bg-acento hover:scale-110 transition font-bold ease-in-out duration-300"
+            className="mt-8 hover:scale-110"
+            icon={IconMap2}
+            loading={false}
+            variant="primary"
           >
-            <IconMap2 />
             Ver mapa
-          </Link>
+          </MainLinkButton>
         </div>
 
         {/* 🗺 Imagen del mapa */}
