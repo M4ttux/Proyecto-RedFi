@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { IconBook2 } from "@tabler/icons-react";
+import { IconBook2, IconArrowLeft } from "@tabler/icons-react";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
+import MainH3 from "../../components/ui/MainH3";
+import MainLinkButton from "../../components/ui/MainLinkButton";
 
 const AcademyHome = () => {
   useEffect(() => {
@@ -11,27 +13,27 @@ const AcademyHome = () => {
   const cursos = [
     {
       id: 1,
-      titulo: "Soluciona problemas de Wi-Fi en casa",
+      titulo: "Como solucionar problemas de internet",
       descripcion:
         "Aprende a resolver fallas de conexión y mejorar la señal en tu hogar.",
       imagen:
-        "https://d3puay5pkxu9s4.cloudfront.net/curso/12814/800_imagen.jpg",
+        "../../../public/imgs/cursos/curso1.jpg",
     },
     {
       id: 2,
-      titulo: "Velocidad y Latencia",
+      titulo: "Como medir la velocidad de internet",
       descripcion:
         "Conoce cómo interpretar megas, ping y jitter en un test de velocidad.",
       imagen:
-        "https://bitbr.tech/wp-content/uploads/2023/07/Tec-em-rede-de-computadores-1.jpg",
+        "../../../public/imgs/cursos/curso2.jpg",
     },
     {
       id: 3,
-      titulo: "Elegí el mejor proveedor",
+      titulo: "Como elegir un proveedor de internet",
       descripcion:
         "Compara cobertura, atención y estabilidad para elegir bien.",
       imagen:
-        "https://bkpsitecpsnew.blob.core.windows.net/uploadsitecps/sites/1/2020/10/redes_de_computadores-2048x1365-1.jpeg",
+        "../../../public/imgs/cursos/curso3.jpg",
     },
   ];
 
@@ -66,26 +68,27 @@ const AcademyHome = () => {
   ];
 
   return (
-    <section className="p-6 max-w-6xl mx-auto">
+    <section className="p-6 max-w-7xl mx-auto">
       <MainH1 icon={IconBook2}>Cursos destacados</MainH1>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {cursos.map((curso) => (
-          <Link to={`/academy/curso${curso.id}`} key={curso.id}>
-            <div className="bg-white/10 rounded-lg overflow-hidden transition-transform duration-300 transform hover:scale-105 hover:shadow-lg">
-              <img
-                src={curso.imagen}
-                alt={curso.titulo}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-texto mb-1">
-                  {curso.titulo}
-                </h3>
-                <p className="text-sm text-gray-300">{curso.descripcion}</p>
-              </div>
+          <MainLinkButton
+            to={`/academy/curso${curso.id}`}
+            key={curso.id}
+            variant="curso"
+            className="p-6"
+          >
+            <img
+              src={curso.imagen}
+              alt={curso.titulo}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-4">
+              <MainH3>{curso.titulo}</MainH3>
+              <p>{curso.descripcion}</p>
             </div>
-          </Link>
+          </MainLinkButton>
         ))}
       </div>
 
@@ -142,13 +145,14 @@ const AcademyHome = () => {
       </div>
 
       {/* 🔙 Botón volver al perfil */}
-      <div className="text-center mt-8">
-        <Link
+      <div className="text-center">
+        <MainLinkButton
           to="/cuenta"
-          className="inline-block bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-2 rounded transition"
+          variant="secondary"
         >
-          ← Volver al perfil
-        </Link>
+          <IconArrowLeft />
+          Volver al perfil
+        </MainLinkButton>
       </div>
     </section>
   );

@@ -1,5 +1,7 @@
 import { useState } from "react";
+import MainButton from "../ui/MainButton";
 import MainH2 from "../ui/MainH2";
+import { IconX } from "@tabler/icons-react";
 import { supabase } from "../../supabase/client";
 
 const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
@@ -173,17 +175,17 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
               <div className="mt-2 text-white flex flex-col items-center">
                 <div className="flex items-center gap-2">
                   <span>{archivo.name}</span>
-                  <button
+                  <MainButton
                     type="button"
+                    variant="cross"
                     onClick={() => {
                       setArchivo(null);
                       setPreviewUrl(null);
                     }}
-                    className="bg-red-600 hover:bg-red-600 text-white rounded-full px-2 py-1 text-xs"
                     title="Eliminar imagen"
                   >
-                    ×
-                  </button>
+                    <IconX size={24} />
+                  </MainButton>
                 </div>
 
                 {previewUrl && (
@@ -201,9 +203,12 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
         </div>
 
         <div className="flex justify-center">
-          <button className="bg-primario hover:bg-acento text-white px-6 py-2 rounded font-semibold">
+          <MainButton
+            type="button"
+            variant="primary"
+          >
             Guardar boleta
-          </button>
+          </MainButton>
         </div>
       </form>
     </div>

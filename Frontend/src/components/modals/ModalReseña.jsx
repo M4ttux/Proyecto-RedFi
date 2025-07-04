@@ -1,5 +1,6 @@
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 import MainH2 from "../ui/MainH2";
+import MainButton from "../ui/MainButton";
 
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;
@@ -47,13 +48,14 @@ const ModalReseña = ({ reseña, onClose }) => {
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
       <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-sm shadow-2xl relative border border-white/10">
         {/* Botón cerrar */}
-          <button
+          <MainButton
             onClick={onClose}
-            className="absolute top-3 right-3 text-white/60 hover:text-red-400 transition"
+            variant="cross"
             title="Cerrar"
+            className="absolute top-3 right-3"
           >
             <IconX size={24} />
-          </button>
+          </MainButton>
 
          {/* Avatar */}
         <div className="flex justify-center mb-4">

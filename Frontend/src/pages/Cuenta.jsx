@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import { getPerfil } from "../services/userService";
 import { Link } from "react-router-dom";
 import MainH2 from "../components/ui/MainH2";
+import MainH3 from "../components/ui/MainH3";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 const Cuenta = () => {
   useEffect(() => {
@@ -71,66 +73,53 @@ const Cuenta = () => {
       {/* Acciones */}
       <section className="max-w-7xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
         {/* Gestionar Boletas */}
-        <Link
-          to="/boletas"
-          className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
-        >
-          <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-            Gestionar boletas
-          </h3>
-          <p>
-            Visualize y administre sus boletas, reciba alertas antes del
-            vencimiento y revise los aumentos mes a mes.
-          </p>
-        </Link>
+        <div>
+          <MainLinkButton to="/boletas" variant="card">
+            <MainH3>Gestionar boletas</MainH3>
+            <p>
+              Visualize y administre sus boletas, reciba alertas antes del
+              vencimiento y revise los aumentos mes a mes.
+            </p>
+          </MainLinkButton>
+        </div>
 
         {/* Red-Fi Academy */}
-        <Link to="/academy">
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition">
-            <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-              Red-Fi Academy
-            </h3>
+        <div>
+          <MainLinkButton to="/academy" variant="card">
+            <MainH3>Red-Fi Academy</MainH3>
             <p>
               Accede a nuestros mini cursos sobre redes, Wi-Fi y cómo mejorar tu
               conexión.
             </p>
-          </div>
-        </Link>
+          </MainLinkButton>
+        </div>
 
         {/* Ver Reseñas */}
-        <Link to="/resenas">
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition">
-            <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-              Mis reseñas
-            </h3>
+        <div>
+          <MainLinkButton to="/resenas" variant="card">
+            <MainH3>Mis reseñas</MainH3>
             <p>
               Visualize y administre todas las reseñas que has publicado sobre
               diferentes proveedores.
             </p>
-          </div>
-        </Link>
+          </MainLinkButton>
+        </div>
 
         {/* Editar Perfil */}
-        <Link
-          to="/editar-perfil"
-          className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
-        >
-          <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-            Editar perfil
-          </h3>
-          <p>Cambie su foto, nombre y otros datos de su cuenta Red-Fi.</p>
-        </Link>
+        <div>
+          <MainLinkButton to="/editar-perfil" variant="card">
+            <MainH3>Editar perfil</MainH3>
+            <p>Cambie su foto, nombre y otros datos de su cuenta Red-Fi.</p>
+          </MainLinkButton>
+        </div>
 
         {/* Gestionar Plan */}
-        <Link
-          to="/planes"
-          className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg text-center hover:bg-acento/30 transition"
-        >
-          <h3 className="text-xl lg:text-2xl font-bold text-texto mb-2">
-            Gestionar plan
-          </h3>
-          <p>Gestione su plan y descubra nuestros beneficios.</p>
-        </Link>
+        <div>
+          <MainLinkButton to="/planes" variant="card">
+            <MainH3>Gestionar plan</MainH3>
+            <p>Gestione su plan y descubra nuestros beneficios.</p>
+          </MainLinkButton>
+        </div>
       </section>
     </div>
   );

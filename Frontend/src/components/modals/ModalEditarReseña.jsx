@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../services/proveedorService";
+import MainButton from "../ui/MainButton";
 import MainH2 from "../ui/MainH2";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
@@ -69,20 +70,22 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-fondo border border-white/20 rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
+      <div className="bg-fondo border border-white/20 rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+        {/* Encabezado del modal */}
+        <div className="flex justify-between mb-4">
           <MainH2 className="mb-0">Editar reseña</MainH2>
-
-          <button
+          <MainButton
             onClick={onClose}
-            className="text-white/60 hover:text-texto transition"
+            type="button"
+            variant="cross"
+            title="Cerrar modal"
             disabled={loading}
           >
             <IconX size={24} />
-          </button>
+          </MainButton>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-texto mb-2">
@@ -112,7 +115,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
                     key={star}
                     type="button"
                     onClick={() => handleStarClick(star)}
-                    className="text-2xl transition-colors"
+                    className="text-2xl hover:scale-110 transition"
                     disabled={loading}
                   >
                     {star <= formData.estrellas ? (
@@ -143,21 +146,23 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           </div>
 
           <div className="flex gap-3 mt-6">
-            <button
+            <MainButton
               type="button"
+              variant="secondary"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-white/10 text-texto rounded-lg hover:bg-white/20 transition disabled:opacity-50"
+              className="flex-1"
             >
               Cancelar
-            </button>
-            <button
+            </MainButton>
+            <MainButton
               type="submit"
+              variant="primary"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-primario text-white rounded-lg hover:bg-acento transition disabled:opacity-50"
+              className="flex-1"
             >
               {loading ? "Guardando..." : "Guardar"}
-            </button>
+            </MainButton>
           </div>
         </form>
       </div>

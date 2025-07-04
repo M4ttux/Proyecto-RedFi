@@ -15,10 +15,13 @@ import ModalProveedor from "./modals/ModalProveedor";
 import ModalReseña from "./modals/ModalReseña";
 import ModalAgregarReseña from "./modals/ModalAgregarReseña";
 
+import MainButton from "./ui/MainButton";
+
 const MapaInteractivo = ({ filtros }) => {
   const [alerta, setAlerta] = useState("");
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
-  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] = useState(false);
+  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
+    useState(false);
   const navigate = useNavigate();
   const boundsCorrientes = BOUNDS_CORRIENTES;
 
@@ -72,7 +75,11 @@ const MapaInteractivo = ({ filtros }) => {
   };
 
   useEffect(() => {
-    if (coordenadasSeleccionadas && !modalReseñaAbierto && !modalReseñaCerradaManual) {
+    if (
+      coordenadasSeleccionadas &&
+      !modalReseñaAbierto &&
+      !modalReseñaCerradaManual
+    ) {
       setModalReseñaAbierto(true); // Reabrir modal con coordenadas
     }
   }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]);
@@ -106,17 +113,17 @@ const MapaInteractivo = ({ filtros }) => {
       {modoSeleccion && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-white px-4 py-2 rounded-lg shadow-lg">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
             <span className="font-medium">
               Haz clic en el mapa para seleccionar ubicación
             </span>
-            <button
-            onClick={desactivarSeleccion}
-            className="ml-2 text-white/60 hover:text-red-400 transition"
-            title="Cerrar"
-          >
-            <IconX size={24} />
-          </button>
+
+            <MainButton
+              type="button"
+              onClick={desactivarSeleccion}
+              variant="cross"
+            >
+              <IconX size={24} />
+            </MainButton>
           </div>
         </div>
       )}

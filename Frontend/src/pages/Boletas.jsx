@@ -4,6 +4,7 @@ import BoletaForm from "../components/boletas/BoletaForm";
 import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import BoletasLayout from "../components/boletas/BoletasLayout";
 import { useNotificaciones } from "../components/Navbar";
+import MainButton from "../components/ui/MainButton";
 
 const Boletas = () => {
   useEffect(() => {
@@ -33,22 +34,20 @@ const Boletas = () => {
   return (
     <BoletasLayout>
       <div className="flex gap-4 justify-center mb-8">
-        <button
+        <MainButton
+          variant="toggle"
+          active={vista === "formulario"}
           onClick={() => setVista("formulario")}
-          className={`px-4 py-2 rounded font-bold ${
-            vista === "formulario" ? "bg-blue-500" : "bg-gray-700"
-          }`}
         >
           Nueva Boleta
-        </button>
-        <button
+        </MainButton>
+        <MainButton
+          variant="toggle"
+          active={vista === "historial"}
           onClick={() => setVista("historial")}
-          className={`px-4 py-2 rounded font-bold ${
-            vista === "historial" ? "bg-blue-500" : "bg-gray-700"
-          }`}
         >
           Ver Historial
-        </button>
+        </MainButton>
       </div>
 
       {vista === "formulario" ? (

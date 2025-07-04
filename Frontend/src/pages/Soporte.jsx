@@ -148,17 +148,6 @@ const Soporte = () => {
       {opciones && (
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {opciones.map((op, index) => (
-            /*<button
-              key={index}
-              onClick={() => manejarSeleccion(op)}
-              className={`py-2 px-3 rounded-lg ${
-                op.texto === "Volver al inicio"
-                  ? "bg-gray-700 hover:bg-gray-800 text-white"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
-              }`}
-            >
-              {op.texto}
-            </button>*/
             <MainButton
               key={index}
               type="button"

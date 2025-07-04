@@ -5,11 +5,13 @@ import { useAuth } from "../context/AuthContext";
 import { IconUserCircle } from "@tabler/icons-react";
 import { obtenerProveedores } from "../services/proveedorService";
 import MainH1 from "../components/ui/MainH1";
+import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 const EditarPerfil = () => {
   useEffect(() => {
-      document.title = "Red-Fi | Editar Perfil";
-    }, []);
+    document.title = "Red-Fi | Editar Perfil";
+  }, []);
   const { usuario } = useAuth();
   const navigate = useNavigate();
 
@@ -214,32 +216,36 @@ const EditarPerfil = () => {
 
           {/* Botones */}
           <div className="flex gap-3">
-            <button
+            <MainLinkButton
               type="button"
-              onClick={() => navigate("/cuenta")}
+              to="/cuenta"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-white/10 text-texto rounded-lg hover:bg-white/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2"
+              variant="secondary"
             >
-              Cancelar
-            </button>
-            <button
+              Volver
+            </MainLinkButton>
+            <MainButton
               type="submit"
+              variant="primary"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-primario text-white rounded-lg hover:bg-acento transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1"
+              loading={loading}
             >
               {loading ? "Guardando..." : "Guardar"}
-            </button>
+            </MainButton>
           </div>
         </form>
 
         {/* Link a cambio de contraseña */}
         <div className="text-center mt-6">
-          <Link
+          <MainLinkButton
             to="/cambiar-contraseña"
-            className="px-4 py-2 text-sm text-texto bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="secondary"
+            disabled={loading}
           >
             Cambiar contraseña
-          </Link>
+          </MainLinkButton>
         </div>
       </section>
     </div>

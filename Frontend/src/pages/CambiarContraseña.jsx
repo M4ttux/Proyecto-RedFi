@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainH1 from "../components/ui/MainH1";
+import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 import { supabase } from "../supabase/client";
 
 const CambiarContraseña = () => {
@@ -96,33 +98,34 @@ const CambiarContraseña = () => {
 
           {/* Botón principal */}
           <div className="flex justify-center">
-            <button
+            <MainButton
               type="submit"
               disabled={loading}
-              className="bg-primario hover:bg-acento text-white px-6 py-2 rounded-lg font-bold shadow transition disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="primary"
+              loading={loading}
             >
               {loading ? "Guardando..." : "Guardar nueva contraseña"}
-            </button>
+            </MainButton>
           </div>
 
           {/* Links de navegación mejorados para mobile también */}
           <div className="flex flex-row flex-wrap justify-center gap-3">
-            <button
-              type="button"
-              onClick={() => navigate("/editar-perfil")}
+            <MainLinkButton
+              to="/editar-perfil"
               disabled={loading}
-              className="px-4 py-2 text-sm text-texto bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="secondary"
+              className="px-4 py-2"
             >
-              Volver a Editar Perfil
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/cuenta")}
+              Ir a <span className="text-acento">Editar Perfil</span>
+            </MainLinkButton>
+            <MainLinkButton
+              to="/cuenta"
               disabled={loading}
-              className="px-4 py-2 text-sm text-texto bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="secondary"
+              className="px-4 py-2"
             >
-              Volver a Mi Cuenta
-            </button>
+              Ir a <span className="text-acento">Mi Cuenta</span>
+            </MainLinkButton>
           </div>
         </form>
       </section>

@@ -1,8 +1,10 @@
 import { useState } from "react";
-import MainH2 from "../ui/MainH2";
 import { supabase } from "../../supabase/client";
 import ModalEditarBoleta from "./ModalEditarBoleta";
 import Modal from "./ModalVerBoleta";
+import MainH2 from "../ui/MainH2";
+import MainButton from "../ui/MainButton";
+
 
 const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
@@ -10,7 +12,10 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   const eliminarBoleta = async (boleta) => {
     if (!confirm("¿Estás seguro de eliminar esta boleta?")) return;
-    const { error } = await supabase.from("boletas").delete().eq("id", boleta.id);
+    const { error } = await supabase
+      .from("boletas")
+      .delete()
+      .eq("id", boleta.id);
     if (error) {
       alert("Error al eliminar la boleta.");
       console.error(error);
@@ -24,7 +29,9 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
     recargarBoletas?.();
   };
 
-  const boletasOrdenadas = [...boletas].sort((a, b) => new Date(b.fecha_carga) - new Date(a.fecha_carga));
+  const boletasOrdenadas = [...boletas].sort(
+    (a, b) => new Date(b.fecha_carga) - new Date(a.fecha_carga)
+  );
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -40,21 +47,33 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
               <thead>
                 <tr className="bg-white/10 text-white uppercase text-sm">
                   <th className="px-6 py-4 border border-white/10">#</th>
-                  <th className="px-6 py-4 border border-white/10">Proveedor</th>
+                  <th className="px-6 py-4 border border-white/10">
+                    Proveedor
+                  </th>
                   <th className="px-6 py-4 border border-white/10">Mes</th>
                   <th className="px-6 py-4 border border-white/10">Monto</th>
                   <th className="px-6 py-4 border border-white/10">Carga</th>
-                  <th className="px-6 py-4 border border-white/10">Vencimiento</th>
+                  <th className="px-6 py-4 border border-white/10">
+                    Vencimiento
+                  </th>
                   <th className="px-6 py-4 border border-white/10">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {boletasOrdenadas.map((b, index) => (
-                  <tr key={b.id} className="hover:bg-white/10">
-                    <td className="px-6 py-4 border border-white/10 text-center">{index + 1}</td>
-                    <td className="px-6 py-4 border border-white/10">{b.proveedor}</td>
-                    <td className="px-6 py-4 border border-white/10">{b.mes} {b.anio}</td>
-                    <td className="px-6 py-4 border border-white/10">${parseFloat(b.monto).toFixed(2)}</td>
+                  <tr key={b.id}>
+                    <td className="px-6 py-4 border border-white/10 text-center">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 border border-white/10">
+                      {b.proveedor}
+                    </td>
+                    <td className="px-6 py-4 border border-white/10">
+                      {b.mes}{/*  {b.anio} */}
+                    </td>
+                    <td className="px-6 py-4 border border-white/10">
+                      ${parseFloat(b.monto).toFixed(2)}
+                    </td>
                     <td className="px-6 py-4 border border-white/10">
                       {b.fecha_carga
                         ? new Date(b.fecha_carga).toLocaleString("es-AR", {
@@ -67,10 +86,36 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                         : "—"}
                     </td>
                     <td className="px-6 py-4 border border-white/10">
-                      {new Date(b.vencimiento + "T12:00:00").toLocaleDateString("es-AR")}
+                      {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(
+                        "es-AR"
+                      )}
                     </td>
                     <td className="px-4 py-4 border border-white/10">
                       <div className="flex flex-wrap gap-2 justify-center">
+                        <MainButton
+                          onClick={() => setBoletaParaVer(b)}
+                          title="Ver boleta"
+                          variant="see"
+                        >
+                          Ver
+                        </MainButton>
+                        <MainButton
+                          onClick={() => setBoletaSeleccionada(b)}
+                          title="Editar boleta"
+                          variant="edit"
+                        >
+                          Editar
+                        </MainButton>
+                        <MainButton
+                          onClick={() => eliminarBoleta(b)}
+                          title="Eliminar boleta"
+                          variant="delete"
+                        >
+                          Eliminar
+                        </MainButton>
+                      </div>
+
+                      {/* <div className="flex flex-wrap gap-2 justify-center">
                         <button
                           onClick={() => setBoletaParaVer(b)}
                           className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-bold"
@@ -89,7 +134,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                         >
                           Eliminar
                         </button>
-                      </div>
+                      </div> */}
                     </td>
                   </tr>
                 ))}
@@ -100,19 +145,55 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           {/* 📱 Tarjetas en mobile */}
           <div className="md:hidden flex flex-col gap-4">
             {boletasOrdenadas.map((b) => (
-              <div key={b.id} className="bg-white/10 rounded-lg p-4 text-white shadow">
-                <p><strong>Proveedor:</strong> {b.proveedor}</p>
-                <p><strong>Mes:</strong> {b.mes} {b.anio}</p>
-                <p><strong>Monto:</strong> ${parseFloat(b.monto).toFixed(2)}</p>
-                <p><strong>Carga:</strong> {new Date(b.fecha_carga).toLocaleString("es-AR", {
-                  day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit"
-                })}</p>
-                <p><strong>Vencimiento:</strong> {new Date(b.vencimiento + "T12:00:00").toLocaleDateString("es-AR")}</p>
+              <div
+                key={b.id}
+                className="bg-white/10 rounded-lg p-4 text-white shadow"
+              >
+                <p>
+                  <strong>Proveedor:</strong> {b.proveedor}
+                </p>
+                <p>
+                  <strong>Mes:</strong> {b.mes} {b.anio}
+                </p>
+                <p>
+                  <strong>Monto:</strong> ${parseFloat(b.monto).toFixed(2)}
+                </p>
+                <p>
+                  <strong>Carga:</strong>{" "}
+                  {new Date(b.fecha_carga).toLocaleString("es-AR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <p>
+                  <strong>Vencimiento:</strong>{" "}
+                  {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(
+                    "es-AR"
+                  )}
+                </p>
 
                 <div className="flex gap-2 mt-3 flex-wrap">
-                  <button onClick={() => setBoletaParaVer(b)} className="bg-blue-600 px-3 py-1 rounded">Ver</button>
-                  <button onClick={() => setBoletaSeleccionada(b)} className="bg-yellow-400 text-black px-3 py-1 rounded">Editar</button>
-                  <button onClick={() => eliminarBoleta(b)} className="bg-red-600 px-3 py-1 rounded">Eliminar</button>
+                  <button
+                    onClick={() => setBoletaParaVer(b)}
+                    className="bg-blue-600 px-3 py-1 rounded"
+                  >
+                    Ver
+                  </button>
+                  <button
+                    onClick={() => setBoletaSeleccionada(b)}
+                    className="bg-yellow-400 text-black px-3 py-1 rounded"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => eliminarBoleta(b)}
+                    className="bg-red-600 px-3 py-1 rounded"
+                  >
+                    Eliminar
+                  </button>
                 </div>
               </div>
             ))}
@@ -121,26 +202,29 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       )}
 
       {/* MODAL VER */}
-      {boletaParaVer && (() => {
-        const indexActual = boletasOrdenadas.findIndex(b => b.id === boletaParaVer.id);
-        const boletaAnterior = boletasOrdenadas[indexActual + 1] || null;
+      {boletaParaVer &&
+        (() => {
+          const indexActual = boletasOrdenadas.findIndex(
+            (b) => b.id === boletaParaVer.id
+          );
+          const boletaAnterior = boletasOrdenadas[indexActual + 1] || null;
 
-        return (
-          <Modal
-            boleta={boletaParaVer}
-            boletaAnterior={boletaAnterior}
-            onClose={() => setBoletaParaVer(null)}
-            onEditar={(b) => {
-              setBoletaSeleccionada(b);
-              setBoletaParaVer(null);
-            }}
-            onEliminar={(b) => {
-              eliminarBoleta(b);
-              setBoletaParaVer(null);
-            }}
-          />
-        );
-      })()}
+          return (
+            <Modal
+              boleta={boletaParaVer}
+              boletaAnterior={boletaAnterior}
+              onClose={() => setBoletaParaVer(null)}
+              onEditar={(b) => {
+                setBoletaSeleccionada(b);
+                setBoletaParaVer(null);
+              }}
+              onEliminar={(b) => {
+                eliminarBoleta(b);
+                setBoletaParaVer(null);
+              }}
+            />
+          );
+        })()}
 
       {/* MODAL EDITAR */}
       {boletaSeleccionada && (

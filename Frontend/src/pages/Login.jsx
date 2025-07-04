@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { IconLogin, IconUserPlus, IconMail, IconLock } from "@tabler/icons-react";
+import {
+  IconLogin,
+  IconUserPlus,
+  IconMail,
+  IconLock,
+} from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
+import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 const Login = () => {
   useEffect(() => {
@@ -14,6 +21,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const from = location.state?.from?.pathname || "/cuenta";
 
   const handleChange = (e) =>
@@ -22,11 +30,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
     try {
       await login(form);
       navigate(from);
     } catch (err) {
       setError("❌ Credenciales inválidas o usuario inexistente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,9 +50,7 @@ const Login = () => {
             <IconLogin size={32} className="text-acento" />
           </div>
           <MainH1>Iniciar sesión</MainH1>
-          <p className="text-white/70">
-            Accede a tu cuenta para continuar
-          </p>
+          <p className="text-white/70">Accede a tu cuenta para continuar</p>
         </div>
 
         {/* Formulario */}
@@ -96,12 +105,14 @@ const Login = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <MainButton
               type="submit"
-              className="w-full bg-primario hover:bg-acento px-4 py-3 rounded-lg font-medium text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
+              variant="primary"
+              className="w-full"
+              loading={loading}
             >
-              Iniciar Sesión
-            </button>
+              {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            </MainButton>
           </form>
         </div>
 
@@ -111,18 +122,17 @@ const Login = () => {
             <div className="w-full border-t border-white/20"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-white/60">¿No tienes cuenta?</span>
+            <span className="px-2 bg-fondo text-white/60">
+              ¿No tienes cuenta?
+            </span>
           </div>
         </div>
 
         {/* Register Link */}
-        <Link
-          to="/register"
-          className="w-full bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/30 transition-all px-4 py-3 rounded-lg font-medium text-texto flex items-center justify-center gap-2 group"
-        >
-          <IconUserPlus size={20} className="group-hover:scale-110 transition-transform" />
+        <MainLinkButton to="/register" variant="secondary" className="w-full">
+          <IconUserPlus size={24} />
           Crear nueva cuenta
-        </Link>
+        </MainLinkButton>
 
         {/* Footer */}
         <div className="text-center mt-6">

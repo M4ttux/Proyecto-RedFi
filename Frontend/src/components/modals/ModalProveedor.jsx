@@ -1,5 +1,7 @@
 
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+import MainButton from "../ui/MainButton";
+import MainLinkButton from "../ui/MainLinkButton";
 import MainH2 from "../ui/MainH2";
 const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   if (!proveedor) return null;
@@ -18,13 +20,14 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
       <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-sm shadow-2xl relative border border-white/10">
         {/* Botón cerrar */}
-        <button
-            onClick={onClose}
-            className="absolute top-3 right-3 text-white/60 hover:text-red-400 transition"
-            title="Cerrar"
-          >
-            <IconX size={24} />
-          </button>
+        <MainButton
+          onClick={onClose}
+          variant="cross"
+          title="Cerrar"
+          className="absolute top-3 right-3"
+        >
+          <IconX size={24} />
+        </MainButton>
 
         {/* Imagen/ícono del proveedor */}
         <div className="flex justify-center mb-4">
@@ -70,15 +73,15 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
         </p>
 
         {/* Botón "Más información" */}
-        <button
+        <MainLinkButton
           onClick={() => {
             onClose();
             navigate(`/proveedores/${proveedor.id}`);
           }}
-          className="w-full bg-primario hover:bg-acento transition text-white py-2 px-4 rounded-lg font-medium"
+          className="w-full px-4 py-2"
         >
           Más información
-        </button>
+        </MainLinkButton>
       </div>
     </div>
   );

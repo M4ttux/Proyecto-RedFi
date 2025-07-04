@@ -7,13 +7,10 @@ import {
   Transition,
 } from "@headlessui/react";
 import { obtenerProveedores } from "../../services/proveedorService";
-import {
-  IconX,
-  IconMapPin,
-  IconChevronDown,
-} from "@tabler/icons-react";
+import { IconX, IconMapPin, IconChevronDown } from "@tabler/icons-react";
 import { useAlertaAnimada } from "../../hooks/useAlertaAnimada";
 import MainH2 from "../ui/MainH2";
+import MainButton from "../ui/MainButton";
 
 const ModalAgregarReseña = ({
   isOpen,
@@ -74,7 +71,7 @@ const ModalAgregarReseña = ({
     e.preventDefault();
     e.stopPropagation();
     setAlerta("");
-    
+
     // 🔧 Usar setTimeout para evitar conflictos de eventos
     setTimeout(() => {
       onSeleccionarUbicacion();
@@ -132,43 +129,45 @@ const ModalAgregarReseña = ({
   // 🔧 Efecto para manejar tecla Escape
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         handleClose(e);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
       // 🔧 Prevenir scroll del body cuando la modal está abierta
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center"
       onClick={handleOverlayClick}
     >
-      <div 
+      <div
         className="bg-gray-900 p-6 rounded-lg w-[95vw] max-w-md relative"
         onClick={handleModalContentClick}
       >
-        <button
-          onClick={handleClose}
-          className="absolute top-2 right-2 text-texto hover:text-red-400 transition-colors"
-          type="button"
-        >
-          <IconX size={24} />
-        </button>
-
-        <MainH2>Agregar reseña</MainH2>
+        <div className="flex justify-between mb-4">
+          <MainH2 className="mb-0">Agregar reseña</MainH2>
+          <MainButton
+            onClick={handleClose}
+            type="button"
+            variant="cross"
+            title="Cerrar modal"
+          >
+            <IconX size={24} />
+          </MainButton>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Select Proveedor */}
@@ -248,7 +247,8 @@ const ModalAgregarReseña = ({
                   {ubicacionTexto || "Cargando dirección..."}
                 </p>
                 <p className="text-texto/60 text-xs mt-1">
-                  {coordenadasSeleccionadas.lat.toFixed(6)}, {coordenadasSeleccionadas.lng.toFixed(6)}
+                  {coordenadasSeleccionadas.lat.toFixed(6)},{" "}
+                  {coordenadasSeleccionadas.lng.toFixed(6)}
                 </p>
               </div>
             ) : (
@@ -260,14 +260,18 @@ const ModalAgregarReseña = ({
             )}
 
             {/* Botón para seleccionar en mapa */}
-            <button
+            <MainButton
               type="button"
               onClick={handleSeleccionarEnMapa}
-              className="w-full bg-primario hover:bg-acento text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              variant="primary"
+              className="w-full"
+              title="Seleccionar ubicación en el mapa"
+              icon={IconMapPin}
             >
-              <IconMapPin size={18} />
-              {coordenadasSeleccionadas ? "Cambiar ubicación" : "Seleccionar en mapa"}
-            </button>
+              {coordenadasSeleccionadas
+                ? "Cambiar ubicación"
+                : "Seleccionar en mapa"}
+            </MainButton>
           </div>
 
           {/* Alerta */}
@@ -338,7 +342,9 @@ const ModalAgregarReseña = ({
 
           {/* Comentario */}
           <div>
-            <label className="block mb-1 font-medium text-texto">Comentario</label>
+            <label className="block mb-1 font-medium text-texto">
+              Comentario
+            </label>
             <textarea
               value={comentario}
               onChange={(e) => setComentario(e.target.value)}
@@ -349,12 +355,9 @@ const ModalAgregarReseña = ({
           </div>
 
           {/* Botón enviar */}
-          <button
-            type="submit"
-            className="w-full bg-primario text-white py-2 rounded hover:bg-acento transition-colors"
-          >
+          <MainButton type="submit" variant="primary" className="w-full">
             Enviar Reseña
-          </button>
+          </MainButton>
         </form>
       </div>
     </div>

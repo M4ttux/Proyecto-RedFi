@@ -9,6 +9,8 @@ import {
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
 import { IconChevronDown } from "@tabler/icons-react";
+import MainButton from "./ui/MainButton";
+import MainH3 from "./ui/MainH3";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -139,7 +141,7 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
 
   return (
     <div className="mb-4 bg-secundario p-4 rounded-lg shadow">
-      <h3 className="text-xl lg:text-2xl mb-2 text-texto">Filtrar resultados</h3>
+      <MainH3>Filtrar resultados</MainH3>
       <div className="flex flex-col gap-4">
         {/* Separador visual */}
         <div className="border-t border-white/10 my-2" />
@@ -184,12 +186,12 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
           "Todas las estrellas"
         )}
 
-        <button
+        <MainButton
           onClick={aplicarFiltros}
-          className="bg-primario px-4 py-2 rounded hover:bg-acento text-white font-semibold"
+          variant="primary"
         >
           Aplicar filtros
-        </button>
+        </MainButton>          
       </div>
     </div>
   );

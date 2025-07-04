@@ -4,6 +4,8 @@ import { supabase } from "../supabase/client";
 import { crearPerfil } from "../services/userService";
 import { IconUserPlus, IconLogin, IconMail, IconLock, IconUser, IconWifi } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
+import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 const Register = () => {
   useEffect(() => {
@@ -154,12 +156,13 @@ const Register = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <MainButton
               type="submit"
-              className="w-full bg-primario hover:bg-acento px-4 py-3 rounded-lg font-medium text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
+              variant="primary"
+              className="w-full"
             >
               Crear Cuenta
-            </button>
+            </MainButton>
           </form>
         </div>
 
@@ -174,13 +177,14 @@ const Register = () => {
         </div>
 
         {/* Login Link */}
-        <Link
+        <MainLinkButton
           to="/login"
-          className="w-full bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/30 transition-all px-4 py-3 rounded-lg font-medium text-texto flex items-center justify-center gap-2 group"
+          variant="secondary"
+          className="w-full"
         >
-          <IconLogin size={20} className="group-hover:scale-110 transition-transform" />
+          <IconLogin size={24}/>
           Iniciar sesión
-        </Link>
+        </MainLinkButton>
 
         {/* Footer */}
         <div className="text-center mt-6">

@@ -4,6 +4,8 @@ import { IconCheck } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
+import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 const beneficiosBasico = [
   { texto: "Acceso al mapa interactivo", disponible: true },
@@ -58,7 +60,8 @@ const Planes = () => {
         <div className="w-full text-center">
           <MainH1>Elija su plan Red-Fi</MainH1>
           <p className="mx-auto">
-            Compare los planes y seleccione el que mejor se adapte a sus necesidades.
+            Compare los planes y seleccione el que mejor se adapte a sus
+            necesidades.
           </p>
         </div>
         <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -67,17 +70,14 @@ const Planes = () => {
             <div>
               <MainH2>Plan Básico</MainH2>
               <p className="text-white/70 mb-4">
-                Ideal para usuarios que quieren explorar Red-Fi sin funciones avanzadas.
+                Ideal para usuarios que quieren explorar Red-Fi sin funciones
+                avanzadas.
               </p>
               {renderBeneficios(beneficiosBasico)}
             </div>
-            <Link to="/cuenta" className="mt-auto">
-              <button
-                className="w-full px-4 py-2 bg-primario hover:bg-acento text-white font-bold rounded-lg transition"
-              >
-                Adquirir Plan
-              </button>
-            </Link>
+            <MainLinkButton to="/cuenta" variant="primary">
+              Adquirir Plan
+            </MainLinkButton>
           </div>
 
           {/* Plan Premium */}
@@ -85,25 +85,22 @@ const Planes = () => {
             <div>
               <MainH2 className="text-acento">Plan Premium</MainH2>
               <p className="text-white/70 mb-4">
-                Acceda a todos los beneficios de Red-Fi sin límites de uso y sin anuncios.
+                Acceda a todos los beneficios de Red-Fi sin límites de uso y sin
+                anuncios.
               </p>
               {renderBeneficios(beneficiosPremium)}
             </div>
             {usuario && planActual === "premium" ? (
-              <button
-                disabled
-                className="mt-auto w-full px-4 py-2 bg-gray-400 text-gray-700 font-bold rounded-lg cursor-not-allowed"
+              <MainButton
+                variant="disabled"
+                className="px-6 py-3"
               >
                 Este es tu plan actual
-              </button>
+              </MainButton>
             ) : (
-              <Link to="/cuenta" className="mt-auto">
-                <button
-                  className="w-full px-4 py-2 bg-primario hover:bg-acento text-white font-bold rounded-lg transition"
-                >
-                  Adquirir Plan
-                </button>
-              </Link>
+              <MainLinkButton to="/cuenta" variant="primary">
+                Adquirir Plan
+              </MainLinkButton>
             )}
           </div>
         </div>

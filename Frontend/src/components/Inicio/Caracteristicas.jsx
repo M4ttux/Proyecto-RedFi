@@ -5,6 +5,7 @@ import {
   IconReceipt,
 } from "@tabler/icons-react";
 import MainH2 from "../ui/MainH2";
+import MainH3 from "../ui/MainH3";
 
 const features = [
   {
@@ -66,9 +67,7 @@ const Caracteristicas = () => {
                   {f.icono}
                 </div>
               </div>
-              <h3 className="text-xl lg:text-2xl font-bold text-acento mb-2">
-                {f.titulo}
-              </h3>
+              <MainH3 className="text-acento">{f.titulo}</MainH3>
               <p className="text-texto leading-relaxed">{f.descripcion}</p>
             </div>
           ))}

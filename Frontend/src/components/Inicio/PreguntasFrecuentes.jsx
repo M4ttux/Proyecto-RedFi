@@ -1,4 +1,5 @@
 import MainH2 from "../ui/MainH2";
+import MainH3 from "../ui/MainH3";
 
 const preguntas = [
   {
@@ -36,15 +37,13 @@ const preguntas = [
 const PreguntasFrecuentes = () => {
   return (
     <section className="py-16 px-4 sm:px-6 bg-white/5 text-texto">
-      <div className="max-w-7xl mx-auto"> 
+      <div className="max-w-7xl mx-auto">
         <MainH2 className="text-center">Preguntas frecuentes</MainH2>
 
         <div className="grid gap-16 sm:grid-cols-2">
           {preguntas.map((item, i) => (
             <div key={i} className="space-y-2">
-              <h3 className="text-xl lg:text-2xl font-bold text-acento">
-                {item.titulo}
-              </h3>
+              <MainH3 className="text-acento">{item.titulo}</MainH3>
               <p className="leading-relaxed">{item.contenido}</p>
             </div>
           ))}

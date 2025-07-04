@@ -1,15 +1,16 @@
 import { useAuth } from "../../context/AuthContext";
 import { useAlertaAnimada } from "../../hooks/useAlertaAnimada";
 import BusquedaUbicacion from "./BusquedaUbicacion";
+import MainButton from "../ui/MainButton";
 
-const PanelControlMapa = ({ 
-  boundsCorrientes, 
-  alerta, 
-  setAlerta, 
-  mapRef, 
-  cargandoUbicacion, 
-  onUbicacionActual, 
-  onAbrirModalReseña 
+const PanelControlMapa = ({
+  boundsCorrientes,
+  alerta,
+  setAlerta,
+  mapRef,
+  cargandoUbicacion,
+  onUbicacionActual,
+  onAbrirModalReseña,
 }) => {
   const { usuario } = useAuth();
   const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
@@ -30,26 +31,23 @@ const PanelControlMapa = ({
         cargandoUbicacion={cargandoUbicacion}
         onUbicacionActual={onUbicacionActual}
       />
-      
+
       <div className="flex flex-col items-center gap-2 w-full">
-        <button
+        <MainButton
           onClick={handleClickReseña}
           disabled={!usuario}
-          className={`w-full z-50 rounded font-semibold px-4 py-2 transition-colors ${
-            usuario
-              ? "bg-primario text-white hover:bg-acento"
-              : "bg-gray-400 text-gray-600 cursor-not-allowed"
-          }`}
+          variant={usuario ? "primary" : "disabled"}
+          className="w-full z-50"
         >
           Agregar reseña
-        </button>
+        </MainButton>
         {!usuario && (
           <p className="text-sm text-white/60 italic animate-fade-in">
             Necesitas iniciar sesión para acceder a esta función.
           </p>
         )}
       </div>
-      
+
       {mostrarAlerta && (
         <p
           className={`text-red-400 transition-opacity duration-500 ${

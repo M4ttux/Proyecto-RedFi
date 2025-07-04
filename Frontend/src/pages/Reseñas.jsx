@@ -1,9 +1,21 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { obtenerReseñasUsuario, actualizarReseña, eliminarReseña } from "../services/reseñaService";
-import { IconCarambolaFilled, IconCarambola, IconEdit, IconTrash, IconCalendar } from "@tabler/icons-react";
+import {
+  obtenerReseñasUsuario,
+  actualizarReseña,
+  eliminarReseña,
+} from "../services/reseñaService";
+import {
+  IconCarambolaFilled,
+  IconCarambola,
+  IconEdit,
+  IconTrash,
+  IconCalendar,
+} from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/ModalEditarReseña";
 import MainH1 from "../components/ui/MainH1";
+import MainH3 from "../components/ui/MainH3";
+import MainButton from "../components/ui/MainButton";
 
 const Reseñas = () => {
   const { usuario } = useAuth();
@@ -43,8 +55,13 @@ const Reseñas = () => {
 
   const handleGuardarReseña = async (formData) => {
     try {
-      const reseñaActualizada = await actualizarReseña(reseñaEditando.id, formData);
-      setReseñas(reseñas.map(r => r.id === reseñaEditando.id ? reseñaActualizada : r));
+      const reseñaActualizada = await actualizarReseña(
+        reseñaEditando.id,
+        formData
+      );
+      setReseñas(
+        reseñas.map((r) => (r.id === reseñaEditando.id ? reseñaActualizada : r))
+      );
       setIsModalOpen(false);
       setReseñaEditando(null);
     } catch (error) {
@@ -57,7 +74,7 @@ const Reseñas = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta reseña?")) {
       try {
         await eliminarReseña(id);
-        setReseñas(reseñas.filter(r => r.id !== id));
+        setReseñas(reseñas.filter((r) => r.id !== id));
       } catch (error) {
         console.error("Error al eliminar reseña:", error);
         setError(error.message);
@@ -66,28 +83,27 @@ const Reseñas = () => {
   };
 
   const formatearFecha = (fecha) => {
-    return new Date(fecha).toLocaleDateString('es-AR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(fecha).toLocaleDateString("es-AR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const renderEstrellas = (estrellas) => {
-  const estrellasLlenas = Math.round(estrellas);
-  return (
-    <div className="flex gap-1 text-yellow-400">
-      {Array.from({ length: 5 }).map((_, i) =>
-        i < estrellasLlenas ? (
-          <IconCarambolaFilled key={i} size={16} />
-        ) : (
-          <IconCarambola key={i} size={16} />
-        )
-      )}
-    </div>
-  );
-};
-
+    const estrellasLlenas = Math.round(estrellas);
+    return (
+      <div className="flex gap-1 text-yellow-400">
+        {Array.from({ length: 5 }).map((_, i) =>
+          i < estrellasLlenas ? (
+            <IconCarambolaFilled key={i} size={16} />
+          ) : (
+            <IconCarambola key={i} size={16} />
+          )
+        )}
+      </div>
+    );
+  };
 
   if (!usuario) {
     return (
@@ -131,11 +147,10 @@ const Reseñas = () => {
         {reseñas.length === 0 ? (
           <div className="text-center py-12">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-8">
-              <h3 className="text-xl font-bold text-texto mb-2">
-                No tienes reseñas publicadas
-              </h3>
+              <MainH3>No tienes reseñas publicadas</MainH3>
               <p className="text-white/70 mb-4">
-                Comienza compartiendo tu experiencia con diferentes proveedores de internet
+                Comienza compartiendo tu experiencia con diferentes proveedores
+                de internet
               </p>
             </div>
           </div>
@@ -166,11 +181,12 @@ const Reseñas = () => {
                   </thead>
                   <tbody className="divide-y divide-white/10">
                     {reseñas.map((reseña) => (
-                      <tr key={reseña.id} className="hover:bg-white/5 transition-colors">
+                      <tr key={reseña.id}>
                         <td className="px-6 py-4">
                           <div>
                             <div className="text-sm font-medium text-texto">
-                              {reseña.proveedores?.nombre || 'Proveedor no disponible'}
+                              {reseña.proveedores?.nombre ||
+                                "Proveedor no disponible"}
                             </div>
                             {reseña.proveedores?.tecnologia && (
                               <div className="text-sm text-white/60">
@@ -195,20 +211,20 @@ const Reseñas = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
-                            <button
+                            <MainButton
                               onClick={() => handleEditarReseña(reseña)}
-                              className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-400/20 rounded-lg transition"
+                              variant="edit"
                               title="Editar reseña"
                             >
-                              <IconEdit size={24} />
-                            </button>
-                            <button
+                              Editar
+                            </MainButton>
+                            <MainButton
                               onClick={() => handleEliminarReseña(reseña.id)}
-                              className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/20 rounded-lg transition"
+                              variant="delete"
                               title="Eliminar reseña"
                             >
-                              <IconTrash size={24} />
-                            </button>
+                              Eliminar
+                            </MainButton>
                           </div>
                         </td>
                       </tr>
@@ -227,9 +243,10 @@ const Reseñas = () => {
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-medium text-texto">
-                        {reseña.proveedores?.nombre || 'Proveedor no disponible'}
-                      </h3>
+                      <MainH3>
+                        {reseña.proveedores?.nombre ||
+                          "Proveedor no disponible"}
+                      </MainH3>
                       {reseña.proveedores?.tecnologia && (
                         <p className="text-sm text-white/60">
                           {reseña.proveedores.tecnologia}
@@ -237,18 +254,18 @@ const Reseñas = () => {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button
+                      <MainButton
                         onClick={() => handleEditarReseña(reseña)}
-                        className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-400/20 rounded-lg transition"
-                      >
-                        <IconEdit size={16} />
-                      </button>
-                      <button
+                        variant="edit"
+                        title="Editar reseña"
+                        iconSize={16}
+                      ></MainButton>
+                      <MainButton
                         onClick={() => handleEliminarReseña(reseña.id)}
-                        className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/20 rounded-lg transition"
-                      >
-                        <IconTrash size={16} />
-                      </button>
+                        variant="delete"
+                        title="Eliminar reseña"
+                        iconSize={16}
+                      ></MainButton>
                     </div>
                   </div>
 
@@ -271,9 +288,7 @@ const Reseñas = () => {
             {/* Estadísticas */}
             <div className="mt-8 text-center">
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-texto mb-2">
-                  Estadísticas de tus reseñas
-                </h3>
+                <MainH3>Estadísticas de tus reseñas</MainH3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                   <div>
                     <div className="text-2xl font-bold text-acento">
@@ -285,7 +300,10 @@ const Reseñas = () => {
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-acento">
-                      {(reseñas.reduce((acc, r) => acc + r.estrellas, 0) / reseñas.length).toFixed(1)}
+                      {(
+                        reseñas.reduce((acc, r) => acc + r.estrellas, 0) /
+                        reseñas.length
+                      ).toFixed(1)}
                     </div>
                     <div className="text-sm text-white/60">
                       Calificación promedio
@@ -293,7 +311,7 @@ const Reseñas = () => {
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-acento">
-                      {new Set(reseñas.map(r => r.proveedor_id)).size}
+                      {new Set(reseñas.map((r) => r.proveedor_id)).size}
                     </div>
                     <div className="text-sm text-white/60">
                       Proveedores evaluados

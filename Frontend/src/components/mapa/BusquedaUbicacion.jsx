@@ -1,4 +1,5 @@
 import { IconX, IconCurrentLocation } from "@tabler/icons-react";
+import MainButton from "../ui/MainButton";
 import { useBusquedaUbicacion } from "../../hooks/useBusquedaUbicacion";
 
 const BusquedaUbicacion = ({
@@ -33,14 +34,15 @@ const BusquedaUbicacion = ({
           className="px-3 py-2 pr-10 rounded w-full bg-fondo text-texto placeholder-gray-400"
         />
         {input && (
-          <button
+          <MainButton
             onClick={handleLimpiarBusqueda}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-texto/40 hover:text-red-500 transition"
             title="Limpiar búsqueda"
             type="button"
+            variant="cross"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-0"
           >
-            <IconX size={20} />
-          </button>
+            <IconX size={24} />
+          </MainButton>
         )}
       </div>
 
@@ -59,25 +61,25 @@ const BusquedaUbicacion = ({
       )}
 
       <div className="flex items-center gap-2">
-        <button
+        <MainButton
           onClick={handleBuscar}
-          className="flex-1 bg-primario text-white font-semibold px-4 py-2 rounded hover:bg-acento transition"
+          title="Buscar ubicación"
+          type="button"
+          variant="primary"
+          className="flex-1"
         >
           Buscar ubicación
-        </button>
-
-        <button
+        </MainButton>
+        <MainButton
           onClick={onUbicacionActual}
-          className={`hidden lg:inline-flex items-center gap-1 px-4 py-2 rounded shadow-md transition ${
-            cargandoUbicacion
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-primario hover:bg-acento"
-          }`}
-          disabled={cargandoUbicacion}
           title="Ubicación actual"
+          icon={IconCurrentLocation}
+          type="button"
+          variant="primary"
+          className="hidden lg:inline-flex"
+          loading={cargandoUbicacion}
         >
-          <IconCurrentLocation size={24} className="text-white" />
-        </button>
+        </MainButton>
       </div>
     </div>
   );

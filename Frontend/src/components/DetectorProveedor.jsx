@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import MainH3 from "./ui/MainH3";
 
 const DetectorProveedor = () => {
   const [datos, setDatos] = useState(null);
@@ -13,7 +14,7 @@ const DetectorProveedor = () => {
 
   return (
     <div className="p-6 max-w-xl mx-auto text-center rounded-lg border border-white/10">
-      <h3 className="text-xl lg:text-2xl font-bold mb-4">Tu conexión actual</h3>
+      <MainH3>Tu conexión actual</MainH3>
 
       {error && <p className="text-red-600">{error}</p>}
 
