@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { obtenerProveedores } from "../../services/proveedorService";
+import { obtenerProveedores } from "../../../services/proveedorService";
 import { IconX, IconMapPin } from "@tabler/icons-react";
-import MainH2 from "../ui/MainH2";
-import MainButton from "../ui/MainButton";
-import Select from "../ui/Select";
-import Alerta from "../ui/Alerta";
+import MainH2 from "../../ui/MainH2";
+import MainButton from "../../ui/MainButton";
+import Select from "../../ui/Select";
+import Alerta from "../../ui/Alerta";
 
 const ModalAgregarReseña = ({
   isOpen,

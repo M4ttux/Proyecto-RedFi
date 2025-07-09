@@ -1,6 +1,6 @@
 import { IconX, IconEye, IconTrash, IconEdit } from "@tabler/icons-react";
-import MainButton from "../ui/MainButton";
-import MainH2 from "../ui/MainH2";
+import MainButton from "../../ui/MainButton";
+import MainH2 from "../../ui/MainH2";
 
 const ModalVerBoleta = ({
   boleta,

@@ -4,19 +4,19 @@ import Inicio from "../pages/Inicio";
 import Herramientas from "../pages/Herramientas";
 import Soporte from "../pages/Soporte";
 import Cuenta from "../pages/Cuenta";
-import Register from "../pages/Register";
-import Login from "../pages/Login";
+import Register from "../pages/auth/Register";
+import Login from "../pages/auth/Login";
 import Proveedores from "../pages/Proveedores";
 import Mapa from "../pages/Mapa";
 import Boletas from "../pages/Boletas";
 import Reseñas from "../pages/Reseñas";
-import AcademyHome from "../pages/Academy/AcademyHome";
-import Curso1 from '../pages/Academy/Curso1';
-import Curso2 from '../pages/Academy/Curso2';
-import Curso3 from '../pages/Academy/Curso3';
-import RequireAuth from "../components/RequireAuth";
-import EditarPerfil from "../pages/EditarPerfil";
-import CambiarContraseña from "../pages/CambiarContraseña";
+import AcademyHome from "../pages/Academia";
+import Curso1 from '../pages/academia/Curso1';
+import Curso2 from '../pages/academia/Curso2';
+import Curso3 from '../pages/academia/Curso3';
+import RequireAuth from "../components/auth/RequireAuth";
+import EditarPerfil from "../pages/perfil/EditarPerfil";
+import CambiarContraseña from "../pages/perfil/CambiarContraseña";
 import Planes from "../pages/Planes";
 
 

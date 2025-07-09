@@ -2,20 +2,20 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { IconX } from "@tabler/icons-react";
-import { crearReseña } from "../services/reseñaService";
-import { cargarReseñasEnMapa } from "../services/mapa";
-import { useMapaInteractivo } from "../hooks/useMapaInteractivo";
-import { useUbicacionActual } from "../hooks/useUbicacionActual";
-import { useSeleccionUbicacion } from "../hooks/useSeleccionUbicacion";
-import { BOUNDS_CORRIENTES } from "../constantes";
+import { crearReseña } from "../../services/reseñaService";
+import { cargarReseñasEnMapa } from "../../services/mapa";
+import { useMapaInteractivo } from "../../hooks/useMapaInteractivo";
+import { useUbicacionActual } from "../../hooks/useUbicacionActual";
+import { useSeleccionUbicacion } from "../../hooks/useSeleccionUbicacion";
+import { BOUNDS_CORRIENTES } from "../../constants/constantes";
 
-import CargandoMapa from "./mapa/CargandoMapa";
-import PanelControlMapa from "./mapa/PanelControlMapa";
-import ModalProveedor from "./modals/ModalProveedor";
-import ModalReseña from "./modals/ModalReseña";
-import ModalAgregarReseña from "./modals/ModalAgregarReseña";
+import CargandoMapa from "./cargador/CargandoMapa";
+import PanelControlMapa from "./PanelControlMapa";
+import ModalProveedor from "../modals/mapa/ModalProveedor";
+import ModalReseña from "../modals/mapa/ModalReseña";
+import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
 
-import MainButton from "./ui/MainButton";
+import MainButton from "../ui/MainButton";
 
 const MapaInteractivo = ({ filtros, onMapRefReady }) => {
   const [alerta, setAlerta] = useState("");

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
-import MainH2 from "../ui/MainH2";
-import MainButton from "../ui/MainButton";
-import Avatar from "../ui/Avatar";
+import MainH2 from "../../ui/MainH2";
+import MainButton from "../../ui/MainButton";
+import Avatar from "../../ui/Avatar";
 
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;

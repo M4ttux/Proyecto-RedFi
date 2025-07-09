@@ -11,7 +11,7 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
 
   const buscarSugerencias = useCallback((value) => {
     if (debounceTimeout) clearTimeout(debounceTimeout);
-    
+
     setDebounceTimeout(
       setTimeout(() => {
         if (value.trim().length > 2) {
@@ -34,7 +34,9 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
     setInput("");
     setSugerencias([]);
     setAlerta("");
-    eliminarMarcadorUbicacion(mapRef.current);
+    if (mapRef?.current) {
+      eliminarMarcadorUbicacion(mapRef.current);
+    }
   };
 
   const handleInputChange = (value) => {
@@ -43,13 +45,17 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
   };
 
   const handleBuscar = () => {
-    buscarUbicacion(input, boundsCorrientes, setAlerta, mapRef.current);
+    if (mapRef?.current) {
+      buscarUbicacion(input, boundsCorrientes, setAlerta, mapRef.current);
+    }
   };
 
   const handleSeleccionarSugerencia = (sugerencia) => {
     setInput(sugerencia.formatted);
     setSugerencias([]);
-    buscarUbicacion(sugerencia.formatted, boundsCorrientes, setAlerta, mapRef.current);
+    if (mapRef?.current) {
+      buscarUbicacion(sugerencia.formatted, boundsCorrientes, setAlerta, mapRef.current);
+    }
   };
 
   return {
@@ -59,5 +65,6 @@ export const useBusquedaUbicacion = (boundsCorrientes, setAlerta, mapRef) => {
     handleBuscar,
     handleSeleccionarSugerencia,
     handleLimpiarBusqueda,
+    setSugerencias,
   };
 };

@@ -8,8 +8,11 @@ export const buscarUbicacion = async (input, bounds, setAlerta, map) => {
 
   try {
     const response = await fetch(
-      `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(input)}&key=${API_KEY}&limit=1`
+      `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
+        input + ", Corrientes, Argentina"
+      )}&key=${API_KEY}&limit=1&countrycode=ar`
     );
+
     const data = await response.json();
 
     if (!data.results || data.results.length === 0) {
@@ -122,4 +125,3 @@ export const eliminarMarcadorUbicacion = (map) => {
     map.__marcadorUbicacion = null;
   }
 };
-

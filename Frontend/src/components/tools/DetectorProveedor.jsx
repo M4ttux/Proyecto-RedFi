@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MainH3 from "./ui/MainH3";
+import MainH3 from "../ui/MainH3";
 
 const DetectorProveedor = () => {
   const [datos, setDatos] = useState(null);

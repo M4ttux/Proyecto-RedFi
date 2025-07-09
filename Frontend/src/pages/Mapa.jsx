@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import MapaInteractivo from "../components/MapaInteractivo";
-import FiltrosMobile from "../components/FiltrosMobile";
-import FiltrosZona from "../components/FiltrosZona";
+import MapaInteractivo from "../components/mapa/MapaInteractivo";
+import FiltrosMobile from "../components/mapa/filtros/FiltrosMobile";
+import FiltrosZona from "../components/mapa/filtros/FiltrosZona";
 import { IconFilter, IconCurrentLocation } from "@tabler/icons-react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
-import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constantes";
+import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
 
 const Mapa = () => {
   useEffect(() => {

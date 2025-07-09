@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import {
   IconLogin,
   IconUserPlus,
   IconMail,
   IconLock,
 } from "@tabler/icons-react";
-import MainH1 from "../components/ui/MainH1";
-import MainButton from "../components/ui/MainButton";
-import MainLinkButton from "../components/ui/MainLinkButton";
+import MainH1 from "../../components/ui/MainH1";
+import MainButton from "../../components/ui/MainButton";
+import MainLinkButton from "../../components/ui/MainLinkButton";
 
 const Login = () => {
   useEffect(() => {

@@ -12,7 +12,7 @@ import {
   IconTrash,
   IconCalendar,
 } from "@tabler/icons-react";
-import ModalEditarReseña from "../components/modals/ModalEditarReseña";
+import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import MainH1 from "../components/ui/MainH1";
 import MainH3 from "../components/ui/MainH3";
 import MainButton from "../components/ui/MainButton";

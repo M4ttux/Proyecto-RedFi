@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { supabase } from "../supabase/client";
-import { useAuth } from "../context/AuthContext";
+import { supabase } from "../../supabase/client";
+import { useAuth } from "../../context/AuthContext";
 import { IconUserCircle } from "@tabler/icons-react";
-import { obtenerProveedores } from "../services/proveedorService";
-import MainH1 from "../components/ui/MainH1";
-import MainButton from "../components/ui/MainButton";
-import MainLinkButton from "../components/ui/MainLinkButton";
-import Select from "../components/ui/Select";
+import { obtenerProveedores } from "../../services/proveedorService";
+import MainH1 from "../../components/ui/MainH1";
+import MainButton from "../../components/ui/MainButton";
+import MainLinkButton from "../../components/ui/MainLinkButton";
+import Select from "../../components/ui/Select";
 
 const EditarPerfil = () => {
   useEffect(() => {

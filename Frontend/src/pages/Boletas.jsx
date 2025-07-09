@@ -3,7 +3,7 @@ import { supabase } from "../supabase/client";
 import BoletaForm from "../components/boletas/BoletaForm";
 import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import BoletasLayout from "../components/boletas/BoletasLayout";
-import { useNotificaciones } from "../components/Navbar";
+import { useNotificaciones } from "../components/layout/Navbar";
 import MainButton from "../components/ui/MainButton";
 
 const Boletas = () => {

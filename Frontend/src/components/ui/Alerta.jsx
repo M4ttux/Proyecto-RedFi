@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IconX } from "@tabler/icons-react";
 import MainButton from "./MainButton";
-import { DURACION_ALERTA } from "../../constantes";
+import { DURACION_ALERTA } from "../../constants/constantes";
 
 const estilos = {
   error: "text-red-400 border-red-500/30",

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
-import { obtenerProveedores } from "../../services/proveedorService";
-import MainButton from "../ui/MainButton";
-import MainH2 from "../ui/MainH2";
+import { obtenerProveedores } from "../../../services/proveedorService";
+import MainButton from "../../ui/MainButton";
+import MainH2 from "../../ui/MainH2";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
   const [formData, setFormData] = useState({

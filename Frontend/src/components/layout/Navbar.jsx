@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import Logo from "../icons/logotipo/imagotipo";
+import { useAuth } from "../../context/AuthContext";
+import Logo from "../../icons/logotipo/imagotipo";
 import { IconX, IconMenu2 } from "@tabler/icons-react";
-import { supabase } from "../supabase/client";
+import { supabase } from "../../supabase/client";
 
 // ✅ Hook de notificaciones con evento personalizado
 export const useNotificaciones = () => {

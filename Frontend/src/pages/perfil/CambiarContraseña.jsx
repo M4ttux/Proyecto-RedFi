@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainH1 from "../components/ui/MainH1";
-import MainButton from "../components/ui/MainButton";
-import MainLinkButton from "../components/ui/MainLinkButton";
-import { supabase } from "../supabase/client";
+import MainH1 from "../../components/ui/MainH1";
+import MainButton from "../../components/ui/MainButton";
+import MainLinkButton from "../../components/ui/MainLinkButton";
+import { supabase } from "../../supabase/client";
 
 const CambiarContraseña = () => {
   const navigate = useNavigate();

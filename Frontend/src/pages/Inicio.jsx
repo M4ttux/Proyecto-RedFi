@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import HeroSection from "../components/Inicio/HeroSection";
+import HeroSection from "../components/inicio/HeroSection";
 import Caracteristicas from "../components/inicio/Caracteristicas";
 import CTASection from "../components/inicio/CTASection";
 import PreguntasFrecuentes from "../components/inicio/PreguntasFrecuentes";

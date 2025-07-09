@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { IconBook2, IconArrowLeft } from "@tabler/icons-react";
-import MainH1 from "../../components/ui/MainH1";
-import MainH2 from "../../components/ui/MainH2";
-import MainH3 from "../../components/ui/MainH3";
-import MainLinkButton from "../../components/ui/MainLinkButton";
+import MainH1 from "../components/ui/MainH1";
+import MainH2 from "../components/ui/MainH2";
+import MainH3 from "../components/ui/MainH3";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 const AcademyHome = () => {
   useEffect(() => {
@@ -16,24 +16,21 @@ const AcademyHome = () => {
       titulo: "Como solucionar problemas de internet",
       descripcion:
         "Aprende a resolver fallas de conexión y mejorar la señal en tu hogar.",
-      imagen:
-        "../../../public/imgs/cursos/curso1.jpg",
+      imagen: "/imgs/cursos/curso1.jpg",
     },
     {
       id: 2,
       titulo: "Como medir la velocidad de internet",
       descripcion:
         "Conoce cómo interpretar megas, ping y jitter en un test de velocidad.",
-      imagen:
-        "../../../public/imgs/cursos/curso2.jpg",
+      imagen: "/imgs/cursos/curso2.jpg",
     },
     {
       id: 3,
       titulo: "Como elegir un proveedor de internet",
       descripcion:
         "Compara cobertura, atención y estabilidad para elegir bien.",
-      imagen:
-        "../../../public/imgs/cursos/curso3.jpg",
+      imagen: "/imgs/cursos/curso3.jpg",
     },
   ];
 
@@ -146,10 +143,7 @@ const AcademyHome = () => {
 
       {/* 🔙 Botón volver al perfil */}
       <div className="text-center">
-        <MainLinkButton
-          to="/cuenta"
-          variant="secondary"
-        >
+        <MainLinkButton to="/cuenta" variant="secondary">
           <IconArrowLeft />
           Volver al perfil
         </MainLinkButton>

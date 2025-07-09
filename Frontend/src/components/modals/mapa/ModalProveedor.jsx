@@ -1,8 +1,8 @@
 
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
-import MainButton from "../ui/MainButton";
-import MainLinkButton from "../ui/MainLinkButton";
-import MainH2 from "../ui/MainH2";
+import MainButton from "../../ui/MainButton";
+import MainLinkButton from "../../ui/MainLinkButton";
+import MainH2 from "../../ui/MainH2";
 const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   if (!proveedor) return null;
 

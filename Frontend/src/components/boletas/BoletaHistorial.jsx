@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../supabase/client";
-import ModalEditarBoleta from "./ModalEditarBoleta";
-import Modal from "./ModalVerBoleta";
+import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
+import Modal from "../modals/boletas/ModalVerBoleta";
 import MainH2 from "../ui/MainH2";
 import MainButton from "../ui/MainButton";
 

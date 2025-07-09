@@ -1,9 +1,9 @@
 import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import PanelControlMapa from "./mapa/PanelControlMapa";
-import MainButton from "./ui/MainButton";
-import MainH3 from "./ui/MainH3";
-import Select from "./ui/Select";
+import PanelControlMapa from "../PanelControlMapa";
+import MainButton from "../../ui/MainButton";
+import MainH3 from "../../ui/MainH3";
+import Select from "../../ui/Select";
 
 const FiltrosZona = ({
   filtros,

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import DetectorProveedor from "../components/DetectorProveedor";
-import SpeedTest from "../components/SpeedTest";
+import DetectorProveedor from "../components/tools/DetectorProveedor";
+import SpeedTest from "../components/tools/SpeedTest";
 import { IconTool } from '@tabler/icons-react';
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";

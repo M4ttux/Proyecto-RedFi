@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import MainH2 from "../ui/MainH2";
-import { supabase } from "../../supabase/client";
+import MainH2 from "../../ui/MainH2";
+import { supabase } from "../../../supabase/client";
 
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   const [form, setForm] = useState({ ...boleta });
