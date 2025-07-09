@@ -17,15 +17,13 @@ import ModalAgregarReseña from "./modals/ModalAgregarReseña";
 
 import MainButton from "./ui/MainButton";
 
-const MapaInteractivo = ({ filtros }) => {
+const MapaInteractivo = ({ filtros, onMapRefReady }) => {
   const [alerta, setAlerta] = useState("");
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
-  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
-    useState(false);
+  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] = useState(false);
   const navigate = useNavigate();
   const boundsCorrientes = BOUNDS_CORRIENTES;
 
-  // Primero obtener el mapa y sus referencias
   const {
     mapContainer,
     mapRef,
@@ -34,11 +32,15 @@ const MapaInteractivo = ({ filtros }) => {
     setProveedorActivo,
     reseñaActiva,
     setReseñaActiva,
-    cargarReseñasIniciales, // 🔧 Agregar esta línea
-    reseñasCompletasRef, // 🔧 Agregar esta línea
+    cargarReseñasIniciales,
   } = useMapaInteractivo(filtros, boundsCorrientes);
 
-  // Luego usar mapRef en selección de ubicación
+  useEffect(() => {
+    if (mapRef?.current && onMapRefReady) {
+      onMapRefReady(mapRef);
+    }
+  }, [mapRef, onMapRefReady]);
+
   const {
     modoSeleccion,
     coordenadasSeleccionadas,
@@ -47,7 +49,6 @@ const MapaInteractivo = ({ filtros }) => {
     limpiarSeleccion,
   } = useSeleccionUbicacion(mapRef, boundsCorrientes, setModalReseñaAbierto);
 
-  // Sincronizar bandera global para evitar modal de proveedor
   useEffect(() => {
     window.modoSeleccionActivo = modoSeleccion;
     return () => {
@@ -69,9 +70,9 @@ const MapaInteractivo = ({ filtros }) => {
 
   const handleSeleccionarUbicacion = () => {
     limpiarSeleccion();
-    setModalReseñaAbierto(false); // Cerrar modal
+    setModalReseñaAbierto(false);
     setModalReseñaCerradaManual(false);
-    activarSeleccion(); // Activar modo selección
+    activarSeleccion();
   };
 
   useEffect(() => {
@@ -80,22 +81,36 @@ const MapaInteractivo = ({ filtros }) => {
       !modalReseñaAbierto &&
       !modalReseñaCerradaManual
     ) {
-      setModalReseñaAbierto(true); // Reabrir modal con coordenadas
+      setModalReseñaAbierto(true);
     }
   }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]);
 
+  useEffect(() => {
+  if (alerta) {
+    const timeout = setTimeout(() => setAlerta(""), 4000); // o DURACION_ALERTA si lo tenés
+    return () => clearTimeout(timeout);
+  }
+}, [alerta]);
+
+  useEffect(() => {
+  const handleAbrirModal = () => {
+    handleAbrirModalReseña();
+  };
+
+  window.addEventListener("abrirModalAgregarReseña", handleAbrirModal);
+  return () => {
+    window.removeEventListener("abrirModalAgregarReseña", handleAbrirModal);
+  };
+}, []);
+
   const handleAgregarReseña = async (reseñaData) => {
     try {
-      const nuevaReseña = await crearReseña(reseñaData);
-
+      await crearReseña(reseñaData);
       setModalReseñaAbierto(false);
       limpiarSeleccion();
-
-      // 🔧 Recargar reseñas completas después de agregar una nueva
       await cargarReseñasIniciales(filtros);
     } catch (error) {
       console.error("❌ Error al enviar reseña:", error);
-      throw error;
     }
   };
 
@@ -113,32 +128,13 @@ const MapaInteractivo = ({ filtros }) => {
       {modoSeleccion && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-white px-4 py-2 rounded-lg shadow-lg">
           <div className="flex items-center gap-2">
-            <span className="font-medium">
-              Haz clic en el mapa para seleccionar ubicación
-            </span>
-
-            <MainButton
-              type="button"
-              onClick={desactivarSeleccion}
-              variant="cross"
-              className="px-0"
-              title="Cerrar modo selección"
-            >
+            <span className="font-medium">Haz clic en el mapa para seleccionar ubicación</span>
+            <MainButton type="button" onClick={desactivarSeleccion} variant="cross" className="px-0">
               <IconX size={24} />
             </MainButton>
           </div>
         </div>
       )}
-
-      <PanelControlMapa
-        boundsCorrientes={boundsCorrientes}
-        alerta={alerta}
-        setAlerta={setAlerta}
-        mapRef={mapRef}
-        cargandoUbicacion={cargandoUbicacion}
-        onUbicacionActual={handleUbicacionActual}
-        onAbrirModalReseña={handleAbrirModalReseña}
-      />
 
       <CargandoMapa cargandoMapa={cargandoMapa} />
 
@@ -154,17 +150,8 @@ const MapaInteractivo = ({ filtros }) => {
         }}
       />
 
-      <ModalProveedor
-        proveedor={proveedorActivo}
-        onClose={() => setProveedorActivo(null)}
-        navigate={navigate}
-      />
-
-      <ModalReseña
-        reseña={reseñaActiva}
-        onClose={() => setReseñaActiva(null)}
-      />
-
+      <ModalProveedor proveedor={proveedorActivo} onClose={() => setProveedorActivo(null)} navigate={navigate} />
+      <ModalReseña reseña={reseñaActiva} onClose={() => setReseñaActiva(null)} />
       <ModalAgregarReseña
         isOpen={modalReseñaAbierto}
         onClose={handleCerrarModal}

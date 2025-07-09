@@ -1,21 +1,19 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import MapaInteractivo from "../components/MapaInteractivo";
 import FiltrosMobile from "../components/FiltrosMobile";
 import FiltrosZona from "../components/FiltrosZona";
 import { IconFilter, IconCurrentLocation } from "@tabler/icons-react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
-import { DURACION_ALERTA } from "../constantes";
+import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constantes";
 
 const Mapa = () => {
-  const mapContainerRef = useRef(null);
-
   useEffect(() => {
     document.title = "Red-Fi | Mapa";
   }, []);
 
-  // 👉 Ocultar filtros mobile si ancho >= 1024px
   useEffect(() => {
+
     const manejarResize = () => {
       if (window.innerWidth >= 1024) {
         setMostrarFiltros(false);
@@ -23,16 +21,14 @@ const Mapa = () => {
     };
 
     window.addEventListener("resize", manejarResize);
-    manejarResize(); // Ejecutar al montar
-
-    return () => {
-      window.removeEventListener("resize", manejarResize);
-    };
+    manejarResize();
+    return () => window.removeEventListener("resize", manejarResize);
   }, []);
 
   const [cargandoZonas, setCargandoZonas] = useState(true);
   const [cargandoProveedores, setCargandoProveedores] = useState(true);
   const [cargandoTecnologias, setCargandoTecnologias] = useState(true);
+  const [mapRefReal, setMapRefReal] = useState(null);
 
   const [zonas, setZonas] = useState([]);
   const [proveedores, setProveedores] = useState([]);
@@ -40,10 +36,6 @@ const Mapa = () => {
 
   useEffect(() => {
     const cargarDatos = async () => {
-      setCargandoZonas(true);
-      setCargandoProveedores(true);
-      setCargandoTecnologias(true);
-
       const zonasSupabase = await getZonas();
       const proveedoresSupabase = await obtenerProveedores();
 
@@ -56,18 +48,17 @@ const Mapa = () => {
       );
 
       setZonas([{ id: "", nombre: "Todas las zonas" }, ...zonasFiltradas]);
-      setCargandoZonas(false);
-
       setProveedores([
         { id: "", nombre: "Todos los proveedores" },
         ...proveedoresSupabase,
       ]);
-      setCargandoProveedores(false);
-
       setTecnologiasUnicas([
         "",
         ...new Set(proveedoresSupabase.map((p) => p.tecnologia)),
       ]);
+
+      setCargandoZonas(false);
+      setCargandoProveedores(false);
       setCargandoTecnologias(false);
     };
 
@@ -94,7 +85,6 @@ const Mapa = () => {
   return (
     <div className="h-[calc(100vh-72px)] w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 h-full relative">
-        {/* Sidebar en desktop */}
         <aside className="hidden lg:block lg:col-span-3 bg-[#222222] h-full z-10 overflow-y-auto">
           <FiltrosZona
             filtros={filtrosTemporales}
@@ -107,17 +97,30 @@ const Mapa = () => {
             cargandoZonas={cargandoZonas}
             cargandoProveedores={cargandoProveedores}
             cargandoTecnologias={cargandoTecnologias}
+            mapRef={mapRefReal}
+            boundsCorrientes={BOUNDS_CORRIENTES}
+            cargandoUbicacion={cargandoUbicacion}
+            onUbicacionActual={() => {
+              setCargandoUbicacion(true);
+              window.dispatchEvent(new CustomEvent("solicitarUbicacion"));
+              setTimeout(
+                () => setCargandoUbicacion(false),
+                DURACION_ALERTA + 1000
+              );
+            }}
+            onAbrirModalReseña={() => {
+              window.dispatchEvent(new CustomEvent("abrirModalAgregarReseña"));
+            }}
           />
         </aside>
 
-        {/* Mapa principal */}
         <section className="col-span-1 lg:col-span-9 h-full relative">
           <MapaInteractivo
             filtros={filtrosAplicados}
-            mapContainerRef={mapContainerRef}
+            onMapRefReady={(ref) => setMapRefReal(ref)}
           />
 
-          {/* Botones flotantes mobile */}
+          {/* Botones mobile */}
           <div className="lg:hidden absolute bottom-4 right-4 flex flex-col gap-3 z-30">
             <button
               onClick={() => setMostrarFiltros(true)}
@@ -130,9 +133,7 @@ const Mapa = () => {
             <button
               onClick={() => {
                 setCargandoUbicacion(true);
-                const evento = new CustomEvent("solicitarUbicacion");
-                window.dispatchEvent(evento);
-
+                window.dispatchEvent(new CustomEvent("solicitarUbicacion"));
                 setTimeout(
                   () => setCargandoUbicacion(false),
                   DURACION_ALERTA + 1000
@@ -150,7 +151,6 @@ const Mapa = () => {
             </button>
           </div>
 
-          {/* Panel flotante para filtros (mobile) */}
           {mostrarFiltros && (
             <FiltrosMobile
               filtrosTemporales={filtrosTemporales}

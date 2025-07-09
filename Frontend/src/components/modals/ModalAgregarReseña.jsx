@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { obtenerProveedores } from "../../services/proveedorService";
 import { IconX, IconMapPin } from "@tabler/icons-react";
-import { useAlertaAnimada } from "../../hooks/useAlertaAnimada";
 import MainH2 from "../ui/MainH2";
 import MainButton from "../ui/MainButton";
 import Select from "../ui/Select";
+import Alerta from "../ui/Alerta";
 
 const ModalAgregarReseña = ({
   isOpen,
@@ -21,7 +21,6 @@ const ModalAgregarReseña = ({
   const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
   const [alerta, setAlerta] = useState("");
-  const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
 
   const estrellasOptions = [1, 2, 3, 4, 5];
 
@@ -124,7 +123,7 @@ const ModalAgregarReseña = ({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <Select
-            label="Proveedor"
+            label="Proveedor *"
             value={proveedorSeleccionado}
             onChange={(id) => setProveedorSeleccionado(id)}
             options={[
@@ -148,7 +147,7 @@ const ModalAgregarReseña = ({
           />
 
           <div className="space-y-2">
-            <label className="block font-medium text-texto">Ubicación</label>
+            <label className="block font-medium text-texto">Ubicación *</label>
             {coordenadasSeleccionadas ? (
               <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
                 <div className="flex items-center gap-2 text-green-400 font-medium mb-1">
@@ -184,19 +183,10 @@ const ModalAgregarReseña = ({
             </MainButton>
           </div>
 
-          {mostrarAlerta && (
-            <p
-              className={`text-red-400 transition-opacity duration-500 ${
-                animarAlerta ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              {alerta}
-            </p>
-          )}
-
           <Select
-            label="Estrellas"
+            label="Estrellas *"
             value={estrellas}
+            required
             onChange={setEstrellas}
             options={estrellasOptions}
             getOptionValue={(e) => e}
@@ -205,13 +195,14 @@ const ModalAgregarReseña = ({
 
           <div>
             <label className="block mb-1 font-medium text-texto">
-              Comentario
+              Comentario *
             </label>
             <textarea
               value={comentario}
               onChange={(e) => setComentario(e.target.value)}
               className="w-full p-2 rounded bg-secundario text-texto"
               placeholder="Escribe tu opinión..."
+              required
               rows={3}
             />
           </div>
@@ -219,6 +210,12 @@ const ModalAgregarReseña = ({
           <MainButton type="submit" variant="primary" className="w-full">
             Enviar Reseña
           </MainButton>
+
+          <Alerta
+            mensaje={alerta}
+            tipo="error" // o "exito", "info", "advertencia"
+            onCerrar={() => setAlerta("")}
+          />
         </form>
       </div>
     </div>

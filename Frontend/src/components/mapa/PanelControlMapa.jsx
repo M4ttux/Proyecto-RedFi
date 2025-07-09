@@ -1,5 +1,4 @@
 import { useAuth } from "../../context/AuthContext";
-import { useAlertaAnimada } from "../../hooks/useAlertaAnimada";
 import BusquedaUbicacion from "./BusquedaUbicacion";
 import MainButton from "../ui/MainButton";
 
@@ -13,7 +12,6 @@ const PanelControlMapa = ({
   onAbrirModalReseña,
 }) => {
   const { usuario } = useAuth();
-  const { mostrarAlerta, animarAlerta } = useAlertaAnimada(alerta);
   const handleClickReseña = () => {
     if (!usuario) {
       setAlerta("Debes iniciar sesión para agregar una reseña");
@@ -24,11 +22,12 @@ const PanelControlMapa = ({
 
   return (
     /* <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-lg shadow-lg space-y-2"> */
-    <div className="space-y-2">
+    <div className="space-y-4">
       <BusquedaUbicacion
         boundsCorrientes={boundsCorrientes}
-        setAlerta={setAlerta}
         mapRef={mapRef}
+        setAlerta={setAlerta}
+        alerta={alerta} // ✅ NUEVO
         cargandoUbicacion={cargandoUbicacion}
         onUbicacionActual={onUbicacionActual}
       />
@@ -38,7 +37,7 @@ const PanelControlMapa = ({
           onClick={handleClickReseña}
           disabled={!usuario}
           variant={usuario ? "accent" : "disabled"}
-          className="w-full z-50"
+          className="w-full"
         >
           Agregar reseña
         </MainButton>
@@ -48,16 +47,6 @@ const PanelControlMapa = ({
           </p>
         )}
       </div>
-
-      {mostrarAlerta && (
-        <p
-          className={`text-red-400 transition-opacity duration-500 ${
-            animarAlerta ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {alerta}
-        </p>
-      )}
     </div>
   );
 };
