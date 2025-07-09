@@ -7,6 +7,7 @@ import { obtenerProveedores } from "../services/proveedorService";
 import MainH1 from "../components/ui/MainH1";
 import MainButton from "../components/ui/MainButton";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import Select from "../components/ui/Select";
 
 const EditarPerfil = () => {
   useEffect(() => {
@@ -190,28 +191,21 @@ const EditarPerfil = () => {
 
           {/* Proveedor preferido */}
           <div>
-            <label className="block text-sm font-medium text-texto mb-2">
-              Proveedor Preferido
-            </label>
-            <select
+            <Select
+              label="Proveedor Preferido"
               name="proveedor_preferido"
               value={form.proveedor_preferido}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto focus:outline-none focus:border-acento"
+              onChange={(value) =>
+                setForm((prev) => ({ ...prev, proveedor_preferido: value }))
+              }
+              options={[
+                { id: "", nombre: "Seleccionar proveedor" },
+                ...proveedores,
+              ]}
+              getOptionValue={(p) => p.nombre}
+              getOptionLabel={(p) => p.nombre}
               disabled={loading}
-            >
-              <option value="">Seleccionar proveedor</option>
-              {proveedores.map((proveedor) => (
-                <option
-                  key={proveedor.id}
-                  value={proveedor.nombre}
-                  className="bg-fondo"
-                >
-                  {proveedor.nombre}
-                  {proveedor.tecnologia && ` (${proveedor.tecnologia})`}
-                </option>
-              ))}
-            </select>
+            />
           </div>
 
           {/* Botones */}

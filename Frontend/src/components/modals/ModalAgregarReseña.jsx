@@ -1,16 +1,10 @@
-import { useState, useEffect, Fragment } from "react";
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-  Transition,
-} from "@headlessui/react";
+import { useState, useEffect } from "react";
 import { obtenerProveedores } from "../../services/proveedorService";
-import { IconX, IconMapPin, IconChevronDown } from "@tabler/icons-react";
+import { IconX, IconMapPin } from "@tabler/icons-react";
 import { useAlertaAnimada } from "../../hooks/useAlertaAnimada";
 import MainH2 from "../ui/MainH2";
 import MainButton from "../ui/MainButton";
+import Select from "../ui/Select";
 
 const ModalAgregarReseña = ({
   isOpen,
@@ -22,7 +16,7 @@ const ModalAgregarReseña = ({
   onSeleccionarUbicacion,
 }) => {
   const [proveedores, setProveedores] = useState([]);
-  const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
+  const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [comentario, setComentario] = useState("");
   const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
@@ -39,14 +33,12 @@ const ModalAgregarReseña = ({
     if (isOpen) cargarProveedores();
   }, [isOpen]);
 
-  // Efecto para manejar coordenadas seleccionadas
   useEffect(() => {
     if (coordenadasSeleccionadas) {
       convertirCoordenadasATexto(coordenadasSeleccionadas);
     }
   }, [coordenadasSeleccionadas]);
 
-  // Convertir coordenadas a dirección
   const convertirCoordenadasATexto = async (coords) => {
     try {
       const response = await fetch(
@@ -66,41 +58,8 @@ const ModalAgregarReseña = ({
     }
   };
 
-  // 🔧 Manejar selección en mapa con prevención de propagación
-  const handleSeleccionarEnMapa = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setAlerta("");
-
-    // 🔧 Usar setTimeout para evitar conflictos de eventos
-    setTimeout(() => {
-      onSeleccionarUbicacion();
-    }, 100);
-  };
-
-  // 🔧 Manejar cierre de modal con prevención de propagación
-  const handleClose = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onClose();
-  };
-
-  // 🔧 Prevenir propagación en el contenido de la modal
-  const handleModalContentClick = (e) => {
-    e.stopPropagation();
-  };
-
-  // 🔧 Manejar clic en el overlay (fondo)
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      handleClose(e);
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-
     if (!comentario.trim() || !proveedorSeleccionado) {
       setAlerta("Debes completar todos los campos.");
       return;
@@ -113,33 +72,26 @@ const ModalAgregarReseña = ({
     onEnviar({
       comentario,
       estrellas,
-      proveedor_id: proveedorSeleccionado.id,
+      proveedor_id: proveedorSeleccionado,
       ubicacion: coordenadasSeleccionadas,
       ubicacionTexto,
     });
 
-    // Limpiar formulario
     setComentario("");
-    setProveedorSeleccionado(null);
+    setProveedorSeleccionado("");
     setUbicacionTexto("");
     setEstrellas(5);
     onClose();
   };
 
-  // 🔧 Efecto para manejar tecla Escape
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === "Escape" && isOpen) {
-        handleClose(e);
-      }
+      if (e.key === "Escape" && isOpen) onClose();
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
-      // 🔧 Prevenir scroll del body cuando la modal está abierta
       document.body.style.overflow = "hidden";
     }
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
@@ -151,92 +103,52 @@ const ModalAgregarReseña = ({
   return (
     <div
       className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center"
-      onClick={handleOverlayClick}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
         className="bg-gray-900 p-6 rounded-lg w-[95vw] max-w-md relative"
-        onClick={handleModalContentClick}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between mb-4">
           <MainH2 className="mb-0">Agregar reseña</MainH2>
           <MainButton
-            onClick={handleClose}
+            onClick={onClose}
             type="button"
             variant="cross"
             title="Cerrar modal"
+            className="px-0"
           >
             <IconX size={24} />
           </MainButton>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Select Proveedor */}
-          <div className="space-y-1">
-            <p className="font-medium text-texto">Proveedor</p>
-            <Listbox
-              value={proveedorSeleccionado}
-              onChange={setProveedorSeleccionado}
-            >
-              {({ open }) => (
-                <div className="relative">
-                  <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg">
-                    <span className="block truncate">
-                      {proveedorSeleccionado
-                        ? proveedorSeleccionado.nombre
-                        : "Selecciona un proveedor"}
-                    </span>
-                    <div
-                      className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${
-                        open ? "rotate-180" : ""
-                      }`}
-                    >
-                      <IconChevronDown />
-                    </div>
-                  </ListboxButton>
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <ListboxOptions
-                      modal={false}
-                      className="absolute z-50 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none scrollbar-thin"
-                    >
-                      {proveedores.map((p) => (
-                        <ListboxOption
-                          key={p.id}
-                          className={({ active }) =>
-                            `${
-                              active ? "bg-acento text-white" : "text-texto"
-                            } relative cursor-pointer select-none py-2 pl-3 pr-4`
-                          }
-                          value={p}
-                        >
-                          {({ selected }) => (
-                            <span
-                              className={`${
-                                selected ? "font-semibold" : "font-normal"
-                              } block truncate`}
-                            >
-                              {p.nombre}
-                            </span>
-                          )}
-                        </ListboxOption>
-                      ))}
-                    </ListboxOptions>
-                  </Transition>
-                </div>
-              )}
-            </Listbox>
-          </div>
+          <Select
+            label="Proveedor"
+            value={proveedorSeleccionado}
+            onChange={(id) => setProveedorSeleccionado(id)}
+            options={[
+              { id: "__disabled__", nombre: "Todos los Proveedores" },
+              ...proveedores,
+            ]}
+            getOptionValue={(p) => p.id}
+            getOptionLabel={(p) => p.nombre}
+            required
+            className="disabled:opacity-50"
+            renderOption={(p) => (
+              <option
+                key={p.id}
+                value={p.id}
+                disabled={p.id === "__disabled__"}
+                className="bg-fondo"
+              >
+                {p.nombre}
+              </option>
+            )}
+          />
 
-          {/* SECCIÓN: Selección de Ubicación */}
           <div className="space-y-2">
             <label className="block font-medium text-texto">Ubicación</label>
-
-            {/* Mostrar ubicación seleccionada */}
             {coordenadasSeleccionadas ? (
               <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
                 <div className="flex items-center gap-2 text-green-400 font-medium mb-1">
@@ -258,11 +170,9 @@ const ModalAgregarReseña = ({
                 </p>
               </div>
             )}
-
-            {/* Botón para seleccionar en mapa */}
             <MainButton
               type="button"
-              onClick={handleSeleccionarEnMapa}
+              onClick={onSeleccionarUbicacion}
               variant="primary"
               className="w-full"
               title="Seleccionar ubicación en el mapa"
@@ -274,7 +184,6 @@ const ModalAgregarReseña = ({
             </MainButton>
           </div>
 
-          {/* Alerta */}
           {mostrarAlerta && (
             <p
               className={`text-red-400 transition-opacity duration-500 ${
@@ -285,62 +194,15 @@ const ModalAgregarReseña = ({
             </p>
           )}
 
-          {/* Select Estrellas */}
-          <div className="space-y-1">
-            <p className="font-medium text-texto">Estrellas</p>
-            <Listbox value={estrellas} onChange={setEstrellas}>
-              {({ open }) => (
-                <div className="relative">
-                  <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg">
-                    <span className="block truncate">{estrellas}★</span>
-                    <div
-                      className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${
-                        open ? "rotate-180" : ""
-                      }`}
-                    >
-                      <IconChevronDown />
-                    </div>
-                  </ListboxButton>
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <ListboxOptions
-                      modal={false}
-                      className="absolute z-50 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none scrollbar-thin"
-                    >
-                      {estrellasOptions.map((e) => (
-                        <ListboxOption
-                          key={e}
-                          className={({ active }) =>
-                            `${
-                              active ? "bg-acento text-white" : "text-texto"
-                            } relative cursor-pointer select-none py-2 pl-3 pr-4`
-                          }
-                          value={e}
-                        >
-                          {({ selected }) => (
-                            <span
-                              className={`${
-                                selected ? "font-semibold" : "font-normal"
-                              } block truncate`}
-                            >
-                              {e}★
-                            </span>
-                          )}
-                        </ListboxOption>
-                      ))}
-                    </ListboxOptions>
-                  </Transition>
-                </div>
-              )}
-            </Listbox>
-          </div>
+          <Select
+            label="Estrellas"
+            value={estrellas}
+            onChange={setEstrellas}
+            options={estrellasOptions}
+            getOptionValue={(e) => e}
+            getOptionLabel={(e) => `${e}★`}
+          />
 
-          {/* Comentario */}
           <div>
             <label className="block mb-1 font-medium text-texto">
               Comentario
@@ -354,7 +216,6 @@ const ModalAgregarReseña = ({
             />
           </div>
 
-          {/* Botón enviar */}
           <MainButton type="submit" variant="primary" className="w-full">
             Enviar Reseña
           </MainButton>

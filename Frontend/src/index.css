@@ -24,7 +24,6 @@
   h5,
   h6 {
     font-family: "Nunito", sans-serif;
-    font-weight: 700;
   }
 
   button {
@@ -73,8 +72,12 @@
   }
 }
 
+select {
+  cursor: pointer;
+}
+
 select option {
-  background-color: var(--color-secundario);
+  background-color: #393939
 }
 
 html {

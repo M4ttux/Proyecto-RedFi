@@ -1,6 +1,7 @@
 import { IconX, IconCurrentLocation } from "@tabler/icons-react";
 import MainButton from "../ui/MainButton";
 import { useBusquedaUbicacion } from "../../hooks/useBusquedaUbicacion";
+import MainH3 from "../ui/MainH3";
 
 const BusquedaUbicacion = ({
   boundsCorrientes,
@@ -21,17 +22,21 @@ const BusquedaUbicacion = ({
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <p className="font-semibold text-texto">Buscar ubicación</p>
+        <MainH3 className="mb-0">Buscar ubicación</MainH3>
       </div>
 
       <div className="relative w-full">
+        <label htmlFor="busqueda" className="sr-only">
+          Buscar ubicación
+        </label>
         <input
           type="text"
+          id="busqueda"
           value={input}
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
           placeholder="Buscar en Corrientes..."
-          className="px-3 py-2 pr-10 rounded w-full bg-fondo text-texto placeholder-gray-400"
+          className="px-3 py-2 pr-10 rounded-lg w-full bg-fondo text-texto placeholder-gray-400 border border-white/20"
         />
         {input && (
           <MainButton
@@ -60,7 +65,7 @@ const BusquedaUbicacion = ({
         </ul>
       )}
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         <MainButton
           onClick={handleBuscar}
           title="Buscar ubicación"

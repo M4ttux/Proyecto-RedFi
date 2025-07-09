@@ -1,59 +1,21 @@
-import { useState, useEffect, Fragment } from "react";
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-  Transition,
-} from "@headlessui/react";
-import { getZonas } from "../services/zonaService";
-import { obtenerProveedores } from "../services/proveedorService";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
+import PanelControlMapa from "./mapa/PanelControlMapa";
 import MainButton from "./ui/MainButton";
 import MainH3 from "./ui/MainH3";
+import Select from "./ui/Select";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
-const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false }) => {
-  const [zonas, setZonas] = useState([]);
-  const [proveedores, setProveedores] = useState([]);
-  const [tecnologiasUnicas, setTecnologiasUnicas] = useState([]);
-
-  useEffect(() => {
-  const cargarDatos = async () => {
-    const zonasSupabase = await getZonas();
-    const proveedoresSupabase = await obtenerProveedores();
-
-    // Obtener los IDs de zona usados por al menos un proveedor
-    const zonasConProveedor = new Set(
-      proveedoresSupabase.map((p) => p.zona_id).filter(Boolean)
-    );
-
-    // Filtrar las zonas que tienen proveedores
-    const zonasFiltradas = zonasSupabase.filter((z) =>
-      zonasConProveedor.has(z.id)
-    );
-
-    // Agregar la opción "Todas las zonas"
-    setZonas([{ id: "", nombre: "Todas las zonas" }, ...zonasFiltradas]);
-
-    setProveedores([
-      { id: "", nombre: "Todos los proveedores" },
-      ...proveedoresSupabase,
-    ]);
-
-    setTecnologiasUnicas([
-      "",
-      ...new Set(proveedoresSupabase.map((p) => p.tecnologia)),
-    ]);
-  };
-
-  cargarDatos();
-}, []);
-
-
+const FiltrosZona = ({
+  filtros,
+  setFiltros,
+  onFiltrar,
+  setMostrarFiltros,
+  zonas,
+  proveedores,
+  tecnologiasUnicas,
+  cargandoZonas,
+  cargandoProveedores,
+  cargandoTecnologias,
+}) => {
   const aplicarFiltros = () => {
     onFiltrar({
       zona: filtros.zona.id || "",
@@ -63,135 +25,118 @@ const FiltrosZona = ({ filtros, setFiltros, onFiltrar, abrirHaciaArriba = false 
     });
   };
 
-  const renderListbox = (
-    label,
-    value,
-    setValue,
-    options,
-    renderOption,
-    placeholder
-  ) => {
-    const abreArriba =
-      abrirHaciaArriba && (label === "Tecnología" || label === "Valoración exacta");
-
-    return (
-      <div className="space-y-1">
-        <p className="font-medium text-texto">{label}</p>
-        <Listbox value={value} onChange={setValue}>
-          {({ open }) => (
-            <div className="relative">
-              <ListboxButton className="relative w-full cursor-pointer bg-texto/10 text-texto py-2 pl-3 pr-10 text-left shadow-md rounded-lg">
-                <span className="block truncate">
-                  {renderOption(value) || placeholder}
-                </span>
-                <div
-                  className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${
-                    open ? "rotate-180" : ""
-                  }`}
-                >
-                  <IconChevronDown />
-                </div>
-              </ListboxButton>
-
-              <Transition
-                show={open}
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <ListboxOptions
-                  modal={false}
-                  className={classNames(
-                    "absolute z-10 max-h-48 w-full overflow-auto bg-fondo text-texto py-1 shadow-lg rounded-lg focus:outline-none scrollbar-thin",
-                    abreArriba ? "bottom-full mb-2" : "top-full mt-1"
-                  )}
-                >
-                  {options.map((option) => (
-                    <ListboxOption
-                      key={option.id || option || "default"}
-                      className={({ active }) =>
-                        classNames(
-                          active ? "bg-acento text-white" : "text-texto",
-                          "relative cursor-pointer select-none py-2 pl-3 pr-4"
-                        )
-                      }
-                      value={option}
-                    >
-                      {({ selected }) => (
-                        <span
-                          className={classNames(
-                            selected ? "font-semibold" : "font-normal",
-                            "block truncate"
-                          )}
-                        >
-                          {renderOption(option)}
-                        </span>
-                      )}
-                    </ListboxOption>
-                  ))}
-                </ListboxOptions>
-              </Transition>
-            </div>
-          )}
-        </Listbox>
-      </div>
-    );
-  };
-
   return (
-    <div className="mb-4 bg-secundario p-4 rounded-lg shadow">
-      <MainH3>Filtrar resultados</MainH3>
+    <div className="bg-[#222222] px-4 py-8 rounded-lg">
+      <div className="flex justify-between items-center">
+        <MainH3 className="mb-0">Filtrar resultados</MainH3>
+        <MainButton
+          type="button"
+          onClick={() => setMostrarFiltros(false)}
+          variant="cross"
+          className="lg:hidden px-0"
+        >
+          <IconX size={24} />
+        </MainButton>
+      </div>
+
       <div className="flex flex-col gap-4">
-        {/* Separador visual */}
         <div className="border-t border-white/10 my-2" />
         <p className="text-sm text-white/60 -mt-2 mb-1">Filtrar proveedores</p>
-        {renderListbox(
-          "Zona",
-          filtros.zona,
-          (zona) => setFiltros((prev) => ({ ...prev, zona })),
-          zonas,
-          (z) => (z.departamento ? `${z.departamento} - ${z.cabecera}` : z.nombre),
-          "Todas las zonas"
-        )}
-
-        {renderListbox(
-          "Proveedor",
-          filtros.proveedor,
-          (proveedor) => setFiltros((prev) => ({ ...prev, proveedor })),
-          proveedores,
-          (p) => p.nombre,
-          "Todos los proveedores"
-        )}
-
-        {renderListbox(
-          "Tecnología",
-          filtros.tecnologia,
-          (tecnologia) => setFiltros((prev) => ({ ...prev, tecnologia })),
-          tecnologiasUnicas,
-          (t) => (t || "Todas las tecnologías"),
-          "Todas las tecnologías"
-        )}
-
-        {/* Separador visual */}
+        <Select
+          label="Zona"
+          value={filtros.zona?.id || ""}
+          onChange={(id) => {
+            const zona = zonas.find((z) => String(z.id) === String(id)) || {
+              id: "",
+              nombre: "Todas las zonas",
+            };
+            setFiltros((prev) => ({ ...prev, zona }));
+          }}
+          options={zonas}
+          getOptionValue={(z) => z.id}
+          getOptionLabel={(z) => z.departamento || z.nombre}
+          loading={cargandoZonas}
+        />
+        <Select
+          label="Proveedor"
+          value={filtros.proveedor?.id || ""}
+          onChange={(id) => {
+            const proveedor = proveedores.find((p) => p.id === id) || {
+              id: "",
+              nombre: "Todos los proveedores",
+            };
+            setFiltros((prev) => ({ ...prev, proveedor }));
+          }}
+          options={proveedores}
+          getOptionValue={(p) => p.id}
+          getOptionLabel={(p) => p.nombre}
+          loading={cargandoProveedores}
+        />
+        <Select
+          label="Tecnología"
+          value={filtros.tecnologia || ""}
+          onChange={(t) => setFiltros((prev) => ({ ...prev, tecnologia: t }))}
+          options={tecnologiasUnicas}
+          getOptionValue={(t) => t}
+          getOptionLabel={(t) => t || "Todas las tecnologías"}
+          loading={cargandoTecnologias}
+        />
         <div className="border-t border-white/10 my-2" />
         <p className="text-sm text-white/60 -mt-2 mb-1">Filtrar reseñas</p>
+        <div>
+          <p className="block text-texto mb-1">
+            Valoración exacta
+          </p>
 
-        {renderListbox(
-          "Valoración exacta",
-          filtros.valoracionMin,
-          (valoracionMin) => setFiltros((prev) => ({ ...prev, valoracionMin })),
-          [0, 1, 2, 3, 4, 5],
-          (v) => (v === 0 ? "Todas las estrellas" : `${v}★`),
-          "Todas las estrellas"
-        )}
+          <div className="flex items-center gap-3">
+            {/* Botón "Todas" */}
+            <button
+              type="button"
+              onClick={() =>
+                setFiltros((prev) => ({ ...prev, valoracionMin: 0 }))
+              }
+              className={`px-3 py-1 rounded-lg text-sm font-medium border transition
+        ${
+          filtros.valoracionMin === 0
+            ? "bg-acento text-white border-acento"
+            : "bg-white/5 text-white/70 border-white/20 hover:bg-white/10"
+        }`}
+            >
+              Todas
+            </button>
 
-        <MainButton
-          onClick={aplicarFiltros}
-          variant="primary"
-        >
+            {/* Estrellas */}
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((v) => {
+                const isActive = filtros.valoracionMin >= v;
+                const StarIcon = isActive ? IconCarambolaFilled : IconCarambola;
+
+                return (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() =>
+                      setFiltros((prev) => ({ ...prev, valoracionMin: v }))
+                    }
+                    className="p-1"
+                    title={`${v} estrella${v > 1 ? "s" : ""}`}
+                  >
+                    <StarIcon
+                      size={24}
+                      className={`transition hover:scale-110 ${
+                        isActive ? "text-acento" : "text-white/30"
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <MainButton onClick={aplicarFiltros} variant="accent">
           Aplicar filtros
-        </MainButton>          
+        </MainButton>
       </div>
     </div>
   );

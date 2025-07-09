@@ -15,12 +15,18 @@ const Button = ({
   className = "",
   ...props
 }) => {
-  // Detecta si se pasó padding personalizado (ej: p-0, px-2, py-1, etc.)
-  const hasCustomPadding = /\bp[trblxy]?-\d+\b/.test(className);
+  // Detectar si se pasó padding personalizado
+  const hasPx = /\bpx-\d+\b/.test(className);
+  const hasPy = /\bpy-\d+\b/.test(className);
+  const hasP = /\bp-\d+\b/.test(className);
+
+  const defaultPx = !hasPx && !hasP ? "px-4" : "";
+  const defaultPy = !hasPy && !hasP ? "py-2" : "";
 
   const baseStyles = classNames(
     "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none duration-300",
-    !hasCustomPadding && "px-4 py-2"
+    defaultPx,
+    defaultPy
   );
 
   const variants = {

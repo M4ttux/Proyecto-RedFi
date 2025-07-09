@@ -23,7 +23,8 @@ const PanelControlMapa = ({
   };
 
   return (
-    <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-lg shadow-lg space-y-2">
+    /* <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 lg:left-4 lg:translate-x-0 w-4/5 max-w-xl lg:max-w-md bg-secundario/90 p-4 rounded-lg shadow-lg space-y-2"> */
+    <div className="space-y-2">
       <BusquedaUbicacion
         boundsCorrientes={boundsCorrientes}
         setAlerta={setAlerta}
@@ -36,7 +37,7 @@ const PanelControlMapa = ({
         <MainButton
           onClick={handleClickReseña}
           disabled={!usuario}
-          variant={usuario ? "primary" : "disabled"}
+          variant={usuario ? "accent" : "disabled"}
           className="w-full z-50"
         >
           Agregar reseña

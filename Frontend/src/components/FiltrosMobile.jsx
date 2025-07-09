@@ -1,20 +1,16 @@
 import FiltrosZona from "./FiltrosZona";
-import { IconX } from "@tabler/icons-react";
-import MainButton from "./ui/MainButton";
 
-const FiltrosMobile = ({ filtrosTemporales, setFiltrosTemporales, setFiltrosAplicados, setMostrarFiltros }) => {
+const FiltrosMobile = ({
+  filtrosTemporales,
+  setFiltrosTemporales,
+  setFiltrosAplicados,
+  setMostrarFiltros,
+  zonas,
+  proveedores,
+  tecnologiasUnicas,
+}) => {
   return (
-    <div className="absolute bottom-0 left-0 w-full bg-secundario p-4 rounded-t-lg shadow-lg z-40 max-h-[60vh] overflow-y-auto">
-      <div className="flex justify-between items-center mb-4">
-        <p className="font-bold text-texto text-lg">Filtros</p>
-        <MainButton
-          type = "button"
-          onClick={() => setMostrarFiltros(false)}
-          variant="cross"
-        >
-          <IconX size={24} />
-        </MainButton>
-      </div>
+    <div className="absolute bottom-0 left-0 w-full bg-[#222222] rounded-t-lg z-40 overflow-y-auto">
       <FiltrosZona
         filtros={filtrosTemporales}
         setFiltros={setFiltrosTemporales}
@@ -23,6 +19,10 @@ const FiltrosMobile = ({ filtrosTemporales, setFiltrosTemporales, setFiltrosApli
           setMostrarFiltros(false);
         }}
         abrirHaciaArriba={true}
+        setMostrarFiltros={setMostrarFiltros}
+        zonas={zonas}
+        proveedores={proveedores}
+        tecnologiasUnicas={tecnologiasUnicas}
       />
     </div>
   );

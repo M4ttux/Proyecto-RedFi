@@ -13,6 +13,7 @@ export const obtenerProveedores = async () => {
         geom
       )
     `)
+    .order("nombre", { ascending: true });
 
   if (error) throw error
   return data

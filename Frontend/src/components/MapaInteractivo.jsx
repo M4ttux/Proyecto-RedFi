@@ -121,6 +121,8 @@ const MapaInteractivo = ({ filtros }) => {
               type="button"
               onClick={desactivarSeleccion}
               variant="cross"
+              className="px-0"
+              title="Cerrar modo selección"
             >
               <IconX size={24} />
             </MainButton>
