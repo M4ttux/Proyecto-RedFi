@@ -49,7 +49,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
       {/* Input + botón en línea */}
       <div className="flex gap-2 relative" ref={contenedorRef}>
         <div className="relative flex-1">
-          <label htmlFor="busqueda" className="sr-only">
+          <label htmlFor="busqueda" className="block text-texto mb-1"> 
             Buscar ubicación
           </label>
           <input
@@ -66,7 +66,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
               }
             }}
             placeholder="Buscar en Corrientes..."
-            className={`px-3 py-2 pr-10 rounded-lg w-full bg-fondo text-texto placeholder-gray-400 border transition-all duration-300 ${
+            className={`px-3 py-1.75 pr-10 rounded-lg w-full bg-fondo text-texto placeholder-gray-400 border transition-all duration-300 ${
               inputInvalido ? "border-red-500/30" : "border-white/20"
             }`}
           />
@@ -115,7 +115,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
           title="Buscar ubicación"
           type="button"
           variant="primary"
-          className="self-start"
+          className="self-end"
           icon={IconSearch}
         />
       </div>

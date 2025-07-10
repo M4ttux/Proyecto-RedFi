@@ -185,7 +185,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
       />
 
       {alerta?.mensaje && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40 w-[90vw] max-w-xl px-4">
           <Alerta
             mensaje={alerta.mensaje}
             tipo={alerta.tipo}

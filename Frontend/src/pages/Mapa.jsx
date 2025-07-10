@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import MapaInteractivo from "../components/mapa/MapaInteractivo";
+import PanelControlMapa from "../components/mapa/PanelControlMapa";
 import FiltrosMobile from "../components/mapa/filtros/FiltrosMobile";
-import FiltrosZona from "../components/mapa/filtros/FiltrosZona";
-import { IconFilter, IconCurrentLocation } from "@tabler/icons-react";
+import { IconFilter } from "@tabler/icons-react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
 import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
@@ -12,26 +12,32 @@ const Mapa = () => {
     document.title = "Red-Fi | Mapa";
   }, []);
 
-  useEffect(() => {
-    const manejarResize = () => {
-      if (window.innerWidth >= 1024) {
-        setMostrarFiltros(false);
-      }
-    };
-
-    window.addEventListener("resize", manejarResize);
-    manejarResize();
-    return () => window.removeEventListener("resize", manejarResize);
-  }, []);
-
-  const [cargandoZonas, setCargandoZonas] = useState(true);
-  const [cargandoProveedores, setCargandoProveedores] = useState(true);
-  const [cargandoTecnologias, setCargandoTecnologias] = useState(true);
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [mapRefReal, setMapRefReal] = useState(null);
+  const [alerta, setAlerta] = useState("");
+  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
 
   const [zonas, setZonas] = useState([]);
   const [proveedores, setProveedores] = useState([]);
   const [tecnologiasUnicas, setTecnologiasUnicas] = useState([]);
+
+  const [cargandoZonas, setCargandoZonas] = useState(true);
+  const [cargandoProveedores, setCargandoProveedores] = useState(true);
+  const [cargandoTecnologias, setCargandoTecnologias] = useState(true);
+
+  const [filtrosAplicados, setFiltrosAplicados] = useState({
+    zona: "",
+    proveedor: "",
+    tecnologia: "",
+    valoracionMin: 0,
+  });
+
+  const [filtrosTemporales, setFiltrosTemporales] = useState({
+    zona: { id: "", nombre: "Todas las zonas" },
+    proveedor: { id: "", nombre: "Todos los proveedores" },
+    tecnologia: "",
+    valoracionMin: 0,
+  });
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -64,55 +70,53 @@ const Mapa = () => {
     cargarDatos();
   }, []);
 
-  const [filtrosAplicados, setFiltrosAplicados] = useState({
-    zona: "",
-    proveedor: "",
-    tecnologia: "",
-    valoracionMin: 0,
-  });
+  useEffect(() => {
+  const manejarResize = () => {
+    if (window.innerWidth >= 1024) {
+      setMostrarFiltros(false);
+    }
+  };
 
-  const [filtrosTemporales, setFiltrosTemporales] = useState({
-    zona: { id: "", nombre: "Todas las zonas" },
-    proveedor: { id: "", nombre: "Todos los proveedores" },
-    tecnologia: "",
-    valoracionMin: 0,
-  });
+  window.addEventListener("resize", manejarResize);
+  manejarResize(); // Ejecutar una vez al montar
 
-  const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+  return () => window.removeEventListener("resize", manejarResize);
+}, []);
+
+  const handleUbicacionActual = () => {
+    setCargandoUbicacion(true);
+    window.dispatchEvent(new CustomEvent("solicitarUbicacion"));
+    setTimeout(() => setCargandoUbicacion(false), DURACION_ALERTA + 1000);
+  };
 
   return (
     <div className="h-[calc(100vh-72px)] w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 h-full relative">
+        {/* Panel lateral */}
         <aside className="hidden lg:block lg:col-span-3 bg-[#222222] border border-white/10 h-full z-10 overflow-y-auto">
-          <FiltrosZona
+          <PanelControlMapa
+            boundsCorrientes={BOUNDS_CORRIENTES}
+            mapRef={mapRefReal}
+            alerta={alerta}
+            setAlerta={setAlerta}
+            cargandoUbicacion={cargandoUbicacion}
+            onUbicacionActual={handleUbicacionActual}
+            onAbrirModalReseña={() =>
+              window.dispatchEvent(new CustomEvent("abrirModalAgregarReseña"))
+            }
             filtros={filtrosTemporales}
             setFiltros={setFiltrosTemporales}
-            onFiltrar={(f) => setFiltrosAplicados(f)}
-            setMostrarFiltros={setMostrarFiltros}
             zonas={zonas}
             proveedores={proveedores}
             tecnologiasUnicas={tecnologiasUnicas}
             cargandoZonas={cargandoZonas}
             cargandoProveedores={cargandoProveedores}
             cargandoTecnologias={cargandoTecnologias}
-            mapRef={mapRefReal}
-            boundsCorrientes={BOUNDS_CORRIENTES}
-            cargandoUbicacion={cargandoUbicacion}
-            onUbicacionActual={() => {
-              setCargandoUbicacion(true);
-              window.dispatchEvent(new CustomEvent("solicitarUbicacion"));
-              setTimeout(
-                () => setCargandoUbicacion(false),
-                DURACION_ALERTA + 1000
-              );
-            }}
-            onAbrirModalReseña={() => {
-              window.dispatchEvent(new CustomEvent("abrirModalAgregarReseña"));
-            }}
+            onFiltrar={(f) => setFiltrosAplicados(f)}
           />
         </aside>
 
+        {/* Mapa */}
         <section className="col-span-1 lg:col-span-9 h-full relative">
           <MapaInteractivo
             filtros={filtrosAplicados}
@@ -128,30 +132,11 @@ const Mapa = () => {
             >
               <IconFilter className="text-white" />
             </button>
-
-            <button
-              onClick={() => {
-                setCargandoUbicacion(true);
-                window.dispatchEvent(new CustomEvent("solicitarUbicacion"));
-                setTimeout(
-                  () => setCargandoUbicacion(false),
-                  DURACION_ALERTA + 1000
-                );
-              }}
-              className={`p-3 rounded-full shadow-md transition ${
-                cargandoUbicacion
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-primario hover:bg-acento"
-              }`}
-              disabled={cargandoUbicacion}
-              title="Ubicación actual"
-            >
-              <IconCurrentLocation className="text-white" />
-            </button>
           </div>
 
           {mostrarFiltros && (
             <FiltrosMobile
+              mapRef={mapRefReal}
               filtrosTemporales={filtrosTemporales}
               setFiltrosTemporales={setFiltrosTemporales}
               setFiltrosAplicados={setFiltrosAplicados}

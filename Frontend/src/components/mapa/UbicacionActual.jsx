@@ -40,7 +40,7 @@ const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
         className="w-full"
         loading={cargandoUbicacion}
       >
-        Ubicación actual
+        Mi Ubicación
       </MainButton>
 
       {alerta && (
