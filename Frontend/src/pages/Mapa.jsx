@@ -6,6 +6,7 @@ import { IconFilter } from "@tabler/icons-react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedorService";
 import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
+import CargandoMapa from "../components/mapa/cargador/CargandoMapa";
 
 const Mapa = () => {
   useEffect(() => {
@@ -16,6 +17,7 @@ const Mapa = () => {
   const [mapRefReal, setMapRefReal] = useState(null);
   const [alerta, setAlerta] = useState("");
   const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+  const [cargandoMapa, setCargandoMapa] = useState(true);
 
   const [zonas, setZonas] = useState([]);
   const [proveedores, setProveedores] = useState([]);
@@ -71,17 +73,17 @@ const Mapa = () => {
   }, []);
 
   useEffect(() => {
-  const manejarResize = () => {
-    if (window.innerWidth >= 1024) {
-      setMostrarFiltros(false);
-    }
-  };
+    const manejarResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMostrarFiltros(false);
+      }
+    };
 
-  window.addEventListener("resize", manejarResize);
-  manejarResize(); // Ejecutar una vez al montar
+    window.addEventListener("resize", manejarResize);
+    manejarResize();
 
-  return () => window.removeEventListener("resize", manejarResize);
-}, []);
+    return () => window.removeEventListener("resize", manejarResize);
+  }, []);
 
   const handleUbicacionActual = () => {
     setCargandoUbicacion(true);
@@ -90,9 +92,18 @@ const Mapa = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-72px)] w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-12 h-full relative">
-        {/* Panel lateral */}
+    <div className="h-[calc(100vh-72px)] w-full relative">
+      {cargandoMapa && (
+        <div className="absolute inset-0 z-45">
+          <CargandoMapa cargandoMapa={cargandoMapa} />
+        </div>
+      )}
+
+      <div
+        className={`grid grid-cols-1 lg:grid-cols-12 h-full relative transition-opacity duration-300 ${
+          cargandoMapa ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      >
         <aside className="hidden lg:block lg:col-span-3 bg-[#222222] border border-white/10 h-full z-10 overflow-y-auto">
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}
@@ -116,14 +127,13 @@ const Mapa = () => {
           />
         </aside>
 
-        {/* Mapa */}
         <section className="col-span-1 lg:col-span-9 h-full relative">
           <MapaInteractivo
             filtros={filtrosAplicados}
             onMapRefReady={(ref) => setMapRefReal(ref)}
+            setCargandoMapa={setCargandoMapa}
           />
 
-          {/* Botones mobile */}
           <div className="lg:hidden absolute bottom-4 right-4 flex flex-col gap-3 z-30">
             <button
               onClick={() => setMostrarFiltros(true)}

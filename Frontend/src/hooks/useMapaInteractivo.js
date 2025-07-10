@@ -7,9 +7,39 @@ import {
   actualizarVisibilidadEnMapa,
   cargarReseñasEnMapa,
   actualizarVisibilidadReseñas,
-  manejarUbicacionActual,
 } from "../services/mapa";
 import { obtenerReseñas } from "../services/reseñaService";
+
+// ✅ Helper para esperar que una capa esté completamente cargada
+const esperarCapaCargada = (map, layerId, timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
+
+    const verificar = () => {
+      const capas = map.getStyle()?.layers;
+      const capa = capas?.find((l) => l.id === layerId);
+      const fuente = capa?.source;
+      const fuenteObj = map.getSource(fuente);
+
+      const cargada =
+        map.isStyleLoaded() &&
+        capa &&
+        fuenteObj &&
+        typeof fuenteObj.loaded === "function" &&
+        fuenteObj.loaded();
+
+      if (cargada) {
+        resolve();
+      } else if (Date.now() - start > timeout) {
+        reject(`⏱ Timeout esperando capa ${layerId}`);
+      } else {
+        setTimeout(verificar, 100);
+      }
+    };
+
+    map.once("idle", verificar);
+  });
+};
 
 export const useMapaInteractivo = (filtros, boundsCorrientes) => {
   const mapContainer = useRef(null);
@@ -30,65 +60,44 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
   const filtrosActualesRef = useRef(filtrosNormalizados);
 
   const [cargandoMapa, setCargandoMapa] = useState(true);
+  const [mapaListoVisualmente, setMapaListoVisualmente] = useState(false);
   const [proveedorActivo, setProveedorActivo] = useState(null);
   const [reseñaActiva, setReseñaActiva] = useState(null);
 
-  // 🎯 Manejador global de clicks corregido para UUIDs
   const manejarClickGlobal = useCallback((e) => {
-    if (!mapRef.current) return;
-
-    if (modoSeleccionActivo) {
-      console.log("🛑 Ignorado: en modo selección de ubicación.");
-      return; // Evita procesar clicks mientras se selecciona ubicación
-    }
+    if (!mapRef.current || window.modoSeleccionActivo) return;
 
     const features = mapRef.current.queryRenderedFeatures(e.point);
+    const reseñaFeature = features.find((f) => f.layer.id === "reseñas-layer");
 
-    // Buscar si hay una reseña en el click
-    const reseñaFeature = features.find(f => f.layer.id === 'reseñas-layer');
-    
     if (reseñaFeature) {
-      // 🔧 NO usar parseInt para UUIDs
       const reseñaId = reseñaFeature.properties.id;
-      
-      const reseñaCompleta = reseñasCompletasRef.current.find(r => r.id === reseñaId);
-      
+      const reseñaCompleta = reseñasCompletasRef.current.find((r) => r.id === reseñaId);
+
       if (reseñaCompleta) {
         setReseñaActiva(reseñaCompleta);
-      } else {        
-        // 🔧 Fallback mejorado para UUIDs
-        const properties = reseñaFeature.properties;
-        
-        // Buscar proveedor real usando UUID
-        const proveedorReal = proveedoresRef.current.find(
-          p => p.id === properties.proveedor_id
-        );
-        
-        const reseñaFallback = {
-          id: properties.id,
-          proveedor_id: properties.proveedor_id,
-          usuario_id: properties.usuario_id,
-          estrellas: parseInt(properties.estrellas) || 0,
-          comentario: properties.comentario || "Sin comentario",
-          // Usar datos reales si están disponibles
-          proveedores: proveedorReal ? 
-            { nombre: proveedorReal.nombre } : 
-            { nombre: `Proveedor ${properties.proveedor_id}` },
-          user_profiles: { nombre: `Usuario ${properties.usuario_id.substring(0, 8)}...` }
+      } else {
+        const p = reseñaFeature.properties;
+        const proveedorReal = proveedoresRef.current.find((pr) => pr.id === p.proveedor_id);
+        const fallback = {
+          id: p.id,
+          proveedor_id: p.proveedor_id,
+          usuario_id: p.usuario_id,
+          estrellas: parseInt(p.estrellas) || 0,
+          comentario: p.comentario || "Sin comentario",
+          proveedores: proveedorReal ? { nombre: proveedorReal.nombre } : { nombre: `Proveedor ${p.proveedor_id}` },
+          user_profiles: { nombre: `Usuario ${p.usuario_id.substring(0, 8)}...` },
         };
-
-        setReseñaActiva(reseñaFallback);
+        setReseñaActiva(fallback);
       }
-      return; // 🛑 Detener aquí, no procesar proveedores
+      return;
     }
 
-    // Buscar proveedores solo si no hay reseñas
-    const proveedorFeature = features.find(f => f.layer.id.startsWith('fill-'));
+    const proveedorFeature = features.find((f) => f.layer.id.startsWith("fill-"));
     if (proveedorFeature) {
-      const proveedorId = proveedorFeature.layer.id.replace('fill-', '');
-      const proveedor = proveedoresRef.current.find(p => p.id.toString() === proveedorId);
-      
-      if (proveedor && proveedor.visible) {
+      const proveedorId = proveedorFeature.layer.id.replace("fill-", "");
+      const proveedor = proveedoresRef.current.find((p) => p.id.toString() === proveedorId);
+      if (proveedor?.visible) {
         setProveedorActivo(proveedor);
       }
     }
@@ -98,12 +107,8 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
     if (mapRef.current && isMapLoaded.current) {
       const filtrosAUsar = filtrosParaUsar || filtrosActualesRef.current;
       try {
-        // 📌 Obtener reseñas completas y guardarlas
         const reseñasCompletas = await obtenerReseñas();
-
         reseñasCompletasRef.current = reseñasCompletas;
-        
-        // Cargar en el mapa (sin setReseñaActiva porque usamos el manejador global)
         await cargarReseñasEnMapa(mapRef.current, null, filtrosAUsar);
         filtrosActualesRef.current = filtrosAUsar;
       } catch (error) {
@@ -117,17 +122,13 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
 
     const anterior = filtrosActualesRef.current;
     const nuevo = filtrosNormalizados;
-    const cambio = (
+    const cambio =
       anterior.zona !== nuevo.zona ||
       anterior.proveedor !== nuevo.proveedor ||
       anterior.tecnologia !== nuevo.tecnologia ||
-      anterior.valoracionMin !== nuevo.valoracionMin
-    );
+      anterior.valoracionMin !== nuevo.valoracionMin;
 
-    if (!cambio) {
-      console.log("🔄 Filtros no cambiaron, saltando actualización");
-      return;
-    }
+    if (!cambio) return;
 
     try {
       actualizarVisibilidadReseñas(mapRef.current, filtrosNormalizados);
@@ -137,7 +138,6 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
     }
   }, [filtrosNormalizados]);
 
-  // 🌎 Inicializar el mapa (SOLO UNA VEZ)
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return;
 
@@ -147,13 +147,14 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
     ]);
 
     mapRef.current = map;
-
     const navControl = new maplibregl.NavigationControl();
     navControlRef.current = navControl;
 
     const setNavPosition = () => {
       const isMobile = window.innerWidth < 1024;
-      try { map.removeControl(navControl); } catch (e) {}
+      try {
+        map.removeControl(navControl);
+      } catch {}
       map.addControl(navControl, isMobile ? "bottom-left" : "bottom-right");
     };
 
@@ -164,15 +165,15 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
       isMapLoaded.current = true;
 
       try {
-        // Cargar proveedores SIN event listeners individuales
         proveedoresRef.current = await cargarProveedoresEnMapa(map, filtrosNormalizados, null);
-        
         await cargarReseñasIniciales(filtrosNormalizados);
-        
-        // 🎯 Agregar manejador global de clicks
-        map.on('click', (e) => manejarClickGlobal(e));
-        
+
+        await esperarCapaCargada(map, "reseñas-layer", 5000);
+
+        setMapaListoVisualmente(true);
         setCargandoMapa(false);
+
+        map.on("click", manejarClickGlobal);
       } catch (error) {
         console.error("❌ Error en carga inicial del mapa:", error);
         setCargandoMapa(false);
@@ -181,7 +182,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
 
     return () => {
       if (map) {
-        map.off('click', manejarClickGlobal);
+        map.off("click", manejarClickGlobal);
         map.remove();
       }
       window.removeEventListener("resize", setNavPosition);
@@ -192,19 +193,14 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
     };
   }, [boundsCorrientes, manejarClickGlobal]);
 
-  // 🔄 Cuando cambia la ruta a /mapa, cargar reseñas si no están cargadas
   useEffect(() => {
     if (location.pathname === "/mapa" && isMapLoaded.current) {
       cargarReseñasIniciales(filtrosNormalizados);
     }
   }, [location.pathname, cargarReseñasIniciales, filtrosNormalizados]);
 
-  // 🔄 Aplicar filtros dinámicos (sin reinicializar mapa)
   useEffect(() => {
-    if (!mapRef.current || !isMapLoaded.current) {
-      return;
-    }
-
+    if (!mapRef.current || !isMapLoaded.current) return;
     try {
       actualizarVisibilidadEnMapa(mapRef.current, proveedoresRef, filtrosNormalizados);
       actualizarFiltrosReseñas();
@@ -217,6 +213,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
     mapContainer,
     mapRef,
     cargandoMapa,
+    mapaListoVisualmente,
     proveedorActivo,
     setProveedorActivo,
     reseñaActiva,

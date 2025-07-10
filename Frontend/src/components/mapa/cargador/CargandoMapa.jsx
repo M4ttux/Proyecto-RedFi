@@ -6,12 +6,11 @@ const CargandoMapa = ({ cargandoMapa }) => {
 
   useEffect(() => {
     if (cargandoMapa) {
-      setVisible(true); // volver a mostrarlo cuando vuelve a cargar
+      setVisible(true);
     } else {
       const timeout = setTimeout(() => {
-        setVisible(false); // ocultarlo después del fade-out
-      }, 500); // duración del fade-out
-
+        setVisible(false);
+      }, 200); // más corto para evitar fade notorio
       return () => clearTimeout(timeout);
     }
   }, [cargandoMapa]);
@@ -20,12 +19,20 @@ const CargandoMapa = ({ cargandoMapa }) => {
 
   return (
     <div
-      className={`absolute inset-0 z-50 flex flex-col items-center justify-center text-white text-lg font-semibold gap-2 transition-opacity duration-500 ${
-        cargandoMapa ? "opacity-100 bg-black/60" : "opacity-0 bg-black/0"
+      className={`fixed inset-0 z-45 flex items-center justify-center transition-opacity duration-300 ${
+        cargandoMapa ? "opacity-75 pointer-events-auto" : "opacity-0 pointer-events-none"
       }`}
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
+        backdropFilter: "blur(4px)",
+      }}
     >
-      <IconLoader2 size={32} className="animate-spin" />
-      Cargando mapa...
+      <div className="flex flex-col items-center gap-3 text-white">
+        <IconLoader2 size={42} className="animate-spin text-white" />
+        <p className="text-lg sm:text-xl font-semibold tracking-wide">
+          Cargando mapa...
+        </p>
+      </div>
     </div>
   );
 };

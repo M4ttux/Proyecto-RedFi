@@ -3,14 +3,11 @@ import { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { IconX } from "@tabler/icons-react";
 import { crearReseña } from "../../services/reseñaService";
-import { cargarReseñasEnMapa } from "../../services/mapa";
+import { BOUNDS_CORRIENTES } from "../../constants/constantes";
 import { useMapaInteractivo } from "../../hooks/useMapaInteractivo";
 import { useUbicacionActual } from "../../hooks/useUbicacionActual";
 import { useSeleccionUbicacion } from "../../hooks/useSeleccionUbicacion";
-import { BOUNDS_CORRIENTES } from "../../constants/constantes";
 
-import CargandoMapa from "./cargador/CargandoMapa";
-import PanelControlMapa from "./PanelControlMapa";
 import ModalProveedor from "../modals/mapa/ModalProveedor";
 import ModalReseña from "../modals/mapa/ModalReseña";
 import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
@@ -18,13 +15,14 @@ import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
 import MainButton from "../ui/MainButton";
 import Alerta from "../ui/Alerta";
 
-const MapaInteractivo = ({ filtros, onMapRefReady }) => {
+const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   const [alerta, setAlerta] = useState(null);
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
   const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
     useState(false);
-  const navigate = useNavigate();
+
   const boundsCorrientes = BOUNDS_CORRIENTES;
+  const navigate = useNavigate();
 
   const {
     mapContainer,
@@ -37,11 +35,13 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
     cargarReseñasIniciales,
   } = useMapaInteractivo(filtros, boundsCorrientes);
 
+  // ✅ Solo ejecutar setCargandoMapa(false) cuando el hook ya lo indique
   useEffect(() => {
-    if (mapRef?.current && onMapRefReady) {
+    if (!cargandoMapa && mapRef?.current && onMapRefReady) {
       onMapRefReady(mapRef);
+      setCargandoMapa?.(false); // desde Mapa.jsx
     }
-  }, [mapRef, onMapRefReady]);
+  }, [cargandoMapa, mapRef, onMapRefReady, setCargandoMapa]);
 
   const {
     modoSeleccion,
@@ -150,13 +150,10 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
         </div>
       )}
 
-      <CargandoMapa cargandoMapa={cargandoMapa} />
-
+      {/* Mapa en sí */}
       <div
         ref={mapContainer}
-        className={`w-full h-full transition-opacity duration-700 ease-in-out ${
-          cargandoMapa ? "opacity-0" : "opacity-100"
-        } ${modoSeleccion ? "cursor-crosshair" : ""}`}
+        className={`w-full h-full ${modoSeleccion ? "cursor-crosshair" : ""}`}
         style={{
           overflow: "hidden",
           position: "relative",
