@@ -36,7 +36,7 @@ const FiltrosZona = ({
     <div className="bg-[#222222] px-6 py-6 rounded-lg">
       <div className="pb-4">
         <div className="flex justify-between items-center">
-          <MainH3 className="mb-0 lg:mb-4">Buscar ubicación</MainH3>
+          <MainH3 className="mb-0 lg:mb-4">Panel de control</MainH3>
           <MainButton
             type="button"
             onClick={() => setMostrarFiltros(false)}

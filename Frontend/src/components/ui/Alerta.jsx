@@ -16,37 +16,50 @@ const Alerta = ({
   onCerrar,
   autoOcultar = true,
   duracion = DURACION_ALERTA,
+  flotante = false,
 }) => {
-  const [visible, setVisible] = useState(!!mensaje);
+  const [visible, setVisible] = useState(false); // controla la clase de animación
+  const [renderizar, setRenderizar] = useState(false); // controla si se renderiza el componente
 
   useEffect(() => {
     if (mensaje) {
-      setVisible(true);
+      setRenderizar(true);
+      setTimeout(() => setVisible(true), 100); // permite animación de entrada
       if (autoOcultar) {
         const timer = setTimeout(() => {
           setVisible(false);
-          onCerrar?.();
+          setTimeout(() => {
+            setRenderizar(false);
+            onCerrar?.();
+          }, 300); // delay para animación de salida
         }, duracion);
         return () => clearTimeout(timer);
       }
     }
   }, [mensaje, autoOcultar, duracion, onCerrar]);
 
-  if (!mensaje || !visible) return null;
+  const cerrarAlerta = () => {
+    setVisible(false);
+    setTimeout(() => {
+      setRenderizar(false);
+      onCerrar?.();
+    }, 300);
+  };
+
+  if (!renderizar) return null;
 
   return (
     <div
-      className={`relative pr-10 text-sm bg-white/5 px-3 py-2 rounded-md border transition-opacity duration-500 opacity-100 ${
-        estilos[tipo] || estilos.error
-      }`}
+      className={`${
+        flotante ? "absolute w-full left-0 z-50" : ""
+      } relative pr-10 bg-[#222222] px-3 py-2 rounded-lg border transition-all duration-300 transform ${
+        visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+      } ${estilos[tipo] || estilos.error}`}
     >
       {mensaje}
       {onCerrar && (
         <MainButton
-          onClick={() => {
-            setVisible(false);
-            onCerrar();
-          }}
+          onClick={cerrarAlerta}
           type="button"
           variant="cross"
           className="absolute right-2 top-1/2 -translate-y-1/2 p-0"

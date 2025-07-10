@@ -16,11 +16,13 @@ import ModalReseña from "../modals/mapa/ModalReseña";
 import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
 
 import MainButton from "../ui/MainButton";
+import Alerta from "../ui/Alerta";
 
 const MapaInteractivo = ({ filtros, onMapRefReady }) => {
-  const [alerta, setAlerta] = useState("");
+  const [alerta, setAlerta] = useState(null);
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
-  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] = useState(false);
+  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
+    useState(false);
   const navigate = useNavigate();
   const boundsCorrientes = BOUNDS_CORRIENTES;
 
@@ -86,22 +88,22 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
   }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]);
 
   useEffect(() => {
-  if (alerta) {
-    const timeout = setTimeout(() => setAlerta(""), 4000); // o DURACION_ALERTA si lo tenés
-    return () => clearTimeout(timeout);
-  }
-}, [alerta]);
+    if (alerta) {
+      const timeout = setTimeout(() => setAlerta(""), 4000);
+      return () => clearTimeout(timeout);
+    }
+  }, [alerta]);
 
   useEffect(() => {
-  const handleAbrirModal = () => {
-    handleAbrirModalReseña();
-  };
+    const handleAbrirModal = () => {
+      handleAbrirModalReseña();
+    };
 
-  window.addEventListener("abrirModalAgregarReseña", handleAbrirModal);
-  return () => {
-    window.removeEventListener("abrirModalAgregarReseña", handleAbrirModal);
-  };
-}, []);
+    window.addEventListener("abrirModalAgregarReseña", handleAbrirModal);
+    return () => {
+      window.removeEventListener("abrirModalAgregarReseña", handleAbrirModal);
+    };
+  }, []);
 
   const handleAgregarReseña = async (reseñaData) => {
     try {
@@ -109,8 +111,13 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
       setModalReseñaAbierto(false);
       limpiarSeleccion();
       await cargarReseñasIniciales(filtros);
+      setAlerta({ mensaje: "Reseña publicada con éxito.", tipo: "exito" });
     } catch (error) {
       console.error("❌ Error al enviar reseña:", error);
+      setAlerta({
+        mensaje: "Ocurrió un error al publicar la reseña.",
+        tipo: "error",
+      });
     }
   };
 
@@ -128,8 +135,15 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
       {modoSeleccion && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-white px-4 py-2 rounded-lg shadow-lg">
           <div className="flex items-center gap-2">
-            <span className="font-medium">Haz clic en el mapa para seleccionar ubicación</span>
-            <MainButton type="button" onClick={desactivarSeleccion} variant="cross" className="px-0">
+            <span className="font-medium">
+              Haz clic en el mapa para seleccionar ubicación
+            </span>
+            <MainButton
+              type="button"
+              onClick={desactivarSeleccion}
+              variant="cross"
+              className="px-0"
+            >
               <IconX size={24} />
             </MainButton>
           </div>
@@ -150,8 +164,15 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
         }}
       />
 
-      <ModalProveedor proveedor={proveedorActivo} onClose={() => setProveedorActivo(null)} navigate={navigate} />
-      <ModalReseña reseña={reseñaActiva} onClose={() => setReseñaActiva(null)} />
+      <ModalProveedor
+        proveedor={proveedorActivo}
+        onClose={() => setProveedorActivo(null)}
+        navigate={navigate}
+      />
+      <ModalReseña
+        reseña={reseñaActiva}
+        onClose={() => setReseñaActiva(null)}
+      />
       <ModalAgregarReseña
         isOpen={modalReseñaAbierto}
         onClose={handleCerrarModal}
@@ -162,6 +183,17 @@ const MapaInteractivo = ({ filtros, onMapRefReady }) => {
         coordenadasSeleccionadas={coordenadasSeleccionadas}
         onSeleccionarUbicacion={handleSeleccionarUbicacion}
       />
+
+      {alerta?.mensaje && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40">
+          <Alerta
+            mensaje={alerta.mensaje}
+            tipo={alerta.tipo}
+            onCerrar={() => setAlerta("")}
+            flotante
+          />
+        </div>
+      )}
     </div>
   );
 };

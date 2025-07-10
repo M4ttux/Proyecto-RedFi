@@ -1,9 +1,9 @@
+import { useState, useEffect, useRef } from "react";
 import { IconX, IconCurrentLocation, IconSearch } from "@tabler/icons-react";
-import MainButton from "../ui/MainButton";
 import { useBusquedaUbicacion } from "../../hooks/useBusquedaUbicacion";
 import { manejarUbicacionActual } from "../../services/mapa";
-import { useState, useEffect, useRef } from "react";
 import { DURACION_ALERTA } from "../../constants/constantes";
+import MainButton from "../ui/MainButton";
 import Alerta from "../ui/Alerta";
 
 const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
@@ -17,38 +17,11 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
     setSugerencias,
   } = useBusquedaUbicacion(boundsCorrientes, setAlerta, mapRef);
 
-  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+
+  const [inputInvalido, setInputInvalido] = useState(false);
 
   const contenedorRef = useRef();
 
-  const handleUbicacionActual = async () => {
-    setCargandoUbicacion(true);
-    setAlerta(""); // limpiar mensajes anteriores
-    try {
-      if (mapRef?.current) {
-        await manejarUbicacionActual(
-          boundsCorrientes,
-          setAlerta,
-          mapRef.current
-        );
-      } else {
-        setAlerta("No se puede acceder al mapa en este momento.");
-      }
-    } catch (error) {
-      setAlerta("No se pudo obtener tu ubicación.");
-    } finally {
-      setTimeout(() => setCargandoUbicacion(false), 1000);
-    }
-  };
-
-  useEffect(() => {
-    if (alerta) {
-      const timer = setTimeout(() => {
-        setAlerta("");
-      }, DURACION_ALERTA);
-      return () => clearTimeout(timer);
-    }
-  }, [alerta, setAlerta]);
 
   useEffect(() => {
     const manejarClickAfuera = (e) => {
@@ -64,8 +37,10 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
   const handleBuscarClick = () => {
     if (!input.trim()) {
       setAlerta("Por favor ingresá una ubicación.");
+      setInputInvalido(true);
       return;
     }
+    setInputInvalido(false); // limpiar error si luego hace una búsqueda válida
     handleBuscar();
   };
 
@@ -81,15 +56,21 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
             type="text"
             id="busqueda"
             value={input}
-            onChange={(e) => handleInputChange(e.target.value)}
+            onChange={(e) => {
+              handleInputChange(e.target.value);
+              if (inputInvalido) setInputInvalido(false); // limpiar borde rojo al escribir
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleBuscarClick();
               }
             }}
             placeholder="Buscar en Corrientes..."
-            className="px-3 py-2 pr-10 rounded-lg w-full bg-fondo text-texto placeholder-gray-400 border border-white/20"
+            className={`px-3 py-2 pr-10 rounded-lg w-full bg-fondo text-texto placeholder-gray-400 border transition-all duration-300 ${
+              inputInvalido ? "border-red-500/30" : "border-white/20"
+            }`}
           />
+
           {input && (
             <MainButton
               onClick={handleLimpiarBusqueda}
@@ -115,6 +96,18 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
               ))}
             </ul>
           )}
+
+          {/* Alerta si hay mensaje */}
+          {alerta && (
+            <div className="absolute top-full left-0 w-full mt-2 z-50">
+              <Alerta
+                mensaje={alerta}
+                tipo="error"
+                onCerrar={() => setAlerta("")}
+                flotante // activa estilos flotantes
+              />
+            </div>
+          )}
         </div>
 
         <MainButton
@@ -126,24 +119,6 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
           icon={IconSearch}
         />
       </div>
-
-      {/* Botón de ubicación actual */}
-      <div className="pt-2 w-full">
-        <MainButton
-          onClick={handleUbicacionActual}
-          title="Ubicación actual"
-          icon={IconCurrentLocation}
-          type="button"
-          variant="accent"
-          className="w-full lg:w-full"
-          loading={cargandoUbicacion}
-        >
-          Ubicación actual
-          </MainButton>
-      </div>
-
-      {/* Alerta si hay mensaje */}
-      <Alerta mensaje={alerta} tipo="error" onCerrar={() => setAlerta("")} />
     </div>
   );
 };

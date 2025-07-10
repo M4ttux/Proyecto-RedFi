@@ -13,7 +13,6 @@ const Mapa = () => {
   }, []);
 
   useEffect(() => {
-
     const manejarResize = () => {
       if (window.innerWidth >= 1024) {
         setMostrarFiltros(false);
@@ -85,7 +84,7 @@ const Mapa = () => {
   return (
     <div className="h-[calc(100vh-72px)] w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 h-full relative">
-        <aside className="hidden lg:block lg:col-span-3 bg-[#222222] h-full z-10 overflow-y-auto">
+        <aside className="hidden lg:block lg:col-span-3 bg-[#222222] border border-white/10 h-full z-10 overflow-y-auto">
           <FiltrosZona
             filtros={filtrosTemporales}
             setFiltros={setFiltrosTemporales}
