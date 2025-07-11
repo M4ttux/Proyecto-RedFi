@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { IconX } from "@tabler/icons-react";
+import MainButton from "../ui/MainButton";
 
 const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
   const colores = {
@@ -21,9 +23,11 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
   if (!visible) return null;
 
   return (
-    <div className={`text-white px-4 py-3 rounded mb-4 relative ${colores[tipo]}`}>
+    <div
+      className={`text-white px-4 py-3 rounded mb-4 relative ${colores[tipo]}`}
+    >
       {mensaje}
-      <button
+      {/* <button
         onClick={() => {
           setVisible(false);
           if (onClose) onClose();
@@ -32,7 +36,16 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
         title="Cerrar"
       >
         &times;
-      </button>
+      </button> */}
+      <MainButton
+        onClick={() => {
+          setVisible(false);
+          if (onClose) onClose();
+        }}
+        type="button"
+        variant="cross"
+        title="Cerrara"
+      />
     </div>
   );
 };

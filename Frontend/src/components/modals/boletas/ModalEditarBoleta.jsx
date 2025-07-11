@@ -1,39 +1,48 @@
 import { useState, useEffect } from "react";
+import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
+import Input from "../../ui/Input";
+import FileInput from "../../ui/FileInput";
+import {
+  IconX,
+  IconCalendar,
+  IconCurrencyDollar,
+  IconWifi,
+} from "@tabler/icons-react";
 import { actualizarBoletaConImagen } from "../../../services/boletasService";
 
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar, setAlerta }) => {
   const [form, setForm] = useState({ ...boleta });
   const [archivoNuevo, setArchivoNuevo] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [imagenEliminada, setImagenEliminada] = useState(false);
+
+  useEffect(() => {
+    if (boleta.url_imagen) {
+      setPreview(boleta.url_imagen);
+    }
+  }, [boleta.url_imagen]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setArchivoNuevo(file);
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-    } else {
-      setPreview(null);
-    }
-  };
-
-  const borrarArchivoNuevo = () => {
+  const handleClearImagen = () => {
     setArchivoNuevo(null);
     setPreview(null);
+    setImagenEliminada(true); // marcar que se quiere eliminar
   };
 
   const handleGuardarCambios = async () => {
+    setLoading(true);
     try {
-      await actualizarBoletaConImagen(boleta, form, archivoNuevo);
+      await actualizarBoletaConImagen(boleta, form, archivoNuevo, imagenEliminada);
       setAlerta?.({
         tipo: "exito",
         mensaje: "Boleta modificada correctamente.",
       });
-      window.dispatchEvent(new Event("nueva-boleta"))
+      window.dispatchEvent(new Event("nueva-boleta"));
       onActualizar?.();
       onClose();
     } catch (error) {
@@ -42,108 +51,111 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar, setAlerta }) => {
         tipo: "error",
         mensaje: error.message || "Error al guardar cambios.",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-white text-black p-6 rounded-lg w-full max-w-xl space-y-4">
-        <MainH2 className="text-center">Modificar boleta</MainH2>
+      <div className="bg-[#222222] text-white p-6 rounded-lg w-full max-w-xl border border-white/10">
+        {/* Encabezado */}
+        <div className="flex justify-between mb-4">
+          <MainH2 className="mb-0">Modificar boleta</MainH2>
+          <MainButton
+            onClick={onClose}
+            type="button"
+            variant="cross"
+            title="Cerrar modal"
+            className="px-0"
+          >
+            <IconX size={24} />
+          </MainButton>
+        </div>
 
+        {/* Formulario */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
+          <Input
             name="mes"
             value={form.mes}
             onChange={handleChange}
             placeholder="Mes"
-            className="border p-2 rounded"
+            label="Mes"
           />
-          <input
+          <Input
             name="anio"
             value={form.anio}
             onChange={handleChange}
             placeholder="Año"
-            className="border p-2 rounded"
+            label="Año"
           />
-          <input
+          <Input
             name="monto"
             type="number"
             value={form.monto}
             onChange={handleChange}
             placeholder="Monto"
-            className="border p-2 rounded"
+            label="Monto"
+            icon={IconCurrencyDollar}
           />
-          <input
+          <Input
             name="proveedor"
             value={form.proveedor}
             onChange={handleChange}
             placeholder="Proveedor"
-            className="border p-2 rounded"
+            label="Proveedor"
+            icon={IconWifi}
           />
-          <input
+          <Input
             name="vencimiento"
             type="date"
             value={form.vencimiento}
             onChange={handleChange}
-            className="border p-2 rounded col-span-1 md:col-span-2"
+            label="Fecha de vencimiento"
+            className="md:col-span-2"
+            icon={IconCalendar}
           />
 
-          <div className="md:col-span-2 text-center space-y-2">
-            <label className="block text-black mb-1 font-medium">
-              Nueva imagen (opcional)
-            </label>
-
-            <label className="inline-block bg-gray-200 text-black font-semibold px-6 py-2 rounded cursor-pointer hover:bg-gray-300 transition">
-              Seleccionar imagen
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
-
-            {preview && (
-              <div className="mt-3">
-                <img
-                  src={preview}
-                  alt="Previsualización"
-                  className="mx-auto max-h-40 object-contain border rounded"
-                />
-                <button
-                  onClick={borrarArchivoNuevo}
-                  className="text-red-600 mt-1 hover:underline"
-                >
-                  Quitar imagen seleccionada
-                </button>
-              </div>
-            )}
-
-            {!preview && boleta.url_imagen && (
-              <div className="mt-3">
-                <p className="text-gray-600 mb-1">Imagen actual:</p>
-                <img
-                  src={boleta.url_imagen}
-                  alt="Boleta actual"
-                  className="mx-auto max-h-40 object-contain border rounded"
-                />
-              </div>
-            )}
+          {/* Imagen */}
+          <div className="md:col-span-2 text-center">
+            <FileInput
+              id="archivoNuevo"
+              label="Nueva imagen (opcional)"
+              value={archivoNuevo}
+              onChange={(file) => {
+                setArchivoNuevo(file);
+                setImagenEliminada(false); // si elige una nueva, ya no es una eliminación
+              }}
+              previewUrl={preview}
+              setPreviewUrl={setPreview}
+              existingImage={
+                boleta.url_imagen && !imagenEliminada ? boleta.url_imagen : null
+              }
+              onClear={handleClearImagen}
+            />
           </div>
         </div>
+
+        {/* Acciones */}
         <div className="flex justify-center gap-4 pt-4">
-          <button
+          <MainButton
+            type="button"
+            variant="secondary"
             onClick={onClose}
-            className="bg-gray-400 hover:bg-gray-500 px-4 py-2 rounded text-white font-semibold"
+            disabled={loading}
           >
             Cancelar
-          </button>
-          <button
+          </MainButton>
+
+          <MainButton
+            type="button"
+            variant="primary"
             onClick={handleGuardarCambios}
-            className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded text-white font-semibold"
+            loading={loading}
+            disabled={loading}
           >
             Guardar Cambios
-          </button>
+          </MainButton>
         </div>
       </div>
     </div>

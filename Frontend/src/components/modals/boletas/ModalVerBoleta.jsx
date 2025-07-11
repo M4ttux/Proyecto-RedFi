@@ -5,8 +5,6 @@ import MainH2 from "../../ui/MainH2";
 const ModalVerBoleta = ({
   boleta,
   onClose,
-  onEditar,
-  onEliminar,
   boletaAnterior,
 }) => {
   if (!boleta) return null;
@@ -35,18 +33,19 @@ const ModalVerBoleta = ({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-      <div className="bg-neutral-900 text-white rounded-lg shadow-lg max-w-3xl w-full p-6 relative transition transform duration-300 ease-out scale-95 animate-fadeIn">
-        <MainButton
-          onClick={onClose}
-          type="button"
-          variant="cross"
-          title="Cerrar"
-          className="absolute top-3 right-3"
-        >
-          <IconX size={24} />
-        </MainButton>
-
-        <MainH2 className="text-center">Detalle de boleta</MainH2>
+      <div className="bg-[#222222] text-white p-6 rounded-lg w-full max-w-xl border border-white/10">
+        <div className="flex justify-between mb-4">
+          <MainH2 className="mb-0">Detalle de boleta</MainH2>
+          <MainButton
+            onClick={onClose}
+            type="button"
+            variant="cross"
+            title="Cerrar modal"
+            className="px-0"
+          >
+            <IconX size={24} />
+          </MainButton>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div className="space-y-3 ml-10 mb-2 text-xl">
@@ -82,31 +81,6 @@ const ModalVerBoleta = ({
               className="max-h-[300px] object-contain rounded border"
             />
           </div>
-        </div>
-
-        <div className="flex justify-center gap-4 mt-8 flex-wrap">
-          <a
-            href={boleta.url_imagen}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Ver"
-          >
-            <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded font-bold">
-              <IconEye size={20} /> Ver
-            </button>
-          </a>
-          <button
-            onClick={() => onEditar(boleta)}
-            className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded font-bold"
-          >
-            <IconEdit size={20} /> Editar
-          </button>
-          <button
-            onClick={() => onEliminar(boleta)}
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded font-bold"
-          >
-            <IconTrash size={20} /> Eliminar
-          </button>
         </div>
       </div>
     </div>

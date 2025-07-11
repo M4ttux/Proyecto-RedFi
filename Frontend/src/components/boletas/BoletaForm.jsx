@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import MainButton from "../ui/MainButton";
 import MainH2 from "../ui/MainH2";
-import { IconX } from "@tabler/icons-react";
+import Input from "../ui/Input";
+import FileInput from "../ui/FileInput";
+import {
+  IconX,
+  IconCalendar,
+  IconCurrencyDollar,
+  IconWifi,
+} from "@tabler/icons-react";
 import {
   obtenerUsuarioActual,
   subirImagenBoleta,
@@ -27,16 +34,6 @@ const BoletaForm = ({
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setArchivo(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPreviewUrl(reader.result);
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -81,7 +78,7 @@ const BoletaForm = ({
       if (onBoletaAgregada) onBoletaAgregada();
       if (onActualizarNotificaciones) onActualizarNotificaciones();
       window.dispatchEvent(new Event("nueva-boleta"));
-      
+
       setVista?.("historial");
     } catch (error) {
       console.error(error);
@@ -94,116 +91,70 @@ const BoletaForm = ({
       <MainH2 className="text-center">Carga de boletas</MainH2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white/5 p-6 rounded-lg"
+        className="space-y-6 bg-white/5 border border-white/10 p-6 rounded-lg"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
-          {/* Campos de texto */}
-          <div>
-            <label className="block text-white mb-1">Mes *</label>
-            <input
-              name="mes"
-              value={form.mes}
-              onChange={handleChange}
-              placeholder="Ej. Abril"
-              required
-              className="px-4 py-2 rounded bg-white text-black w-full"
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Input
+            label="Mes *"
+            name="mes"
+            value={form.mes}
+            onChange={handleChange}
+            placeholder="Ej. Abril"
+            required
+          />
 
-          <div>
-            <label className="block text-white mb-1">Año *</label>
-            <input
-              name="anio"
-              value={form.anio}
-              onChange={handleChange}
-              placeholder="Ej. 2025"
-              required
-              className="px-4 py-2 rounded bg-white text-black w-full"
-            />
-          </div>
+          <Input
+            label="Año *"
+            name="anio"
+            value={form.anio}
+            onChange={handleChange}
+            placeholder="Ej. 2025"
+            required
+          />
 
-          <div>
-            <label className="block text-white mb-1">Monto *</label>
-            <input
-              name="monto"
-              type="number"
-              value={form.monto}
-              onChange={handleChange}
-              placeholder="Monto $"
-              required
-              className="px-4 py-2 rounded bg-white text-black w-full"
-            />
-          </div>
+          <Input
+            label="Monto *"
+            name="monto"
+            type="number"
+            value={form.monto}
+            onChange={handleChange}
+            placeholder="Monto $"
+            required
+            icon={IconCurrencyDollar}
+          />
 
-          <div>
-            <label className="block text-white mb-1">Proveedor *</label>
-            <input
-              name="proveedor"
-              value={form.proveedor}
-              onChange={handleChange}
-              placeholder="Ej. Fibertel"
-              required
-              className="px-4 py-2 rounded bg-white text-black w-full"
-            />
-          </div>
+          <Input
+            label="Proveedor *"
+            name="proveedor"
+            value={form.proveedor}
+            onChange={handleChange}
+            placeholder="Ej. Fibertel"
+            required
+            icon={IconWifi}
+          />
 
           <div className="md:col-span-2">
-            <label className="block text-white mb-1">
-              Fecha de vencimiento *
-            </label>
-            <input
+            <Input
+              label="Fecha de vencimiento *"
               name="vencimiento"
               type="date"
               value={form.vencimiento}
               onChange={handleChange}
               required
-              className="px-4 py-2 rounded bg-white text-black w-full"
+              icon={IconCalendar}
             />
           </div>
 
           {/* Selector de imagen */}
           <div className="md:col-span-2 text-center">
-            <label className="block text-white mb-1">
-              Imagen de la boleta *
-            </label>
-            <label className="inline-block bg-white text-black font-semibold px-6 py-2 rounded cursor-pointer hover:bg-gray-200 transition">
-              Seleccionar imagen
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
-
-            {archivo && (
-              <div className="mt-2 text-white flex flex-col items-center">
-                <div className="flex items-center gap-2">
-                  <span>{archivo.name}</span>
-                  <MainButton
-                    type="button"
-                    variant="cross"
-                    onClick={() => {
-                      setArchivo(null);
-                      setPreviewUrl(null);
-                    }}
-                    title="Eliminar imagen"
-                  >
-                    <IconX size={24} />
-                  </MainButton>
-                </div>
-
-                {previewUrl && (
-                  <div className="mt-3">
-                    <img
-                      src={previewUrl}
-                      alt="Previsualización"
-                      className="max-h-48 rounded border"
-                    />
-                  </div>
-                )}
-              </div>
-            )}
+            <FileInput
+              id="archivo"
+              label="Imagen de la boleta *"
+              value={archivo}
+              onChange={setArchivo}
+              previewUrl={previewUrl}
+              setPreviewUrl={setPreviewUrl}
+            />
           </div>
         </div>
 

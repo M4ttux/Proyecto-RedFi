@@ -26,12 +26,12 @@ const Herramientas = () => {
         {/* Contenedor flex o grid */}
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Detector de proveedor */}
-          <div className="w-full bg-white/5 border-t border-white/10 p-8 rounded-lg self-start">
+          <div className="w-full bg-white/5 border border-white/10 p-8 rounded-lg self-start">
             <MainH2>Información de tu red</MainH2>
             <DetectorProveedor />
           </div>
           {/* Test de velocidad */}
-          <div className="w-full bg-white/5 border-t border-white/10 p-8 rounded-lg">
+          <div className="w-full bg-white/5 border border-white/10 p-8 rounded-lg">
             <MainH2>Test de velocidad</MainH2>
             <SpeedTest />
           </div>

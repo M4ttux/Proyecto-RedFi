@@ -10,6 +10,7 @@ import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import Alerta from "../../components/ui/Alerta";
 import Input from "../../components/ui/Input";
+import FileInput from "../../components/ui/FileInput";
 import Select from "../../components/ui/Select";
 import Avatar from "../../components/ui/Avatar";
 
@@ -21,6 +22,7 @@ const EditarPerfil = () => {
     nombre: "",
     proveedor_preferido: "",
     foto: null,
+    eliminarFoto: false,
   });
   const [preview, setPreview] = useState(null);
   const [proveedores, setProveedores] = useState([]);
@@ -122,25 +124,29 @@ const EditarPerfil = () => {
             {/* Avatar */}
             <div className="flex flex-col items-center gap-3">
               <Avatar fotoUrl={preview} nombre={form.nombre} size={30} />
-
-              <label htmlFor="foto" className="w-fit">
-                <MainButton
-                  type="button"
-                  variant="accent"
-                  disabled={loading}
-                  loading={loading}
-                  as="span"
-                >
-                  Subir/Actualizar Foto
-                </MainButton>
-              </label>
-
-              <input
+              <FileInput
                 id="foto"
-                type="file"
-                accept="image/png, image/jpeg, image/webp"
-                onChange={handleFileChange}
-                className="hidden"
+                label="Foto de perfil"
+                value={form.foto}
+                onChange={(file) => {
+                  setForm((prev) => ({
+                    ...prev,
+                    foto: file,
+                    eliminarFoto: !file, // Si no hay file, es porque se eliminó
+                  }));
+
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => setPreview(reader.result);
+                    reader.readAsDataURL(file);
+                  } else {
+                    setPreview(null);
+                  }
+                }}
+                previewUrl={preview}
+                setPreviewUrl={setPreview}
+                disabled={loading}
+                sinPreview={true}
               />
             </div>
 

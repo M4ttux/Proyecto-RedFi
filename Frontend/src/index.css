@@ -72,10 +72,6 @@
   }
 }
 
-select {
-  cursor: pointer;
-}
-
 select option {
   background-color: #393939
 }
@@ -90,6 +86,7 @@ input:-webkit-autofill:focus {
 }
 
 input::-ms-reveal,
+::-webkit-calendar-picker-indicator,
 input::-webkit-credentials-auto-fill-button {
   filter: invert(50%); /* fuerza a blanco */
 }

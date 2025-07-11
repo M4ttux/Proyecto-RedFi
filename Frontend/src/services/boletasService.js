@@ -140,10 +140,19 @@ export const eliminarBoletaConImagen = async (boleta) => {
 export const actualizarBoletaConImagen = async (
   boleta,
   nuevosDatos,
-  nuevaImagen
+  nuevaImagen,
+  eliminarImagen = false
 ) => {
   let url_imagen = boleta.url_imagen;
 
+  // Si el usuario quiere eliminar la imagen (sin subir una nueva)
+  if (eliminarImagen && boleta.url_imagen) {
+    const fileName = boleta.url_imagen.split("/").pop();
+    await supabase.storage.from("boletas").remove([fileName]);
+    url_imagen = null;
+  }
+
+  // Si se sube una nueva imagen
   if (nuevaImagen) {
     // Eliminar imagen anterior si existe
     if (boleta.url_imagen) {
@@ -151,7 +160,6 @@ export const actualizarBoletaConImagen = async (
       await supabase.storage.from("boletas").remove([oldPath]);
     }
 
-    // Subir nueva imagen
     const nuevoNombre = `boleta-${Date.now()}-${nuevaImagen.name}`;
     const { error: errorSubida } = await supabase.storage
       .from("boletas")
@@ -168,7 +176,7 @@ export const actualizarBoletaConImagen = async (
     url_imagen = publicUrlData.publicUrl;
   }
 
-  // Actualizar boleta
+  // Actualizar la boleta con o sin imagen
   const { error } = await supabase
     .from("boletas")
     .update({ ...nuevosDatos, url_imagen })

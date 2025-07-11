@@ -32,8 +32,10 @@ const Select = ({
           disabled={disabled || loading}
           required={required}
           className={classNames(
-            "w-full px-3 py-2 bg-white/5 text-texto rounded-lg border border-white/20",
-            "max-w-full truncate appearance-none pr-10", // quitamos flecha nativa y hacemos espacio
+            "w-full px-3 py-2 bg-white/5 text-texto rounded-lg border transition",
+            "border-white/20 focus:outline-none focus:border-acento focus:ring-1 focus:ring-acento",
+            "appearance-none pr-10 max-w-full truncate",
+            (disabled || loading) && "cursor-not-allowed opacity-70",
             className
           )}
         >

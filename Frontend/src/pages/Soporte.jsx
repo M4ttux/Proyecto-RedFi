@@ -113,7 +113,7 @@ const Soporte = () => {
   }, [mensajes, escribiendo]);
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-neutral-900 border border-neutral-700 rounded-lg shadow-lg p-2 sm:p-4 flex flex-col h-[70vh] sm:h-[700px]">
+    <div className="w-full max-w-lg mx-auto bg-[#222222] border border-white/10 rounded-lg shadow-lg p-2 sm:p-4 flex flex-col h-[70vh] sm:h-[700px]">
       <MainH1 icon={IconMessageChatbot}>Asistente Red-Fi</MainH1>
 
       <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
@@ -127,7 +127,7 @@ const Soporte = () => {
             <div
               className={`p-3 rounded-lg max-w-[80%] ${
                 m.autor === "bot"
-                  ? "bg-neutral-800 text-texto text-left"
+                  ? "bg-white/5 text-texto text-left"
                   : "bg-blue-700 text-white text-right"
               }`}
             >

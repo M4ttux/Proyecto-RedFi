@@ -3,6 +3,7 @@ import { eliminarBoletaConImagen } from "../../services/boletasService";
 import { IconLoader2 } from "@tabler/icons-react";
 import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
 import ModalVerBoleta from "../modals/boletas/ModalVerBoleta";
+import ModalEliminar from "../modals/ModalEliminar";
 import MainH2 from "../ui/MainH2";
 import MainButton from "../ui/MainButton";
 
@@ -10,22 +11,29 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
   const [cargando, setCargando] = useState(true);
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
   const [boletaParaVer, setBoletaParaVer] = useState(null);
+  const [boletaAEliminar, setBoletaAEliminar] = useState(null);
+  const [eliminando, setEliminando] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setCargando(false), 300); // simulamos carga
     return () => clearTimeout(timer);
   }, [boletas]);
 
-  const eliminarBoleta = async (boleta) => {
-    if (!confirm("¿Estás seguro de eliminar esta boleta?")) return;
+  const confirmarEliminacion = async () => {
+    if (!boletaAEliminar) return;
+
     try {
-      await eliminarBoletaConImagen(boleta);
+      setEliminando(true);
+      await eliminarBoletaConImagen(boletaAEliminar);
       setAlerta({ tipo: "exito", mensaje: "Boleta eliminada correctamente." });
       window.dispatchEvent(new Event("nueva-boleta"));
       recargarBoletas?.();
     } catch (error) {
       setAlerta({ tipo: "error", mensaje: "Error al eliminar la boleta." });
       console.error(error);
+    } finally {
+      setEliminando(false);
+      setBoletaAEliminar(null);
     }
   };
 
@@ -115,7 +123,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
                           Editar
                         </MainButton>
                         <MainButton
-                          onClick={() => eliminarBoleta(b)}
+                          onClick={() => setBoletaAEliminar(b)}
                           title="Eliminar boleta"
                           variant="delete"
                         >
@@ -222,14 +230,6 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
               boleta={boletaParaVer}
               boletaAnterior={boletaAnterior}
               onClose={() => setBoletaParaVer(null)}
-              onEditar={(b) => {
-                setBoletaSeleccionada(b);
-                setBoletaParaVer(null);
-              }}
-              onEliminar={(b) => {
-                eliminarBoleta(b);
-                setBoletaParaVer(null);
-              }}
             />
           );
         })()}
@@ -241,6 +241,17 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
           onClose={() => setBoletaSeleccionada(null)}
           onActualizar={recargarBoletas}
           setAlerta={setAlerta}
+        />
+      )}
+
+      {/* MODAL ELIMINAR */}
+      {boletaAEliminar && (
+        <ModalEliminar
+          titulo="Eliminar boleta"
+          descripcion="¿Estás seguro que querés eliminar esta boleta? Esta acción no se puede deshacer."
+          onConfirmar={confirmarEliminacion}
+          onCancelar={() => setBoletaAEliminar(null)}
+          loading={eliminando}
         />
       )}
     </div>

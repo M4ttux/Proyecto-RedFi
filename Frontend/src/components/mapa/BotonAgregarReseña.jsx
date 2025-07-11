@@ -16,6 +16,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña, setAlerta }) => {
         disabled={!usuario}
         variant={usuario ? "accent" : "disabled"}
         className="w-full"
+        title={usuario ? "Agregar reseña" : "Debes iniciar sesión para agregar una reseña"}
       >
         Agregar reseña
       </MainButton>

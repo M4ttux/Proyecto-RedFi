@@ -121,19 +121,19 @@ const Navbar = () => {
                 </MainButton>
 
                 {mostrarNotis && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white text-black rounded shadow-lg z-50 p-4 space-y-2">
+                  <div className="absolute right-0 mt-2 w-72 bg-[#393939] text-texto rounded-lg shadow-lg z-50 p-4 space-y-2">
                     {notificaciones.length === 0 ? (
-                      <p className="text-gray-500 italic text-center">
+                      <p className="text-gray-300 italic text-center">
                         Sin notificaciones
                       </p>
                     ) : (
                       notificaciones.map((msg, i) => (
                         <div
                           key={i}
-                          className="border-b border-gray-200 pb-2 last:border-b-0 flex justify-between items-start gap-2"
+                          className="border-b border-gray-300 pb-2 last:border-b-0 flex justify-between items-start gap-2"
                         >
                           <span className="break-words">{msg}</span>
-                          <button
+                          {/* <button
                             className="text-gray-500 hover:text-red-500 font-bold text-lg leading-none"
                             onClick={() =>
                               setNotificaciones((prev) =>
@@ -143,7 +143,19 @@ const Navbar = () => {
                             title="Cerrar"
                           >
                             ×
-                          </button>
+                          </button> */}
+                          <MainButton
+                            onClick={() =>
+                              setNotificaciones((prev) =>
+                                prev.filter((_, idx) => idx !== i)
+                              )
+                            }
+                            variant="cross"
+                            title="Cerrar"
+                            icon={IconX}
+                            iconSize={20}
+                            className="leading-none p-0"
+                          />
                         </div>
                       ))
                     )}

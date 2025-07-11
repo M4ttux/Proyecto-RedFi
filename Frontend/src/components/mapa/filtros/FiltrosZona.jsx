@@ -141,6 +141,7 @@ const FiltrosZona = ({
           onClick={limpiarFiltros}
           variant="secondary"
           className="w-full sm:w-[35%] h-full"
+          title="Limpiar filtros"
         >
           Limpiar filtros
         </MainButton>
@@ -148,6 +149,7 @@ const FiltrosZona = ({
           onClick={aplicarFiltros}
           variant="accent"
           className="w-full sm:w-[65%] h-full"
+          title="Aplicar filtros"
         >
           Aplicar filtros
         </MainButton>

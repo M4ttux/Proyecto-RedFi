@@ -59,6 +59,7 @@ export const updatePerfilYFoto = async ({
   proveedor_preferido,
   foto,
   preview,
+  eliminarFoto = false,
 }) => {
   const {
     data: { user },
@@ -79,6 +80,17 @@ export const updatePerfilYFoto = async ({
 
   let nuevaUrl = preview;
 
+  const perfilActual = await getPerfil();
+  const urlAntigua = perfilActual.foto_url;
+  const bucketUrl = supabase.storage.from("perfiles").getPublicUrl("")
+    .data.publicUrl;
+
+  if (eliminarFoto && urlAntigua && urlAntigua.startsWith(bucketUrl)) {
+    const rutaAntigua = urlAntigua.replace(bucketUrl, "").replace(/^\/+/, "");
+    await supabase.storage.from("perfiles").remove([rutaAntigua]);
+    nuevaUrl = null;
+  }
+
   if (foto) {
     // Validar tipo
     const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
@@ -97,7 +109,9 @@ export const updatePerfilYFoto = async ({
       const img = new Image();
       img.onload = () => {
         if (img.width > 500 || img.height > 500) {
-          reject(new Error("La resolución máxima permitida es 500x500 píxeles."));
+          reject(
+            new Error("La resolución máxima permitida es 500x500 píxeles.")
+          );
         } else {
           resolve(true);
         }
@@ -108,10 +122,9 @@ export const updatePerfilYFoto = async ({
 
     if (!imagenValida) throw new Error("La imagen no es válida.");
 
-    // 🔍 Obtener ruta antigua para eliminar
-    const perfilActual = await getPerfil();
     const urlAntigua = perfilActual.foto_url;
-    const bucketUrl = supabase.storage.from("perfiles").getPublicUrl("").data.publicUrl;
+    const bucketUrl = supabase.storage.from("perfiles").getPublicUrl("")
+      .data.publicUrl;
 
     if (urlAntigua && urlAntigua.startsWith(bucketUrl)) {
       const rutaAntigua = urlAntigua.replace(bucketUrl, "").replace(/^\/+/, "");
@@ -132,7 +145,9 @@ export const updatePerfilYFoto = async ({
 
     if (uploadError) throw new Error("Error al subir la imagen al servidor.");
 
-    const { data } = supabase.storage.from("perfiles").getPublicUrl(rutaCompleta);
+    const { data } = supabase.storage
+      .from("perfiles")
+      .getPublicUrl(rutaCompleta);
     nuevaUrl = data.publicUrl;
   }
 

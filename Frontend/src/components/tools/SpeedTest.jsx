@@ -5,7 +5,7 @@ const SpeedTest = () => {
     <div>
       <iframe
         src="https://librespeed.org/"
-        className="w-full h-[400px] lg:h-[700px] rounded-lg border border-white/10"
+        className="w-full h-[400px] lg:h-[700px] rounded-lg"
         title="Test de Velocidad"
       />
     </div>
