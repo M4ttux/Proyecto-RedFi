@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase/client";
+import { obtenerBoletasDelUsuario } from "../services/boletasService";
 import BoletaForm from "../components/boletas/BoletaForm";
 import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import BoletasLayout from "../components/boletas/BoletasLayout";
 import { useNotificaciones } from "../components/layout/Navbar";
 import MainButton from "../components/ui/MainButton";
+import Alerta from "../components/ui/Alerta";
 
 const Boletas = () => {
   useEffect(() => {
@@ -15,24 +16,28 @@ const Boletas = () => {
   const { cargarNotificaciones } = useNotificaciones();
 
   const cargarBoletas = async () => {
-    const user = (await supabase.auth.getUser()).data.user;
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from("boletas")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("fecha_carga", { ascending: false }); // 🔽 más nuevas arriba
-
-    if (!error) setBoletas(data);
+    const data = await obtenerBoletasDelUsuario();
+    setBoletas(data);
   };
 
   useEffect(() => {
     cargarBoletas();
   }, []);
 
+  const [alerta, setAlerta] = useState({ tipo: "", mensaje: "" });
+
   return (
     <BoletasLayout>
+      {alerta.mensaje && (
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
+          <Alerta
+            mensaje={alerta.mensaje}
+            tipo={alerta.tipo}
+            onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
+            flotante={true}
+          />
+        </div>
+      )}
       <div className="flex gap-4 justify-center mb-8">
         <MainButton
           variant="toggle"
@@ -54,9 +59,15 @@ const Boletas = () => {
         <BoletaForm
           onBoletaAgregada={cargarBoletas}
           onActualizarNotificaciones={cargarNotificaciones}
+          setAlerta={setAlerta}
+          setVista={setVista}
         />
       ) : (
-        <BoletaHistorial boletas={boletas} recargarBoletas={cargarBoletas} />
+        <BoletaHistorial
+          boletas={boletas}
+          recargarBoletas={cargarBoletas}
+          setAlerta={setAlerta}
+        />
       )}
     </BoletasLayout>
   );

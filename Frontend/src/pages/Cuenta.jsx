@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getPerfil } from "../services/userService";
-import { Link } from "react-router-dom";
+import { getPerfil } from "../services/perfilService";
 import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
@@ -11,7 +10,7 @@ const Cuenta = () => {
     document.title = "Red-Fi | Mi Perfil";
   }, []);
 
-  const { usuario, logout } = useAuth();
+  const { usuario } = useAuth();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
 

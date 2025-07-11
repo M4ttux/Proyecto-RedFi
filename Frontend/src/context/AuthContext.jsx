@@ -1,54 +1,42 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../supabase/client";
-import { useNavigate } from "react-router-dom";
+import {
+  obtenerSesionActual,
+  escucharCambiosDeSesion,
+} from "../services/authService";
 
-// Crear contexto
+// Creamos el contexto
 const AuthContext = createContext();
 
-// Hook personalizado para consumir el contexto
+// Hook para consumir fácilmente el contexto
 export const useAuth = () => useContext(AuthContext);
 
 // Proveedor del contexto
 export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
-  const [loading, setLoading] = useState(true); 
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
-  // Verificar sesión activa al cargar la app
+  // Cargar la sesión inicial y escuchar cambios de sesión
   useEffect(() => {
-    const obtenerUsuario = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUsuario(session?.user || null);
-      setLoading(false); // Marcar como completado
+    const cargarSesion = async () => {
+      try {
+        const session = await obtenerSesionActual();
+        setUsuario(session?.user || null);
+      } catch (error) {
+        console.error("Error al obtener la sesión:", error.message);
+      } finally {
+        setLoading(false);
+      }
     };
-    obtenerUsuario();
 
-    // Escuchar cambios de sesión (login/logout)
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUsuario(session?.user || null);
-    });
+    cargarSesion();
+    const suscripcion = escucharCambiosDeSesion(setUsuario);
 
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    return () => suscripcion.unsubscribe();
   }, []);
 
-  // Login
-  const login = async ({ email, password }) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    navigate("/cuenta");
-  };
-
-  // Logout
-  const logout = async () => {
-    await supabase.auth.signOut();
-    setUsuario(null);
-    navigate("/");
-  };
-
+  // Exponemos únicamente el estado de sesión
   return (
-    <AuthContext.Provider value={{ usuario, login, logout, loading }}>
+    <AuthContext.Provider value={{ usuario, loading }}>
       {children}
     </AuthContext.Provider>
   );

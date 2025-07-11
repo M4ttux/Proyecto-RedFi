@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import MainH2 from "../../ui/MainH2";
-import { supabase } from "../../../supabase/client";
+import { actualizarBoletaConImagen } from "../../../services/boletasService";
 
-const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
+const ModalEditarBoleta = ({ boleta, onClose, onActualizar, setAlerta }) => {
   const [form, setForm] = useState({ ...boleta });
   const [archivoNuevo, setArchivoNuevo] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -27,47 +27,21 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   };
 
   const handleGuardarCambios = async () => {
-    let url_imagen = boleta.url_imagen;
-
-    if (archivoNuevo) {
-      // 1. Eliminar imagen anterior si existía
-      if (boleta.url_imagen) {
-        const oldPath = boleta.url_imagen.split("/").pop();
-        await supabase.storage.from("boletas").remove([oldPath]);
-      }
-
-      // 2. Subir imagen nueva
-      const nuevoNombre = `boleta-${Date.now()}-${archivoNuevo.name}`;
-      const { data: subida, error: errorSubida } = await supabase.storage
-        .from("boletas")
-        .upload(nuevoNombre, archivoNuevo);
-
-      if (errorSubida) {
-        alert("Error al subir la nueva imagen.");
-        console.error(errorSubida);
-        return;
-      }
-
-      const { data: publicUrlData } = supabase.storage
-        .from("boletas")
-        .getPublicUrl(nuevoNombre);
-
-      url_imagen = publicUrlData.publicUrl;
-    }
-
-    // 3. Actualizar en la tabla
-    const { error } = await supabase
-      .from("boletas")
-      .update({ ...form, url_imagen })
-      .eq("id", boleta.id);
-
-    if (error) {
-      alert("Error al guardar cambios.");
-      console.error(error);
-    } else {
-      alert("Boleta modificada correctamente.");
-      if (onActualizar) onActualizar();
+    try {
+      await actualizarBoletaConImagen(boleta, form, archivoNuevo);
+      setAlerta?.({
+        tipo: "exito",
+        mensaje: "Boleta modificada correctamente.",
+      });
+      window.dispatchEvent(new Event("nueva-boleta"))
+      onActualizar?.();
       onClose();
+    } catch (error) {
+      console.error(error);
+      setAlerta?.({
+        tipo: "error",
+        mensaje: error.message || "Error al guardar cambios.",
+      });
     }
   };
 

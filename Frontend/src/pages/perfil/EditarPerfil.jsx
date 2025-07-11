@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { supabase } from "../../supabase/client";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { IconUserCircle } from "@tabler/icons-react";
+import { IconUserEdit } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../services/proveedorService";
+import { getPerfil, updatePerfilYFoto } from "../../services/perfilService";
+
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
+import Alerta from "../../components/ui/Alerta";
+import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
+import Avatar from "../../components/ui/Avatar";
 
 const EditarPerfil = () => {
-  useEffect(() => {
-    document.title = "Red-Fi | Editar Perfil";
-  }, []);
   const { usuario } = useAuth();
   const navigate = useNavigate();
 
@@ -21,30 +22,37 @@ const EditarPerfil = () => {
     proveedor_preferido: "",
     foto: null,
   });
-
   const [preview, setPreview] = useState(null);
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [alerta, setAlerta] = useState({ tipo: "", mensaje: "" });
 
   useEffect(() => {
-    const cargarDatosPerfil = async () => {
+    document.title = "Red-Fi | Editar Perfil";
+  }, []);
+
+  useEffect(() => {
+    const cargarDatos = async () => {
       if (!usuario) return;
 
-      const { data: perfilDB } = await supabase
-        .from("user_profiles")
-        .select("nombre, proveedor_preferido, foto_url")
-        .eq("id", usuario.id)
-        .single();
+      try {
+        const perfilDB = await getPerfil();
 
-      setForm({
-        nombre: perfilDB?.nombre || usuario.user_metadata?.name || "",
-        proveedor_preferido: perfilDB?.proveedor_preferido || "",
-        foto: null,
-      });
+        setForm({
+          nombre: perfilDB?.nombre || usuario.user_metadata?.name || "",
+          proveedor_preferido: perfilDB?.proveedor_preferido || "",
+          foto: null,
+        });
 
-      setPreview(
-        perfilDB?.foto_url || usuario.user_metadata?.foto_perfil || null
-      );
+        setPreview(
+          perfilDB?.foto_url || usuario.user_metadata?.foto_perfil || null
+        );
+      } catch (err) {
+        setAlerta({
+          tipo: "error",
+          mensaje: "Error al cargar el perfil.",
+        });
+      }
     };
 
     const cargarProveedores = async () => {
@@ -52,17 +60,19 @@ const EditarPerfil = () => {
         const data = await obtenerProveedores();
         setProveedores(data);
       } catch (error) {
-        console.error("Error al cargar proveedores:", error);
+        setAlerta({
+          tipo: "error",
+          mensaje: "Error al cargar proveedores.",
+        });
       }
     };
 
-    cargarDatosPerfil();
+    cargarDatos();
     cargarProveedores();
   }, [usuario]);
 
-  const handleInputChange = (e) => {
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -77,122 +87,75 @@ const EditarPerfil = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAlerta({ tipo: "", mensaje: "" });
     setLoading(true);
 
-    let nuevaUrl = preview;
-
-    if (form.foto) {
-      const nombreArchivo = `perfil-${usuario.id}-${Date.now()}`;
-      const { error: uploadError } = await supabase.storage
-        .from("perfiles")
-        .upload(nombreArchivo, form.foto, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      if (uploadError) {
-        alert("Error al subir la imagen");
-        setLoading(false);
-        return;
-      }
-
-      const { data } = supabase.storage
-        .from("perfiles")
-        .getPublicUrl(nombreArchivo);
-      nuevaUrl = data.publicUrl;
+    try {
+      await updatePerfilYFoto({ ...form, preview });
+      setAlerta({
+        tipo: "exito",
+        mensaje: "Perfil actualizado correctamente.",
+      });
+      setTimeout(() => navigate("/cuenta"), 1500);
+    } catch (error) {
+      setAlerta({
+        tipo: "error",
+        mensaje: error?.message || "Ocurrió un error inesperado.",
+      });
     }
 
-    const { error: authError } = await supabase.auth.updateUser({
-      data: {
-        name: form.nombre,
-        foto_perfil: nuevaUrl,
-      },
-    });
-
-    if (authError) {
-      alert("Error al actualizar autenticación");
-      setLoading(false);
-      return;
-    }
-
-    const { error: perfilError } = await supabase
-      .from("user_profiles")
-      .update({
-        nombre: form.nombre,
-        proveedor_preferido: form.proveedor_preferido,
-        foto_url: nuevaUrl,
-      })
-      .eq("id", usuario.id);
-
-    if (perfilError) {
-      alert("Error al guardar en base de datos");
-      setLoading(false);
-      return;
-    }
-
-    alert("Perfil actualizado correctamente");
-    navigate("/cuenta");
+    setLoading(false);
   };
 
   return (
-    <div className="w-full">
-      <section className="max-w-lg py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
-        <MainH1>Editar perfil</MainH1>
+    <div className="w-full bg-fondo flex items-center justify-center px-4 py-8 relative">
+      <div className="w-full max-w-lg">
+        {/* Título */}
+        <div className="w-full text-center mb-8">
+          <MainH1 icon={IconUserEdit}>Editar perfil</MainH1>
+          <p className="mx-auto">Modificá tu información personal.</p>
+        </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white/5 border border-white/20 rounded-lg p-6 space-y-6 shadow-md"
-        >
-          {/* Avatar */}
-          <div className="text-center">
-            <div className="w-30 h-30 rounded-full bg-white/10 border-2 border-white/20 mx-auto mb-3 flex items-center justify-center overflow-hidden">
-              {preview ? (
-                <img
-                  src={preview}
-                  alt="Foto de perfil"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <IconUserCircle size={120} className="text-acento" />
-              )}
+        {/* Card */}
+        <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Avatar */}
+            <div className="flex flex-col items-center gap-3">
+              <Avatar fotoUrl={preview} nombre={form.nombre} size={30} />
+
+              <label htmlFor="foto" className="w-fit">
+                <MainButton
+                  type="button"
+                  variant="accent"
+                  disabled={loading}
+                  loading={loading}
+                  as="span"
+                >
+                  Subir/Actualizar Foto
+                </MainButton>
+              </label>
+
+              <input
+                id="foto"
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                onChange={handleFileChange}
+                className="hidden"
+              />
             </div>
 
-            <label
-              htmlFor="foto"
-              className="inline-block bg-acento hover:bg-orange-600 text-white font-bold py-2 px-4 rounded cursor-pointer transition"
-            >
-              Actualizar Foto
-            </label>
-            <input
-              id="foto"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </div>
-
-          {/* Nombre */}
-          <div>
-            <label className="block text-sm font-medium text-texto mb-2">
-              Nombre *
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Nombre *"
               name="nombre"
               value={form.nombre}
-              onChange={handleInputChange}
-              required
-              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento"
+              onChange={handleChange}
               placeholder="Tu nombre completo"
+              required
               disabled={loading}
             />
-          </div>
 
-          {/* Proveedor preferido */}
-          <div>
             <Select
-              label="Proveedor Preferido"
+              label="Proveedor preferido"
               name="proveedor_preferido"
               value={form.proveedor_preferido}
               onChange={(value) =>
@@ -206,30 +169,29 @@ const EditarPerfil = () => {
               getOptionLabel={(p) => p.nombre}
               disabled={loading}
             />
-          </div>
 
-          {/* Botones */}
-          <div className="flex gap-3">
-            <MainLinkButton
-              type="button"
-              to="/cuenta"
-              disabled={loading}
-              className="flex-1 px-4 py-2"
-              variant="secondary"
-            >
-              Volver
-            </MainLinkButton>
-            <MainButton
-              type="submit"
-              variant="primary"
-              disabled={loading}
-              className="flex-1"
-              loading={loading}
-            >
-              {loading ? "Guardando..." : "Guardar"}
-            </MainButton>
-          </div>
-        </form>
+            <div className="flex gap-3">
+              <MainLinkButton
+                type="button"
+                to="/cuenta"
+                disabled={loading}
+                className="flex-1 px-4 py-2"
+                variant="secondary"
+              >
+                Volver
+              </MainLinkButton>
+              <MainButton
+                type="submit"
+                variant="primary"
+                disabled={loading}
+                className="flex-1"
+                loading={loading}
+              >
+                {loading ? "Guardando..." : "Guardar"}
+              </MainButton>
+            </div>
+          </form>
+        </div>
 
         {/* Link a cambio de contraseña */}
         <div className="text-center mt-6">
@@ -241,7 +203,19 @@ const EditarPerfil = () => {
             Cambiar contraseña
           </MainLinkButton>
         </div>
-      </section>
+
+        {/* Alerta flotante */}
+        {alerta.mensaje && (
+          <div className="absolute left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
+            <Alerta
+              tipo={alerta.tipo}
+              mensaje={alerta.mensaje}
+              onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
+              flotante={true}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

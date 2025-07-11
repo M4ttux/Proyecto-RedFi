@@ -1,7 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { IconCheck } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainButton from "../components/ui/MainButton";

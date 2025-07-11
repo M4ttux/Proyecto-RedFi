@@ -1,10 +1,6 @@
-// components/mapa/BotonAgregarReseña.jsx
-import { useAuth } from "../../context/AuthContext";
 import MainButton from "../ui/MainButton";
 
-const BotonAgregarReseña = ({ onAbrirModalReseña, setAlerta }) => {
-  const { usuario } = useAuth();
-
+const BotonAgregarReseña = ({ usuario, onAbrirModalReseña, setAlerta }) => {
   const handleClick = () => {
     if (!usuario) {
       setAlerta("Debes iniciar sesión para agregar una reseña");

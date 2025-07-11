@@ -1,32 +1,32 @@
-import { useState } from "react";
-import { supabase } from "../../supabase/client";
+import { useEffect, useState } from "react";
+import { eliminarBoletaConImagen } from "../../services/boletasService";
+import { IconLoader2 } from "@tabler/icons-react";
 import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
-import Modal from "../modals/boletas/ModalVerBoleta";
+import ModalVerBoleta from "../modals/boletas/ModalVerBoleta";
 import MainH2 from "../ui/MainH2";
 import MainButton from "../ui/MainButton";
 
-
-const BoletaHistorial = ({ boletas, recargarBoletas }) => {
+const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
+  const [cargando, setCargando] = useState(true);
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
   const [boletaParaVer, setBoletaParaVer] = useState(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setCargando(false), 300); // simulamos carga
+    return () => clearTimeout(timer);
+  }, [boletas]);
+
   const eliminarBoleta = async (boleta) => {
     if (!confirm("¿Estás seguro de eliminar esta boleta?")) return;
-    const { error } = await supabase
-      .from("boletas")
-      .delete()
-      .eq("id", boleta.id);
-    if (error) {
-      alert("Error al eliminar la boleta.");
+    try {
+      await eliminarBoletaConImagen(boleta);
+      setAlerta({ tipo: "exito", mensaje: "Boleta eliminada correctamente." });
+      window.dispatchEvent(new Event("nueva-boleta"));
+      recargarBoletas?.();
+    } catch (error) {
+      setAlerta({ tipo: "error", mensaje: "Error al eliminar la boleta." });
       console.error(error);
-      return;
     }
-    if (boleta.url_imagen) {
-      const fileName = boleta.url_imagen.split("/").pop();
-      await supabase.storage.from("boletas").remove([fileName]);
-    }
-    alert("Boleta eliminada correctamente.");
-    recargarBoletas?.();
   };
 
   const boletasOrdenadas = [...boletas].sort(
@@ -34,11 +34,18 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto relative">
       <MainH2 className="text-center">Historial de boletas</MainH2>
 
-      {boletas.length === 0 ? (
-        <p className="text-white/60 text-center">No cargaste boletas aún.</p>
+      {cargando ? (
+        <div className="flex justify-center items-center text-white/60 gap-2 mt-10">
+          <IconLoader2 className="animate-spin" size={24} />
+          Cargando boletas...
+        </div>
+      ) : boletas.length === 0 ? (
+        <p className="text-white/60 text-center mt-6">
+          No cargaste boletas aún.
+        </p>
       ) : (
         <>
           {/* 🖥️ Tabla en escritorio */}
@@ -69,7 +76,8 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                       {b.proveedor}
                     </td>
                     <td className="px-6 py-4 border border-white/10">
-                      {b.mes}{/*  {b.anio} */}
+                      {b.mes}
+                      {/*  {b.anio} */}
                     </td>
                     <td className="px-6 py-4 border border-white/10">
                       ${parseFloat(b.monto).toFixed(2)}
@@ -210,7 +218,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           const boletaAnterior = boletasOrdenadas[indexActual + 1] || null;
 
           return (
-            <Modal
+            <ModalVerBoleta
               boleta={boletaParaVer}
               boletaAnterior={boletaAnterior}
               onClose={() => setBoletaParaVer(null)}
@@ -232,6 +240,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           boleta={boletaSeleccionada}
           onClose={() => setBoletaSeleccionada(null)}
           onActualizar={recargarBoletas}
+          setAlerta={setAlerta}
         />
       )}
     </div>

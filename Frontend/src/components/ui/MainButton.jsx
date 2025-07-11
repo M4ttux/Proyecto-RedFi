@@ -13,8 +13,10 @@ const Button = ({
   icon: Icon = null,
   iconSize = 24,
   className = "",
+  as = "button",
   ...props
 }) => {
+  const Tag = as;
   // Detectar si se pasó padding personalizado
   const hasPx = /\bpx-\d+\b/.test(className);
   const hasPy = /\bpy-\d+\b/.test(className);
@@ -48,11 +50,13 @@ const Button = ({
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";
 
   // Icono automático si no se pasó uno
-  const autoIcon = !Icon && {
-    see: IconEye,
-    edit: IconEdit,
-    delete: IconTrash,
-  }[variant];
+  const autoIcon =
+    !Icon &&
+    {
+      see: IconEye,
+      edit: IconEdit,
+      delete: IconTrash,
+    }[variant];
 
   const finalClass = classNames(
     baseStyles,
@@ -64,11 +68,11 @@ const Button = ({
   );
 
   return (
-    <button
-      type={type}
+    <Tag
+      type={Tag === "button" ? type : undefined}
       onClick={onClick}
       className={finalClass}
-      disabled={disabled || loading}
+      disabled={Tag === "button" ? disabled || loading : undefined}
       {...props}
     >
       {loading ? (
@@ -78,7 +82,7 @@ const Button = ({
         React.createElement(Icon || autoIcon, { size: iconSize })
       )}
       {children}
-    </button>
+    </Tag>
   );
 };
 

@@ -2,9 +2,18 @@ import { useState } from "react";
 import MainButton from "../ui/MainButton";
 import MainH2 from "../ui/MainH2";
 import { IconX } from "@tabler/icons-react";
-import { supabase } from "../../supabase/client";
+import {
+  obtenerUsuarioActual,
+  subirImagenBoleta,
+  guardarBoleta,
+} from "../../services/boletasService";
 
-const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
+const BoletaForm = ({
+  onBoletaAgregada,
+  onActualizarNotificaciones,
+  setAlerta,
+  setVista,
+}) => {
   const [form, setForm] = useState({
     mes: "",
     anio: "",
@@ -33,45 +42,32 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user = (await supabase.auth.getUser()).data.user;
-    if (!user) return alert("Debes iniciar sesión.");
+    const user = await obtenerUsuarioActual();
+    if (!user) {
+      setAlerta({ tipo: "error", mensaje: "Debes iniciar sesión." });
+      return;
+    }
 
     let url_imagen = null;
 
-    if (archivo) {
-      const fileName = `boleta-${Date.now()}-${archivo.name}`;
-      const { error: uploadError } = await supabase.storage
-        .from("boletas")
-        .upload(fileName, archivo);
-
-      if (uploadError) {
-        console.error("Error al subir imagen:", uploadError.message);
-        alert("Error al subir la imagen.");
-        return;
+    try {
+      if (archivo) {
+        url_imagen = await subirImagenBoleta(archivo);
       }
 
-      const { data: publicUrlData } = supabase.storage
-        .from("boletas")
-        .getPublicUrl(fileName);
+      const vencimientoAjustado = new Date(
+        form.vencimiento + "T12:00:00"
+      ).toISOString();
 
-      url_imagen = publicUrlData.publicUrl;
-    }
+      await guardarBoleta({
+        ...form,
+        user_id: user.id,
+        vencimiento: vencimientoAjustado,
+        url_imagen,
+      });
 
-    // 💡 Corregimos desfase horario sumando hora media
-    const vencimientoAjustado = new Date(form.vencimiento + "T12:00:00").toISOString();
+      setAlerta({ tipo: "exito", mensaje: "Boleta guardada correctamente." });
 
-    const { error } = await supabase.from("boletas").insert({
-      ...form,
-      user_id: user.id,
-      vencimiento: vencimientoAjustado,
-      url_imagen,
-    });
-
-    if (error) {
-      console.error(error);
-      alert("Error al guardar la boleta.");
-    } else {
-      alert("Boleta guardada correctamente.");
       setForm({
         mes: "",
         anio: "",
@@ -85,6 +81,11 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
       if (onBoletaAgregada) onBoletaAgregada();
       if (onActualizarNotificaciones) onActualizarNotificaciones();
       window.dispatchEvent(new Event("nueva-boleta"));
+      
+      setVista?.("historial");
+    } catch (error) {
+      console.error(error);
+      setAlerta({ tipo: "error", mensaje: "Error al guardar la boleta." });
     }
   };
 
@@ -96,6 +97,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
         className="space-y-6 bg-white/5 p-6 rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+          {/* Campos de texto */}
           <div>
             <label className="block text-white mb-1">Mes *</label>
             <input
@@ -159,8 +161,11 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
             />
           </div>
 
+          {/* Selector de imagen */}
           <div className="md:col-span-2 text-center">
-            <label className="block text-white mb-1">Imagen de la boleta *</label>
+            <label className="block text-white mb-1">
+              Imagen de la boleta *
+            </label>
             <label className="inline-block bg-white text-black font-semibold px-6 py-2 rounded cursor-pointer hover:bg-gray-200 transition">
               Seleccionar imagen
               <input
@@ -203,10 +208,7 @@ const BoletaForm = ({ onBoletaAgregada, onActualizarNotificaciones }) => {
         </div>
 
         <div className="flex justify-center">
-          <MainButton
-            type="button"
-            variant="primary"
-          >
+          <MainButton type="submit" variant="primary">
             Guardar boleta
           </MainButton>
         </div>

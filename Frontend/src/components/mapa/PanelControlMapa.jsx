@@ -28,14 +28,6 @@ const PanelControlMapa = ({
 }) => {
   const { usuario } = useAuth();
 
-  const handleClickReseña = () => {
-    if (!usuario) {
-      setAlerta("Debes iniciar sesión para agregar una reseña");
-      return;
-    }
-    onAbrirModalReseña();
-  };
-
   return (
     <div className="p-4 space-y-6">
       <div className="flex justify-between items-center mb-4">
@@ -78,6 +70,7 @@ const PanelControlMapa = ({
 
       {/* Botón de reseña */}
       <BotonAgregarReseña
+        usuario={usuario}
         onAbrirModalReseña={onAbrirModalReseña}
         setAlerta={setAlerta}
       />
