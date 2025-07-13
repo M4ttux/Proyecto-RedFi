@@ -14,6 +14,7 @@ const Select = ({
   loading = false,
   name,
   required = false,
+  isInvalid = false, // ✅ NUEVO
 }) => {
   return (
     <div className="space-y-1 relative">
@@ -33,9 +34,12 @@ const Select = ({
           required={required}
           className={classNames(
             "w-full px-3 py-2 bg-white/5 text-texto rounded-lg border transition",
-            "border-white/20 focus:outline-none focus:border-acento focus:ring-1 focus:ring-acento",
             "appearance-none pr-10 max-w-full truncate",
+            "focus:outline-none focus:ring-1",
             (disabled || loading) && "cursor-not-allowed opacity-70",
+            isInvalid
+              ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+              : "border-white/20 focus:border-acento focus:ring-1 focus:ring-acento",
             className
           )}
         >

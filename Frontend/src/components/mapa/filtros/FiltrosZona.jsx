@@ -64,7 +64,9 @@ const FiltrosZona = ({
           label="Proveedor"
           value={filtros.proveedor?.id || ""}
           onChange={(id) => {
-            const proveedor = proveedores.find((p) => p.id === id) || {
+            const proveedor = proveedores.find(
+              (p) => String(p.id) === String(id)
+            ) || {
               id: "",
               nombre: "Todos los proveedores",
             };

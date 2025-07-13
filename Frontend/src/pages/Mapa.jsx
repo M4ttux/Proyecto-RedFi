@@ -46,23 +46,33 @@ const Mapa = () => {
       const zonasSupabase = await getZonas();
       const proveedoresSupabase = await obtenerProveedores();
 
-      const zonasConProveedor = new Set(
-        proveedoresSupabase.map((p) => p.zona_id).filter(Boolean)
-      );
+      // 🔄 Obtener zonas usadas por proveedores (relación muchos a muchos)
+      const zonasRelacionadas = new Set();
+      proveedoresSupabase.forEach((prov) => {
+        prov.ZonaProveedor?.forEach((rel) => {
+          if (rel.zonas?.id) zonasRelacionadas.add(rel.zonas.id);
+        });
+      });
 
       const zonasFiltradas = zonasSupabase.filter((z) =>
-        zonasConProveedor.has(z.id)
+        zonasRelacionadas.has(z.id)
       );
+
+      // 🔄 Obtener tecnologías únicas desde la relación muchos a muchos
+      const tecnologiasSet = new Set();
+      proveedoresSupabase.forEach((prov) => {
+        prov.ProveedorTecnologia?.forEach((rel) => {
+          if (rel.tecnologias?.tecnologia)
+            tecnologiasSet.add(rel.tecnologias.tecnologia);
+        });
+      });
 
       setZonas([{ id: "", nombre: "Todas las zonas" }, ...zonasFiltradas]);
       setProveedores([
         { id: "", nombre: "Todos los proveedores" },
         ...proveedoresSupabase,
       ]);
-      setTecnologiasUnicas([
-        "",
-        ...new Set(proveedoresSupabase.map((p) => p.tecnologia)),
-      ]);
+      setTecnologiasUnicas(["", ...Array.from(tecnologiasSet)]);
 
       setCargandoZonas(false);
       setCargandoProveedores(false);

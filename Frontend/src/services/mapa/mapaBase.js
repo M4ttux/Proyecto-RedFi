@@ -23,8 +23,25 @@ export const crearMapaBase = (mapContainer, bounds) => {
 
 export const getVisible = (prov, filtros) => {
   if (!filtros) return true;
-  if (filtros.proveedor && prov.id != filtros.proveedor) return false;
-  if (filtros.zona && prov.zona_id != filtros.zona) return false;
-  if (filtros.tecnologia && prov.tecnologia !== filtros.tecnologia) return false;
+
+  // Filtro por proveedor
+  if (filtros.proveedor && String(prov.id) !== String(filtros.proveedor)) return false;
+
+  // Filtro por zona
+  const tieneZona =
+    !filtros.zona ||
+    prov.ZonaProveedor?.some(
+      (rel) => String(rel.zonas?.id) === String(filtros.zona)
+    );
+  if (!tieneZona) return false;
+
+  // Filtro por tecnología
+  const tieneTecnologia =
+    !filtros.tecnologia ||
+    prov.ProveedorTecnologia?.some(
+      (rel) => rel.tecnologias?.tecnologia === filtros.tecnologia
+    );
+  if (!tieneTecnologia) return false;
+
   return true;
 };

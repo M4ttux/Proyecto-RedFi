@@ -1,34 +1,34 @@
 import { supabase } from "../supabase/client";
 
+// Obtener todos los proveedores con tecnologías y zonas
 export const obtenerProveedores = async () => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(`
-      id,
-      nombre,
-      tecnologia,
-      color,
-      zona_id,
-      zonas (
-        geom
+      *,
+      ProveedorTecnologia (
+        tecnologias (*)
+      ),
+      ZonaProveedor (
+        zonas (*)
       )
     `)
     .order("nombre", { ascending: true });
 
-  if (error) throw error
-  return data
-}
+  if (error) throw error;
+  return data;
+};
 
+// Obtener un proveedor por ID con sus reseñas y tecnologías
 export const obtenerProveedorPorId = async (id) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(`
-      id,
-      nombre,
-      tecnologia,
-      color,
-      zona_id,
-      reseñas:reseñas (
+      *,
+      ProveedorTecnologia (
+        tecnologias (*)
+      ),
+      reseñas (
         comentario,
         estrellas,
         created_at,

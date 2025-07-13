@@ -50,12 +50,15 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
   const reseñasCompletasRef = useRef([]);
   const location = useLocation();
 
-  const filtrosNormalizados = useMemo(() => ({
-    zona: filtros?.zona || "",
-    proveedor: filtros?.proveedor || "",
-    tecnologia: filtros?.tecnologia || "",
-    valoracionMin: filtros?.valoracionMin || 0,
-  }), [filtros]);
+  const filtrosNormalizados = useMemo(
+    () => ({
+      zona: filtros?.zona || "",
+      proveedor: filtros?.proveedor || "",
+      tecnologia: filtros?.tecnologia || "",
+      valoracionMin: filtros?.valoracionMin || 0,
+    }),
+    [filtros]
+  );
 
   const filtrosActualesRef = useRef(filtrosNormalizados);
 
@@ -72,31 +75,48 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
 
     if (reseñaFeature) {
       const reseñaId = reseñaFeature.properties.id;
-      const reseñaCompleta = reseñasCompletasRef.current.find((r) => r.id === reseñaId);
+      const reseñaCompleta = reseñasCompletasRef.current.find(
+        (r) => r.id === reseñaId
+      );
 
       if (reseñaCompleta) {
         setReseñaActiva(reseñaCompleta);
       } else {
         const p = reseñaFeature.properties;
-        const proveedorReal = proveedoresRef.current.find((pr) => pr.id === p.proveedor_id);
+        const proveedorReal = proveedoresRef.current.find(
+          (pr) => pr.id === p.proveedor_id
+        );
         const fallback = {
           id: p.id,
           proveedor_id: p.proveedor_id,
           usuario_id: p.usuario_id,
           estrellas: parseInt(p.estrellas) || 0,
           comentario: p.comentario || "Sin comentario",
-          proveedores: proveedorReal ? { nombre: proveedorReal.nombre } : { nombre: `Proveedor ${p.proveedor_id}` },
-          user_profiles: { nombre: `Usuario ${p.usuario_id.substring(0, 8)}...` },
+          proveedores: proveedorReal
+            ? { nombre: proveedorReal.nombre }
+            : { nombre: `Proveedor ${p.proveedor_id}` },
+          user_profiles: {
+            nombre: `Usuario ${p.usuario_id.substring(0, 8)}...`,
+          },
         };
         setReseñaActiva(fallback);
       }
       return;
     }
 
-    const proveedorFeature = features.find((f) => f.layer.id.startsWith("fill-"));
+    const proveedorFeature = features.find((f) =>
+      f.layer.id.startsWith("fill-")
+    );
     if (proveedorFeature) {
-      const proveedorId = proveedorFeature.layer.id.replace("fill-", "");
-      const proveedor = proveedoresRef.current.find((p) => p.id.toString() === proveedorId);
+      const proveedorIdCompuesto = proveedorFeature.layer.id.replace(
+        "fill-",
+        ""
+      );
+      const proveedorId = proveedorIdCompuesto.split("-")[0]; // Extrae solo el prov.id
+      const proveedor = proveedoresRef.current.find(
+        (p) => p.id.toString() === proveedorId
+      );
+
       if (proveedor?.visible) {
         setProveedorActivo(proveedor);
       }
@@ -165,7 +185,11 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
       isMapLoaded.current = true;
 
       try {
-        proveedoresRef.current = await cargarProveedoresEnMapa(map, filtrosNormalizados, null);
+        proveedoresRef.current = await cargarProveedoresEnMapa(
+          map,
+          filtrosNormalizados,
+          null
+        );
         await cargarReseñasIniciales(filtrosNormalizados);
 
         await esperarCapaCargada(map, "reseñas-layer", 5000);
@@ -202,7 +226,11 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
   useEffect(() => {
     if (!mapRef.current || !isMapLoaded.current) return;
     try {
-      actualizarVisibilidadEnMapa(mapRef.current, proveedoresRef, filtrosNormalizados);
+      actualizarVisibilidadEnMapa(
+        mapRef.current,
+        proveedoresRef,
+        filtrosNormalizados
+      );
       actualizarFiltrosReseñas();
     } catch (error) {
       console.error("❌ Error actualizando filtros:", error);

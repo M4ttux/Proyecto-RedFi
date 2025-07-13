@@ -1,24 +1,23 @@
 import { supabase } from "../supabase/client";
 
-// Funcion para obtener todas las reseñas
+// Obtener todas las reseñas
 export const obtenerReseñas = async () => {
-  const { data, error } = await supabase.from("reseñas").select(`
-      id,
-      comentario,
-      estrellas,
-      proveedor_id,
-      usuario_id,
-      created_at,
-      ubicacion,
+  const { data, error } = await supabase
+    .from("reseñas")
+    .select(`
+      *,
       user_profiles:usuario_id (
         nombre,
         foto_url
       ),
       proveedores (
-        nombre,
-        zona_id,
-        tecnologia,
-        zonas ( geom )
+        *,
+        ProveedorTecnologia (
+          tecnologias (*)
+        ),
+        ZonaProveedor (
+          zonas (*)
+        )
       )
     `);
 
@@ -26,7 +25,7 @@ export const obtenerReseñas = async () => {
   return data;
 };
 
-// Funcion para obtener las reseñas del usuario autenticado
+// Obtener reseñas del usuario autenticado
 export const obtenerReseñasUsuario = async () => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -35,16 +34,15 @@ export const obtenerReseñasUsuario = async () => {
     const { data, error } = await supabase
       .from("reseñas")
       .select(`
-        id,
-        comentario,
-        estrellas,
-        proveedor_id,
-        usuario_id,
-        ubicacion,
-        created_at,
+        *,
         proveedores (
-          nombre,
-          tecnologia
+          *,
+          ProveedorTecnologia (
+            tecnologias (*)
+          ),
+          ZonaProveedor (
+            zonas (*)
+          )
         )
       `)
       .eq("usuario_id", user.id)
@@ -57,7 +55,7 @@ export const obtenerReseñasUsuario = async () => {
   }
 };
 
-// Función para actualizar una reseña
+// Actualizar reseña
 export const actualizarReseña = async (id, reseñaData) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -71,18 +69,17 @@ export const actualizarReseña = async (id, reseñaData) => {
         proveedor_id: reseñaData.proveedor_id,
       })
       .eq("id", id)
-      .eq("usuario_id", user.id) // Asegurar que solo pueda editar sus propias reseñas
+      .eq("usuario_id", user.id)
       .select(`
-        id,
-        comentario,
-        estrellas,
-        proveedor_id,
-        usuario_id,
-        ubicacion,
-        created_at,
+        *,
         proveedores (
-          nombre,
-          tecnologia
+          *,
+          ProveedorTecnologia (
+            tecnologias (*)
+          ),
+          ZonaProveedor (
+            zonas (*)
+          )
         )
       `)
       .single();
@@ -94,7 +91,7 @@ export const actualizarReseña = async (id, reseñaData) => {
   }
 };
 
-// Función para eliminar una reseña
+// Eliminar reseña
 export const eliminarReseña = async (id) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -104,7 +101,7 @@ export const eliminarReseña = async (id) => {
       .from("reseñas")
       .delete()
       .eq("id", id)
-      .eq("usuario_id", user.id); // Asegurar que solo pueda eliminar sus propias reseñas
+      .eq("usuario_id", user.id);
 
     if (error) throw error;
     return true;
@@ -113,28 +110,11 @@ export const eliminarReseña = async (id) => {
   }
 };
 
-// Función para crear reseñas
+// Crear reseña
 export const crearReseña = async (reseñaData) => {
   try {
-    // Obtener usuario autenticado
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
-
-    // 🔎 Intentar obtener el nombre del usuario desde user_profiles
-    const { data: perfil, error: perfilError } = await supabase
-      .from("user_profiles")
-      .select("nombre")
-      .eq("id", user.id)
-      .single();
-
-    if (perfilError) {
-      console.warn(
-        "⚠️ No se pudo obtener nombre desde user_profiles:",
-        perfilError
-      );
-    }
 
     const datosReseña = {
       comentario: reseñaData.comentario,
@@ -147,39 +127,28 @@ export const crearReseña = async (reseñaData) => {
       },
     };
 
-    // Insertar y recuperar con relaciones
     const { data: reseñaCompleta, error: insertError } = await supabase
       .from("reseñas")
       .insert([datosReseña])
-      .select(
-        `
-        id,
-        comentario,
-        estrellas,
-        proveedor_id,
-        usuario_id,
-        ubicacion,
+      .select(`
+        *,
         user_profiles:usuario_id (
           nombre,
           foto_url
         ),
         proveedores (
-          nombre,
-          zona_id,
-          tecnologia,
-          zonas ( geom )
+          *,
+          ProveedorTecnologia (
+            tecnologias (*)
+          ),
+          ZonaProveedor (
+            zonas (*)
+          )
         )
-      `
-      )
+      `)
       .single();
 
-    if (insertError) {
-      console.error("❌ Error insertando reseña:", insertError);
-      throw insertError;
-    }
-
-    console.log("🧪 Reseña completa con relaciones Supabase:", reseñaCompleta);
-
+    if (insertError) throw insertError;
 
     return reseñaCompleta;
   } catch (error) {

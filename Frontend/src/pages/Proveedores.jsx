@@ -29,6 +29,10 @@ const Proveedores = () => {
     );
   }
 
+  const tecnologias = proveedor?.ProveedorTecnologia?.map(
+    (rel) => rel.tecnologias?.tecnologia
+  ) || [];
+
   return (
     <div className="w-full bg-fondo px-4 sm:px-6 py-16">
       <div className="max-w-4xl mx-auto">
@@ -44,13 +48,17 @@ const Proveedores = () => {
           {/* Nombre */}
           <MainH1>{proveedor.nombre}</MainH1>
 
-          {/* Tecnología */}
-          <p className="text-white/70 mt-2">
-            Tecnología:{" "}
-            <span className="font-medium text-texto">
-              {proveedor.tecnologia || "No especificada"}
-            </span>
-          </p>
+          {/* Tecnologías */}
+          {tecnologias.length > 0 ? (
+            <p className="text-white/70 mt-2">
+              Tecnologías:{" "}
+              <span className="font-medium text-texto">
+                {tecnologias.join(", ")}
+              </span>
+            </p>
+          ) : (
+            <p className="text-white/60 mt-2">Tecnologías no especificadas</p>
+          )}
 
           {/* Descripción breve */}
           <p className="text-sm text-white/70 mt-4 max-w-xl mx-auto leading-relaxed">
@@ -58,7 +66,7 @@ const Proveedores = () => {
               "Proveedor destacado en Corrientes por su cobertura, estabilidad y servicio al cliente. Red-Fi lo destaca por su presencia activa en múltiples zonas urbanas y rurales."}
           </p>
 
-          {/* Botón sitio web (siempre visible) */}
+          {/* Botón sitio web */}
           <a
             href={proveedor.sitio_web || "https://www.google.com"}
             target="_blank"
@@ -98,7 +106,7 @@ const Proveedores = () => {
                     key={r.id}
                     className="bg-white/5 border border-white/10 p-5 rounded-xl flex flex-col gap-3"
                   >
-                    {/* Usuario + estrellas en una fila */}
+                    {/* Usuario + estrellas */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         {fotoUrl ? (

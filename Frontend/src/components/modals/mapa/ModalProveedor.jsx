@@ -1,8 +1,8 @@
-
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainLinkButton from "../../ui/MainLinkButton";
 import MainH2 from "../../ui/MainH2";
+
 const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   if (!proveedor) return null;
 
@@ -12,9 +12,10 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   const descripcionPlaceholder =
     "Proveedor destacado en la región, reconocido por su estabilidad y atención al cliente.";
 
-  const tecnologias = Array.isArray(proveedor.tecnologia)
-    ? proveedor.tecnologia
-    : [proveedor.tecnologia];
+  // ✅ Obtener tecnologías desde la relación muchos a muchos
+  const tecnologias = proveedor.ProveedorTecnologia?.map(
+    (rel) => rel.tecnologias?.tecnologia
+  ) || [];
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
@@ -57,14 +58,18 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
 
         {/* Tecnologías */}
         <div className="flex flex-wrap justify-center gap-2 mb-4">
-          {tecnologias.map((tec, index) => (
-            <span
-              key={index}
-              className="bg-white/10 border border-white/20 text-xs px-3 py-1 rounded-full"
-            >
-              {tec}
-            </span>
-          ))}
+          {tecnologias.length > 0 ? (
+            tecnologias.map((tec, index) => (
+              <span
+                key={index}
+                className="bg-white/10 border border-white/20 text-xs px-3 py-1 rounded-full"
+              >
+                {tec}
+              </span>
+            ))
+          ) : (
+            <span className="text-sm text-texto/60">Sin tecnologías asociadas</span>
+          )}
         </div>
 
         {/* Descripción */}

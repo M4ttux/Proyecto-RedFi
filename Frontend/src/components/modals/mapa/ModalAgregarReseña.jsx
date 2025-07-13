@@ -5,6 +5,7 @@ import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Select from "../../ui/Select";
 import Alerta from "../../ui/Alerta";
+import Textarea from "../../ui/Textarea";
 
 const ModalAgregarReseña = ({
   isOpen,
@@ -16,11 +17,15 @@ const ModalAgregarReseña = ({
   onSeleccionarUbicacion,
 }) => {
   const [proveedores, setProveedores] = useState([]);
-  const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
+  const [proveedorSeleccionado, setProveedorSeleccionado] =
+    useState("__disabled__");
   const [comentario, setComentario] = useState("");
   const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
   const [alerta, setAlerta] = useState("");
+  const [errorProveedor, setErrorProveedor] = useState(false);
+  const [errorUbicacion, setErrorUbicacion] = useState(false);
+  const [errorComentario, setErrorComentario] = useState(false);
 
   const estrellasOptions = [1, 2, 3, 4, 5];
 
@@ -29,12 +34,23 @@ const ModalAgregarReseña = ({
       const data = await obtenerProveedores();
       setProveedores(data);
     };
-    if (isOpen) cargarProveedores();
+    if (isOpen) {
+      cargarProveedores();
+      setProveedorSeleccionado("__disabled__");
+      setComentario("");
+      setUbicacionTexto("");
+      setEstrellas(5);
+      setErrorProveedor(false);
+      setErrorUbicacion(false);
+      setErrorComentario(false);
+      setAlerta("");
+    }
   }, [isOpen]);
 
   useEffect(() => {
     if (coordenadasSeleccionadas) {
       convertirCoordenadasATexto(coordenadasSeleccionadas);
+      setErrorUbicacion(false);
     }
   }, [coordenadasSeleccionadas]);
 
@@ -59,12 +75,32 @@ const ModalAgregarReseña = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!comentario.trim() || !proveedorSeleccionado) {
-      setAlerta("Debes completar todos los campos.");
-      return;
+    let mensajeError = "";
+    let hayError = false;
+
+    const proveedorInvalido = proveedorSeleccionado === "__disabled__";
+    setErrorProveedor(proveedorInvalido);
+    if (proveedorInvalido && !mensajeError) {
+      mensajeError = "Debes seleccionar un proveedor.";
+      hayError = true;
     }
-    if (!coordenadasSeleccionadas) {
-      setAlerta("Debes seleccionar una ubicación en el mapa.");
+
+    const ubicacionInvalida = !coordenadasSeleccionadas;
+    setErrorUbicacion(ubicacionInvalida);
+    if (ubicacionInvalida && !mensajeError) {
+      mensajeError = "Debes seleccionar una ubicación en el mapa.";
+      hayError = true;
+    }
+
+    const comentarioInvalido = !comentario.trim();
+    setErrorComentario(comentarioInvalido);
+    if (comentarioInvalido && !mensajeError) {
+      mensajeError = "Debes escribir un comentario.";
+      hayError = true;
+    }
+
+    if (hayError) {
+      setAlerta(mensajeError);
       return;
     }
 
@@ -76,10 +112,6 @@ const ModalAgregarReseña = ({
       ubicacionTexto,
     });
 
-    setComentario("");
-    setProveedorSeleccionado("");
-    setUbicacionTexto("");
-    setEstrellas(5);
     onClose();
   };
 
@@ -125,15 +157,19 @@ const ModalAgregarReseña = ({
           <Select
             label="Proveedor *"
             value={proveedorSeleccionado}
-            onChange={(id) => setProveedorSeleccionado(id)}
+            onChange={(id) => {
+              setProveedorSeleccionado(id);
+              setErrorProveedor(false);
+            }}
             options={[
               { id: "__disabled__", nombre: "Todos los Proveedores" },
               ...proveedores,
             ]}
             getOptionValue={(p) => p.id}
             getOptionLabel={(p) => p.nombre}
+            loading={proveedores.length === 0}
             required
-            className="disabled:opacity-50"
+            isInvalid={errorProveedor}
             renderOption={(p) => (
               <option
                 key={p.id}
@@ -146,6 +182,7 @@ const ModalAgregarReseña = ({
             )}
           />
 
+          {/* Ubicación */}
           <div className="space-y-2">
             <label className="block font-medium text-texto">Ubicación *</label>
             {coordenadasSeleccionadas ? (
@@ -163,17 +200,32 @@ const ModalAgregarReseña = ({
                 </p>
               </div>
             ) : (
-              <div className="bg-texto/5 border border-texto/20 rounded-lg p-3">
-                <p className="text-texto/60 mb-2">
+              <div
+                className={`rounded-lg p-3 transition border ${
+                  errorUbicacion
+                    ? "bg-red-500/10 border-red-500/50"
+                    : "bg-texto/5 border-texto/20"
+                }`}
+              >
+                <p
+                  className={`mb-2 ${
+                    errorUbicacion ? "text-red-400" : "text-texto/60"
+                  }`}
+                >
                   No has seleccionado una ubicación
                 </p>
               </div>
             )}
+
             <MainButton
               type="button"
               onClick={onSeleccionarUbicacion}
               variant="primary"
-              className="w-full"
+              className={`w-full ${
+                errorUbicacion
+                  ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900"
+                  : ""
+              }`}
               title="Seleccionar ubicación en el mapa"
               icon={IconMapPin}
             >
@@ -193,19 +245,18 @@ const ModalAgregarReseña = ({
             getOptionLabel={(e) => `${e}★`}
           />
 
-          <div>
-            <label className="block mb-1 font-medium text-texto">
-              Comentario *
-            </label>
-            <textarea
-              value={comentario}
-              onChange={(e) => setComentario(e.target.value)}
-              className="w-full p-2 rounded bg-secundario text-texto"
-              placeholder="Escribe tu opinión..."
-              required
-              rows={3}
-            />
-          </div>
+          <Textarea
+            label="Comentario *"
+            name="comentario"
+            value={comentario}
+            onChange={(e) => {
+              setComentario(e.target.value);
+              setErrorComentario(false);
+            }}
+            placeholder="Escribe tu opinión..."
+            required
+            isInvalid={errorComentario}
+          />
 
           <MainButton type="submit" variant="primary" className="w-full">
             Enviar Reseña
@@ -213,7 +264,7 @@ const ModalAgregarReseña = ({
 
           <Alerta
             mensaje={alerta}
-            tipo="error" // o "exito", "info", "advertencia"
+            tipo="error"
             onCerrar={() => setAlerta("")}
           />
         </form>
