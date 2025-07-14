@@ -41,6 +41,18 @@ const Herramientas = () => {
         <div className="bg-white/5 mx-auto max-w-7xl border border-white/10 p-8 rounded-lg">
           <div className="w-full text-center">
             <MainH2>Análisis de conexión por zonas de tu casa</MainH2>
+            <div className=" text-gray-300 p-4 rounded mb-6 text-sm leading-relaxed">
+              <p>
+                📶 Medí la calidad de tu Wi-Fi en distintas zonas de tu casa
+                ingresando un nombre (ej: <strong>Living</strong>,{" "}
+                <strong>Pieza</strong>, <strong>Balcón</strong>) y ejecutando el
+                test.
+              </p>
+              <p className="mt-2">
+                🔍 Ideal para encontrar el mejor lugar para ubicar el módem o
+                comparar el rendimiento por sector.
+              </p>
+            </div>
           </div>
           <WifiScanner />
         </div>

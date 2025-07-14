@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
-import Select from "../ui/Select";
 import Alerta from "../ui/Alerta";
-
-const ZONAS = ["Seleccionar una zona", "Pieza", "Living", "Segundo piso"];
+import Input from "../ui/Input";
 
 const WifiScanner = () => {
-  const [zonaSeleccionada, setZonaSeleccionada] = useState("");
+  const [nombreZona, setNombreZona] = useState("");
   const [resultados, setResultados] = useState({});
   const [recomendacion, setRecomendacion] = useState("");
   const [alertaError, setAlertaError] = useState("");
@@ -33,8 +31,8 @@ const WifiScanner = () => {
   }, []);
 
   const medirZona = () => {
-    if (!zonaSeleccionada || zonaSeleccionada === "Seleccionar una zona") {
-      setAlertaError("Debés seleccionar una zona antes de medir.");
+    if (!nombreZona.trim()) {
+      setAlertaError("Debés escribir un nombre para la zona.");
       return;
     }
 
@@ -50,10 +48,11 @@ const WifiScanner = () => {
     setEnProgreso(true);
 
     t.onupdate = (data) => {
+      console.log("📡 Datos obtenidos:", data);
       if (data.testState === 4 && !datosSeteados) {
         setResultados((prev) => ({
           ...prev,
-          [zonaSeleccionada]: {
+          [nombreZona]: {
             ping: parseFloat(data.pingStatus) || 0,
             jitter: parseFloat(data.jitterStatus) || 0,
           },
@@ -61,6 +60,7 @@ const WifiScanner = () => {
         datosSeteados = true;
         t.abort();
         setEnProgreso(false);
+        setNombreZona("");
       }
     };
 
@@ -97,7 +97,7 @@ const WifiScanner = () => {
   const reiniciarAnalisis = () => {
     setResultados({});
     setRecomendacion("");
-    setZonaSeleccionada("");
+    setNombreZona("");
     setAlertaError("");
   };
 
@@ -110,25 +110,26 @@ const WifiScanner = () => {
   return (
     <div className="p-6 rounded-lg mx-auto text-white max-w-2xl relative">
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-4 text-center">
-        <Select
-          name="zona"
-          value={zonaSeleccionada}
-          onChange={(val) => {
-            setZonaSeleccionada(val);
-            setAlertaError("");
-          }}
-          options={ZONAS}
-          getOptionValue={(opt) => opt}
-          getOptionLabel={(opt) => opt}
-          isInvalid={!!alertaError}
-        />
+        <div className="w-full md:w-1/2">
+          <Input
+            name="zona"
+            value={nombreZona}
+            onChange={(e) => {
+              setNombreZona(e.target.value);
+              setAlertaError("");
+            }}
+            placeholder="Escribí el nombre de la zona (ej: Comedor)"
+            required
+            isInvalid={!!alertaError}
+          />
+        </div>
 
         <MainButton
           onClick={medirZona}
           disabled={enProgreso}
           loading={enProgreso}
         >
-          Medir conexión
+          {enProgreso ? "Analizando..." : "Medir conexión"}
         </MainButton>
       </div>
 
@@ -167,13 +168,12 @@ const WifiScanner = () => {
         </div>
       )}
 
-      <div className="mt-6 flex flex-col items-center gap-4">
-        <MainButton onClick={recomendarUbicacion} variant="accent">
-          Recomendar ubicación
-        </MainButton>
-
+      <div className="w-full mt-6 flex flex-row items-center justify-center gap-4">
         <MainButton onClick={reiniciarAnalisis} variant="danger">
           Reiniciar análisis
+        </MainButton>
+        <MainButton onClick={recomendarUbicacion} variant="accent">
+          Recomendar ubicación
         </MainButton>
       </div>
 

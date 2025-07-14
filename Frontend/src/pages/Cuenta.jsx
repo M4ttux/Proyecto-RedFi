@@ -119,6 +119,14 @@ const Cuenta = () => {
             <p>Gestione su plan y descubra nuestros beneficios.</p>
           </MainLinkButton>
         </div>
+
+        {/* Glosario de Redes */}
+        <div>
+          <MainLinkButton to="/glosario" variant="card">
+            <MainH3>Glosario de redes</MainH3>
+            <p>Buscá términos como IP, ping, latencia y más.</p>
+          </MainLinkButton>
+        </div>
       </section>
     </div>
   );
