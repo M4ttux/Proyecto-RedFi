@@ -2,9 +2,7 @@ import { supabase } from "../supabase/client";
 
 // Obtener todas las reseñas
 export const obtenerReseñas = async () => {
-  const { data, error } = await supabase
-    .from("reseñas")
-    .select(`
+  const { data, error } = await supabase.from("reseñas").select(`
       *,
       user_profiles:usuario_id (
         nombre,
@@ -28,12 +26,15 @@ export const obtenerReseñas = async () => {
 // Obtener reseñas del usuario autenticado
 export const obtenerReseñasUsuario = async () => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const { data, error } = await supabase
       .from("reseñas")
-      .select(`
+      .select(
+        `
         *,
         proveedores (
           *,
@@ -43,8 +44,13 @@ export const obtenerReseñasUsuario = async () => {
           ZonaProveedor (
             zonas (*)
           )
+        ),
+        user_profiles (
+          nombre,
+          foto_url
         )
-      `)
+      `
+      )
       .eq("usuario_id", user.id)
       .order("created_at", { ascending: false });
 
@@ -58,7 +64,9 @@ export const obtenerReseñasUsuario = async () => {
 // Actualizar reseña
 export const actualizarReseña = async (id, reseñaData) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const { data, error } = await supabase
@@ -70,7 +78,8 @@ export const actualizarReseña = async (id, reseñaData) => {
       })
       .eq("id", id)
       .eq("usuario_id", user.id)
-      .select(`
+      .select(
+        `
         *,
         proveedores (
           *,
@@ -81,7 +90,8 @@ export const actualizarReseña = async (id, reseñaData) => {
             zonas (*)
           )
         )
-      `)
+      `
+      )
       .single();
 
     if (error) throw error;
@@ -94,7 +104,9 @@ export const actualizarReseña = async (id, reseñaData) => {
 // Eliminar reseña
 export const eliminarReseña = async (id) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const { error } = await supabase
@@ -113,7 +125,9 @@ export const eliminarReseña = async (id) => {
 // Crear reseña
 export const crearReseña = async (reseñaData) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const datosReseña = {
@@ -130,7 +144,8 @@ export const crearReseña = async (reseñaData) => {
     const { data: reseñaCompleta, error: insertError } = await supabase
       .from("reseñas")
       .insert([datosReseña])
-      .select(`
+      .select(
+        `
         *,
         user_profiles:usuario_id (
           nombre,
@@ -145,7 +160,8 @@ export const crearReseña = async (reseñaData) => {
             zonas (*)
           )
         )
-      `)
+      `
+      )
       .single();
 
     if (insertError) throw insertError;

@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import DetectorProveedor from "../components/tools/DetectorProveedor";
 import SpeedTest from "../components/tools/SpeedTest";
-import { IconTool } from '@tabler/icons-react';
+import WifiScanner from "../components/tools/WifiScanner";
+import { IconTool } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 
-
 const Herramientas = () => {
-
   useEffect(() => {
     document.title = "Red-Fi | Herramientas";
   }, []);
@@ -19,7 +18,8 @@ const Herramientas = () => {
         <div className="w-full text-center">
           <MainH1 icon={IconTool}>Herramientas Red-Fi</MainH1>
           <p className="mx-auto">
-            Ejecute pruebas clave y obtenga información útil sobre su red actual.
+            Ejecute pruebas clave y obtenga información útil sobre su red
+            actual.
           </p>
         </div>
 
@@ -35,6 +35,14 @@ const Herramientas = () => {
             <MainH2>Test de velocidad</MainH2>
             <SpeedTest />
           </div>
+        </div>
+
+        {/* WifiScanner – análisis por zona */}
+        <div className="bg-white/5 mx-auto max-w-7xl border border-white/10 p-8 rounded-lg">
+          <div className="w-full text-center">
+            <MainH2>Análisis de conexión por zonas de tu casa</MainH2>
+          </div>
+          <WifiScanner />
         </div>
       </section>
     </div>

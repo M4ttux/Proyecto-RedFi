@@ -8,22 +8,28 @@ import {
 import {
   IconCarambolaFilled,
   IconCarambola,
-  IconEdit,
-  IconTrash,
   IconCalendar,
+  IconLoader2,
 } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
+import ModalEliminar from "../components/modals/ModalEliminar";
+import ModalReseña from "../components/modals/mapa/ModalReseña";
 import MainH1 from "../components/ui/MainH1";
 import MainH3 from "../components/ui/MainH3";
 import MainButton from "../components/ui/MainButton";
+import Alerta from "../components/ui/Alerta";
+import Table from "../components/ui/Table";
 
 const Reseñas = () => {
+  const [reseñaParaVer, setReseñaParaVer] = useState(null);
   const { usuario } = useAuth();
   const [reseñas, setReseñas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [alerta, setAlerta] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reseñaEditando, setReseñaEditando] = useState(null);
+  const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
+  const [eliminando, setEliminando] = useState(false);
 
   useEffect(() => {
     document.title = "Red-Fi | Mis Reseñas";
@@ -33,12 +39,11 @@ const Reseñas = () => {
     const cargarReseñas = async () => {
       if (usuario) {
         try {
-          setError(null);
           const data = await obtenerReseñasUsuario();
           setReseñas(data);
         } catch (error) {
           console.error("Error al cargar reseñas:", error);
-          setError(error.message);
+          setAlerta({ tipo: "error", mensaje: "Error al cargar las reseñas." });
         } finally {
           setLoading(false);
         }
@@ -64,21 +69,40 @@ const Reseñas = () => {
       );
       setIsModalOpen(false);
       setReseñaEditando(null);
+      setAlerta({
+        tipo: "exito",
+        mensaje: "Reseña actualizada correctamente.",
+      });
     } catch (error) {
       console.error("Error al actualizar reseña:", error);
-      setError(error.message);
+      setAlerta({
+        tipo: "error",
+        mensaje: "Ocurrió un error al actualizar la reseña.",
+      });
     }
   };
 
-  const handleEliminarReseña = async (id) => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta reseña?")) {
-      try {
-        await eliminarReseña(id);
-        setReseñas(reseñas.filter((r) => r.id !== id));
-      } catch (error) {
-        console.error("Error al eliminar reseña:", error);
-        setError(error.message);
-      }
+  const handleEliminarReseña = (reseña) => {
+    setReseñaAEliminar(reseña);
+  };
+
+  const confirmarEliminacion = async () => {
+    if (!reseñaAEliminar) return;
+
+    try {
+      setEliminando(true);
+      await eliminarReseña(reseñaAEliminar.id);
+      setReseñas(reseñas.filter((r) => r.id !== reseñaAEliminar.id));
+      setAlerta({ tipo: "exito", mensaje: "Reseña eliminada correctamente." });
+    } catch (error) {
+      console.error("Error al eliminar reseña:", error);
+      setAlerta({
+        tipo: "error",
+        mensaje: "Ocurrió un error al eliminar la reseña.",
+      });
+    } finally {
+      setEliminando(false);
+      setReseñaAEliminar(null);
     }
   };
 
@@ -105,6 +129,78 @@ const Reseñas = () => {
     );
   };
 
+  const columnas = [
+    {
+      id: "proveedor",
+      label: "Proveedor",
+      renderCell: (r) => (
+        <div>
+          <div className="text-sm font-medium text-texto">
+            {r.proveedores?.nombre || "Proveedor no disponible"}
+          </div>
+          {r.proveedores?.tecnologia && (
+            <div className="text-sm text-white/60">
+              {r.proveedores.tecnologia}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "calificacion",
+      label: "Calificación",
+      renderCell: (r) => renderEstrellas(r.estrellas),
+    },
+    {
+      id: "comentario",
+      label: "Comentario",
+      renderCell: (r) => (
+        <div className="text-sm text-texto max-w-xs truncate">
+          {r.comentario}
+        </div>
+      ),
+    },
+    {
+      id: "fecha",
+      label: "Fecha",
+      renderCell: (r) => (
+        <div className="flex items-center text-sm text-white/60">
+          <IconCalendar size={16} className="mr-2" />
+          {formatearFecha(r.created_at)}
+        </div>
+      ),
+    },
+    {
+      id: "acciones",
+      label: "Acciones",
+      renderCell: (r) => (
+        <div className="flex gap-2">
+          <MainButton
+            onClick={() => setReseñaParaVer(r)}
+            variant="see"
+            title="Ver reseña"
+          >
+            Ver
+          </MainButton>
+          <MainButton
+            onClick={() => handleEditarReseña(r)}
+            variant="edit"
+            title="Editar reseña"
+          >
+            Editar
+          </MainButton>
+          <MainButton
+            onClick={() => handleEliminarReseña(r)}
+            variant="delete"
+            title="Eliminar reseña"
+          >
+            Eliminar
+          </MainButton>
+        </div>
+      ),
+    },
+  ];
+
   if (!usuario) {
     return (
       <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
@@ -119,16 +215,18 @@ const Reseñas = () => {
     return (
       <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
         <div className="max-w-7xl mx-auto pt-16 text-center">
-          <p className="text-texto text-lg">Cargando tus reseñas...</p>
+          <div className="flex justify-center items-center text-white/60 gap-2 mt-10">
+            <IconLoader2 className="animate-spin" size={24} />
+            Cargando reseñas...
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
+    <div className="self-start w-full bg-fondo px-4 sm:px-6 pb-12 relative">
       <div className="max-w-7xl mx-auto pt-16">
-        {/* Header */}
         <div className="text-center mb-8">
           <MainH1>Mis reseñas</MainH1>
           <p className="text-white/70 text-lg">
@@ -136,105 +234,33 @@ const Reseñas = () => {
           </p>
         </div>
 
-        {/* Error */}
-        {error && (
-          <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-red-200 text-center mb-6">
-            {error}
+        {alerta && (
+          <div className="mb-6">
+            <Alerta
+              mensaje={alerta.mensaje}
+              tipo={alerta.tipo}
+              onCerrar={() => setAlerta(null)}
+              flotante={true}
+            />
           </div>
         )}
 
-        {/* Contenido */}
         {reseñas.length === 0 ? (
           <div className="text-center py-12">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-8">
               <MainH3>No tienes reseñas publicadas</MainH3>
               <p className="text-white/70 mb-4">
                 Comienza compartiendo tu experiencia con diferentes proveedores
-                de internet
+                de internet.
               </p>
             </div>
           </div>
         ) : (
           <>
-            {/* Vista Desktop - Tabla */}
             <div className="hidden lg:block">
-              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-white/10">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-texto uppercase tracking-wider">
-                        Proveedor
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-texto uppercase tracking-wider">
-                        Calificación
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-texto uppercase tracking-wider">
-                        Comentario
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-texto uppercase tracking-wider">
-                        Fecha
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-texto uppercase tracking-wider">
-                        Acciones
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {reseñas.map((reseña) => (
-                      <tr key={reseña.id}>
-                        <td className="px-6 py-4">
-                          <div>
-                            <div className="text-sm font-medium text-texto">
-                              {reseña.proveedores?.nombre ||
-                                "Proveedor no disponible"}
-                            </div>
-                            {reseña.proveedores?.tecnologia && (
-                              <div className="text-sm text-white/60">
-                                {reseña.proveedores.tecnologia}
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          {renderEstrellas(reseña.estrellas)}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-sm text-texto max-w-xs truncate">
-                            {reseña.comentario}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center text-sm text-white/60">
-                            <IconCalendar size={16} className="mr-2" />
-                            {formatearFecha(reseña.created_at)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex gap-2">
-                            <MainButton
-                              onClick={() => handleEditarReseña(reseña)}
-                              variant="edit"
-                              title="Editar reseña"
-                            >
-                              Editar
-                            </MainButton>
-                            <MainButton
-                              onClick={() => handleEliminarReseña(reseña.id)}
-                              variant="delete"
-                              title="Eliminar reseña"
-                            >
-                              Eliminar
-                            </MainButton>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <Table columns={columnas} data={reseñas} />
             </div>
 
-            {/* Vista Mobile - Cards */}
             <div className="lg:hidden space-y-4">
               {reseñas.map((reseña) => (
                 <div
@@ -255,17 +281,23 @@ const Reseñas = () => {
                     </div>
                     <div className="flex gap-2">
                       <MainButton
+                        onClick={() => setReseñaParaVer(reseña)}
+                        variant="see"
+                        title="Ver reseña"
+                        iconSize={16}
+                      />
+                      <MainButton
                         onClick={() => handleEditarReseña(reseña)}
                         variant="edit"
                         title="Editar reseña"
                         iconSize={16}
-                      ></MainButton>
+                      />
                       <MainButton
-                        onClick={() => handleEliminarReseña(reseña.id)}
+                        onClick={() => handleEliminarReseña(reseña)}
                         variant="delete"
                         title="Eliminar reseña"
                         iconSize={16}
-                      ></MainButton>
+                      />
                     </div>
                   </div>
 
@@ -324,7 +356,15 @@ const Reseñas = () => {
         )}
       </div>
 
-      {/* Modal */}
+      {/* Modal ver reseña */}
+      {reseñaParaVer && (
+        <ModalReseña
+          reseña={reseñaParaVer}
+          onClose={() => setReseñaParaVer(null)}
+        />
+      )}
+
+      {/* Modal editar reseña */}
       <ModalEditarReseña
         isOpen={isModalOpen}
         onClose={() => {
@@ -334,6 +374,17 @@ const Reseñas = () => {
         reseña={reseñaEditando}
         onSave={handleGuardarReseña}
       />
+
+      {/* Modal eliminar reseña */}
+      {reseñaAEliminar && (
+        <ModalEliminar
+          titulo="Eliminar reseña"
+          descripcion="¿Estás seguro que querés eliminar esta reseña? Esta acción no se puede deshacer."
+          onConfirmar={confirmarEliminacion}
+          onCancelar={() => setReseñaAEliminar(null)}
+          loading={eliminando}
+        />
+      )}
     </div>
   );
 };

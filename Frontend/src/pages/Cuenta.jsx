@@ -48,7 +48,7 @@ const Cuenta = () => {
     .toUpperCase();
 
   return (
-    <div className="w-full bg-fondo px-4 sm:px-6">
+    <div className="w-full">
       {/* Info básica del usuario */}
       <section className="max-w-7xl mx-auto text-center">
         {foto ? (
@@ -70,7 +70,7 @@ const Cuenta = () => {
       </section>
 
       {/* Acciones */}
-      <section className="max-w-7xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <section className="max-w-7xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8 px-4 sm:px-6">
         {/* Gestionar Boletas */}
         <div>
           <MainLinkButton to="/boletas" variant="card">

@@ -29,7 +29,7 @@ const PanelControlMapa = ({
   const { usuario } = useAuth();
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="space-y-6">
       <div className="flex justify-between items-center mb-4">
         <MainH3 className="mb-0">Panel de control</MainH3>
         {onCerrarPanel && (

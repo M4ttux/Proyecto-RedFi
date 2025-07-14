@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { eliminarBoletaConImagen } from "../../services/boletasService";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconLoader2, IconCalendar } from "@tabler/icons-react";
 import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
 import ModalVerBoleta from "../modals/boletas/ModalVerBoleta";
 import ModalEliminar from "../modals/ModalEliminar";
 import MainH2 from "../ui/MainH2";
 import MainButton from "../ui/MainButton";
+import Table from "../ui/Table";
 
 const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
   const [cargando, setCargando] = useState(true);
@@ -15,13 +16,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
   const [eliminando, setEliminando] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setCargando(false), 300); // simulamos carga
+    const timer = setTimeout(() => setCargando(false), 300);
     return () => clearTimeout(timer);
   }, [boletas]);
 
   const confirmarEliminacion = async () => {
     if (!boletaAEliminar) return;
-
     try {
       setEliminando(true);
       await eliminarBoletaConImagen(boletaAEliminar);
@@ -41,6 +41,89 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
     (a, b) => new Date(b.fecha_carga) - new Date(a.fecha_carga)
   );
 
+  const columnas = [
+    {
+      id: "numero",
+      label: "#",
+      renderCell: (_, index) => (
+        <span className="text-center">{index + 1}</span>
+      ),
+    },
+    {
+      id: "proveedor",
+      label: "Proveedor",
+    },
+    {
+      id: "mes",
+      label: "Mes",
+    },
+    {
+      id: "monto",
+      label: "Monto",
+      renderCell: (b) => `$${parseFloat(b.monto).toFixed(2)}`,
+    },
+    {
+      id: "fecha_carga",
+      label: "Carga",
+      renderCell: (b) => (
+        <div className="flex items-center text-sm text-white/60">
+          <IconCalendar size={16} className="mr-2" />
+          {b.fecha_carga
+            ? new Date(b.fecha_carga).toLocaleDateString("es-AR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "—"}
+        </div>
+      ),
+    },
+    {
+      id: "vencimiento",
+      label: "Vencimiento",
+      renderCell: (b) => (
+        <div className="flex items-center text-sm text-white/60">
+          <IconCalendar size={16} className="mr-2" />
+          {new Date(b.vencimiento + "T12:00:00").toLocaleDateString("es-AR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </div>
+      ),
+    },
+
+    {
+      id: "acciones",
+      label: "Acciones",
+      renderCell: (b) => (
+        <div className="flex flex-wrap gap-2 justify-center">
+          <MainButton
+            onClick={() => setBoletaParaVer(b)}
+            title="Ver boleta"
+            variant="see"
+          >
+            Ver
+          </MainButton>
+          <MainButton
+            onClick={() => setBoletaSeleccionada(b)}
+            title="Editar boleta"
+            variant="edit"
+          >
+            Editar
+          </MainButton>
+          <MainButton
+            onClick={() => setBoletaAEliminar(b)}
+            title="Eliminar boleta"
+            variant="delete"
+          >
+            Eliminar
+          </MainButton>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto relative">
       <MainH2 className="text-center">Historial de boletas</MainH2>
@@ -57,109 +140,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
       ) : (
         <>
           {/* 🖥️ Tabla en escritorio */}
-          <div className="w-full overflow-x-auto hidden md:block">
-            <table className="min-w-[1000px] table-auto border-collapse bg-white/5 text-white text-base">
-              <thead>
-                <tr className="bg-white/10 text-white uppercase text-sm">
-                  <th className="px-6 py-4 border border-white/10">#</th>
-                  <th className="px-6 py-4 border border-white/10">
-                    Proveedor
-                  </th>
-                  <th className="px-6 py-4 border border-white/10">Mes</th>
-                  <th className="px-6 py-4 border border-white/10">Monto</th>
-                  <th className="px-6 py-4 border border-white/10">Carga</th>
-                  <th className="px-6 py-4 border border-white/10">
-                    Vencimiento
-                  </th>
-                  <th className="px-6 py-4 border border-white/10">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {boletasOrdenadas.map((b, index) => (
-                  <tr key={b.id}>
-                    <td className="px-6 py-4 border border-white/10 text-center">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4 border border-white/10">
-                      {b.proveedor}
-                    </td>
-                    <td className="px-6 py-4 border border-white/10">
-                      {b.mes}
-                      {/*  {b.anio} */}
-                    </td>
-                    <td className="px-6 py-4 border border-white/10">
-                      ${parseFloat(b.monto).toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 border border-white/10">
-                      {b.fecha_carga
-                        ? new Date(b.fecha_carga).toLocaleString("es-AR", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : "—"}
-                    </td>
-                    <td className="px-6 py-4 border border-white/10">
-                      {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(
-                        "es-AR"
-                      )}
-                    </td>
-                    <td className="px-4 py-4 border border-white/10">
-                      <div className="flex flex-wrap gap-2 justify-center">
-                        <MainButton
-                          onClick={() => setBoletaParaVer(b)}
-                          title="Ver boleta"
-                          variant="see"
-                        >
-                          Ver
-                        </MainButton>
-                        <MainButton
-                          onClick={() => setBoletaSeleccionada(b)}
-                          title="Editar boleta"
-                          variant="edit"
-                        >
-                          Editar
-                        </MainButton>
-                        <MainButton
-                          onClick={() => setBoletaAEliminar(b)}
-                          title="Eliminar boleta"
-                          variant="delete"
-                        >
-                          Eliminar
-                        </MainButton>
-                      </div>
-
-                      {/* <div className="flex flex-wrap gap-2 justify-center">
-                        <button
-                          onClick={() => setBoletaParaVer(b)}
-                          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-bold"
-                        >
-                          Ver
-                        </button>
-                        <button
-                          onClick={() => setBoletaSeleccionada(b)}
-                          className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-sm text-black font-bold"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => eliminarBoleta(b)}
-                          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-bold"
-                        >
-                          Eliminar
-                        </button>
-                      </div> */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="hidden md:block">
+            <Table columns={columnas} data={boletasOrdenadas} />
           </div>
 
           {/* 📱 Tarjetas en mobile */}
-          <div className="md:hidden flex flex-col gap-4">
+          <div className="md:hidden flex flex-col gap-4 mt-6">
             {boletasOrdenadas.map((b) => (
               <div
                 key={b.id}
@@ -192,24 +178,27 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
                 </p>
 
                 <div className="flex gap-2 mt-3 flex-wrap">
-                  <button
+                  <MainButton
                     onClick={() => setBoletaParaVer(b)}
-                    className="bg-blue-600 px-3 py-1 rounded"
+                    title="Ver boleta"
+                    variant="see"
                   >
                     Ver
-                  </button>
-                  <button
+                  </MainButton>
+                  <MainButton
                     onClick={() => setBoletaSeleccionada(b)}
-                    className="bg-yellow-400 text-black px-3 py-1 rounded"
+                    title="Editar boleta"
+                    variant="edit"
                   >
                     Editar
-                  </button>
-                  <button
-                    onClick={() => eliminarBoleta(b)}
-                    className="bg-red-600 px-3 py-1 rounded"
+                  </MainButton>
+                  <MainButton
+                    onClick={() => setBoletaAEliminar(b)}
+                    title="Eliminar boleta"
+                    variant="delete"
                   >
                     Eliminar
-                  </button>
+                  </MainButton>
                 </div>
               </div>
             ))}
@@ -217,14 +206,13 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
         </>
       )}
 
-      {/* MODAL VER */}
+      {/* MODALES */}
       {boletaParaVer &&
         (() => {
           const indexActual = boletasOrdenadas.findIndex(
             (b) => b.id === boletaParaVer.id
           );
           const boletaAnterior = boletasOrdenadas[indexActual + 1] || null;
-
           return (
             <ModalVerBoleta
               boleta={boletaParaVer}
@@ -234,7 +222,6 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
           );
         })()}
 
-      {/* MODAL EDITAR */}
       {boletaSeleccionada && (
         <ModalEditarBoleta
           boleta={boletaSeleccionada}
@@ -244,7 +231,6 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
         />
       )}
 
-      {/* MODAL ELIMINAR */}
       {boletaAEliminar && (
         <ModalEliminar
           titulo="Eliminar boleta"

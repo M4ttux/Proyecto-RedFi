@@ -5,6 +5,7 @@ import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import Glosario from "../pages/academia/Glosario";
 
 const AcademyHome = () => {
   useEffect(() => {
@@ -66,7 +67,11 @@ const AcademyHome = () => {
 
   return (
     <section className="p-6 max-w-7xl mx-auto">
-      <MainH1 icon={IconBook2}>Cursos destacados</MainH1>
+
+      <Glosario />
+      <div className="text-center">
+        <MainH2 icon={IconBook2}>Cursos destacados</MainH2>
+      </div>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {cursos.map((curso) => (

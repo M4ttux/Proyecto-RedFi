@@ -102,7 +102,7 @@ const Mapa = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-72px)] w-full relative">
+    <div className="h-[calc(100vh-74px)] w-full relative">
       {cargandoMapa && (
         <div className="absolute inset-0 z-45">
           <CargandoMapa cargandoMapa={cargandoMapa} />
@@ -114,7 +114,7 @@ const Mapa = () => {
           cargandoMapa ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
-        <aside className="hidden lg:block lg:col-span-3 bg-[#222222] border border-white/10 h-full z-10 overflow-y-auto">
+        <aside className="hidden lg:block lg:col-span-3 bg-[#222222] border border-white/10 h-full z-10 overflow-y-auto lg:p-4">
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}
             mapRef={mapRefReal}
@@ -137,7 +137,7 @@ const Mapa = () => {
           />
         </aside>
 
-        <section className="col-span-1 lg:col-span-9 h-full relative">
+        <div className="col-span-1 lg:col-span-9 h-full relative">
           <MapaInteractivo
             filtros={filtrosAplicados}
             onMapRefReady={(ref) => setMapRefReal(ref)}
@@ -169,7 +169,7 @@ const Mapa = () => {
               cargandoTecnologias={cargandoTecnologias}
             />
           )}
-        </section>
+        </div>
       </div>
     </div>
   );

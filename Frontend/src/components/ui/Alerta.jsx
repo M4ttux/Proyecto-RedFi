@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { IconX } from "@tabler/icons-react";
+import {
+  IconX,
+  IconAlertCircle,
+  IconCircleCheck,
+  IconInfoCircle,
+  IconAlertTriangle,
+} from "@tabler/icons-react";
 import MainButton from "./MainButton";
 import { DURACION_ALERTA } from "../../constants/constantes";
 
@@ -10,6 +16,13 @@ const estilos = {
   advertencia: "text-yellow-400 border-yellow-500/30",
 };
 
+const iconos = {
+  error: IconAlertCircle,
+  exito: IconCircleCheck,
+  info: IconInfoCircle,
+  advertencia: IconAlertTriangle,
+};
+
 const Alerta = ({
   mensaje,
   tipo = "error",
@@ -18,20 +31,20 @@ const Alerta = ({
   duracion = DURACION_ALERTA,
   flotante = false,
 }) => {
-  const [visible, setVisible] = useState(false); // controla la clase de animación
-  const [renderizar, setRenderizar] = useState(false); // controla si se renderiza el componente
+  const [visible, setVisible] = useState(false);
+  const [renderizar, setRenderizar] = useState(false);
 
   useEffect(() => {
     if (mensaje) {
       setRenderizar(true);
-      setTimeout(() => setVisible(true), 100); // permite animación de entrada
+      setTimeout(() => setVisible(true), 100);
       if (autoOcultar) {
         const timer = setTimeout(() => {
           setVisible(false);
           setTimeout(() => {
             setRenderizar(false);
             onCerrar?.();
-          }, 300); // delay para animación de salida
+          }, 300);
         }, duracion);
         return () => clearTimeout(timer);
       }
@@ -48,15 +61,21 @@ const Alerta = ({
 
   if (!renderizar) return null;
 
+  const Icono = iconos[tipo] || iconos.error;
+
   return (
     <div
       className={`${
         flotante ? "absolute w-full left-0 z-50" : ""
-      } relative pr-10 bg-[#222222] px-3 py-2 rounded-lg border transition-all duration-300 transform ${
+      } relative pr-10 bg-[#222222] px-4 py-3 rounded-lg border transition-all duration-300 transform ${
         visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
       } ${estilos[tipo] || estilos.error}`}
     >
-      {mensaje}
+      <div className="flex items-center gap-3">
+        <Icono size={20} />
+        <span className="flex-1">{mensaje}</span>
+      </div>
+
       {onCerrar && (
         <MainButton
           onClick={cerrarAlerta}
