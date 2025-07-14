@@ -38,7 +38,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
                 {columns.map((col) => (
                   <td key={col.id} className="px-6 py-4 text-texto text-sm">
                     {typeof col.renderCell === "function"
-                      ? col.renderCell(row)
+                      ? col.renderCell(row, rowIndex)
                       : row[col.id]}
                   </td>
                 ))}

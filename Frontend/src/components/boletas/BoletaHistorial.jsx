@@ -5,6 +5,7 @@ import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
 import ModalVerBoleta from "../modals/boletas/ModalVerBoleta";
 import ModalEliminar from "../modals/ModalEliminar";
 import MainH2 from "../ui/MainH2";
+import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
 import Table from "../ui/Table";
 
@@ -145,61 +146,64 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
           </div>
 
           {/* 📱 Tarjetas en mobile */}
-          <div className="md:hidden flex flex-col gap-4 mt-6">
+          <div className="md:hidden space-y-4 mt-6">
             {boletasOrdenadas.map((b) => (
               <div
                 key={b.id}
-                className="bg-white/10 rounded-lg p-4 text-white shadow"
+                className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-4"
               >
-                <p>
-                  <strong>Proveedor:</strong> {b.proveedor}
+                <div className="flex justify-between items-start mb-3">
+                  <MainH3>{b.proveedor}</MainH3>
+                  <div className="flex gap-2">
+                    <MainButton
+                      onClick={() => setBoletaParaVer(b)}
+                      variant="see"
+                      title="Ver boleta"
+                      iconSize={16}
+                    />
+                    <MainButton
+                      onClick={() => setBoletaSeleccionada(b)}
+                      variant="edit"
+                      title="Editar boleta"
+                      iconSize={16}
+                    />
+                    <MainButton
+                      onClick={() => setBoletaAEliminar(b)}
+                      variant="delete"
+                      title="Eliminar boleta"
+                      iconSize={16}
+                    />
+                  </div>
+                </div>
+                <p className="text-sm text-texto mb-1">
+                  <strong>Mes:</strong> {b.mes}
                 </p>
-                <p>
-                  <strong>Mes:</strong> {b.mes} {b.anio}
-                </p>
-                <p>
+                <p className="text-sm text-texto mb-1">
                   <strong>Monto:</strong> ${parseFloat(b.monto).toFixed(2)}
                 </p>
-                <p>
-                  <strong>Carga:</strong>{" "}
-                  {new Date(b.fecha_carga).toLocaleString("es-AR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                <p className="text-sm mb-1 flex items-center gap-2 text-white/60">
+                  <strong className="text-texto">Carga:</strong>
+                  <span>
+                    {new Date(b.fecha_carga).toLocaleDateString("es-AR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
                 </p>
-                <p>
-                  <strong>Vencimiento:</strong>{" "}
-                  {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(
-                    "es-AR"
-                  )}
+                <p className="text-sm mb-1 flex items-center gap-2 text-white/60">
+                  <strong className="text-texto">Vencimiento:</strong>
+                  <span>
+                    {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(
+                      "es-AR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </span>
                 </p>
-
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  <MainButton
-                    onClick={() => setBoletaParaVer(b)}
-                    title="Ver boleta"
-                    variant="see"
-                  >
-                    Ver
-                  </MainButton>
-                  <MainButton
-                    onClick={() => setBoletaSeleccionada(b)}
-                    title="Editar boleta"
-                    variant="edit"
-                  >
-                    Editar
-                  </MainButton>
-                  <MainButton
-                    onClick={() => setBoletaAEliminar(b)}
-                    title="Eliminar boleta"
-                    variant="delete"
-                  >
-                    Eliminar
-                  </MainButton>
-                </div>
               </div>
             ))}
           </div>
