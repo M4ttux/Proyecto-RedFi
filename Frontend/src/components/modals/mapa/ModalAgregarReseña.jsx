@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { obtenerProveedores } from "../../../services/proveedorService";
-import { IconX, IconMapPin } from "@tabler/icons-react";
+import { IconX, IconMapPin, IconLoader2 } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Select from "../../ui/Select";
@@ -34,12 +34,21 @@ const ModalAgregarReseña = ({
       const data = await obtenerProveedores();
       setProveedores(data);
     };
-    if (isOpen) {
+    if (isOpen && proveedores.length === 0) {
       cargarProveedores();
+    }
+  }, [isOpen, proveedores.length]);
+
+  useEffect(() => {
+    if (isOpen && !coordenadasSeleccionadas) {
+      // Solo reinicia si no hay coordenadas seleccionadas (primera apertura)
       setProveedorSeleccionado("__disabled__");
       setComentario("");
       setUbicacionTexto("");
       setEstrellas(5);
+    }
+
+    if (isOpen) {
       setErrorProveedor(false);
       setErrorUbicacion(false);
       setErrorComentario(false);
@@ -192,10 +201,17 @@ const ModalAgregarReseña = ({
                   Ubicación seleccionada
                 </div>
                 <p className="text-texto break-words">
-                  {ubicacionTexto || "Cargando dirección..."}
+                  {ubicacionTexto ? (
+                    ubicacionTexto
+                  ) : (
+                    <span className="flex items-center gap-2 text-texto/60">
+                      <IconLoader2 className="animate-spin" size={16} />
+                      Cargando dirección...
+                    </span>
+                  )}
                 </p>
                 <p className="text-texto/60 text-xs mt-1">
-                  {coordenadasSeleccionadas.lat.toFixed(6)},{" "}
+                  {"Coordenas: "}{coordenadasSeleccionadas.lat.toFixed(6)},{" "}
                   {coordenadasSeleccionadas.lng.toFixed(6)}
                 </p>
               </div>
