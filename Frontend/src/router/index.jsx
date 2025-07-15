@@ -19,6 +19,7 @@ import EditarPerfil from "../pages/perfil/EditarPerfil";
 import CambiarContraseña from "../pages/perfil/CambiarContraseña";
 import Planes from "../pages/Planes";
 import Glosario from "../pages/Glosario";
+import Administrador from "../pages/Administrador";
 
 
 export const router = createBrowserRouter([
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
       { path: 'academy/curso2', element: ( <RequireAuth> <Curso2 /> </RequireAuth> ),},
       { path: 'academy/curso3', element: ( <RequireAuth> <Curso3 /> </RequireAuth> ),},
       { path: "glosario", element: ( <RequireAuth><Glosario /></RequireAuth> ) },
+      { path: "admin", element: <Administrador /> },
     ],
   },
 ]);

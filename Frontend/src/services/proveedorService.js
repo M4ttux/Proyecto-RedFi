@@ -4,7 +4,8 @@ import { supabase } from "../supabase/client";
 export const obtenerProveedores = async () => {
   const { data, error } = await supabase
     .from("proveedores")
-    .select(`
+    .select(
+      `
       *,
       ProveedorTecnologia (
         tecnologias (*)
@@ -12,7 +13,8 @@ export const obtenerProveedores = async () => {
       ZonaProveedor (
         zonas (*)
       )
-    `)
+    `
+    )
     .order("nombre", { ascending: true });
 
   if (error) throw error;
@@ -23,7 +25,8 @@ export const obtenerProveedores = async () => {
 export const obtenerProveedorPorId = async (id) => {
   const { data, error } = await supabase
     .from("proveedores")
-    .select(`
+    .select(
+      `
       *,
       ProveedorTecnologia (
         tecnologias (*)
@@ -37,10 +40,26 @@ export const obtenerProveedorPorId = async (id) => {
           foto_url
         )
       )
-    `)
+    `
+    )
     .eq("id", id)
     .single();
 
   if (error) throw error;
   return data;
+};
+
+export const obtenerProveedoresAdmin = async () => {
+  const { data, error } = await supabase
+    .from("proveedores")
+    .select("nombre, color, descripcion, sitio_web, ProveedorTecnologia(tecnologias(tecnologia))");
+
+  if (error) throw new Error("Error al obtener proveedores para admin.");
+
+  return data.map((p) => ({
+    ...p,
+    tecnologia: p.ProveedorTecnologia?.map(
+      (t) => t.tecnologias?.tecnologia
+    ).filter(Boolean),
+  }));
 };

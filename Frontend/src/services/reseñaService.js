@@ -172,3 +172,12 @@ export const crearReseña = async (reseñaData) => {
     throw error;
   }
 };
+
+export const obtenerReseñasAdmin = async () => {
+  const { data, error } = await supabase
+    .from("reseñas")
+    .select("estrellas, comentario, user_profiles(nombre), proveedores(nombre)");
+
+  if (error) throw new Error("Error al obtener reseñas para admin.");
+  return data;
+};

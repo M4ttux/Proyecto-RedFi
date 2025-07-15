@@ -173,3 +173,12 @@ export const updatePerfilYFoto = async ({
   if (perfilError)
     throw new Error("Error al guardar los datos en la base de datos.");
 };
+
+export const obtenerPerfilesAdmin = async () => {
+  const { data, error } = await supabase
+    .from("user_profiles")
+    .select("nombre, proveedor_preferido, rol, plan");
+
+  if (error) throw new Error("Error al obtener perfiles.");
+  return data;
+};
