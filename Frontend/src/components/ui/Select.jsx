@@ -14,7 +14,7 @@ const Select = ({
   loading = false,
   name,
   required = false,
-  isInvalid = false, // ✅ NUEVO
+  isInvalid = false,
 }) => {
   return (
     <div className="space-y-1 relative">

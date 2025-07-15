@@ -98,7 +98,6 @@ const EditarPerfil = () => {
         tipo: "exito",
         mensaje: "Perfil actualizado correctamente.",
       });
-      setTimeout(() => navigate("/cuenta"), 1500);
     } catch (error) {
       setAlerta({
         tipo: "error",

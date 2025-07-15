@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
       { path: 'academy/curso2', element: ( <RequireAuth> <Curso2 /> </RequireAuth> ),},
       { path: 'academy/curso3', element: ( <RequireAuth> <Curso3 /> </RequireAuth> ),},
       { path: "glosario", element: ( <RequireAuth><Glosario /></RequireAuth> ) },
-      { path: "admin", element: <Administrador /> },
+      { path: "admin", element: <RequireAuth><Administrador /></RequireAuth> },
     ],
   },
 ]);

@@ -15,12 +15,13 @@ const LinkButton = ({
 }) => {
   const hasCustomPadding = /\bp[trblxy]?-\d+\b/.test(className);
 
+  const esCard = variant === "card" || variant === "cardAdmin";
+
   const baseStyles = classNames(
-    variant === "card"
-      ? "block text-center rounded-lg transition" // para los cards del perfil
-      : "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none duration-300", // para los botones
-    !hasCustomPadding &&
-      (variant === "card" ? "p-4" : "px-6 py-3")
+    esCard
+      ? "block text-center rounded-lg transition"
+      : "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none duration-300",
+    !hasCustomPadding && (esCard ? "p-4" : "px-6 py-3")
   );
 
   const variants = {
@@ -30,7 +31,10 @@ const LinkButton = ({
     danger: "bg-red-600 text-white hover:bg-red-700",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     card: "bg-white/5 backdrop-blur-md border border-white/10 hover:bg-acento/30 text-white min-h-[130px] flex flex-col justify-center",
-    curso: "flex flex-col bg-white/10 rounded-lg overflow-hidden transition duration-300 hover:scale-105 hover:shadow-lg text-white block",
+    cardAdmin:
+      "bg-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:bg-purple-800/40 text-white min-h-[130px] flex flex-col justify-center",
+    curso:
+      "flex flex-col bg-white/10 rounded-lg overflow-hidden transition duration-300 hover:scale-105 hover:shadow-lg text-white block",
   };
 
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";
