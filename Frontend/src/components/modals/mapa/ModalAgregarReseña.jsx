@@ -146,7 +146,7 @@ const ModalAgregarReseña = ({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="bg-gray-900 p-6 rounded-lg w-full max-w-xl relative"
+        className="bg-secundario text-white p-6 rounded-lg w-full max-w-xl relative border border-white/10"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between mb-4">

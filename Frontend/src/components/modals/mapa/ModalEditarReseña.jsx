@@ -69,8 +69,8 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-fondo border border-white/20 rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-secundario border border-white/20 rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
         {/* Encabezado del modal */}
         <div className="flex justify-between mb-4">
           <MainH2 className="mb-0">Editar reseña</MainH2>
