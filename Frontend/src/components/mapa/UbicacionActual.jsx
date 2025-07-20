@@ -44,14 +44,12 @@ const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
       </MainButton>
 
       {alerta && (
-        <div className="absolute top-full left-0 w-full mt-2 z-50">
-          <Alerta
-            mensaje={alerta}
-            tipo="error"
-            onCerrar={() => setAlerta("")}
-            flotante
-          />
-        </div>
+        <Alerta
+          mensaje={alerta}
+          tipo="error"
+          onCerrar={() => setAlerta("")}
+          flotante={true}
+        />
       )}
     </div>
   );

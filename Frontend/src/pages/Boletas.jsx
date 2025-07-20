@@ -29,14 +29,12 @@ const Boletas = () => {
   return (
     <BoletasLayout>
       {alerta.mensaje && (
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
-          <Alerta
-            mensaje={alerta.mensaje}
-            tipo={alerta.tipo}
-            onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
-            flotante={true}
-          />
-        </div>
+        <Alerta
+          mensaje={alerta.mensaje}
+          tipo={alerta.tipo}
+          onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
+          flotante={true}
+        />
       )}
       <div className="flex gap-4 justify-center mb-8">
         <MainButton

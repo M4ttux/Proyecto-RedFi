@@ -28,7 +28,7 @@ const Alerta = ({
   tipo = "error",
   onCerrar,
   autoOcultar = true,
-  duracion = DURACION_ALERTA,
+  duracion = DURACION_ALERTA * 1000,
   flotante = false,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -65,27 +65,31 @@ const Alerta = ({
 
   return (
     <div
-      className={`${
-        flotante ? "absolute w-full left-0 z-50" : ""
-      } relative pr-10 bg-[#222222] px-4 py-3 rounded-lg border transition-all duration-300 transform ${
-        visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-      } ${estilos[tipo] || estilos.error}`}
+      className={`
+      ${
+        flotante
+          ? "fixed bottom-6 right-6 z-50 w-[calc(100%-3rem)] max-w-md"
+          : "relative"
+      }
+      bg-[#222222] px-4 py-3 pr-12 rounded-lg border transition-all duration-300 transform
+      ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}
+      ${estilos[tipo] || estilos.error}
+    `}
     >
       <div className="flex items-center gap-3">
         <Icono size={20} />
         <span className="flex-1">{mensaje}</span>
       </div>
-
-      {onCerrar && (
-        <MainButton
-          onClick={cerrarAlerta}
-          type="button"
-          variant="cross"
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-0"
-        >
-          <IconX size={18} />
-        </MainButton>
-      )}
+      
+      {/* Botón de cerrar - siempre visible */}
+      <MainButton
+        onClick={cerrarAlerta}
+        type="button"
+        variant="cross"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 z-10"
+      >
+        <IconX size={18} />
+      </MainButton>
     </div>
   );
 };

@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getPerfil } from "../services/perfilService";
+import { useLocation } from "react-router-dom";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import Alerta from "../components/ui/Alerta";
 import { IconUser } from "@tabler/icons-react";
 
 const Cuenta = () => {
+  const { usuario } = useAuth();
+  const location = useLocation();
+  const [perfil, setPerfil] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [alerta, setAlerta] = useState(location.state?.alerta || null);
+
   useEffect(() => {
     document.title = "Red-Fi | Mi Perfil";
   }, []);
-
-  const { usuario } = useAuth();
-  const [perfil, setPerfil] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const cargarPerfil = async () => {
@@ -22,7 +26,10 @@ const Cuenta = () => {
         const data = await getPerfil();
         setPerfil(data);
       } catch (error) {
-        console.error("Error al obtener el perfil:", error.message);
+        setAlerta({
+          tipo: "error",
+          mensaje: "No se pudo cargar el perfil de usuario.",
+        });
       } finally {
         setLoading(false);
       }
@@ -52,22 +59,32 @@ const Cuenta = () => {
   return (
     <div className="w-full">
       <section className="max-w-7xl mx-auto text-center px-4 sm:px-6 py-16 space-y-12">
+        {alerta && (
+          <Alerta
+            tipo={alerta.tipo}
+            mensaje={alerta.mensaje}
+            flotante={true}
+            onCerrar={() => setAlerta(null)}
+          />
+        )}
         <div className="w-full text-center">
           <MainH1 icon={IconUser}>Mi cuenta</MainH1>
-          <p className="mx-auto">Modificá tus datos personales y tus preferencias.</p>
+          <p className="mx-auto">
+            Modificá tus datos personales y tus preferencias.
+          </p>
         </div>
         <div className="w-full flex flex-col items-center">
           {foto ? (
-          <img
-            src={foto}
-            alt="Foto de perfil"
-            className="size-50 rounded-full object-cover border-4 border-white/20 mx-auto mb-4 shadow-lg"
-          />
-        ) : (
-          <div className="size-50 rounded-full bg-white/10 border-4 border-white/20 mx-auto mb-4 flex items-center justify-center shadow-lg">
-            <span className="text-3xl font-bold text-white">{iniciales}</span>
-          </div>
-        )}
+            <img
+              src={foto}
+              alt="Foto de perfil"
+              className="size-50 rounded-full object-cover border-4 border-white/20 mx-auto mb-4 shadow-lg"
+            />
+          ) : (
+            <div className="size-50 rounded-full bg-white/10 border-4 border-white/20 mx-auto mb-4 flex items-center justify-center shadow-lg">
+              <span className="text-3xl font-bold text-white">{iniciales}</span>
+            </div>
+          )}
           <MainH2>{nombre}</MainH2>
           <p className="text-white/60 mb-4">{usuario.email}</p>
           <p className="text-sm text-white/40 mb-4">
@@ -81,7 +98,8 @@ const Cuenta = () => {
             <MainLinkButton to="/boletas" variant="card">
               <MainH3>Gestionar boletas</MainH3>
               <p>
-                Visualize y administre sus boletas, reciba alertas antes del vencimiento y revise los aumentos mes a mes.
+                Visualize y administre sus boletas, reciba alertas antes del
+                vencimiento y revise los aumentos mes a mes.
               </p>
             </MainLinkButton>
           </div>
@@ -89,14 +107,20 @@ const Cuenta = () => {
           <div>
             <MainLinkButton to="/academy" variant="card">
               <MainH3>Red-Fi Academy</MainH3>
-              <p>Accede a nuestros mini cursos sobre redes, Wi-Fi y cómo mejorar tu conexión.</p>
+              <p>
+                Accede a nuestros mini cursos sobre redes, Wi-Fi y cómo mejorar
+                tu conexión.
+              </p>
             </MainLinkButton>
           </div>
 
           <div>
             <MainLinkButton to="/resenas" variant="card">
               <MainH3>Mis reseñas</MainH3>
-              <p>Visualize y administre todas las reseñas que has publicado sobre diferentes proveedores.</p>
+              <p>
+                Visualize y administre todas las reseñas que has publicado sobre
+                diferentes proveedores.
+              </p>
             </MainLinkButton>
           </div>
 
@@ -126,7 +150,10 @@ const Cuenta = () => {
           <div className="max-w-7xl mx-auto mt-8 w-full">
             <MainLinkButton to="/admin" variant="cardAdmin">
               <MainH3>Administrar Red-Fi</MainH3>
-              <p>Accedé al panel de administración para gestionar usuarios, proveedores, reseñas y tecnologías.</p>
+              <p>
+                Accedé al panel de administración para gestionar usuarios,
+                proveedores, reseñas y tecnologías.
+              </p>
             </MainLinkButton>
           </div>
         )}

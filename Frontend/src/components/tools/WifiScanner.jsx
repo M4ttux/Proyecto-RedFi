@@ -134,13 +134,12 @@ const WifiScanner = () => {
       </div>
 
       {alertaError && (
-        <div className="mt-4">
-          <Alerta
-            mensaje={alertaError}
-            tipo="error"
-            onCerrar={() => setAlertaError("")}
-          />
-        </div>
+        <Alerta
+          mensaje={alertaError}
+          tipo="error"
+          onCerrar={() => setAlertaError("")}
+          flotante={true}
+        />
       )}
 
       {Object.keys(resultados).length > 0 && (
@@ -178,15 +177,13 @@ const WifiScanner = () => {
       </div>
 
       {recomendacion && (
-        <div className="mt-6">
-          <Alerta
-            mensaje={recomendacion}
-            tipo="info"
-            onCerrar={() => setRecomendacion("")}
-            autoOcultar={true}
-            flotante={false}
-          />
-        </div>
+        <Alerta
+          mensaje={recomendacion}
+          tipo="info"
+          onCerrar={() => setRecomendacion("")}
+          autoOcultar={true}
+          flotante={false}
+        />
       )}
     </div>
   );

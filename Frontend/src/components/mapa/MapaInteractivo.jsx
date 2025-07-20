@@ -182,14 +182,12 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       />
 
       {alerta?.mensaje && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40 w-[90vw] max-w-xl px-4">
-          <Alerta
-            mensaje={alerta.mensaje}
-            tipo={alerta.tipo}
-            onCerrar={() => setAlerta("")}
-            flotante
-          />
-        </div>
+        <Alerta
+          mensaje={alerta.mensaje}
+          tipo={alerta.tipo}
+          onCerrar={() => setAlerta("")}
+          flotante={true}
+        />
       )}
     </div>
   );

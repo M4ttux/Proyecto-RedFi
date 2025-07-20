@@ -101,14 +101,12 @@ const Login = () => {
 
         {/* Alerta flotante */}
         {alerta.mensaje && (
-          <div className="absolute left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
-            <Alerta
-              tipo={alerta.tipo}
-              mensaje={alerta.mensaje}
-              onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
-              flotante={true}
-            />
-          </div>
+          <Alerta
+            tipo={alerta.tipo}
+            mensaje={alerta.mensaje}
+            onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
+            flotante={true}
+          />
         )}
 
         {/* Divider */}

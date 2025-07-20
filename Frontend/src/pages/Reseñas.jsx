@@ -235,14 +235,12 @@ const Reseñas = () => {
         </div>
 
         {alerta && (
-          <div className="mb-6">
-            <Alerta
-              mensaje={alerta.mensaje}
-              tipo={alerta.tipo}
-              onCerrar={() => setAlerta(null)}
-              flotante={true}
-            />
-          </div>
+          <Alerta
+            mensaje={alerta.mensaje}
+            tipo={alerta.tipo}
+            onCerrar={() => setAlerta(null)}
+            flotante={true}
+          />
         )}
 
         {reseñas.length === 0 ? (

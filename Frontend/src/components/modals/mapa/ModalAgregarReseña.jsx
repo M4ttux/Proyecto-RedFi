@@ -211,7 +211,8 @@ const ModalAgregarReseña = ({
                   )}
                 </p>
                 <p className="text-texto/60 text-xs mt-1">
-                  {"Coordenadas: "}{coordenadasSeleccionadas.lat.toFixed(6)},{" "}
+                  {"Coordenadas: "}
+                  {coordenadasSeleccionadas.lat.toFixed(6)},{" "}
                   {coordenadasSeleccionadas.lng.toFixed(6)}
                 </p>
               </div>
@@ -282,6 +283,7 @@ const ModalAgregarReseña = ({
             mensaje={alerta}
             tipo="error"
             onCerrar={() => setAlerta("")}
+            flotante={true}
           />
         </form>
       </div>
