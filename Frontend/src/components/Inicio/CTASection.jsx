@@ -4,7 +4,7 @@ import MainH2 from "../ui/MainH2";
 
 const CTASection = () => {
   return (
-    <section className="bg-secundario text-texto py-20 text-center px-4 sm:px-6">
+    <section className="bg-secundario text-texto py-16 text-center px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <MainH2>¿Listo para mejorar tu conexión?</MainH2>
         <p className="text-lg text-texto/90">

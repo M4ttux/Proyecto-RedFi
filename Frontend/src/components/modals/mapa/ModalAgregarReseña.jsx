@@ -4,8 +4,9 @@ import { IconX, IconMapPin, IconLoader2 } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Select from "../../ui/Select";
-import Alerta from "../../ui/Alerta";
 import Textarea from "../../ui/Textarea";
+
+import { useAlerta } from "../../../context/AlertaContext";
 
 const ModalAgregarReseña = ({
   isOpen,
@@ -22,7 +23,7 @@ const ModalAgregarReseña = ({
   const [comentario, setComentario] = useState("");
   const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
-  const [alerta, setAlerta] = useState("");
+  const { mostrarError } = useAlerta();
   const [errorProveedor, setErrorProveedor] = useState(false);
   const [errorUbicacion, setErrorUbicacion] = useState(false);
   const [errorComentario, setErrorComentario] = useState(false);
@@ -52,7 +53,6 @@ const ModalAgregarReseña = ({
       setErrorProveedor(false);
       setErrorUbicacion(false);
       setErrorComentario(false);
-      setAlerta("");
     }
   }, [isOpen]);
 
@@ -75,7 +75,6 @@ const ModalAgregarReseña = ({
       } else {
         setUbicacionTexto(`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`);
       }
-      setAlerta("");
     } catch (error) {
       setUbicacionTexto(`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`);
       console.error("Error al convertir coordenadas:", error);
@@ -109,7 +108,7 @@ const ModalAgregarReseña = ({
     }
 
     if (hayError) {
-      setAlerta(mensajeError);
+      mostrarError(mensajeError);
       return;
     }
 
@@ -142,7 +141,7 @@ const ModalAgregarReseña = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center"
+      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-4 sm:px-6"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
@@ -279,12 +278,6 @@ const ModalAgregarReseña = ({
             Enviar Reseña
           </MainButton>
 
-          <Alerta
-            mensaje={alerta}
-            tipo="error"
-            onCerrar={() => setAlerta("")}
-            flotante={true}
-          />
         </form>
       </div>
     </div>

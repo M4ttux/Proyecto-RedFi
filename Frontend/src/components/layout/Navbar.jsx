@@ -133,17 +133,6 @@ const Navbar = () => {
                           className="border-b border-gray-300 pb-2 last:border-b-0 flex justify-between items-start gap-2"
                         >
                           <span className="break-words">{msg}</span>
-                          {/* <button
-                            className="text-gray-500 hover:text-red-500 font-bold text-lg leading-none"
-                            onClick={() =>
-                              setNotificaciones((prev) =>
-                                prev.filter((_, idx) => idx !== i)
-                              )
-                            }
-                            title="Cerrar"
-                          >
-                            ×
-                          </button> */}
                           <MainButton
                             onClick={() =>
                               setNotificaciones((prev) =>
@@ -241,8 +230,8 @@ const Navbar = () => {
                   Perfil
                 </Link>
                 <button
-                  onClick={() => {
-                    logout();
+                  onClick={async () => {
+                    await logoutUser();
                     setMenuAbierto(false);
                   }}
                   className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold"

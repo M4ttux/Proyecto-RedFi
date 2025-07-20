@@ -1,35 +1,27 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import {
-  obtenerReseñasUsuario,
-  actualizarReseña,
-  eliminarReseña,
-} from "../services/reseñaService";
-import {
-  IconCarambolaFilled,
-  IconCarambola,
-  IconCalendar,
-  IconLoader2,
-} from "@tabler/icons-react";
+import { obtenerReseñasUsuario, actualizarReseña, eliminarReseña } from "../services/reseñaService";
+import { IconCarambolaFilled, IconCarambola, IconCalendar, IconLoader2 } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import ModalEliminar from "../components/modals/ModalEliminar";
 import ModalReseña from "../components/modals/mapa/ModalReseña";
 import MainH1 from "../components/ui/MainH1";
 import MainH3 from "../components/ui/MainH3";
 import MainButton from "../components/ui/MainButton";
-import Alerta from "../components/ui/Alerta";
 import Table from "../components/ui/Table";
+
+import { useAlerta } from "../context/AlertaContext";
 
 const Reseñas = () => {
   const [reseñaParaVer, setReseñaParaVer] = useState(null);
   const { usuario } = useAuth();
   const [reseñas, setReseñas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [alerta, setAlerta] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reseñaEditando, setReseñaEditando] = useState(null);
   const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
+  const { mostrarError, mostrarExito } = useAlerta();
 
   useEffect(() => {
     document.title = "Red-Fi | Mis Reseñas";
@@ -43,7 +35,7 @@ const Reseñas = () => {
           setReseñas(data);
         } catch (error) {
           console.error("Error al cargar reseñas:", error);
-          setAlerta({ tipo: "error", mensaje: "Error al cargar las reseñas." });
+          mostrarError("Error al cargar las reseñas.");
         } finally {
           setLoading(false);
         }
@@ -69,16 +61,10 @@ const Reseñas = () => {
       );
       setIsModalOpen(false);
       setReseñaEditando(null);
-      setAlerta({
-        tipo: "exito",
-        mensaje: "Reseña actualizada correctamente.",
-      });
+      mostrarExito("Reseña actualizada correctamente.");
     } catch (error) {
       console.error("Error al actualizar reseña:", error);
-      setAlerta({
-        tipo: "error",
-        mensaje: "Ocurrió un error al actualizar la reseña.",
-      });
+      mostrarError("Error al actualizar la reseña.");
     }
   };
 
@@ -93,13 +79,10 @@ const Reseñas = () => {
       setEliminando(true);
       await eliminarReseña(reseñaAEliminar.id);
       setReseñas(reseñas.filter((r) => r.id !== reseñaAEliminar.id));
-      setAlerta({ tipo: "exito", mensaje: "Reseña eliminada correctamente." });
+      mostrarExito("Reseña eliminada correctamente.");
     } catch (error) {
       console.error("Error al eliminar reseña:", error);
-      setAlerta({
-        tipo: "error",
-        mensaje: "Ocurrió un error al eliminar la reseña.",
-      });
+      mostrarError("Error al eliminar la reseña.");
     } finally {
       setEliminando(false);
       setReseñaAEliminar(null);
@@ -234,17 +217,8 @@ const Reseñas = () => {
           </p>
         </div>
 
-        {alerta && (
-          <Alerta
-            mensaje={alerta.mensaje}
-            tipo={alerta.tipo}
-            onCerrar={() => setAlerta(null)}
-            flotante={true}
-          />
-        )}
-
         {reseñas.length === 0 ? (
-          <div className="text-center py-12">
+          <div className="text-center py-16">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-8">
               <MainH3>No tienes reseñas publicadas</MainH3>
               <p className="text-white/70 mb-4">

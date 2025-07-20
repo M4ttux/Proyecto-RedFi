@@ -27,16 +27,6 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
       className={`text-white px-4 py-3 rounded mb-4 relative ${colores[tipo]}`}
     >
       {mensaje}
-      {/* <button
-        onClick={() => {
-          setVisible(false);
-          if (onClose) onClose();
-        }}
-        className="absolute top-1 right-2 text-white text-xl font-bold leading-none"
-        title="Cerrar"
-      >
-        &times;
-      </button> */}
       <MainButton
         onClick={() => {
           setVisible(false);

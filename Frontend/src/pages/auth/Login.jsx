@@ -11,8 +11,9 @@ import { loginUser } from "../../services/authService";
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
-import Alerta from "../../components/ui/Alerta";
 import Input from "../../components/ui/Input";
+
+import { useAlerta } from "../../context/AlertaContext";
 
 const Login = () => {
   useEffect(() => {
@@ -20,10 +21,10 @@ const Login = () => {
   }, []);
 
   const [form, setForm] = useState({ email: "", password: "" });
-  const [alerta, setAlerta] = useState({ tipo: "", mensaje: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { mostrarError } = useAlerta();
 
   const from = location.state?.from?.pathname || "/cuenta";
 
@@ -32,24 +33,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAlerta({ tipo: "", mensaje: "" });
     setLoading(true);
 
     try {
       await loginUser(form);
       navigate(from);
     } catch (err) {
-      setAlerta({
-        tipo: "error",
-        mensaje: err.message,
-      });
+      mostrarError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full bg-fondo flex items-center justify-center px-4 py-8 relative">
+    <div className="w-full bg-fondo flex items-center justify-center px-4 py-16 relative">
       <div className="w-full max-w-md">
         {/* Título */}
         <div className="w-full text-center mb-8">
@@ -69,10 +66,6 @@ const Login = () => {
               onChange={handleChange}
               required
               icon={IconMail}
-              isInvalid={
-                alerta.tipo === "error" &&
-                alerta.mensaje.toLowerCase().includes("correo")
-              }
             />
             <Input
               label="Contraseña"
@@ -83,10 +76,6 @@ const Login = () => {
               onChange={handleChange}
               required
               icon={IconLock}
-              isInvalid={
-                alerta.tipo === "error" &&
-                alerta.mensaje.toLowerCase().includes("contraseña")
-              }
             />
             <MainButton
               type="submit"
@@ -98,16 +87,6 @@ const Login = () => {
             </MainButton>
           </form>
         </div>
-
-        {/* Alerta flotante */}
-        {alerta.mensaje && (
-          <Alerta
-            tipo={alerta.tipo}
-            mensaje={alerta.mensaje}
-            onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
-            flotante={true}
-          />
-        )}
 
         {/* Divider */}
         <div className="relative my-6">

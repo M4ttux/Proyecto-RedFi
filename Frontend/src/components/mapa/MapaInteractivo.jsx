@@ -13,10 +13,11 @@ import ModalReseña from "../modals/mapa/ModalReseña";
 import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
 
 import MainButton from "../ui/MainButton";
-import Alerta from "../ui/Alerta";
+
+import { useAlerta } from "../../context/AlertaContext";
 
 const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
-  const [alerta, setAlerta] = useState(null);
+  const { mostrarError, mostrarExito } = useAlerta();
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
   const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
     useState(false);
@@ -35,11 +36,10 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     cargarReseñasIniciales,
   } = useMapaInteractivo(filtros, boundsCorrientes);
 
-  // ✅ Solo ejecutar setCargandoMapa(false) cuando el hook ya lo indique
   useEffect(() => {
     if (!cargandoMapa && mapRef?.current && onMapRefReady) {
       onMapRefReady(mapRef);
-      setCargandoMapa?.(false); // desde Mapa.jsx
+      setCargandoMapa?.(false);
     }
   }, [cargandoMapa, mapRef, onMapRefReady, setCargandoMapa]);
 
@@ -60,7 +60,6 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
 
   const { cargandoUbicacion, handleUbicacionActual } = useUbicacionActual(
     boundsCorrientes,
-    setAlerta,
     mapRef
   );
 
@@ -88,13 +87,6 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]);
 
   useEffect(() => {
-    if (alerta) {
-      const timeout = setTimeout(() => setAlerta(""), 4000);
-      return () => clearTimeout(timeout);
-    }
-  }, [alerta]);
-
-  useEffect(() => {
     const handleAbrirModal = () => {
       handleAbrirModalReseña();
     };
@@ -111,13 +103,10 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       setModalReseñaAbierto(false);
       limpiarSeleccion();
       await cargarReseñasIniciales(filtros);
-      setAlerta({ mensaje: "Reseña publicada con éxito.", tipo: "exito" });
+      mostrarExito("Reseña publicada con éxito.");
     } catch (error) {
       console.error("❌ Error al enviar reseña:", error);
-      setAlerta({
-        mensaje: "Ocurrió un error al publicar la reseña.",
-        tipo: "error",
-      });
+      mostrarError("Ocurrió un error al publicar la reseña.");
     }
   };
 
@@ -176,19 +165,9 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
         onEnviar={handleAgregarReseña}
         mapRef={mapRef}
         boundsCorrientes={boundsCorrientes}
-        setAlerta={setAlerta}
         coordenadasSeleccionadas={coordenadasSeleccionadas}
         onSeleccionarUbicacion={handleSeleccionarUbicacion}
       />
-
-      {alerta?.mensaje && (
-        <Alerta
-          mensaje={alerta.mensaje}
-          tipo={alerta.tipo}
-          onCerrar={() => setAlerta("")}
-          flotante={true}
-        />
-      )}
     </div>
   );
 };

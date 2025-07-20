@@ -9,11 +9,7 @@ import { IconX } from "@tabler/icons-react";
 
 const PanelControlMapa = ({
   boundsCorrientes,
-  alerta,
-  setAlerta,
   mapRef,
-  cargandoUbicacion,
-  onUbicacionActual,
   onAbrirModalReseña,
   filtros,
   setFiltros,
@@ -48,12 +44,13 @@ const PanelControlMapa = ({
       <BusquedaUbicacion
         boundsCorrientes={boundsCorrientes}
         mapRef={mapRef}
-        alerta={alerta}
-        setAlerta={setAlerta}
       />
 
       {/* Botón de ubicación */}
-      <UbicacionActual mapRef={mapRef} boundsCorrientes={boundsCorrientes} />
+      <UbicacionActual
+        mapRef={mapRef}
+        boundsCorrientes={boundsCorrientes}
+      />
 
       {/* Filtros */}
       <FiltrosZona
@@ -72,7 +69,6 @@ const PanelControlMapa = ({
       <BotonAgregarReseña
         usuario={usuario}
         onAbrirModalReseña={onAbrirModalReseña}
-        setAlerta={setAlerta}
       />
     </div>
   );

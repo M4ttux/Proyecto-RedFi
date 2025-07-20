@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
-import Alerta from "../ui/Alerta";
 import Input from "../ui/Input";
+
+import { useAlerta } from "../../context/AlertaContext";
 
 const WifiScanner = () => {
   const [nombreZona, setNombreZona] = useState("");
   const [resultados, setResultados] = useState({});
   const [recomendacion, setRecomendacion] = useState("");
-  const [alertaError, setAlertaError] = useState("");
   const [enProgreso, setEnProgreso] = useState(false);
   const medidorRef = useRef(null);
   const testActivo = useRef(null);
+  const { mostrarError, mostrarInfo } = useAlerta();
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -32,7 +33,7 @@ const WifiScanner = () => {
 
   const medirZona = () => {
     if (!nombreZona.trim()) {
-      setAlertaError("Debés escribir un nombre para la zona.");
+      mostrarError("Por favor, ingresa un nombre para la zona.");
       return;
     }
 
@@ -66,6 +67,7 @@ const WifiScanner = () => {
 
     t.onerror = (err) => {
       console.error("❌ Error al medir:", err);
+      mostrarError("Ocurrió un error durante la medición.");
       setEnProgreso(false);
     };
 
@@ -79,9 +81,7 @@ const WifiScanner = () => {
 
   const recomendarUbicacion = () => {
     if (Object.keys(resultados).length < 2) {
-      setRecomendacion(
-        "Medí al menos dos zonas para obtener una recomendación."
-      );
+      mostrarInfo("Medí al menos dos zonas para obtener una recomendación.");
       return;
     }
 
@@ -89,16 +89,14 @@ const WifiScanner = () => {
       return a.ping + a.jitter - (b.ping + b.jitter);
     })[0];
 
-    setRecomendacion(
+    mostrarInfo(
       `Mejor ubicación: ${mejor[0]} (Ping: ${mejor[1].ping} ms, Jitter: ${mejor[1].jitter} ms)`
     );
   };
 
   const reiniciarAnalisis = () => {
     setResultados({});
-    setRecomendacion("");
     setNombreZona("");
-    setAlertaError("");
   };
 
   const eliminarZona = (zona) => {
@@ -116,11 +114,9 @@ const WifiScanner = () => {
             value={nombreZona}
             onChange={(e) => {
               setNombreZona(e.target.value);
-              setAlertaError("");
             }}
             placeholder="Escribí el nombre de la zona (ej: Comedor)"
             required
-            isInvalid={!!alertaError}
           />
         </div>
 
@@ -132,15 +128,6 @@ const WifiScanner = () => {
           {enProgreso ? "Analizando..." : "Medir conexión"}
         </MainButton>
       </div>
-
-      {alertaError && (
-        <Alerta
-          mensaje={alertaError}
-          tipo="error"
-          onCerrar={() => setAlertaError("")}
-          flotante={true}
-        />
-      )}
 
       {Object.keys(resultados).length > 0 && (
         <div className="mt-6 text-left">
@@ -175,16 +162,6 @@ const WifiScanner = () => {
           Recomendar ubicación
         </MainButton>
       </div>
-
-      {recomendacion && (
-        <Alerta
-          mensaje={recomendacion}
-          tipo="info"
-          onCerrar={() => setRecomendacion("")}
-          autoOcultar={true}
-          flotante={false}
-        />
-      )}
     </div>
   );
 };

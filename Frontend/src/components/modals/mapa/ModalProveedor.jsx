@@ -18,7 +18,7 @@ const ModalProveedor = ({ proveedor, onClose, navigate }) => {
   ) || [];
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn">
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn px-4 sm:px-6">
       <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-xl shadow-2xl relative border border-white/10">
         {/* Botón cerrar */}
         <MainButton

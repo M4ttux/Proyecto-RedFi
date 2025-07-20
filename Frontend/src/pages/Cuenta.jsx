@@ -6,19 +6,26 @@ import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
-import Alerta from "../components/ui/Alerta";
 import { IconUser } from "@tabler/icons-react";
+import { useAlerta } from "../context/AlertaContext";
 
 const Cuenta = () => {
   const { usuario } = useAuth();
   const location = useLocation();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [alerta, setAlerta] = useState(location.state?.alerta || null);
+  const { mostrarError, mostrarExito } = useAlerta();
 
   useEffect(() => {
     document.title = "Red-Fi | Mi Perfil";
   }, []);
+
+  useEffect(() => {
+    if (location.state?.alerta) {
+      const { tipo, mensaje } = location.state.alerta;
+      tipo === "exito" ? mostrarExito(mensaje) : mostrarError(mensaje);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const cargarPerfil = async () => {
@@ -26,17 +33,14 @@ const Cuenta = () => {
         const data = await getPerfil();
         setPerfil(data);
       } catch (error) {
-        setAlerta({
-          tipo: "error",
-          mensaje: "No se pudo cargar el perfil de usuario.",
-        });
+        mostrarError("No se pudo cargar el perfil de usuario.");
       } finally {
         setLoading(false);
       }
     };
 
     if (usuario) cargarPerfil();
-  }, [usuario]);
+  }, [usuario, mostrarError]);
 
   if (!usuario) {
     return (
@@ -47,6 +51,7 @@ const Cuenta = () => {
   if (loading) {
     return <p className="text-center mt-10 text-texto">Cargando perfil...</p>;
   }
+
   const nombre = perfil?.nombre || "Usuario";
   const foto = perfil?.foto_url || usuario?.user_metadata?.foto_perfil;
   const iniciales = nombre
@@ -59,20 +64,13 @@ const Cuenta = () => {
   return (
     <div className="w-full">
       <section className="max-w-7xl mx-auto text-center px-4 sm:px-6 py-16 space-y-12">
-        {alerta && (
-          <Alerta
-            tipo={alerta.tipo}
-            mensaje={alerta.mensaje}
-            flotante={true}
-            onCerrar={() => setAlerta(null)}
-          />
-        )}
         <div className="w-full text-center">
           <MainH1 icon={IconUser}>Mi cuenta</MainH1>
           <p className="mx-auto">
             Modificá tus datos personales y tus preferencias.
           </p>
         </div>
+
         <div className="w-full flex flex-col items-center">
           {foto ? (
             <img

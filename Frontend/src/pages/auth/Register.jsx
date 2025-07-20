@@ -2,19 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { crearPerfil } from "../../services/perfilService";
 import { registerUser } from "../../services/authService";
-import {
-  IconUserPlus,
-  IconLogin,
-  IconMail,
-  IconLock,
-  IconUser,
-  IconWifi,
-} from "@tabler/icons-react";
+import { IconUserPlus, IconLogin, IconMail, IconLock, IconUser, IconWifi } from "@tabler/icons-react";
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
-import Alerta from "../../components/ui/Alerta";
 import Input from "../../components/ui/Input";
+
+import { useAlerta } from "../../context/AlertaContext";
 
 const Register = () => {
   useEffect(() => {
@@ -28,16 +22,15 @@ const Register = () => {
     proveedor_preferido: "",
   });
 
-  const [alerta, setAlerta] = useState({ tipo: "", mensaje: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { mostrarError, mostrarExito } = useAlerta();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAlerta({ tipo: "", mensaje: "" });
     setLoading(true);
 
     const { email, password, nombre, proveedor_preferido } = form;
@@ -45,35 +38,23 @@ const Register = () => {
     try {
       await registerUser({ email, password });
     } catch (err) {
-      setAlerta({
-        tipo: "error",
-        mensaje: err.message,
-      });
+      mostrarError(err.message);
       setLoading(false);
       return;
     }
 
     try {
       await crearPerfil({ nombre, proveedor_preferido });
-
-      setAlerta({
-        tipo: "exito",
-        mensaje: "Cuenta creada con éxito. Redirigiendo...",
-      });
-
+      mostrarExito("Cuenta creada con éxito. Redirigiendo...");
       setTimeout(() => navigate("/cuenta"), 1500);
     } catch (err) {
-      setAlerta({
-        tipo: "error",
-        mensaje:
-          "El usuario fue registrado, pero falló la creación del perfil.",
-      });
+      mostrarError("El usuario fue registrado, pero falló la creación del perfil.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full bg-fondo flex items-center justify-center px-4 py-8 relative">
+    <div className="w-full bg-fondo flex items-center justify-center px-4 py-16 relative">
       <div className="w-full max-w-md">
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconLogin}>Crear cuenta</MainH1>
@@ -91,10 +72,6 @@ const Register = () => {
               value={form.email}
               onChange={handleChange}
               required
-              isInvalid={
-                alerta.tipo === "error" &&
-                alerta.mensaje.toLowerCase().includes("correo")
-              }
             />
             <Input
               label="Contraseña *"
@@ -105,10 +82,6 @@ const Register = () => {
               value={form.password}
               onChange={handleChange}
               required
-              isInvalid={
-                alerta.tipo === "error" &&
-                alerta.mensaje.toLowerCase().includes("contraseña")
-              }
             />
             <Input
               label="Nombre completo *"
@@ -142,15 +115,6 @@ const Register = () => {
             </MainButton>
           </form>
         </div>
-
-        {alerta.mensaje && (
-          <Alerta
-            tipo={alerta.tipo}
-            mensaje={alerta.mensaje}
-            onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
-            flotante={true}
-          />
-        )}
 
         {/* Divider */}
         <div className="relative my-6">

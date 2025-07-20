@@ -10,13 +10,16 @@ import {
   IconWifi,
 } from "@tabler/icons-react";
 import { actualizarBoletaConImagen } from "../../../services/boletasService";
+import { useAlerta } from "../../../context/AlertaContext";
 
-const ModalEditarBoleta = ({ boleta, onClose, onActualizar, setAlerta }) => {
+const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   const [form, setForm] = useState({ ...boleta });
   const [archivoNuevo, setArchivoNuevo] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imagenEliminada, setImagenEliminada] = useState(false);
+
+  const { mostrarExito, mostrarError } = useAlerta();
 
   useEffect(() => {
     if (boleta.url_imagen) {
@@ -31,26 +34,20 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar, setAlerta }) => {
   const handleClearImagen = () => {
     setArchivoNuevo(null);
     setPreview(null);
-    setImagenEliminada(true); // marcar que se quiere eliminar
+    setImagenEliminada(true);
   };
 
   const handleGuardarCambios = async () => {
     setLoading(true);
     try {
       await actualizarBoletaConImagen(boleta, form, archivoNuevo, imagenEliminada);
-      setAlerta?.({
-        tipo: "exito",
-        mensaje: "Boleta modificada correctamente.",
-      });
+      mostrarExito("Boleta actualizada correctamente.");
       window.dispatchEvent(new Event("nueva-boleta"));
       onActualizar?.();
       onClose();
     } catch (error) {
       console.error(error);
-      setAlerta?.({
-        tipo: "error",
-        mensaje: error.message || "Error al guardar cambios.",
-      });
+      mostrarError("Error al actualizar la boleta.");
     } finally {
       setLoading(false);
     }

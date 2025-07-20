@@ -8,13 +8,15 @@ import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
 import Table from "../ui/Table";
+import { useAlerta } from "../../context/AlertaContext";
 
-const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
+const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   const [cargando, setCargando] = useState(true);
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
   const [boletaParaVer, setBoletaParaVer] = useState(null);
   const [boletaAEliminar, setBoletaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
+  const { mostrarExito, mostrarError } = useAlerta();
 
   useEffect(() => {
     const timer = setTimeout(() => setCargando(false), 300);
@@ -26,11 +28,11 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
     try {
       setEliminando(true);
       await eliminarBoletaConImagen(boletaAEliminar);
-      setAlerta({ tipo: "exito", mensaje: "Boleta eliminada correctamente." });
+      mostrarExito("Boleta eliminada correctamente.");
       window.dispatchEvent(new Event("nueva-boleta"));
       recargarBoletas?.();
     } catch (error) {
-      setAlerta({ tipo: "error", mensaje: "Error al eliminar la boleta." });
+      mostrarError("Error al eliminar la boleta.");
       console.error(error);
     } finally {
       setEliminando(false);
@@ -231,7 +233,6 @@ const BoletaHistorial = ({ boletas, recargarBoletas, setAlerta }) => {
           boleta={boletaSeleccionada}
           onClose={() => setBoletaSeleccionada(null)}
           onActualizar={recargarBoletas}
-          setAlerta={setAlerta}
         />
       )}
 

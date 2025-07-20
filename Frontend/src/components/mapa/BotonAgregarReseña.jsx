@@ -1,9 +1,12 @@
+import { useAlerta } from "../../context/AlertaContext";
 import MainButton from "../ui/MainButton";
 
-const BotonAgregarReseña = ({ usuario, onAbrirModalReseña, setAlerta }) => {
+const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
+  const { mostrarError } = useAlerta();
+
   const handleClick = () => {
     if (!usuario) {
-      setAlerta("Debes iniciar sesión para agregar una reseña");
+      mostrarError("Debes iniciar sesión para agregar una reseña");
       return;
     }
     onAbrirModalReseña();
@@ -16,7 +19,11 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña, setAlerta }) => {
         disabled={!usuario}
         variant={usuario ? "accent" : "disabled"}
         className="w-full"
-        title={usuario ? "Agregar reseña" : "Debes iniciar sesión para agregar una reseña"}
+        title={
+          usuario
+            ? "Agregar reseña"
+            : "Debes iniciar sesión para agregar una reseña"
+        }
       >
         Agregar reseña
       </MainButton>

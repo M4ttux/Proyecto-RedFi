@@ -15,7 +15,6 @@ const Mapa = () => {
 
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [mapRefReal, setMapRefReal] = useState(null);
-  const [alerta, setAlerta] = useState("");
   const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
   const [cargandoMapa, setCargandoMapa] = useState(true);
 
@@ -95,12 +94,6 @@ const Mapa = () => {
     return () => window.removeEventListener("resize", manejarResize);
   }, []);
 
-  const handleUbicacionActual = () => {
-    setCargandoUbicacion(true);
-    window.dispatchEvent(new CustomEvent("solicitarUbicacion"));
-    setTimeout(() => setCargandoUbicacion(false), DURACION_ALERTA + 1000);
-  };
-
   return (
     <div className="h-[calc(100vh-74px)] w-full relative">
       {cargandoMapa && (
@@ -118,10 +111,6 @@ const Mapa = () => {
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}
             mapRef={mapRefReal}
-            alerta={alerta}
-            setAlerta={setAlerta}
-            cargandoUbicacion={cargandoUbicacion}
-            onUbicacionActual={handleUbicacionActual}
             onAbrirModalReseña={() =>
               window.dispatchEvent(new CustomEvent("abrirModalAgregarReseña"))
             }

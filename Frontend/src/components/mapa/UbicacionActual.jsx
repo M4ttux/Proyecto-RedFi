@@ -1,33 +1,12 @@
-// components/mapa/UbicacionActual.jsx
-import { useState } from "react";
 import { IconCurrentLocation } from "@tabler/icons-react";
-import { manejarUbicacionActual } from "../../services/mapa";
 import MainButton from "../ui/MainButton";
-import Alerta from "../ui/Alerta";
+import { useUbicacionActual } from "../../hooks/useUbicacionActual";
 
 const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
-  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
-  const [alerta, setAlerta] = useState("");
-
-  const handleUbicacionActual = async () => {
-    setCargandoUbicacion(true);
-    setAlerta("");
-    try {
-      if (mapRef?.current) {
-        await manejarUbicacionActual(
-          boundsCorrientes,
-          setAlerta,
-          mapRef.current
-        );
-      } else {
-        setAlerta("No se puede acceder al mapa en este momento.");
-      }
-    } catch (error) {
-      setAlerta("No se pudo obtener tu ubicación.");
-    } finally {
-      setTimeout(() => setCargandoUbicacion(false), 1000);
-    }
-  };
+  const { cargandoUbicacion, handleUbicacionActual } = useUbicacionActual(
+    boundsCorrientes,
+    mapRef
+  );
 
   return (
     <div className="relative">
@@ -42,15 +21,6 @@ const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
       >
         Mi Ubicación
       </MainButton>
-
-      {alerta && (
-        <Alerta
-          mensaje={alerta}
-          tipo="error"
-          onCerrar={() => setAlerta("")}
-          flotante={true}
-        />
-      )}
     </div>
   );
 };

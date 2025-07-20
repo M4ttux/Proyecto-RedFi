@@ -14,11 +14,11 @@ import {
   subirImagenBoleta,
   guardarBoleta,
 } from "../../services/boletasService";
+import { useAlerta } from "../../context/AlertaContext";
 
 const BoletaForm = ({
   onBoletaAgregada,
   onActualizarNotificaciones,
-  setAlerta,
   setVista,
 }) => {
   const [form, setForm] = useState({
@@ -31,6 +31,7 @@ const BoletaForm = ({
 
   const [archivo, setArchivo] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const { mostrarExito, mostrarError } = useAlerta();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -41,7 +42,7 @@ const BoletaForm = ({
 
     const user = await obtenerUsuarioActual();
     if (!user) {
-      setAlerta({ tipo: "error", mensaje: "Debes iniciar sesión." });
+      mostrarError("Debés iniciar sesión.");
       return;
     }
 
@@ -63,7 +64,7 @@ const BoletaForm = ({
         url_imagen,
       });
 
-      setAlerta({ tipo: "exito", mensaje: "Boleta guardada correctamente." });
+      mostrarExito("Boleta guardada correctamente.");
 
       setForm({
         mes: "",
@@ -82,7 +83,7 @@ const BoletaForm = ({
       setVista?.("historial");
     } catch (error) {
       console.error(error);
-      setAlerta({ tipo: "error", mensaje: "Error al guardar la boleta." });
+      mostrarError("Error al guardar la boleta.");
     }
   };
 

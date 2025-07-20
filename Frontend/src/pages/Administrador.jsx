@@ -6,12 +6,13 @@ import { obtenerReseñasAdmin } from "../services/reseñaService";
 import { obtenerTecnologias } from "../services/tecnologiaService";
 
 import Table from "../components/ui/Table";
-import Alerta from "../components/ui/Alerta";
 import MainH1 from "../components/ui/MainH1";
 
 import TablaSelector from "../components/admin/TablaSelector";
 import LoaderAdmin from "../components/admin/LoaderAdmin";
 import { generarColumnas } from "../components/admin/generarColumnas";
+
+import { useAlerta } from "../context/AlertaContext";
 
 const tablasDisponibles = [
   { id: "user_profiles", label: "Perfiles" },
@@ -22,9 +23,9 @@ const tablasDisponibles = [
 
 const Administrador = () => {
   const [perfil, setPerfil] = useState(null);
-  const [alerta, setAlerta] = useState(null);
   const [tablaActual, setTablaActual] = useState("user_profiles");
   const [loading, setLoading] = useState(true);
+  const { mostrarError } = useAlerta();
   const navigate = useNavigate();
 
   const [todosLosDatos, setTodosLosDatos] = useState({
@@ -36,7 +37,6 @@ const Administrador = () => {
 
   const precargarDatos = async () => {
     setLoading(true);
-    setAlerta(null);
     try {
       const [perfiles, proveedores, reseñas, tecnologias] = await Promise.all([
         obtenerPerfilesAdmin(),
@@ -51,7 +51,7 @@ const Administrador = () => {
         tecnologias,
       });
     } catch (error) {
-      setAlerta({ tipo: "error", mensaje: error.message });
+      mostrarError("Error al cargar datos.");
     } finally {
       setLoading(false);
     }
@@ -75,26 +75,13 @@ const Administrador = () => {
           await precargarDatos();
         }
       } catch (error) {
-        setAlerta({
-          tipo: "error",
-          mensaje: "Error al cargar perfil de usuario.",
-        });
+        mostrarError("Error al cargar perfil de usuario.");
         setLoading(false);
       }
     };
 
     verificarPermisos();
   }, [navigate]);
-
-  if (alerta) {
-    return (
-      <Alerta
-        mensaje={alerta.mensaje}
-        tipo={alerta.tipo}
-        flotante={true}
-      />
-    );
-  }
 
   if (!perfil || perfil.rol !== "admin") return;
   if (loading) return <LoaderAdmin />;

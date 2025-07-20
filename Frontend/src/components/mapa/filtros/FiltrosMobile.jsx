@@ -1,5 +1,5 @@
 import PanelControlMapa from "../PanelControlMapa";
-import { useState } from "react";
+import { useAlerta } from "../../../context/AlertaContext";
 
 const FiltrosMobile = ({
   filtrosTemporales,
@@ -15,7 +15,8 @@ const FiltrosMobile = ({
   boundsCorrientes,
   mapRef,
 }) => {
-  const [alertaMobile, setAlertaMobile] = useState("");
+  const { mostrarError } = useAlerta();
+
   const handleAplicarFiltros = (filtrosFinales) => {
     setFiltrosAplicados(filtrosFinales);
     setMostrarFiltros(false);
@@ -26,13 +27,13 @@ const FiltrosMobile = ({
       <PanelControlMapa
         boundsCorrientes={boundsCorrientes}
         mapRef={mapRef}
-        alerta={alertaMobile}
-        setAlerta={setAlertaMobile}
+        alerta={null}
+        setAlerta={mostrarError}
         cargandoUbicacion={false}
         onUbicacionActual={() => {}}
         onAbrirModalReseña={() => {
           window.dispatchEvent(new CustomEvent("abrirModalAgregarReseña"));
-          setMostrarFiltros(false); // cerrar panel mobile
+          setMostrarFiltros(false);
         }}
         filtros={filtrosTemporales}
         setFiltros={setFiltrosTemporales}

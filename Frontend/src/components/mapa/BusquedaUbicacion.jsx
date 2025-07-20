@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { IconX, IconSearch } from "@tabler/icons-react";
 import { useBusquedaUbicacion } from "../../hooks/useBusquedaUbicacion";
+import { useAlerta } from "../../context/AlertaContext";
 import Input from "../ui/Input";
 import MainButton from "../ui/MainButton";
-import Alerta from "../ui/Alerta";
 
-const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
+const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
   const {
     input,
     sugerencias,
@@ -14,7 +14,9 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
     handleSeleccionarSugerencia,
     handleLimpiarBusqueda,
     setSugerencias,
-  } = useBusquedaUbicacion(boundsCorrientes, setAlerta, mapRef);
+  } = useBusquedaUbicacion(boundsCorrientes, mapRef);
+
+  const { mostrarError } = useAlerta();
 
   const [inputInvalido, setInputInvalido] = useState(false);
   const contenedorRef = useRef();
@@ -31,7 +33,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
 
   const handleBuscarClick = () => {
     if (!input.trim()) {
-      setAlerta("Por favor ingresá una ubicación.");
+      mostrarError("Por favor ingresá una ubicación.");
       setInputInvalido(true);
       return;
     }
@@ -85,16 +87,6 @@ const BusquedaUbicacion = ({ boundsCorrientes, setAlerta, alerta, mapRef }) => {
                 </li>
               ))}
             </ul>
-          )}
-
-          {/* Alerta si hay mensaje */}
-          {alerta && (
-            <Alerta
-              mensaje={alerta}
-              tipo="error"
-              onCerrar={() => setAlerta("")}
-              flotante={true}
-            />
           )}
         </div>
 

@@ -8,15 +8,17 @@ import { getPerfil, updatePerfilYFoto } from "../../services/perfilService";
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
-import Alerta from "../../components/ui/Alerta";
 import Input from "../../components/ui/Input";
 import FileInput from "../../components/ui/FileInput";
 import Select from "../../components/ui/Select";
 import Avatar from "../../components/ui/Avatar";
 
+import { useAlerta } from "../../context/AlertaContext";
+
 const EditarPerfil = () => {
   const { usuario } = useAuth();
   const navigate = useNavigate();
+  const { mostrarError, mostrarExito } = useAlerta();
 
   const [form, setForm] = useState({
     nombre: "",
@@ -27,7 +29,6 @@ const EditarPerfil = () => {
   const [preview, setPreview] = useState(null);
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [alerta, setAlerta] = useState({ tipo: "", mensaje: "" });
 
   useEffect(() => {
     document.title = "Red-Fi | Editar Perfil";
@@ -50,10 +51,7 @@ const EditarPerfil = () => {
           perfilDB?.foto_url || usuario.user_metadata?.foto_perfil || null
         );
       } catch (err) {
-        setAlerta({
-          tipo: "error",
-          mensaje: "Error al cargar el perfil.",
-        });
+        mostrarError("Error al cargar el perfil.");
       }
     };
 
@@ -62,10 +60,7 @@ const EditarPerfil = () => {
         const data = await obtenerProveedores();
         setProveedores(data);
       } catch (error) {
-        setAlerta({
-          tipo: "error",
-          mensaje: "Error al cargar proveedores.",
-        });
+        mostrarError("Error al cargar proveedores.");
       }
     };
 
@@ -89,27 +84,20 @@ const EditarPerfil = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAlerta({ tipo: "", mensaje: "" });
     setLoading(true);
 
     try {
       await updatePerfilYFoto({ ...form, preview });
-      setAlerta({
-        tipo: "exito",
-        mensaje: "Perfil actualizado correctamente.",
-      });
+      mostrarExito("Perfil actualizado correctamente.");
     } catch (error) {
-      setAlerta({
-        tipo: "error",
-        mensaje: error?.message || "Ocurrió un error inesperado.",
-      });
+      mostrarError(error?.message || "Ocurrió un error inesperado.");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="w-full bg-fondo flex items-center justify-center px-4 py-8 relative">
+    <div className="w-full bg-fondo flex items-center justify-center px-4 py-16 relative">
       <div className="w-full max-w-lg">
         {/* Título */}
         <div className="w-full text-center mb-8">
@@ -131,7 +119,7 @@ const EditarPerfil = () => {
                   setForm((prev) => ({
                     ...prev,
                     foto: file,
-                    eliminarFoto: !file, // Si no hay file, es porque se eliminó
+                    eliminarFoto: !file,
                   }));
 
                   if (file) {
@@ -208,16 +196,6 @@ const EditarPerfil = () => {
             Cambiar contraseña
           </MainLinkButton>
         </div>
-
-        {/* Alerta flotante */}
-        {alerta.mensaje && (
-          <Alerta
-            tipo={alerta.tipo}
-            mensaje={alerta.mensaje}
-            onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
-            flotante={true}
-          />
-        )}
       </div>
     </div>
   );

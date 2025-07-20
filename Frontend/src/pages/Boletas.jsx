@@ -5,37 +5,32 @@ import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import BoletasLayout from "../components/boletas/BoletasLayout";
 import { useNotificaciones } from "../components/layout/Navbar";
 import MainButton from "../components/ui/MainButton";
-import Alerta from "../components/ui/Alerta";
+import { useAlerta } from "../context/AlertaContext";
 
 const Boletas = () => {
   useEffect(() => {
     document.title = "Red-Fi | Boletas";
   }, []);
   const [boletas, setBoletas] = useState([]);
-  const [vista, setVista] = useState("historial"); // "formulario" o "historial"
+  const [vista, setVista] = useState("historial");
   const { cargarNotificaciones } = useNotificaciones();
+  const { mostrarError, mostrarExito } = useAlerta();
 
   const cargarBoletas = async () => {
-    const data = await obtenerBoletasDelUsuario();
-    setBoletas(data);
+    try {
+      const data = await obtenerBoletasDelUsuario();
+      setBoletas(data);
+    } catch (error) {
+      mostrarError("Error al cargar las boletas.");
+    }
   };
 
   useEffect(() => {
     cargarBoletas();
   }, []);
 
-  const [alerta, setAlerta] = useState({ tipo: "", mensaje: "" });
-
   return (
     <BoletasLayout>
-      {alerta.mensaje && (
-        <Alerta
-          mensaje={alerta.mensaje}
-          tipo={alerta.tipo}
-          onCerrar={() => setAlerta({ tipo: "", mensaje: "" })}
-          flotante={true}
-        />
-      )}
       <div className="flex gap-4 justify-center mb-8">
         <MainButton
           variant="toggle"
@@ -57,14 +52,12 @@ const Boletas = () => {
         <BoletaForm
           onBoletaAgregada={cargarBoletas}
           onActualizarNotificaciones={cargarNotificaciones}
-          setAlerta={setAlerta}
           setVista={setVista}
         />
       ) : (
         <BoletaHistorial
           boletas={boletas}
           recargarBoletas={cargarBoletas}
-          setAlerta={setAlerta}
         />
       )}
     </BoletasLayout>

@@ -1,34 +1,30 @@
-import { useState, useEffect } from "react";
 import { manejarUbicacionActual } from "../services/mapa";
+import { useAlerta } from "../context/AlertaContext";
+import { useState } from "react";
 
-export const useUbicacionActual = (boundsCorrientes, setAlerta, mapRef) => {
+export const useUbicacionActual = (boundsCorrientes, mapRef) => {
   const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+  const { mostrarInfo, mostrarError } = useAlerta();
 
-  const handleUbicacionActual = () => {
+  const handleUbicacionActual = async () => {
+    if (!mapRef.current) {
+      mostrarError("El mapa aún no está disponible.");
+      return;
+    }
+
     setCargandoUbicacion(true);
-    const evento = new CustomEvent("solicitarUbicacion");
-    window.dispatchEvent(evento);
-    setTimeout(() => setCargandoUbicacion(false), 4000);
+    try {
+      await manejarUbicacionActual(boundsCorrientes, mostrarInfo, mapRef.current);
+    } catch (e) {
+      mostrarError("Ocurrió un error al obtener tu ubicación.");
+    } finally {
+      setTimeout(() => setCargandoUbicacion(false), 1000);
+    }
   };
-
-  useEffect(() => {
-    const manejarEvento = () => {
-      if (mapRef.current) {
-        setAlerta("");
-        setTimeout(() => {
-          manejarUbicacionActual(boundsCorrientes, setAlerta, mapRef.current);
-        }, 50);
-      }
-    };
-
-    window.addEventListener("solicitarUbicacion", manejarEvento);
-    return () => {
-      window.removeEventListener("solicitarUbicacion", manejarEvento);
-    };
-  }, [boundsCorrientes, setAlerta, mapRef]);
 
   return {
     cargandoUbicacion,
     handleUbicacionActual,
   };
 };
+
