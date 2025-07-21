@@ -33,5 +33,5 @@ export const eliminarTecnologia = async (id, mostrarAlerta = () => {}) => {
   if (error) {
     mostrarAlerta("Error al eliminar la tecnología");
     throw error;
-  }
+  } 
 };

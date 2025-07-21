@@ -3,6 +3,7 @@ import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Avatar from "../../ui/Avatar";
+import ModalContenedor from "../../ui/ModalContenedor";
 
 const ModalReseña = ({ reseña, onClose }) => {
   if (!reseña) return null;
@@ -46,48 +47,46 @@ const ModalReseña = ({ reseña, onClose }) => {
     : "US";
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center animate-fadeIn px-4 sm:px-6">
-      <div className="bg-secundario text-white p-6 rounded-2xl w-full max-w-xl shadow-2xl relative border border-white/10">
-        {/* Botón cerrar */}
-        <MainButton
-          onClick={onClose}
-          variant="cross"
-          title="Cerrar"
-          className="absolute top-3 right-3"
-        >
-          <IconX size={24} />
-        </MainButton>
+    <ModalContenedor onClose={onClose}>
+      {/* Botón cerrar */}
+      <MainButton
+        onClick={onClose}
+        variant="cross"
+        title="Cerrar"
+        className="absolute top-3 right-3"
+      >
+        <IconX size={24} />
+      </MainButton>
 
-        {/* Avatar */}
-        <div className="flex justify-center mb-4">
-          <Avatar fotoUrl={fotoUrl} nombre={nombre} size={20} />
-        </div>
-
-        {/* Nombre */}
-        <MainH2 className="text-2xl lg:text-3xl text-center">{nombre}</MainH2>
-
-        {/* Proveedor */}
-        <p className="text-center text-xs text-texto/60 mb-4">
-          Proveedor: {proveedor}
-        </p>
-
-        {/* Estrellas */}
-        <div className="flex justify-center gap-1 text-yellow-400 text-2xl mb-4">
-          {Array.from({ length: 5 }).map((_, i) =>
-            i < estrellasLlenas ? (
-              <IconCarambolaFilled key={i} size={24} />
-            ) : (
-              <IconCarambola key={i} size={24} />
-            )
-          )}
-        </div>
-
-        {/* Comentario */}
-        <p className="text-sm text-texto/90 bg-white/5 rounded-md px-4 py-4 text-center leading-relaxed">
-          “{reseña.comentario}”
-        </p>
+      {/* Avatar */}
+      <div className="flex justify-center mb-4">
+        <Avatar fotoUrl={fotoUrl} nombre={nombre} size={20} />
       </div>
-    </div>
+
+      {/* Nombre */}
+      <MainH2 className="text-2xl lg:text-3xl text-center">{nombre}</MainH2>
+
+      {/* Proveedor */}
+      <p className="text-center text-xs text-texto/60 mb-4">
+        Proveedor: {proveedor}
+      </p>
+
+      {/* Estrellas */}
+      <div className="flex justify-center gap-1 text-yellow-400 text-2xl mb-4">
+        {Array.from({ length: 5 }).map((_, i) =>
+          i < estrellasLlenas ? (
+            <IconCarambolaFilled key={i} size={24} />
+          ) : (
+            <IconCarambola key={i} size={24} />
+          )
+        )}
+      </div>
+
+      {/* Comentario */}
+      <p className="text-sm text-texto/90 bg-white/5 rounded-md px-4 py-4 text-center leading-relaxed">
+        “{reseña.comentario}”
+      </p>
+    </ModalContenedor>
   );
 };
 

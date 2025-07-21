@@ -1,6 +1,7 @@
 import MainButton from "../ui/MainButton";
 import MainH2 from "../ui/MainH2";
 import { IconX } from "@tabler/icons-react";
+import ModalContenedor from "../ui/ModalContenedor";
 
 const ModalEliminar = ({
   titulo = "¿Estás seguro?",
@@ -10,8 +11,7 @@ const ModalEliminar = ({
   loading = false,
 }) => {
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-secundario text-white p-6 rounded-lg w-full max-w-xl border border-white/10">
+    <ModalContenedor onClose={onCancelar}>
       <div className="flex justify-between mb-4">
           <MainH2 className="mb-0">{titulo}</MainH2>
           <MainButton
@@ -31,7 +31,6 @@ const ModalEliminar = ({
           <MainButton
             onClick={onCancelar}
             variant="secondary"
-            className="px-4 py-2"
             disabled={loading}
           >
             Cancelar
@@ -39,15 +38,13 @@ const ModalEliminar = ({
           <MainButton
             onClick={onConfirmar}
             variant="danger"
-            className="px-4 py-2"
             loading={loading}
             disabled={loading}
           >
             {loading ? "Eliminando..." : "Eliminar"}
           </MainButton>
         </div>
-      </div>
-    </div>
+      </ModalContenedor>
   );
 };
 

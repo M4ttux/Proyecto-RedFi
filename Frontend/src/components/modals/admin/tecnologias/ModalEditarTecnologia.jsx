@@ -4,6 +4,7 @@ import MainButton from "../../../ui/MainButton";
 import MainH2 from "../../../ui/MainH2";
 import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
+import ModalContenedor from "../../../ui/ModalContenedor";
 import { editarTecnologia } from "../../../../services/tecnologiaService";
 import { useAlerta } from "../../../../context/AlertaContext";
 
@@ -50,8 +51,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
   if (!tecnologia) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-secundario border border-white/20 rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
+    <ModalContenedor onClose={onClose}>
         {/* Encabezado */}
         <div className="flex justify-between mb-4">
           <MainH2 className="mb-0">Editar tecnología</MainH2>
@@ -107,8 +107,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
             </MainButton>
           </div>
         </form>
-      </div>
-    </div>
+      </ModalContenedor>
   );
 };
 

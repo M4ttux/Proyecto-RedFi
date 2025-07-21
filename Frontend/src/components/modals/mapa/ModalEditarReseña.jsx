@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../../services/proveedorService";
+import ModalContenedor from "../../ui/ModalContenedor";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 
@@ -69,104 +70,102 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-secundario border border-white/20 rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
-        {/* Encabezado del modal */}
-        <div className="flex justify-between mb-4">
-          <MainH2 className="mb-0">Editar reseña</MainH2>
-          <MainButton
-            onClick={onClose}
-            type="button"
-            variant="cross"
-            title="Cerrar modal"
-            disabled={loading}
-          >
-            <IconX size={24} />
-          </MainButton>
+    <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
+      <div className="flex justify-between mb-4">
+        <MainH2 className="mb-0">Editar reseña</MainH2>
+        <MainButton
+          onClick={onClose}
+          type="button"
+          variant="cross"
+          title="Cerrar modal"
+          disabled={loading}
+        >
+          <IconX size={24} />
+        </MainButton>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-texto mb-2">
+              Proveedor
+            </label>
+            <div className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto">
+              {(() => {
+                const proveedor = proveedores.find(
+                  (p) => p.id === formData.proveedor_id
+                );
+                if (!proveedor) return "Cargando...";
+                return `${proveedor.nombre}${
+                  proveedor.tecnologia ? ` (${proveedor.tecnologia})` : ""
+                }`;
+              })()}
+            </div>
+          </div>
+
+          {/* Estrellas */}
+          <div>
+            <label className="block text-sm font-medium text-texto mb-2">
+              Calificación *
+            </label>
+            <div className="flex gap-1 text-yellow-400">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => handleStarClick(star)}
+                  className="text-2xl hover:scale-110 transition"
+                  disabled={loading}
+                >
+                  {star <= formData.estrellas ? (
+                    <IconCarambolaFilled size={24} />
+                  ) : (
+                    <IconCarambola size={24} />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-texto mb-2">
+              Comentario *
+            </label>
+            <textarea
+              name="comentario"
+              value={formData.comentario}
+              onChange={handleChange}
+              required
+              rows={4}
+              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento resize-none"
+              placeholder="Escribe tu experiencia con este proveedor..."
+              disabled={loading}
+            />
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-texto mb-2">
-                Proveedor
-              </label>
-              <div className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto">
-                {(() => {
-                  const proveedor = proveedores.find(
-                    (p) => p.id === formData.proveedor_id
-                  );
-                  if (!proveedor) return "Cargando...";
-                  return `${proveedor.nombre}${
-                    proveedor.tecnologia ? ` (${proveedor.tecnologia})` : ""
-                  }`;
-                })()}
-              </div>
-            </div>
-
-            {/* Estrellas */}
-            <div>
-              <label className="block text-sm font-medium text-texto mb-2">
-                Calificación *
-              </label>
-              <div className="flex gap-1 text-yellow-400">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => handleStarClick(star)}
-                    className="text-2xl hover:scale-110 transition"
-                    disabled={loading}
-                  >
-                    {star <= formData.estrellas ? (
-                      <IconCarambolaFilled size={24} />
-                    ) : (
-                      <IconCarambola size={24} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-texto mb-2">
-                Comentario *
-              </label>
-              <textarea
-                name="comentario"
-                value={formData.comentario}
-                onChange={handleChange}
-                required
-                rows={4}
-                className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento resize-none"
-                placeholder="Escribe tu experiencia con este proveedor..."
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-3 mt-6">
-            <MainButton
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-              disabled={loading}
-              className="flex-1"
-            >
-              Cancelar
-            </MainButton>
-            <MainButton
-              type="submit"
-              variant="primary"
-              disabled={loading}
-              className="flex-1"
-            >
-              {loading ? "Guardando..." : "Guardar"}
-            </MainButton>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="flex gap-3 mt-6">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1"
+          >
+            Cancelar
+          </MainButton>
+          <MainButton
+            type="submit"
+            variant="primary"
+            disabled={loading}
+            className="flex-1"
+          >
+            {loading ? "Guardando..." : "Guardar"}
+          </MainButton>
+        </div>
+      </form>
+    </ModalContenedor>
   );
 };
 

@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { getPerfil, obtenerPerfilesAdmin } from "../services/perfilService";
 import { obtenerProveedoresAdmin } from "../services/proveedorService";
 import { obtenerReseñasAdmin } from "../services/reseñaService";
-import { obtenerTecnologias, eliminarTecnologia,} from "../services/tecnologiaService";
+import {
+  obtenerTecnologias,
+  eliminarTecnologia,
+} from "../services/tecnologiaService";
 import ModalEliminar from "../components/modals/ModalEliminar";
+
+import ModalVerTecnologia from "../components/modals/admin/tecnologias/ModalVerTecnologia";
 import ModalEditarTecnologia from "../components/modals/admin/tecnologias/ModalEditarTecnologia";
 
 import ModalEditarProveedor from "../components/modals/admin/proveedores/ModalEditarProveedor";
@@ -29,12 +34,14 @@ const Administrador = () => {
   const [perfil, setPerfil] = useState(null);
   const [tablaActual, setTablaActual] = useState("user_profiles");
   const [loading, setLoading] = useState(true);
-  const { mostrarError } = useAlerta();
+  const { mostrarError, mostrarExito } = useAlerta();
   const navigate = useNavigate();
 
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
 
   const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
+
+  const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
   const [tecnologiaAEliminar, setTecnologiaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
 
@@ -46,7 +53,12 @@ const Administrador = () => {
   });
 
   const acciones = {
-    onVer: (row) => console.log("Ver:", row),
+    onVer: (row) => {
+      if (tablaActual === "tecnologias") {
+        setTecnologiaAVer(row);
+      }
+      // ...otros casos
+    },
     onEditar: (row) => {
       if (tablaActual === "tecnologias") {
         setTecnologiaSeleccionada(row);
@@ -133,18 +145,25 @@ const Administrador = () => {
         />
         <Table columns={columnas} data={datosActuales} />
 
-        {tablaActual === "tecnologias" && tecnologiaSeleccionada && (
-          <ModalEditarTecnologia
-            tecnologia={tecnologiaSeleccionada}
-            onClose={() => setTecnologiaSeleccionada(null)}
-            onActualizar={precargarDatos}
-          />
-        )}
-
         {tablaActual === "proveedores" && proveedorSeleccionado && (
           <ModalEditarProveedor
             proveedor={proveedorSeleccionado}
             onClose={() => setProveedorSeleccionado(null)}
+            onActualizar={precargarDatos}
+          />
+        )}
+
+        {tablaActual === "tecnologias" && tecnologiaAVer && (
+          <ModalVerTecnologia
+            tecnologia={tecnologiaAVer}
+            onClose={() => setTecnologiaAVer(null)}
+          />
+        )}
+
+        {tablaActual === "tecnologias" && tecnologiaSeleccionada && (
+          <ModalEditarTecnologia
+            tecnologia={tecnologiaSeleccionada}
+            onClose={() => setTecnologiaSeleccionada(null)}
             onActualizar={precargarDatos}
           />
         )}
@@ -160,6 +179,7 @@ const Administrador = () => {
               try {
                 await eliminarTecnologia(tecnologiaAEliminar.id, mostrarError);
                 setTecnologiaAEliminar(null);
+                mostrarExito("Tecnología eliminada con éxito.");
                 await precargarDatos();
               } catch (e) {
                 console.error("Error al eliminar tecnología:", e);
