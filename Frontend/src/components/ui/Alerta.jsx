@@ -28,7 +28,7 @@ const Alerta = ({
   tipo = "error",
   onCerrar,
   autoOcultar = true,
-  duracion = DURACION_ALERTA * 1000,
+  duracion = DURACION_ALERTA,
   flotante = false,
 }) => {
   const [visible, setVisible] = useState(false);

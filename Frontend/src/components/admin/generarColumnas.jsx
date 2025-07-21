@@ -1,20 +1,16 @@
-import {
-  IconCarambola,
-  IconCarambolaFilled,
-} from "@tabler/icons-react";
+import { IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
+import MainButton from "../ui/MainButton";
 
-export const generarColumnas = (tabla, datos) => {
+export const generarColumnas = (tabla, datos, acciones = {}) => {
   if (!datos.length) return [];
 
   const ejemplo = datos[0];
 
+  const columnasBase = [];
+
   if (tabla === "proveedores") {
-    return [
-      {
-        id: "nombre",
-        label: "NOMBRE",
-        renderCell: (row) => row.nombre,
-      },
+    columnasBase.push(
+      { id: "nombre", label: "NOMBRE", renderCell: (row) => row.nombre },
       {
         id: "descripcion",
         label: "DESCRIPCIÓN",
@@ -42,12 +38,10 @@ export const generarColumnas = (tabla, datos) => {
             style={{ backgroundColor: row.color }}
           />
         ),
-      },
-    ];
-  }
-
-  if (tabla === "reseñas") {
-    return [
+      }
+    );
+  } else if (tabla === "reseñas") {
+    columnasBase.push(
       {
         id: "user_profiles",
         label: "USUARIOS",
@@ -71,11 +65,7 @@ export const generarColumnas = (tabla, datos) => {
                   className="text-yellow-400"
                 />
               ) : (
-                <IconCarambola
-                  key={i}
-                  size={18}
-                  className="text-yellow-400"
-                />
+                <IconCarambola key={i} size={18} className="text-yellow-400" />
               )
             )}
           </div>
@@ -84,13 +74,15 @@ export const generarColumnas = (tabla, datos) => {
       {
         id: "comentario",
         label: "COMENTARIO",
-        renderCell: (row) => row.comentario,
-      },
-    ];
-  }
-
-  if (tabla === "tecnologias") {
-    return [
+        renderCell: (row) => (
+          <div className="max-w-[250px] truncate text-ellipsis overflow-hidden" title={row.comentario}>
+            {row.comentario || "—"}
+          </div>
+        ),
+      }
+    );
+  } else if (tabla === "tecnologias") {
+    columnasBase.push(
       {
         id: "tecnologia",
         label: "TECNOLOGÍA",
@@ -100,14 +92,57 @@ export const generarColumnas = (tabla, datos) => {
         id: "descripcion",
         label: "DESCRIPCIÓN",
         renderCell: (row) => row.descripcion || "—",
-      },
-    ];
+      }
+    );
+  } else {
+    const keys = Object.keys(ejemplo);
+    keys.forEach((key) => {
+      columnasBase.push({
+        id: key,
+        label: key.toUpperCase(),
+        renderCell: (row) => row[key]?.toString?.() || "—",
+      });
+    });
   }
 
-  const keys = Object.keys(ejemplo);
-  return keys.map((key) => ({
-    id: key,
-    label: key.toUpperCase(),
-    renderCell: (row) => row[key]?.toString?.() || "—",
-  }));
+  // Agregar columna de acciones si se proveen funciones
+  if (acciones.onVer || acciones.onEditar || acciones.onEliminar) {
+    columnasBase.push({
+      id: "acciones",
+      label: "ACCIONES",
+      renderCell: (row) => (
+        <div className="flex flex-wrap gap-2">
+          {acciones.onVer && (
+            <MainButton
+              onClick={() => acciones.onVer(row)}
+              title="Ver"
+              variant="see"
+            >
+              Ver
+            </MainButton>
+          )}
+          {acciones.onEditar && (
+            <MainButton
+              onClick={() => acciones.onEditar(row)}
+              title="Editar"
+              variant="edit"
+            >
+              Editar
+            </MainButton>
+          )}
+          {acciones.onEliminar && (
+            <MainButton
+              onClick={() => acciones.onEliminar(row)}
+              title="Eliminar"
+              variant="delete"
+            >
+              Eliminar
+            </MainButton>
+          )}
+        </div>
+      ),
+    });
+  }
+
+  return columnasBase;
 };

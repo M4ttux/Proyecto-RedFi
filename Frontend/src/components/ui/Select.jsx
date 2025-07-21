@@ -4,6 +4,7 @@ import { IconLoader2, IconChevronDown } from "@tabler/icons-react";
 const Select = ({
   label,
   value,
+  multiple = false,
   onChange,
   options = [],
   getOptionValue = (opt) => opt,
@@ -28,13 +29,26 @@ const Select = ({
         <select
           id={name}
           name={name}
+          multiple={multiple}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            if (multiple) {
+              const values = Array.from(
+                e.target.selectedOptions,
+                (opt) => opt.value
+              );
+              onChange(values);
+            } else {
+              onChange(e.target.value);
+            }
+          }}
           disabled={disabled || loading}
           required={required}
           className={classNames(
             "w-full px-3 py-2 bg-white/5 text-texto rounded-lg border transition",
-            "appearance-none pr-10 max-w-full truncate",
+            multiple
+              ? "h-40 overflow-y-auto"
+              : "appearance-none pr-10 max-w-full truncate",
             "focus:outline-none focus:ring-1",
             (disabled || loading) && "cursor-not-allowed opacity-70",
             isInvalid
@@ -58,13 +72,15 @@ const Select = ({
           )}
         </select>
 
-        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-          {loading ? (
-            <IconLoader2 size={20} className="animate-spin text-white/60" />
-          ) : (
-            <IconChevronDown size={20} className="text-white/60" />
-          )}
-        </div>
+        {!multiple && (
+          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+            {loading ? (
+              <IconLoader2 size={20} className="animate-spin text-white/60" />
+            ) : (
+              <IconChevronDown size={20} className="text-white/60" />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

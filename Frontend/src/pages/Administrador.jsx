@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { getPerfil, obtenerPerfilesAdmin } from "../services/perfilService";
 import { obtenerProveedoresAdmin } from "../services/proveedorService";
 import { obtenerReseñasAdmin } from "../services/reseñaService";
-import { obtenerTecnologias } from "../services/tecnologiaService";
+import { obtenerTecnologias, eliminarTecnologia,} from "../services/tecnologiaService";
+import ModalEliminar from "../components/modals/ModalEliminar";
+import ModalEditarTecnologia from "../components/modals/admin/tecnologias/ModalEditarTecnologia";
+
+import ModalEditarProveedor from "../components/modals/admin/proveedores/ModalEditarProveedor";
 
 import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
@@ -28,12 +32,35 @@ const Administrador = () => {
   const { mostrarError } = useAlerta();
   const navigate = useNavigate();
 
+  const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
+
+  const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
+  const [tecnologiaAEliminar, setTecnologiaAEliminar] = useState(null);
+  const [eliminando, setEliminando] = useState(false);
+
   const [todosLosDatos, setTodosLosDatos] = useState({
     user_profiles: [],
     proveedores: [],
     reseñas: [],
     tecnologias: [],
   });
+
+  const acciones = {
+    onVer: (row) => console.log("Ver:", row),
+    onEditar: (row) => {
+      if (tablaActual === "tecnologias") {
+        setTecnologiaSeleccionada(row);
+      }
+      if (tablaActual === "proveedores") {
+        setProveedorSeleccionado(row);
+      }
+    },
+    onEliminar: (row) => {
+      if (tablaActual === "tecnologias") {
+        setTecnologiaAEliminar(row);
+      }
+    },
+  };
 
   const precargarDatos = async () => {
     setLoading(true);
@@ -87,7 +114,7 @@ const Administrador = () => {
   if (loading) return <LoaderAdmin />;
 
   const datosActuales = todosLosDatos[tablaActual] || [];
-  const columnas = generarColumnas(tablaActual, datosActuales);
+  const columnas = generarColumnas(tablaActual, datosActuales, acciones);
 
   return (
     <div className="w-full bg-fondo px-4 sm:px-6 pb-12 self-start">
@@ -105,6 +132,43 @@ const Administrador = () => {
           setTablaActual={setTablaActual}
         />
         <Table columns={columnas} data={datosActuales} />
+
+        {tablaActual === "tecnologias" && tecnologiaSeleccionada && (
+          <ModalEditarTecnologia
+            tecnologia={tecnologiaSeleccionada}
+            onClose={() => setTecnologiaSeleccionada(null)}
+            onActualizar={precargarDatos}
+          />
+        )}
+
+        {tablaActual === "proveedores" && proveedorSeleccionado && (
+          <ModalEditarProveedor
+            proveedor={proveedorSeleccionado}
+            onClose={() => setProveedorSeleccionado(null)}
+            onActualizar={precargarDatos}
+          />
+        )}
+
+        {tablaActual === "tecnologias" && tecnologiaAEliminar && (
+          <ModalEliminar
+            titulo="¿Eliminar tecnología?"
+            descripcion={`¿Estás seguro de que querés eliminar la tecnología "${tecnologiaAEliminar.tecnologia}"?`}
+            loading={eliminando}
+            onCancelar={() => setTecnologiaAEliminar(null)}
+            onConfirmar={async () => {
+              setEliminando(true);
+              try {
+                await eliminarTecnologia(tecnologiaAEliminar.id, mostrarError);
+                setTecnologiaAEliminar(null);
+                await precargarDatos();
+              } catch (e) {
+                console.error("Error al eliminar tecnología:", e);
+              } finally {
+                setEliminando(false);
+              }
+            }}
+          />
+        )}
       </div>
     </div>
   );
