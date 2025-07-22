@@ -1,5 +1,5 @@
-import { useAlerta } from "../../context/AlertaContext";
-import MainButton from "../ui/MainButton";
+import { useAlerta } from "../../../context/AlertaContext";
+import MainButton from "../../ui/MainButton";
 
 const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
   const { mostrarError } = useAlerta();

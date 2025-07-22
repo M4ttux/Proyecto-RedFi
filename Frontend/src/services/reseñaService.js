@@ -1,7 +1,7 @@
 import { supabase } from "../supabase/client";
 
 // Obtener todas las reseñas
-export const obtenerReseñas = async () => {
+export const obtenerReseñas = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase.from("reseñas").select(`
       *,
       user_profiles:usuario_id (
@@ -19,12 +19,15 @@ export const obtenerReseñas = async () => {
       )
     `);
 
-  if (error) throw error;
+  if (error) {
+    mostrarAlerta("Error al obtener reseñas.");
+    throw error;
+  }
   return data;
 };
 
 // Obtener reseñas del usuario autenticado
-export const obtenerReseñasUsuario = async () => {
+export const obtenerReseñasUsuario = async (mostrarAlerta = () => {}) => {
   try {
     const {
       data: { user },
@@ -54,15 +57,19 @@ export const obtenerReseñasUsuario = async () => {
       .eq("usuario_id", user.id)
       .order("created_at", { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      mostrarAlerta("Error al obtener reseñas del usuario.");
+      throw error;
+    }
     return data;
   } catch (error) {
-    throw new Error(`Error al obtener reseñas del usuario: ${error.message}`);
+    mostrarAlerta(`Error al obtener reseñas del usuario: ${error.message}`);
+    throw error;
   }
-};
+};  
 
 // Actualizar reseña
-export const actualizarReseña = async (id, reseñaData) => {
+export const actualizarReseña = async (id, reseñaData, mostrarAlerta = () => {}) => {
   try {
     const {
       data: { user },
@@ -94,15 +101,19 @@ export const actualizarReseña = async (id, reseñaData) => {
       )
       .single();
 
-    if (error) throw error;
+    if (error) {
+      mostrarAlerta("Error al actualizar la reseña.");
+      throw error;
+    }
     return data;
   } catch (error) {
-    throw new Error(`Error al actualizar reseña: ${error.message}`);
+    mostrarAlerta(`Error al actualizar reseña: ${error.message}`);
+    throw error;
   }
 };
 
 // Eliminar reseña
-export const eliminarReseña = async (id) => {
+export const eliminarReseña = async (id, mostrarAlerta = () => {}) => {
   try {
     const {
       data: { user },
@@ -115,15 +126,19 @@ export const eliminarReseña = async (id) => {
       .eq("id", id)
       .eq("usuario_id", user.id);
 
-    if (error) throw error;
+    if (error) {
+      mostrarAlerta("Error al eliminar la reseña.");
+      throw error;
+    }
     return true;
   } catch (error) {
-    throw new Error(`Error al eliminar reseña: ${error.message}`);
+    mostrarAlerta(`Error al eliminar reseña: ${error.message}`);
+    throw error;
   }
 };
 
 // Crear reseña
-export const crearReseña = async (reseñaData) => {
+export const crearReseña = async (reseñaData, mostrarAlerta = () => {}) => {
   try {
     const {
       data: { user },
@@ -164,20 +179,56 @@ export const crearReseña = async (reseñaData) => {
       )
       .single();
 
-    if (insertError) throw insertError;
-
+    if (insertError) {
+      mostrarAlerta("Error al crear reseña.");
+      throw insertError;
+    }
     return reseñaCompleta;
   } catch (error) {
-    console.error("❌ Error en crearReseña:", error);
+    mostrarAlerta(`Error en crear reseña: ${error.message}`);
     throw error;
   }
 };
 
-export const obtenerReseñasAdmin = async () => {
+export const obtenerReseñasAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("reseñas")
-    .select("estrellas, comentario, user_profiles(nombre), proveedores(nombre)");
+    .select("id, estrellas, comentario, user_profiles(nombre), proveedor_id, proveedores(nombre)");
 
-  if (error) throw new Error("Error al obtener reseñas para admin.");
+  if (error) {
+    mostrarAlerta("Error al obtener reseñas para admin.");
+    throw error;
+  }
   return data;
+};
+
+// reseñaService.js
+export const actualizarReseñaAdmin = async (id, datos, mostrarAlerta = () => {}) => {
+  const { error } = await supabase
+    .from("reseñas")
+    .update({
+      comentario: datos.comentario,
+      estrellas: datos.estrellas,
+      proveedor_id: datos.proveedor_id,
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("❌ Error en actualizarReseñaAdmin:", error);
+    mostrarAlerta("Error al actualizar reseña como admin");
+    throw error;
+  }
+};
+
+export const eliminarReseñaAdmin = async (id, mostrarAlerta = () => {}) => {
+  const { error } = await supabase
+    .from("reseñas")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("❌ Error en eliminarReseñaAdmin:", error);
+    mostrarAlerta("Error al eliminar reseña como admin");
+    throw error;
+  }
 };

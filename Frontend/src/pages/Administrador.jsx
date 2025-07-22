@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPerfil, obtenerPerfilesAdmin } from "../services/perfilService";
 import { obtenerProveedoresAdmin } from "../services/proveedorService";
-import { obtenerReseñasAdmin } from "../services/reseñaService";
+import {
+  obtenerReseñasAdmin,
+  actualizarReseñaAdmin,
+  eliminarReseñaAdmin,
+} from "../services/reseñaService";
 import {
   obtenerTecnologias,
   eliminarTecnologia,
 } from "../services/tecnologiaService";
+
 import ModalEliminar from "../components/modals/ModalEliminar";
+
+import ModalVerReseña from "../components/modals/mapa/ModalReseña";
+import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 
 import ModalVerTecnologia from "../components/modals/admin/tecnologias/ModalVerTecnologia";
 import ModalEditarTecnologia from "../components/modals/admin/tecnologias/ModalEditarTecnologia";
@@ -37,10 +45,13 @@ const Administrador = () => {
   const { mostrarError, mostrarExito } = useAlerta();
   const navigate = useNavigate();
 
+  const [reseñaSeleccionada, setReseñaSeleccionada] = useState(null);
+  const [reseñaAVer, setReseñaAVer] = useState(null);
+  const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
+
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
 
   const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
-
   const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
   const [tecnologiaAEliminar, setTecnologiaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
@@ -54,20 +65,32 @@ const Administrador = () => {
 
   const acciones = {
     onVer: (row) => {
+      if (tablaActual === "reseñas") {
+        setReseñaAVer(row);
+      }
       if (tablaActual === "tecnologias") {
         setTecnologiaAVer(row);
       }
       // ...otros casos
     },
     onEditar: (row) => {
-      if (tablaActual === "tecnologias") {
-        setTecnologiaSeleccionada(row);
-      }
       if (tablaActual === "proveedores") {
         setProveedorSeleccionado(row);
       }
+      if (tablaActual === "reseñas") {
+        setReseñaSeleccionada(row);
+      }
+      if (tablaActual === "tecnologias") {
+        setTecnologiaSeleccionada(row);
+      }
     },
     onEliminar: (row) => {
+      /* if (tablaActual === "proveedores") {
+        setProveedorSeleccionado(row);
+      } */
+      if (tablaActual === "reseñas") {
+        setReseñaAEliminar(row);
+      }
       if (tablaActual === "tecnologias") {
         setTecnologiaAEliminar(row);
       }
@@ -150,6 +173,53 @@ const Administrador = () => {
             proveedor={proveedorSeleccionado}
             onClose={() => setProveedorSeleccionado(null)}
             onActualizar={precargarDatos}
+          />
+        )}
+
+        {tablaActual === "reseñas" && reseñaAVer && (
+          <ModalVerReseña
+            reseña={reseñaAVer}
+            onClose={() => setReseñaAVer(null)}
+          />
+        )}
+
+        {tablaActual === "reseñas" && reseñaSeleccionada && (
+          <ModalEditarReseña
+            isOpen={!!reseñaSeleccionada}
+            reseña={reseñaSeleccionada}
+            onClose={() => setReseñaSeleccionada(null)}
+            onSave={async (datosActualizados) => {
+              try {
+                await actualizarReseñaAdmin(reseñaSeleccionada.id, datosActualizados, mostrarError);
+                mostrarExito("Reseña actualizada correctamente");
+                await precargarDatos();
+                setReseñaSeleccionada(null);
+              } catch (e) {
+                mostrarError("Error al actualizar reseña");
+              }
+            }}
+          />
+        )}
+
+        {tablaActual === "reseñas" && reseñaAEliminar && (
+          <ModalEliminar
+            titulo="¿Eliminar reseña?"
+            descripcion="¿Estás seguro de que querés eliminar esta reseña?"
+            loading={eliminando}
+            onCancelar={() => setReseñaAEliminar(null)}
+            onConfirmar={async () => {
+              setEliminando(true);
+              try {
+                await eliminarReseñaAdmin(reseñaAEliminar.id, mostrarError);
+                mostrarExito("Reseña eliminada correctamente");
+                setReseñaAEliminar(null);
+                await precargarDatos();
+              } catch (e) {
+                mostrarError("Error al eliminar reseña");
+              } finally {
+                setEliminando(false);
+              }
+            }}
           />
         )}
 

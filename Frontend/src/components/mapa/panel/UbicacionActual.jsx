@@ -1,6 +1,6 @@
 import { IconCurrentLocation } from "@tabler/icons-react";
-import MainButton from "../ui/MainButton";
-import { useUbicacionActual } from "../../hooks/useUbicacionActual";
+import MainButton from "../../ui/MainButton";
+import { useUbicacionActual } from "../../../hooks/useUbicacionActual";
 
 const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
   const { cargandoUbicacion, handleUbicacionActual } = useUbicacionActual(

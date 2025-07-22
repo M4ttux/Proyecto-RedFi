@@ -1,8 +1,8 @@
 import { useAuth } from "../../context/AuthContext";
-import BusquedaUbicacion from "./BusquedaUbicacion";
-import UbicacionActual from "./UbicacionActual";
+import BusquedaUbicacion from "./panel/BusquedaUbicacion";
+import UbicacionActual from "./panel/UbicacionActual";
 import FiltrosZona from "./filtros/FiltrosZona";
-import BotonAgregarReseña from "./BotonAgregarReseña";
+import BotonAgregarReseña from "./panel/BotonAgregarReseña";
 import MainButton from "../ui/MainButton";
 import MainH3 from "../ui/MainH3";
 import { IconX } from "@tabler/icons-react";

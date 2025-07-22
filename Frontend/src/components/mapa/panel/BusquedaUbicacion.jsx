@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { IconX, IconSearch } from "@tabler/icons-react";
-import { useBusquedaUbicacion } from "../../hooks/useBusquedaUbicacion";
-import { useAlerta } from "../../context/AlertaContext";
-import Input from "../ui/Input";
-import MainButton from "../ui/MainButton";
+import { useBusquedaUbicacion } from "../../../hooks/useBusquedaUbicacion";
+import { useAlerta } from "../../../context/AlertaContext";
+import Input from "../../ui/Input";
+import MainButton from "../../ui/MainButton";
 
 const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
   const {
