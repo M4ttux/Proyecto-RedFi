@@ -1,10 +1,13 @@
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 import MainButton from "../../ui/MainButton";
 import MainLinkButton from "../../ui/MainLinkButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
 
-const ModalProveedor = ({ proveedor, onClose, navigate }) => {
+const ModalProveedor = ({ proveedor, onClose }) => {
+  const navigate = useNavigate();
+
   if (!proveedor) return null;
 
   // Datos simulados por ahora

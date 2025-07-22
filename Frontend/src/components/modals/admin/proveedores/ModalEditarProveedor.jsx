@@ -6,7 +6,7 @@ import Textarea from "../../../ui/Textarea";
 import Select from "../../../ui/Select";
 import { IconX } from "@tabler/icons-react";
 import {
-  editarProveedor,
+  actualizarProveedor,
   obtenerTecnologiasDisponibles,
   obtenerZonasDisponibles,
 } from "../../../../services/proveedorService";
@@ -62,7 +62,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await editarProveedor(proveedor.id, form);
+      await actualizarProveedor(proveedor.id, form);
       mostrarExito("Proveedor actualizado correctamente");
       onActualizar?.();
       onClose();

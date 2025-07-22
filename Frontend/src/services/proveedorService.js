@@ -59,7 +59,7 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
-      "nombre, color, descripcion, sitio_web, ProveedorTecnologia(tecnologias(tecnologia))"
+      "id, nombre, color, descripcion, sitio_web, ProveedorTecnologia(tecnologias(tecnologia))"
     );
 
   if (error) {
@@ -154,7 +154,7 @@ export const agregarProveedor = async (
 };
 
 // Editar proveedor
-export const editarProveedor = async (
+export const actualizarProveedor = async (
   proveedorId,
   datos, // { nombre, descripcion, sitio_web, color, tecnologias: [], zonas: [] }
   mostrarAlerta = () => {}
@@ -232,9 +232,13 @@ export const editarProveedor = async (
 
 // Eliminar proveedor
 export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
-  const { error } = await supabase.from("proveedores").delete().eq("id", id);
+  const { error } = await supabase
+    .from("proveedores")
+    .delete()
+    .eq("id", id);
 
   if (error) {
+    console.error("❌ Error en eliminar Proveedor:", error);
     mostrarAlerta("Error al eliminar el proveedor.");
     throw error;
   }

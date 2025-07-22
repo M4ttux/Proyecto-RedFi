@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPerfil, obtenerPerfilesAdmin } from "../services/perfilService";
-import { obtenerProveedoresAdmin } from "../services/proveedorService";
+import { obtenerProveedoresAdmin, eliminarProveedor } from "../services/proveedorService";
 import {
   obtenerReseñasAdmin,
   actualizarReseñaAdmin,
@@ -20,6 +20,7 @@ import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import ModalVerTecnologia from "../components/modals/admin/tecnologias/ModalVerTecnologia";
 import ModalEditarTecnologia from "../components/modals/admin/tecnologias/ModalEditarTecnologia";
 
+import ModalVerProveedor from "../components/modals/mapa/ModalProveedor";
 import ModalEditarProveedor from "../components/modals/admin/proveedores/ModalEditarProveedor";
 
 import Table from "../components/ui/Table";
@@ -50,6 +51,8 @@ const Administrador = () => {
   const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
 
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
+  const [proveedorAVer, setProveedorAVer] = useState(null);
+  const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
 
   const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
   const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
@@ -65,6 +68,9 @@ const Administrador = () => {
 
   const acciones = {
     onVer: (row) => {
+      if (tablaActual === "proveedores") {
+        setProveedorAVer(row);
+      }
       if (tablaActual === "reseñas") {
         setReseñaAVer(row);
       }
@@ -85,9 +91,9 @@ const Administrador = () => {
       }
     },
     onEliminar: (row) => {
-      /* if (tablaActual === "proveedores") {
-        setProveedorSeleccionado(row);
-      } */
+      if (tablaActual === "proveedores") {
+        setProveedorAEliminar(row);
+      }
       if (tablaActual === "reseñas") {
         setReseñaAEliminar(row);
       }
@@ -168,6 +174,15 @@ const Administrador = () => {
         />
         <Table columns={columnas} data={datosActuales} />
 
+        {/* Proveedores */}
+          { /* Ver */}
+        {tablaActual === "proveedores" && proveedorAVer && (
+          <ModalVerProveedor
+            proveedor={proveedorAVer}
+            onClose={() => setProveedorAVer(null)}
+          />
+        )}
+          {/* Editar */}
         {tablaActual === "proveedores" && proveedorSeleccionado && (
           <ModalEditarProveedor
             proveedor={proveedorSeleccionado}
@@ -175,14 +190,38 @@ const Administrador = () => {
             onActualizar={precargarDatos}
           />
         )}
+          {/* Eliminar */}
+        {tablaActual === "proveedores" && proveedorAEliminar && (
+          <ModalEliminar
+            titulo="¿Eliminar proveedor?"
+            descripcion={`¿Estás seguro de que querés eliminar el proveedor "${proveedorAEliminar.nombre}"?`}
+            loading={eliminando}
+            onCancelar={() => setProveedorAEliminar(null)}
+            onConfirmar={async () => {
+              setEliminando(true);
+              try {
+                await eliminarProveedor(proveedorAEliminar.id, mostrarError);
+                mostrarExito("Proveedor eliminado correctamente");
+                setProveedorAEliminar(null);
+                await precargarDatos();
+              } catch (e) {
+                mostrarError("Error al eliminar proveedor: " + e.message);
+              } finally {
+                setEliminando(false);
+              }
+            }}
+          />
+        )}
 
+        {/* Reseñas */}
+          {/* Ver */}
         {tablaActual === "reseñas" && reseñaAVer && (
           <ModalVerReseña
             reseña={reseñaAVer}
             onClose={() => setReseñaAVer(null)}
           />
         )}
-
+          {/* Editar */}
         {tablaActual === "reseñas" && reseñaSeleccionada && (
           <ModalEditarReseña
             isOpen={!!reseñaSeleccionada}
@@ -195,12 +234,12 @@ const Administrador = () => {
                 await precargarDatos();
                 setReseñaSeleccionada(null);
               } catch (e) {
-                mostrarError("Error al actualizar reseña");
+                mostrarError("Error al actualizar reseña: " + e.message);
               }
             }}
           />
         )}
-
+          {/* Eliminar */}
         {tablaActual === "reseñas" && reseñaAEliminar && (
           <ModalEliminar
             titulo="¿Eliminar reseña?"
@@ -215,7 +254,7 @@ const Administrador = () => {
                 setReseñaAEliminar(null);
                 await precargarDatos();
               } catch (e) {
-                mostrarError("Error al eliminar reseña");
+                mostrarError("Error al eliminar reseña: " + e.message);
               } finally {
                 setEliminando(false);
               }
@@ -223,13 +262,15 @@ const Administrador = () => {
           />
         )}
 
+        {/* Tecnologías */}
+          {/* Ver */}
         {tablaActual === "tecnologias" && tecnologiaAVer && (
           <ModalVerTecnologia
             tecnologia={tecnologiaAVer}
             onClose={() => setTecnologiaAVer(null)}
           />
         )}
-
+          {/* Editar */}
         {tablaActual === "tecnologias" && tecnologiaSeleccionada && (
           <ModalEditarTecnologia
             tecnologia={tecnologiaSeleccionada}
@@ -237,7 +278,7 @@ const Administrador = () => {
             onActualizar={precargarDatos}
           />
         )}
-
+          {/* Eliminar */}
         {tablaActual === "tecnologias" && tecnologiaAEliminar && (
           <ModalEliminar
             titulo="¿Eliminar tecnología?"
@@ -252,7 +293,7 @@ const Administrador = () => {
                 mostrarExito("Tecnología eliminada con éxito.");
                 await precargarDatos();
               } catch (e) {
-                console.error("Error al eliminar tecnología:", e);
+                console.error("Error al eliminar tecnología: " + e.message);
               } finally {
                 setEliminando(false);
               }
