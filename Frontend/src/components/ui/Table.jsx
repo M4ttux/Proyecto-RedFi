@@ -36,7 +36,14 @@ const Table = ({ columns = [], data = [], className = "" }) => {
             data.map((row, rowIndex) => (
               <tr key={row.id || rowIndex}>
                 {columns.map((col) => (
-                  <td key={col.id} className="px-6 py-4 text-texto text-sm">
+                  <td
+                    key={col.id}
+                    className={classNames(
+                      "px-6 py-4 text-texto text-sm",
+                      col.id === "acciones" &&
+                        "min-w-[375px] max-w-[375px] w-[375px]"
+                    )}
+                  >
                     {typeof col.renderCell === "function"
                       ? col.renderCell(row, rowIndex)
                       : row[col.id]}

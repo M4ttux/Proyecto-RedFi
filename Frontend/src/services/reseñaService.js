@@ -193,7 +193,8 @@ export const crearReseña = async (reseñaData, mostrarAlerta = () => {}) => {
 export const obtenerReseñasAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("reseñas")
-    .select("id, estrellas, comentario, user_profiles(nombre), proveedor_id, proveedores(nombre)");
+    .select("id, estrellas, comentario, user_profiles(nombre), proveedor_id, proveedores(nombre)")
+    .order("user_profiles(nombre)", { ascending: true });
 
   if (error) {
     mostrarAlerta("Error al obtener reseñas para admin.");

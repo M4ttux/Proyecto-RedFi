@@ -59,8 +59,9 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
-      "id, nombre, color, descripcion, sitio_web, ProveedorTecnologia(tecnologias(tecnologia))"
-    );
+      "id, nombre, color, descripcion, sitio_web, ProveedorTecnologia(tecnologias(id, tecnologia)), ZonaProveedor(zonas(id, departamento))"
+    )
+    .order("nombre", { ascending: true });
 
   if (error) {
     mostrarAlerta("Error al obtener proveedores para admin.");
@@ -69,9 +70,8 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
 
   return data.map((p) => ({
     ...p,
-    tecnologia: p.ProveedorTecnologia?.map(
-      (t) => t.tecnologias?.tecnologia
-    ).filter(Boolean),
+    tecnologias: p.ProveedorTecnologia?.map((t) => String(t.tecnologias?.tecnologia)).filter(Boolean),
+    zonas: p.ZonaProveedor?.map((z) => String(z.zonas?.id)).filter(Boolean),
   }));
 };
 
@@ -193,10 +193,11 @@ export const actualizarProveedor = async (
     // 3. Insertar nuevas relaciones
     if (Array.isArray(tecnologias) && tecnologias.length > 0) {
       const nuevasRelacionesTecnologia = (tecnologias || [])
-        .filter((id) => id !== undefined && id !== null && id !== "")
+        .map((id) => Number(id))
+        .filter((id) => Number.isInteger(id) && id > 0)
         .map((tecnologia_id) => ({
           proveedor_id: proveedorId,
-          tecnologia_id: parseInt(tecnologia_id),
+          tecnologia_id,
         }));
 
       const { error: errorTecnologia } = await supabase
@@ -208,10 +209,11 @@ export const actualizarProveedor = async (
 
     if (Array.isArray(zonas) && zonas.length > 0) {
       const nuevasRelacionesZonas = (zonas || [])
-        .filter((id) => id !== undefined && id !== null && id !== "")
+        .map((id) => Number(id))
+        .filter((id) => Number.isInteger(id) && id > 0)
         .map((zona_id) => ({
           proveedor_id: proveedorId,
-          zona_id: parseInt(zona_id),
+          zona_id,
         }));
 
       const { error: errorZona } = await supabase
@@ -232,10 +234,7 @@ export const actualizarProveedor = async (
 
 // Eliminar proveedor
 export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
-  const { error } = await supabase
-    .from("proveedores")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("proveedores").delete().eq("id", id);
 
   if (error) {
     console.error("❌ Error en eliminar Proveedor:", error);

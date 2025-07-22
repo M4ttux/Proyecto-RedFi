@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPerfil, obtenerPerfilesAdmin } from "../services/perfilService";
+import { getPerfil, obtenerPerfilesAdmin, eliminarPerfilPorId } from "../services/perfilService";
 import { obtenerProveedoresAdmin, eliminarProveedor } from "../services/proveedorService";
 import {
   obtenerReseñasAdmin,
@@ -13,6 +13,9 @@ import {
 } from "../services/tecnologiaService";
 
 import ModalEliminar from "../components/modals/ModalEliminar";
+
+import ModalVerPerfil from "../components/modals/admin/perfiles/ModalVerPerfil";
+import ModalEditarPerfil from "../components/modals/admin/perfiles/ModalEditarPerfil";
 
 import ModalVerReseña from "../components/modals/mapa/ModalReseña";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
@@ -46,13 +49,17 @@ const Administrador = () => {
   const { mostrarError, mostrarExito } = useAlerta();
   const navigate = useNavigate();
 
-  const [reseñaSeleccionada, setReseñaSeleccionada] = useState(null);
-  const [reseñaAVer, setReseñaAVer] = useState(null);
-  const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
+  const [perfilSeleccionado, setPerfilSeleccionado] = useState(null);
+  const [perfilAVer, setPerfilAVer] = useState(null);
+  const [perfilAEliminar, setPerfilAEliminar] = useState(null);
 
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
   const [proveedorAVer, setProveedorAVer] = useState(null);
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
+
+  const [reseñaSeleccionada, setReseñaSeleccionada] = useState(null);
+  const [reseñaAVer, setReseñaAVer] = useState(null);
+  const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
 
   const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
   const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
@@ -68,6 +75,9 @@ const Administrador = () => {
 
   const acciones = {
     onVer: (row) => {
+      if (tablaActual === "user_profiles") {
+        setPerfilAVer(row);
+      }
       if (tablaActual === "proveedores") {
         setProveedorAVer(row);
       }
@@ -80,6 +90,9 @@ const Administrador = () => {
       // ...otros casos
     },
     onEditar: (row) => {
+      if (tablaActual === "user_profiles") {
+        setPerfilSeleccionado(row);
+      }
       if (tablaActual === "proveedores") {
         setProveedorSeleccionado(row);
       }
@@ -91,6 +104,9 @@ const Administrador = () => {
       }
     },
     onEliminar: (row) => {
+      if (tablaActual === "user_profiles") {
+        setPerfilAEliminar(row);
+      }
       if (tablaActual === "proveedores") {
         setProveedorAEliminar(row);
       }
@@ -174,6 +190,44 @@ const Administrador = () => {
         />
         <Table columns={columnas} data={datosActuales} />
 
+        {/* Perfiles */}
+          { /* Ver */}
+        {tablaActual === "user_profiles" && perfilAVer && (
+          <ModalVerPerfil
+            perfil={perfilAVer}
+            onClose={() => setPerfilAVer(null)}
+          />
+        )}
+          {/* Editar */}
+        {tablaActual === "user_profiles" && perfilSeleccionado && (
+          <ModalEditarPerfil
+            perfil={perfilSeleccionado}
+            onClose={() => setPerfilSeleccionado(null)}
+            onActualizar={precargarDatos}
+          />
+        )}
+          {/* Eliminar */}
+        {tablaActual === "user_profiles" && perfilAEliminar && (
+          <ModalEliminar
+            titulo="¿Eliminar perfil?"
+            descripcion={`¿Estás seguro de que querés eliminar el perfil "${perfilAEliminar.nombre}"?`}
+            loading={eliminando}
+            onCancelar={() => setPerfilAEliminar(null)}
+            onConfirmar={async () => {
+              setEliminando(true);
+              try {
+                await eliminarPerfilPorId(perfilAEliminar.id, mostrarError);
+                mostrarExito("Perfil eliminado con éxito.");
+                setPerfilAEliminar(null);
+                precargarDatos();
+              } catch (error) {
+                mostrarError("Error al eliminar perfil: " + error.message);
+              } finally {
+                setEliminando(false);
+              }
+            }}
+          />
+          )}
         {/* Proveedores */}
           { /* Ver */}
         {tablaActual === "proveedores" && proveedorAVer && (

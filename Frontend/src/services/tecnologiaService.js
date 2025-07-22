@@ -2,7 +2,7 @@ import { supabase } from "../supabase/client";
 
 // Obtener todas las tecnologías
 export const obtenerTecnologias = async (mostrarAlerta = () => {}) => {
-  const { data, error } = await supabase.from("tecnologias").select("*");
+  const { data, error } = await supabase.from("tecnologias").select("*").order("tecnologia", { ascending: true });
   if (error) {
     mostrarAlerta("Error al obtener tecnologías");
     throw error;
@@ -10,7 +10,7 @@ export const obtenerTecnologias = async (mostrarAlerta = () => {}) => {
   return data;
 };
 
-// ✅ Editar tecnología
+// Editar tecnología
 export const editarTecnologia = async (id, nuevosDatos, mostrarAlerta = () => {}) => {
   const { error } = await supabase
     .from("tecnologias")
@@ -23,7 +23,7 @@ export const editarTecnologia = async (id, nuevosDatos, mostrarAlerta = () => {}
   }
 };
 
-// ✅ Eliminar tecnología
+// Eliminar tecnología
 export const eliminarTecnologia = async (id, mostrarAlerta = () => {}) => {
   const { error } = await supabase
     .from("tecnologias")

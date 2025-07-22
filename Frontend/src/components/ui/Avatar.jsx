@@ -12,19 +12,28 @@ const Avatar = ({ fotoUrl, nombre = "Usuario", size = 20, className = "" }) => {
     .slice(0, 2)
     .toUpperCase();
 
+  const dimension = size * 4;
+  const dynamicFontSize = `${size * 1.2}px`;
+
   return (
     <div
       className={classNames(
         "rounded-full border-2 border-acento shadow-md overflow-hidden flex items-center justify-center bg-white/10 text-white font-bold",
-        `w-${size} h-${size}`,
         className
       )}
-      style={{ width: `${size * 4}px`, height: `${size * 4}px` }}
+      style={{
+        width: `${dimension}px`,
+        height: `${dimension}px`,
+        fontSize: dynamicFontSize,
+      }}
     >
       {fotoUrl ? (
         <>
           {!loaded && (
-            <IconLoader2 className="animate-spin text-white/70" size={size * 2} />
+            <IconLoader2
+              className="animate-spin text-white/70"
+              size={size * 2}
+            />
           )}
           <img
             src={fotoUrl}
@@ -37,7 +46,7 @@ const Avatar = ({ fotoUrl, nombre = "Usuario", size = 20, className = "" }) => {
           />
         </>
       ) : (
-        <span className="text-xl">{initials}</span>
+        <span>{initials}</span>
       )}
     </div>
   );
