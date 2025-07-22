@@ -91,7 +91,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             <label className="block text-sm font-medium text-texto mb-2">
               Proveedor
             </label>
-            <div className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto">
+            <div className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-texto">
               {(() => {
                 const proveedor = proveedores.find(
                   (p) => p.id === formData.proveedor_id
@@ -138,7 +138,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
               onChange={handleChange}
               required
               rows={4}
-              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento resize-none"
+              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento resize-none"
               placeholder="Escribe tu experiencia con este proveedor..."
               disabled={loading}
             />

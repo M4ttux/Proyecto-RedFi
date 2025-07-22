@@ -76,10 +76,10 @@ const Cuenta = () => {
             <img
               src={foto}
               alt="Foto de perfil"
-              className="size-50 rounded-full object-cover border-4 border-white/20 mx-auto mb-4 shadow-lg"
+              className="size-50 rounded-full object-cover border-4 border-white/10 mx-auto mb-4 shadow-lg"
             />
           ) : (
-            <div className="size-50 rounded-full bg-white/10 border-4 border-white/20 mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <div className="size-50 rounded-full bg-white/10 border-4 border-white/10 mx-auto mb-4 flex items-center justify-center shadow-lg">
               <span className="text-3xl font-bold text-white">{iniciales}</span>
             </div>
           )}

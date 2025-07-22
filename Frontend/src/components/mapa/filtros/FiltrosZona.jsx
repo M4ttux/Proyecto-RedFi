@@ -103,7 +103,7 @@ const FiltrosZona = ({
               ${
                 filtros.valoracionMin === 0
                   ? "bg-acento text-white border-acento"
-                  : "bg-white/5 text-white/70 border-white/20 hover:bg-white/10"
+                  : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
               }`}
           >
             Todas

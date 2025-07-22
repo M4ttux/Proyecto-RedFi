@@ -57,7 +57,7 @@ const ReseñasDestacadas = () => {
                   i % 2 === 0 ? "men" : "women"
                 }/${i}.jpg`}
                 alt={r.nombre}
-                className="w-24 h-24 rounded-full object-cover border border-white/20 mb-3"
+                className="w-24 h-24 rounded-full object-cover border border-white/10 mb-3"
               />
               <p className="text-acento font-bold mb-2">{r.nombre}</p>
 

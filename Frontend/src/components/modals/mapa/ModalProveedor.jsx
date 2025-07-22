@@ -65,7 +65,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
           tecnologias.map((tec, index) => (
             <span
               key={index}
-              className="bg-white/10 border border-white/20 text-xs px-3 py-1 rounded-full"
+              className="bg-white/10 border border-white/10 text-xs px-3 py-1 rounded-full"
             >
               {tec}
             </span>

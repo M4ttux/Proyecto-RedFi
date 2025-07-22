@@ -11,6 +11,7 @@ import {
   obtenerZonasDisponibles,
 } from "../../../../services/proveedorService";
 import { useAlerta } from "../../../../context/AlertaContext";
+import ModalContenedor from "../../../ui/ModalContenedor";
 
 const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   const [form, setForm] = useState({ ...proveedor });
@@ -74,8 +75,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-secundario border border-white/20 rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 text-white">
+    <ModalContenedor onClose={onClose}>
         <div className="flex justify-between mb-4">
           <MainH2 className="mb-0">Editar proveedor</MainH2>
           <MainButton
@@ -90,65 +90,113 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Nombre *"
-            name="nombre"
-            value={form.nombre || ""}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
+          <div className="flex flex-row gap-4">
+            <div className="flex-1">
+              <Input
+                label="Nombre *"
+                name="nombre"
+                value={form.nombre || ""}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </div>
 
-          <Input
-            label="Sitio web"
-            name="sitio_web"
-            value={form.sitio_web || ""}
-            onChange={handleChange}
-            disabled={loading}
-          />
+            <div className="flex-1">
+              <Input
+                label="Sitio web (url)"
+                name="sitio_web"
+                value={form.sitio_web || ""}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </div>
+          </div>
 
           <Textarea
             label="Descripción"
             name="descripcion"
             value={form.descripcion || ""}
             onChange={handleChange}
-            rows={3}
+            rows={2}
             disabled={loading}
           />
 
-          <Input
-            label="Color *"
-            name="color"
-            value={form.color || ""}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            type="color"
-          />
+          <div>
+            <label className="block text-texto mb-1">Color *</label>
+            <div className="flex items-center gap-4">
+              {/* Color picker visual */}
+              <Input
+                type="color"
+                name="color"
+                value={form.color || "#000000"}
+                onChange={handleChange}
+                disabled={loading}
+                required
+                title="Selecciona un color"
+              />
 
-          <Select
-            label="Tecnologías"
-            name="tecnologias"
-            value={form.tecnologias || []}
-            onChange={(val) => handleSelectChange("tecnologias", val)}
-            options={tecnologias}
-            getOptionLabel={(opt) => opt.tecnologia}
-            getOptionValue={(opt) => String(opt.id)}
-            disabled={loading}
-            multiple={true}
-          />
+              <div className="flex-1">
+                <Input
+                  type="text"
+                  name="color"
+                  value={form.color || ""}
+                  onChange={(e) => {
+                    const hex = e.target.value;
+                    const isValid =
+                      /^#[0-9A-Fa-f]{0,6}$/.test(hex) || hex === "";
 
-          <Select
-            label="Zonas"
-            name="zonas"
-            value={form.zonas || []}
-            onChange={(val) => handleSelectChange("zonas", val)}
-            options={zonas}
-            getOptionLabel={(opt) => opt.departamento}
-            getOptionValue={(opt) => String(opt.id)}
-            disabled={loading}
-            multiple={true}
-          />
+                    if (isValid) {
+                      setForm((prev) => ({ ...prev, color: hex }));
+                    }
+                  }}
+                  disabled={loading}
+                  placeholder="#000000"
+                  maxLength={7}
+                  required
+                />
+              </div>
+
+              <div
+                className="w-10 h-10 rounded border border-white/10"
+                style={{
+                  backgroundColor: /^#[0-9A-Fa-f]{6}$/.test(form.color || "")
+                    ? form.color
+                    : "#000000",
+                }}
+                title={`Color: ${form.color}`}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <Select
+                label="Tecnologías"
+                name="tecnologias"
+                value={form.tecnologias || []}
+                onChange={(val) => handleSelectChange("tecnologias", val)}
+                options={tecnologias}
+                getOptionLabel={(opt) => opt.tecnologia}
+                getOptionValue={(opt) => String(opt.id)}
+                disabled={loading}
+                multiple={true}
+              />
+            </div>
+            <div className="flex-1">
+              <Select
+                label="Zonas"
+                name="zonas"
+                value={form.zonas || []}
+                onChange={(val) => handleSelectChange("zonas", val)}
+                options={zonas}
+                getOptionLabel={(opt) => opt.departamento}
+                getOptionValue={(opt) => String(opt.id)}
+                disabled={loading}
+                multiple={true}
+              />
+            </div>
+          </div>
 
           <div className="flex gap-3 pt-4">
             <MainButton
@@ -171,8 +219,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             </MainButton>
           </div>
         </form>
-      </div>
-    </div>
+      </ModalContenedor>
   );
 };
 

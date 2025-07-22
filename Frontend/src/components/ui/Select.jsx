@@ -53,7 +53,7 @@ const Select = ({
             (disabled || loading) && "cursor-not-allowed opacity-70",
             isInvalid
               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-white/20 focus:border-acento focus:ring-1 focus:ring-acento",
+              : "border-white/10 focus:border-acento focus:ring-1 focus:ring-acento",
             className
           )}
         >

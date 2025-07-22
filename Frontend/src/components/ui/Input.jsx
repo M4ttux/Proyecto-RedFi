@@ -33,29 +33,47 @@ const Input = ({
           </div>
         )}
 
-        <input
-          id={name}
-          name={name}
-          type={type}
-          value={loading ? "" : value ?? ""}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          placeholder={loading ? "Cargando..." : placeholder}
-          required={required}
-          disabled={disabled || loading}
-          className={classNames(
-            "w-full bg-white/5 text-texto rounded-lg border transition",
-            "focus:outline-none focus:ring-1",
-            Icon ? "pl-10" : "pl-3",
-            loading || isInvalid || endIconAction ? "pr-10" : "pr-3",
-            "py-2",
-            (disabled || loading) && "cursor-not-allowed opacity-70",
-            isInvalid
-              ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-white/20 focus:border-acento focus:ring-acento",
-            className
-          )}
-        />
+        {type === "color" ? (
+          <input
+            id={name}
+            name={name}
+            type="color"
+            value={loading ? "#000000" : value ?? "#000000"}
+            onChange={onChange}
+            disabled={disabled || loading}
+            required={required}
+            className={classNames(
+              "w-14 h-14 rounded-lg border transition p-0 cursor-pointer",
+              (disabled || loading) && "cursor-not-allowed opacity-70",
+              isInvalid ? "border-red-500" : "border-white/10",
+              className
+            )}
+          />
+        ) : (
+          <input
+            id={name}
+            name={name}
+            type={type}
+            value={loading ? "" : value ?? ""}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            placeholder={loading ? "Cargando..." : placeholder}
+            required={required}
+            disabled={disabled || loading}
+            className={classNames(
+              "w-full bg-white/5 text-texto rounded-lg border transition",
+              "focus:outline-none focus:ring-1",
+              Icon ? "pl-10" : "pl-3",
+              loading || isInvalid || endIconAction ? "pr-10" : "pr-3",
+              "py-2",
+              (disabled || loading) && "cursor-not-allowed opacity-70",
+              isInvalid
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-white/10 focus:border-acento focus:ring-acento",
+              className
+            )}
+          />
+        )}
 
         {/* Ícono derecho */}
         <div className="absolute inset-y-0 right-3 flex items-center">
