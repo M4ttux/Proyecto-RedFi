@@ -28,7 +28,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
         Agregar reseña
       </MainButton>
       {!usuario && (
-        <p className="text-sm text-white/60 italic animate-fade-in">
+        <p className="text-sm text-texto/60 italic animate-fade-in">
           Necesitas iniciar sesión para acceder a esta función.
         </p>
       )}

@@ -75,9 +75,9 @@ const Select = ({
         {!multiple && (
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
             {loading ? (
-              <IconLoader2 size={20} className="animate-spin text-white/60" />
+              <IconLoader2 size={20} className="animate-spin text-texto/60" />
             ) : (
-              <IconChevronDown size={20} className="text-white/60" />
+              <IconChevronDown size={20} className="text-texto/60" />
             )}
           </div>
         )}

@@ -24,7 +24,7 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
 
   return (
     <div
-      className={`text-white px-4 py-3 rounded mb-4 relative ${colores[tipo]}`}
+      className={`text-texto px-4 py-3 rounded mb-4 relative ${colores[tipo]}`}
     >
       {mensaje}
       <MainButton

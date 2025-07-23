@@ -69,7 +69,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "fecha_carga",
       label: "Carga",
       renderCell: (b) => (
-        <div className="flex items-center text-sm text-white/60">
+        <div className="flex items-center text-sm text-texto/60">
           <IconCalendar size={16} className="mr-2" />
           {b.fecha_carga
             ? new Date(b.fecha_carga).toLocaleDateString("es-AR", {
@@ -85,7 +85,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "vencimiento",
       label: "Vencimiento",
       renderCell: (b) => (
-        <div className="flex items-center text-sm text-white/60">
+        <div className="flex items-center text-sm text-texto/60">
           <IconCalendar size={16} className="mr-2" />
           {new Date(b.vencimiento + "T12:00:00").toLocaleDateString("es-AR", {
             year: "numeric",
@@ -132,12 +132,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       <MainH2 className="text-center">Historial de boletas</MainH2>
 
       {cargando ? (
-        <div className="flex justify-center items-center text-white/60 gap-2 mt-10">
+        <div className="flex justify-center items-center text-texto/60 gap-2 mt-10">
           <IconLoader2 className="animate-spin" size={24} />
           Cargando boletas...
         </div>
       ) : boletas.length === 0 ? (
-        <p className="text-white/60 text-center mt-6">
+        <p className="text-texto/60 text-center mt-6">
           No cargaste boletas aún.
         </p>
       ) : (
@@ -183,7 +183,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                 <p className="text-sm text-texto mb-1">
                   <strong>Monto:</strong> ${parseFloat(b.monto).toFixed(2)}
                 </p>
-                <p className="text-sm mb-1 flex items-center gap-2 text-white/60">
+                <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
                   <strong className="text-texto">Carga:</strong>
                   <span>
                     {new Date(b.fecha_carga).toLocaleDateString("es-AR", {
@@ -193,7 +193,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                     })}
                   </span>
                 </p>
-                <p className="text-sm mb-1 flex items-center gap-2 text-white/60">
+                <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
                   <strong className="text-texto">Vencimiento:</strong>
                   <span>
                     {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(

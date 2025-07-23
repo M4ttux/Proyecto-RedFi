@@ -86,13 +86,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {visibles.map((tec, i) => (
                 <span
                   key={i}
-                  className="bg-white/10 text-white text-sm px-2 py-0.5 rounded-lg"
+                  className="bg-white/10 text-texto text-sm px-2 py-0.5 rounded-lg"
                 >
                   {tec}
                 </span>
               ))}
               {restantes > 0 && (
-                <span className="text-white/60 text-sm px-2 py-0.5 rounded-lg border border-white/10">
+                <span className="text-texto/60 text-sm px-2 py-0.5 rounded-lg border border-white/10">
                   +{restantes} más
                 </span>
               )}

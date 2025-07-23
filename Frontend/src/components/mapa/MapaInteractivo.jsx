@@ -122,7 +122,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   return (
     <div className="h-full w-full relative">
       {modoSeleccion && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-white px-4 py-2 rounded-lg shadow-lg">
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-texto px-4 py-2 rounded-lg shadow-lg">
           <div className="flex items-center gap-2">
             <span className="font-medium">
               Haz clic en el mapa para seleccionar ubicación

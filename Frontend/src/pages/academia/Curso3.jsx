@@ -146,8 +146,8 @@ const Curso3 = () => {
                   <div
                     className={`p-2 rounded font-semibold text-sm ${
                       esCorrecta
-                        ? "bg-green-600 text-white"
-                        : "bg-red-600 text-white"
+                        ? "bg-green-600 text-texto"
+                        : "bg-red-600 text-texto"
                     }`}
                   >
                     {esCorrecta
@@ -162,14 +162,14 @@ const Curso3 = () => {
           <div className="flex justify-center gap-4 flex-wrap mt-6">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
+              className="bg-blue-600 hover:bg-blue-700 text-texto font-semibold px-4 py-2 rounded"
             >
               Enviar respuestas
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-texto font-semibold px-4 py-2 rounded"
             >
               Reiniciar
             </button>
@@ -187,7 +187,7 @@ const Curso3 = () => {
       <div className="text-center">
         <button
           onClick={() => navigate("/academy")}
-          className="mt-6 bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-2 rounded"
+          className="mt-6 bg-white/10 hover:bg-white/20 text-texto font-medium px-6 py-2 rounded"
         >
           ← Volver a Red-Fi Academy
         </button>

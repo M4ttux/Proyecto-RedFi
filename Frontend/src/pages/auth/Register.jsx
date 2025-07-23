@@ -96,7 +96,7 @@ const Register = () => {
               label={
                 <>
                   Proveedor preferido
-                  <span className="text-white/50 text-xs ml-1">(opcional)</span>
+                  <span className="text-texto/50 text-xs ml-1">(opcional)</span>
                 </>
               }
               name="proveedor_preferido"
@@ -122,7 +122,7 @@ const Register = () => {
             <div className="w-full border-t border-white/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-white/60">
+            <span className="px-2 bg-fondo text-texto/60">
               ¿Ya tienes cuenta?
             </span>
           </div>
@@ -134,7 +134,7 @@ const Register = () => {
         </MainLinkButton>
 
         <div className="text-center mt-6">
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-texto/50">
             Al registrarte, aceptas nuestros términos y condiciones
           </p>
         </div>

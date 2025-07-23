@@ -36,7 +36,7 @@ const Planes = () => {
   const planActual = "premium"; // hardcodeado por ahora
 
   const renderBeneficios = (lista) => (
-    <ul className="text-sm text-white/80 space-y-2 mb-6 text-left">
+    <ul className="text-sm text-texto/80 space-y-2 mb-6 text-left">
       {lista.map((b, i) => (
         <li
           key={i}
@@ -68,7 +68,7 @@ const Planes = () => {
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg flex flex-col justify-between">
             <div>
               <MainH2>Plan Básico</MainH2>
-              <p className="text-white/70 mb-4">
+              <p className="text-texto/70 mb-4">
                 Ideal para usuarios que quieren explorar Red-Fi sin funciones
                 avanzadas.
               </p>
@@ -83,7 +83,7 @@ const Planes = () => {
           <div className="bg-white/5 border border-acento/50 rounded-xl p-6 shadow-lg flex flex-col justify-between">
             <div>
               <MainH2 className="text-acento">Plan Premium</MainH2>
-              <p className="text-white/70 mb-4">
+              <p className="text-texto/70 mb-4">
                 Acceda a todos los beneficios de Red-Fi sin límites de uso y sin
                 anuncios.
               </p>

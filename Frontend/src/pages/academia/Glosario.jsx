@@ -52,7 +52,7 @@ const Glosario = () => {
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           placeholder="Buscar un concepto (ej: IP pública)"
-          className="w-full p-3 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-900 placeholder-gray-400 pr-10"
+          className="w-full p-3 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-texto bg-gray-900 placeholder-gray-400 pr-10"
         />
         {busqueda && (
           <button
@@ -99,7 +99,7 @@ const Glosario = () => {
       {/* Resultado mostrado */}
       {resultado && (
         <div className="mt-6 bg-gray-800 p-5 rounded shadow text-left">
-          <h3 className="text-xl font-semibold text-white">
+          <h3 className="text-xl font-semibold text-texto">
             {resultado.title}
           </h3>
           <p className="mt-3 text-gray-300">{resultado.extract}</p>

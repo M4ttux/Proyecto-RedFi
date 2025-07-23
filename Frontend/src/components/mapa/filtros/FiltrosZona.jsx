@@ -102,8 +102,8 @@ const FiltrosZona = ({
             className={`px-3 py-1 rounded-lg text-sm font-medium border transition
               ${
                 filtros.valoracionMin === 0
-                  ? "bg-acento text-white border-acento"
-                  : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
+                  ? "bg-acento text-texto border-acento"
+                  : "bg-white/5 text-texto/70 border-white/10 hover:bg-white/10"
               }`}
           >
             Todas
@@ -127,7 +127,7 @@ const FiltrosZona = ({
                   <StarIcon
                     size={24}
                     className={`transition hover:scale-110 ${
-                      isActive ? "text-yellow-400" : "text-white/30"
+                      isActive ? "text-yellow-400" : "text-texto/30"
                     }`}
                   />
                 </button>

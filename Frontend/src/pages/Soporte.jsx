@@ -129,7 +129,7 @@ const Soporte = () => {
                 className={`p-3 rounded-lg max-w-[80%] ${
                   m.autor === "bot"
                     ? "bg-white/5 text-texto text-left"
-                    : "bg-blue-700 text-white text-right"
+                    : "bg-blue-700 text-texto text-right"
                 }`}
               >
                 {m.texto}

@@ -124,7 +124,7 @@ const WifiScanner = () => {
   };
 
   return (
-    <div className="p-6 rounded-lg mx-auto text-white max-w-2xl relative">
+    <div className="p-6 rounded-lg mx-auto text-texto max-w-2xl relative">
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-center">
         <div className="w-full md:w-1/2">
           <Input

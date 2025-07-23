@@ -139,7 +139,7 @@ const Mapa = () => {
               className="bg-primario p-3 rounded-full shadow-md hover:bg-acento transition"
               title="Filtros"
             >
-              <IconFilter className="text-white" />
+              <IconFilter className="text-texto" />
             </button>
           </div>
 

@@ -23,7 +23,7 @@ const Proveedores = () => {
 
   if (!proveedor) {
     return (
-      <div className="text-center text-white mt-20">
+      <div className="text-center text-texto mt-20">
         <p className="text-lg animate-pulse">Cargando proveedor...</p>
       </div>
     );
@@ -50,18 +50,18 @@ const Proveedores = () => {
 
           {/* Tecnologías */}
           {tecnologias.length > 0 ? (
-            <p className="text-white/70 mt-2">
+            <p className="text-texto/70 mt-2">
               Tecnologías:{" "}
               <span className="font-medium text-texto">
                 {tecnologias.join(", ")}
               </span>
             </p>
           ) : (
-            <p className="text-white/60 mt-2">Tecnologías no especificadas</p>
+            <p className="text-texto/60 mt-2">Tecnologías no especificadas</p>
           )}
 
           {/* Descripción breve */}
-          <p className="text-sm text-white/70 mt-4 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm text-texto/70 mt-4 max-w-xl mx-auto leading-relaxed">
             {proveedor.descripcion ||
               "Proveedor destacado en Corrientes por su cobertura, estabilidad y servicio al cliente. Red-Fi lo destaca por su presencia activa en múltiples zonas urbanas y rurales."}
           </p>
@@ -71,7 +71,7 @@ const Proveedores = () => {
             href={proveedor.sitio_web || "https://www.google.com"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center mt-6 px-5 py-2 bg-primario hover:bg-acento transition text-white rounded-lg font-medium"
+            className="inline-flex items-center justify-center mt-6 px-5 py-2 bg-primario hover:bg-acento transition text-texto rounded-lg font-medium"
           >
             Visitar sitio oficial <IconExternalLink size={18} className="ml-2" />
           </a>
@@ -116,13 +116,13 @@ const Proveedores = () => {
                             className="w-10 h-10 rounded-full object-cover border border-acento"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-white/10 text-white font-bold flex items-center justify-center text-sm border border-acento">
+                          <div className="w-10 h-10 rounded-full bg-white/10 text-texto font-bold flex items-center justify-center text-sm border border-acento">
                             {iniciales}
                           </div>
                         )}
                         <div>
                           <p className="font-medium text-texto">{nombre}</p>
-                          <p className="text-xs text-white/60">{fecha}</p>
+                          <p className="text-xs text-texto/60">{fecha}</p>
                         </div>
                       </div>
 
@@ -146,7 +146,7 @@ const Proveedores = () => {
               })}
             </div>
           ) : (
-            <p className="text-white/60 text-center">
+            <p className="text-texto/60 text-center">
               Este proveedor aún no tiene reseñas.
             </p>
           )}

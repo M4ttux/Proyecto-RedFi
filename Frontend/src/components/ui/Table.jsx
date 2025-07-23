@@ -27,7 +27,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-6 py-4 text-center text-white/60"
+                className="px-6 py-4 text-center text-texto/60"
               >
                 No hay datos para mostrar.
               </td>

@@ -105,7 +105,7 @@ const CambiarContraseña = () => {
             <div className="w-full border-t border-white/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-white/60">
+            <span className="px-2 bg-fondo text-texto/60">
               Opciones de cuenta
             </span>
           </div>

@@ -178,7 +178,7 @@ const Administrador = () => {
       <div className="max-w-7xl mx-auto pt-16">
         <div className="text-center mb-8">
           <MainH1>Panel de Administración</MainH1>
-          <p className="text-white/70 text-lg">
+          <p className="text-texto/70 text-lg">
             Visualizá los datos de todas las tablas del sistema.
           </p>
         </div>

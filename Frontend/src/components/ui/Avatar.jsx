@@ -18,7 +18,7 @@ const Avatar = ({ fotoUrl, nombre = "Usuario", size = 20, className = "" }) => {
   return (
     <div
       className={classNames(
-        "rounded-full border-2 border-acento shadow-md overflow-hidden flex items-center justify-center bg-white/10 text-white font-bold",
+        "rounded-full border-2 border-acento shadow-md overflow-hidden flex items-center justify-center bg-white/10 text-texto font-bold",
         className
       )}
       style={{
@@ -31,7 +31,7 @@ const Avatar = ({ fotoUrl, nombre = "Usuario", size = 20, className = "" }) => {
         <>
           {!loaded && (
             <IconLoader2
-              className="animate-spin text-white/70"
+              className="animate-spin text-texto/70"
               size={size * 2}
             />
           )}

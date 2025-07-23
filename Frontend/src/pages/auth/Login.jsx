@@ -94,7 +94,7 @@ const Login = () => {
             <div className="w-full border-t border-white/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-white/60">
+            <span className="px-2 bg-fondo text-texto/60">
               ¿No tienes cuenta?
             </span>
           </div>
@@ -107,7 +107,7 @@ const Login = () => {
         </MainLinkButton>
 
         <div className="text-center mt-6">
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-texto/50">
             Al iniciar sesión, aceptas nuestros términos y condiciones.
           </p>
         </div>

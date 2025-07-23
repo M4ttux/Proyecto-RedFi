@@ -6,11 +6,11 @@ const LoaderAdmin = () => (
     <div className="max-w-7xl mx-auto pt-16">
       <div className="text-center mb-8">
         <MainH1>Panel de Administración</MainH1>
-        <p className="text-white/70 text-lg">
+        <p className="text-texto/70 text-lg">
           Visualizá los datos de todas las tablas del sistema.
         </p>
       </div>
-      <div className="flex justify-center items-center text-white/60 gap-2 mt-10">
+      <div className="flex justify-center items-center text-texto/60 gap-2 mt-10">
         <IconLoader2 className="animate-spin" size={24} />
         Cargando datos del sistema...
       </div>

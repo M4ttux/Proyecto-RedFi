@@ -27,8 +27,8 @@ const CargandoMapa = ({ cargandoMapa }) => {
         backdropFilter: "blur(4px)",
       }}
     >
-      <div className="flex flex-col items-center gap-3 text-white">
-        <IconLoader2 size={42} className="animate-spin text-white" />
+      <div className="flex flex-col items-center gap-3 text-texto">
+        <IconLoader2 size={42} className="animate-spin text-texto" />
         <p className="text-lg sm:text-xl font-semibold tracking-wide">
           Cargando mapa...
         </p>

@@ -122,7 +122,7 @@ const Reseñas = () => {
             {r.proveedores?.nombre || "Proveedor no disponible"}
           </div>
           {r.proveedores?.tecnologia && (
-            <div className="text-sm text-white/60">
+            <div className="text-sm text-texto/60">
               {r.proveedores.tecnologia}
             </div>
           )}
@@ -147,7 +147,7 @@ const Reseñas = () => {
       id: "fecha",
       label: "Fecha",
       renderCell: (r) => (
-        <div className="flex items-center text-sm text-white/60">
+        <div className="flex items-center text-sm text-texto/60">
           <IconCalendar size={16} className="mr-2" />
           {formatearFecha(r.created_at)}
         </div>
@@ -198,7 +198,7 @@ const Reseñas = () => {
     return (
       <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
         <div className="max-w-7xl mx-auto pt-16 text-center">
-          <div className="flex justify-center items-center text-white/60 gap-2 mt-10">
+          <div className="flex justify-center items-center text-texto/60 gap-2 mt-10">
             <IconLoader2 className="animate-spin" size={24} />
             Cargando reseñas...
           </div>
@@ -212,7 +212,7 @@ const Reseñas = () => {
       <div className="max-w-7xl mx-auto pt-16">
         <div className="text-center mb-8">
           <MainH1>Mis reseñas</MainH1>
-          <p className="text-white/70 text-lg">
+          <p className="text-texto/70 text-lg">
             Administre todas las reseñas que ha publicado.
           </p>
         </div>
@@ -221,7 +221,7 @@ const Reseñas = () => {
           <div className="text-center py-16">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-8">
               <MainH3>No tienes reseñas publicadas</MainH3>
-              <p className="text-white/70 mb-4">
+              <p className="text-texto/70 mb-4">
                 Comienza compartiendo tu experiencia con diferentes proveedores
                 de internet.
               </p>
@@ -246,7 +246,7 @@ const Reseñas = () => {
                           "Proveedor no disponible"}
                       </MainH3>
                       {reseña.proveedores?.tecnologia && (
-                        <p className="text-sm text-white/60">
+                        <p className="text-sm text-texto/60">
                           {reseña.proveedores.tecnologia}
                         </p>
                       )}
@@ -281,7 +281,7 @@ const Reseñas = () => {
                     {reseña.comentario}
                   </p>
 
-                  <div className="flex items-center text-xs text-white/60">
+                  <div className="flex items-center text-xs text-texto/60">
                     <IconCalendar size={14} className="mr-1" />
                     {formatearFecha(reseña.created_at)}
                   </div>
@@ -298,7 +298,7 @@ const Reseñas = () => {
                     <div className="text-2xl font-bold text-acento">
                       {reseñas.length}
                     </div>
-                    <div className="text-sm text-white/60">
+                    <div className="text-sm text-texto/60">
                       Total de reseñas
                     </div>
                   </div>
@@ -309,7 +309,7 @@ const Reseñas = () => {
                         reseñas.length
                       ).toFixed(1)}
                     </div>
-                    <div className="text-sm text-white/60">
+                    <div className="text-sm text-texto/60">
                       Calificación promedio
                     </div>
                   </div>
@@ -317,7 +317,7 @@ const Reseñas = () => {
                     <div className="text-2xl font-bold text-acento">
                       {new Set(reseñas.map((r) => r.proveedor_id)).size}
                     </div>
-                    <div className="text-sm text-white/60">
+                    <div className="text-sm text-texto/60">
                       Proveedores evaluados
                     </div>
                   </div>

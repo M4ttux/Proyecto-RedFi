@@ -77,7 +77,7 @@ const CheckboxDropdown = ({
         <span className="truncate text-sm flex-1 min-w-0">
           {getDisplayText()}
         </span>
-        <IconChevronDown size={18} className="text-white/50 flex-shrink-0 ml-2" />
+        <IconChevronDown size={18} className="text-texto/50 flex-shrink-0 ml-2" />
       </button>
 
       {open && (

@@ -9,11 +9,11 @@ const badgeEstilo = (tipo) =>
   classNames(
     "px-2 py-1 text-xs rounded-full font-medium inline-block",
     {
-      admin: "bg-red-600 text-white",
-      user: "bg-blue-600 text-white",
-      premium: "bg-emerald-500 text-white",
-      basico: "bg-gray-500 text-white",
-    }[tipo] || "bg-white/20 text-white"
+      admin: "bg-red-600 text-texto",
+      user: "bg-blue-600 text-texto",
+      premium: "bg-emerald-500 text-texto",
+      basico: "bg-gray-500 text-texto",
+    }[tipo] || "bg-white/20 text-texto"
   );
 
 const ModalVerPerfil = ({ perfil, onClose }) => {
@@ -37,25 +37,25 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
       </div>
 
       {/* Avatar + nombre */}
-      <div className="flex flex-col items-center text-white mb-6">
+      <div className="flex flex-col items-center text-texto mb-6">
         <Avatar fotoUrl={foto_url} nombre={nombre} size={28} />
         <p className="mt-4 text-xl font-semibold">{nombre}</p>
       </div>
 
       {/* Detalles */}
-      <div className="bg-white/5 rounded-xl px-4 py-4 space-y-4 text-white border border-white/10">
+      <div className="bg-white/5 rounded-xl px-4 py-4 space-y-4 text-texto border border-white/10">
         <div>
-          <p className="text-sm text-white/60">Proveedor preferido</p>
+          <p className="text-sm text-texto/60">Proveedor preferido</p>
           <p className="text-base font-medium">{proveedor_preferido || "—"}</p>
         </div>
 
         <div className="flex flex-row gap-4">
           <div className="flex-1">
-            <p className="text-white/60">Rol</p>
+            <p className="text-texto/60">Rol</p>
             <span className={badgeEstilo(rol)}>{rol}</span>
           </div>
           <div className="flex-1">
-            <p className="text-white/60">Plan</p>
+            <p className="text-texto/60">Plan</p>
             <span className={badgeEstilo(plan)}>{plan}</span>
           </div>
         </div>

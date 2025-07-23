@@ -64,7 +64,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
                     icon: (
                       <IconX
                         size={18}
-                        className="text-white/60 hover:text-red-400 font-bold transition focus:outline-none duration-300"
+                        className="text-texto/60 hover:text-red-400 font-bold transition focus:outline-none duration-300"
                       />
                     ),
                     onClick: handleLimpiarBusqueda,

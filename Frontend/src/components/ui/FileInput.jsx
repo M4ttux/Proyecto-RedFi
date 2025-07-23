@@ -64,7 +64,7 @@ const FileInput = ({
   const mostrarBotonQuitar = value || hayPreview;
 
   return (
-    <div className="space-y-2 text-center text-white">
+    <div className="space-y-2 text-center text-texto">
       {label && (
         <label htmlFor={id} className="block font-medium">
           {label}

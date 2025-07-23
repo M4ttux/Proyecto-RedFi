@@ -57,7 +57,7 @@ const GlosarioBuscador = () => {
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           placeholder="Buscar un concepto (ej: IP pública)"
-          className="w-full p-3 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-900 placeholder-gray-400 pr-10"
+          className="w-full p-3 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-texto bg-gray-900 placeholder-gray-400 pr-10"
         />
         {busqueda && (
           <button
@@ -76,10 +76,10 @@ const GlosarioBuscador = () => {
 
       {/* Instrucción debajo del input */}
       <div className="text-sm text-gray-400 mt-2">
-        ℹ️ <strong className="text-white">¿Cómo utilizar el buscador?</strong>{" "}
-        Escribí palabras como <strong className="text-white">"DNS"</strong>,{" "}
-        <strong className="text-white">"ping"</strong> o{" "}
-        <strong className="text-white">"ancho de banda"</strong> para conocer su
+        ℹ️ <strong className="text-texto">¿Cómo utilizar el buscador?</strong>{" "}
+        Escribí palabras como <strong className="text-texto">"DNS"</strong>,{" "}
+        <strong className="text-texto">"ping"</strong> o{" "}
+        <strong className="text-texto">"ancho de banda"</strong> para conocer su
         significado.
       </div>
 
@@ -100,7 +100,7 @@ const GlosarioBuscador = () => {
           <button
             key={i}
             onClick={() => manejarBusqueda(concepto)}
-            className="bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded-full text-sm transition"
+            className="bg-blue-700 hover:bg-blue-800 text-texto px-3 py-1 rounded-full text-sm transition"
           >
             {concepto}
           </button>
@@ -134,7 +134,7 @@ const GlosarioBuscador = () => {
       {/* Resultado de la búsqueda */}
       {resultado && (
         <div className="mt-6 bg-gray-800 p-5 rounded shadow text-left">
-          <h3 className="text-xl font-semibold text-white">
+          <h3 className="text-xl font-semibold text-texto">
             {resultado.title}
           </h3>
           <p className="mt-3 text-gray-300">{resultado.extract}</p>
@@ -158,7 +158,7 @@ const GlosarioBuscador = () => {
                 }}
                 className={`${
                   leyendo ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-                } text-white px-4 py-2 rounded flex items-center gap-2 transition`}
+                } text-texto px-4 py-2 rounded flex items-center gap-2 transition`}
               >
                 {leyendo ? "⏹️ Detener lectura" : "🔊 Escuchar definición"}
               </button>
@@ -167,7 +167,7 @@ const GlosarioBuscador = () => {
                 href={`https://es.wikipedia.org/wiki/${encodeURIComponent(resultado.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+                className="bg-blue-600 hover:bg-blue-700 text-texto px-4 py-2 rounded transition"
               >
                 🌐 Leer más en Wikipedia
               </a>
@@ -186,7 +186,7 @@ const GlosarioBuscador = () => {
 
       {/* Conceptos destacados */}
       <div className="mt-12">
-        <h2 className="text-xl text-white font-semibold mb-4 text-center">📌 Conceptos destacados</h2>
+        <h2 className="text-xl text-texto font-semibold mb-4 text-center">📌 Conceptos destacados</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {[
             {
@@ -203,7 +203,7 @@ const GlosarioBuscador = () => {
             }
           ].map((item, i) => (
             <div key={i} className="bg-gray-800 p-4 rounded shadow text-left">
-              <h3 className="text-white font-bold text-lg">{item.termino}</h3>
+              <h3 className="text-texto font-bold text-lg">{item.termino}</h3>
               <p className="text-gray-300 mt-2">{item.descripcion}</p>
             </div>
           ))}
@@ -218,7 +218,7 @@ const GlosarioBuscador = () => {
             const randomKey = keys[Math.floor(Math.random() * keys.length)];
             manejarBusqueda(randomKey);
           }}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded mt-4 transition"
+          className="bg-indigo-600 hover:bg-indigo-700 text-texto px-4 py-2 rounded mt-4 transition"
         >
           📚 Ver un concepto al azar
         </button>

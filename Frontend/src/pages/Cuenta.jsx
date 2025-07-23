@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { getPerfil } from "../services/perfilService";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useRole } from "../context/RoleContext";
+import { getPerfil } from "../services/perfilService";
+import { useAlerta } from "../context/AlertaContext";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
-import { IconUser } from "@tabler/icons-react";
-import { useAlerta } from "../context/AlertaContext";
+import { IconUser, IconLoader2 } from "@tabler/icons-react";
 
 const Cuenta = () => {
   const { usuario } = useAuth();
+  const { loadingRole } = useRole();
   const location = useLocation();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,8 +50,15 @@ const Cuenta = () => {
     );
   }
 
-  if (loading) {
-    return <p className="text-center mt-10 text-texto">Cargando perfil...</p>;
+  if (loading || loadingRole) {
+    return (
+      <div className="flex flex-col items-center gap-3 text-texto">
+        <IconLoader2 size={42} className="animate-spin text-texto" />
+        <p className="text-lg sm:text-xl font-semibold tracking-wide">
+          Cargando perfil...
+        </p>
+      </div>
+    );
   }
 
   const nombre = perfil?.nombre || "Usuario";
@@ -80,20 +89,20 @@ const Cuenta = () => {
             />
           ) : (
             <div className="size-50 rounded-full bg-white/10 border-4 border-white/10 mx-auto mb-4 flex items-center justify-center shadow-lg">
-              <span className="text-3xl font-bold text-white">{iniciales}</span>
+              <span className="text-3xl font-bold text-texto">{iniciales}</span>
             </div>
           )}
           <MainH2>{nombre}</MainH2>
-          <p className="text-white/60 mb-4">{usuario.email}</p>
-          <p className="text-sm text-white/40 mb-4">
-            Usuario <span className="font-bold text-acento">Premium</span>
+          <p className="text-texto/60 mb-4">{usuario.email}</p>
+          <p className="text-sm text-texto/40 mb-4">
+            Usuario <span className="font-bold text-acento">{perfil.plan}</span>
           </p>
         </div>
 
         {/* Acciones */}
         <div className="mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div>
-            <MainLinkButton to="/boletas" variant="card">
+            <MainLinkButton to="/boletas" variant="card" isPremium={true}>
               <MainH3>Gestionar boletas</MainH3>
               <p>
                 Visualize y administre sus boletas, reciba alertas antes del
@@ -103,7 +112,7 @@ const Cuenta = () => {
           </div>
 
           <div>
-            <MainLinkButton to="/academy" variant="card">
+            <MainLinkButton to="/academy" variant="card" isPremium={true}>
               <MainH3>Red-Fi Academy</MainH3>
               <p>
                 Accede a nuestros mini cursos sobre redes, Wi-Fi y cómo mejorar
@@ -137,7 +146,7 @@ const Cuenta = () => {
           </div>
 
           <div>
-            <MainLinkButton to="/glosario" variant="card">
+            <MainLinkButton to="/glosario" variant="card" isPremium={true}>
               <MainH3>Glosario de redes</MainH3>
               <p>Buscá términos como IP, ping, latencia y más.</p>
             </MainLinkButton>

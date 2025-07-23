@@ -29,7 +29,7 @@ const Input = ({
       <div className="relative">
         {Icon && (
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon size={20} className="text-white/40" />
+            <Icon size={20} className="text-texto/40" />
           </div>
         )}
 
@@ -78,7 +78,7 @@ const Input = ({
         {/* Ícono derecho */}
         <div className="absolute inset-y-0 right-3 flex items-center">
           {loading ? (
-            <IconLoader2 size={20} className="animate-spin text-white/60" />
+            <IconLoader2 size={20} className="animate-spin text-texto/60" />
           ) : isInvalid ? null : endIconAction ? (
             <button
               type="button"
@@ -86,7 +86,7 @@ const Input = ({
               title={endIconAction.label || "Acción"}
               aria-label={endIconAction.label || "Acción del ícono"}
               tabIndex={0}
-              className="text-white/60 hover:text-white transition focus:outline-none"
+              className="text-texto/60 hover:text-texto transition focus:outline-none"
             >
               {endIconAction.icon}
             </button>

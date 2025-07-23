@@ -12,7 +12,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
     : null;
 
   let diferenciaTexto = "—";
-  let diferenciaColor = "text-white";
+  let diferenciaColor = "text-texto";
 
   if (montoAnterior !== null) {
     const diferencia = montoActual - montoAnterior;
