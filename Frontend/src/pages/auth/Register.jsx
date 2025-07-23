@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRole } from "../../context/RoleContext";
 import { crearPerfil } from "../../services/perfilService";
 import { registerUser } from "../../services/authService";
 import { IconUserPlus, IconLogin, IconMail, IconLock, IconUser, IconWifi } from "@tabler/icons-react";
@@ -25,6 +26,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { mostrarError, mostrarExito } = useAlerta();
+  const { refrescarRol } = useRole();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -45,6 +47,7 @@ const Register = () => {
 
     try {
       await crearPerfil({ nombre, proveedor_preferido });
+      await refrescarRol();
       mostrarExito("Cuenta creada con éxito. Redirigiendo...");
       setTimeout(() => navigate("/cuenta"), 1500);
     } catch (err) {

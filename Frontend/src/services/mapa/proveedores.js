@@ -1,6 +1,20 @@
 import { obtenerProveedores } from "../proveedorService";
 import { getVisible } from "./mapaBase";
 import maplibregl from "maplibre-gl";
+import { generarIconoMultiProveedor } from "./iconoTablerToImage";
+
+// Utilidad para calcular centroide de una zona
+const calcularCentroide = (geom) => {
+  const coords = geom.coordinates?.[0];
+  if (!coords) return null;
+  let x = 0,
+    y = 0;
+  coords.forEach(([lng, lat]) => {
+    x += lng;
+    y += lat;
+  });
+  return [x / coords.length, y / coords.length];
+};
 
 export const cargarProveedoresEnMapa = async (
   map,
@@ -13,12 +27,23 @@ export const cargarProveedoresEnMapa = async (
     visible: getVisible(p, filtros),
   }));
 
-  proveedoresConEstado.forEach((prov) => {
-    if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) return;
+  const zonasConProveedores = new Map();
 
-    prov.ZonaProveedor.forEach((relacionZona) => {
+  for (const prov of proveedoresConEstado) {
+    if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) continue;
+
+    for (const relacionZona of prov.ZonaProveedor) {
       const zona = relacionZona.zonas;
-      if (!zona || !zona.geom) return;
+      if (!zona || !zona.geom) continue;
+
+      // Agrupar por zona
+      if (!zonasConProveedores.has(zona.id)) {
+        zonasConProveedores.set(zona.id, {
+          zona,
+          proveedores: [],
+        });
+      }
+      zonasConProveedores.get(zona.id).proveedores.push(prov);
 
       const sourceId = `zona-${prov.id}-${zona.id}`;
       const fillLayerId = `fill-${prov.id}-${zona.id}`;
@@ -62,16 +87,16 @@ export const cargarProveedoresEnMapa = async (
         },
       });
 
+      // Popup hover
       let popup = new maplibregl.Popup({
         closeButton: false,
         closeOnClick: false,
         offset: 10,
       });
-
       let popupTimeout = null;
       let lastMouseMove = null;
 
-      map.on("mouseenter", fillLayerId, (e) => {
+      map.on("mouseenter", fillLayerId, () => {
         if (window.modoSeleccionActivo || !prov.visible) return;
         map.getCanvas().style.cursor = "pointer";
         map.setPaintProperty(fillLayerId, "fill-opacity", 0.6);
@@ -80,21 +105,39 @@ export const cargarProveedoresEnMapa = async (
       map.on("mousemove", fillLayerId, (e) => {
         if (window.modoSeleccionActivo || !prov.visible) return;
         lastMouseMove = Date.now();
-        if (popup.isOpen()) {
-          popup.setLngLat(e.lngLat);
-          return;
-        }
         clearTimeout(popupTimeout);
+
+        const zonaInfo = zonasConProveedores.get(zona.id);
+
         popupTimeout = setTimeout(() => {
-          const now = Date.now();
-          const quiet = now - lastMouseMove >= 350;
+          const quiet = Date.now() - lastMouseMove >= 350;
           if (quiet && !window.modoSeleccionActivo) {
-            popup
-              .setLngLat(e.lngLat)
-              .setHTML(`<div class="text-sm font-semibold">${prov.nombre}</div>`)
-              .addTo(map);
+            if (zonaInfo?.proveedores?.length > 1) {
+              const contenido = zonaInfo.proveedores
+                .map(
+                  (p) =>
+                    `<div><span style="color:${p.color}">⬤</span> ${p.nombre}</div>`
+                )
+                .join("");
+              popup
+                .setLngLat(e.lngLat)
+                .setHTML(`<strong>Proveedores:</strong><br>${contenido}`)
+                .addTo(map);
+            } else {
+              popup
+                .setLngLat(e.lngLat)
+                .setHTML(
+                  `<div class="text-sm font-semibold">${prov.nombre}</div>`
+                )
+                .addTo(map);
+            }
           }
         }, 350);
+
+        // Si ya está visible, seguirlo con el mouse
+        if (popup.isOpen()) {
+          popup.setLngLat(e.lngLat);
+        }
       });
 
       map.on("mouseleave", fillLayerId, () => {
@@ -104,6 +147,83 @@ export const cargarProveedoresEnMapa = async (
         clearTimeout(popupTimeout);
         popup.remove();
       });
+    }
+  }
+
+  // Renderizar íconos para zonas con múltiples proveedores
+  const iconoBitmap = await generarIconoMultiProveedor();
+
+  zonasConProveedores.forEach(({ zona, proveedores }) => {
+    if (proveedores.length <= 1) return;
+
+    const iconId = `multi-icon-${zona.id}`;
+    const sourceId = `multi-source-${zona.id}`;
+    const coordinates =
+      zona?.centro || zona?.centroid || calcularCentroide(zona.geom);
+    if (!coordinates) return;
+
+    if (map.getSource(sourceId)) {
+      map.removeLayer(iconId);
+      map.removeSource(sourceId);
+    }
+
+    map.addSource(sourceId, {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates,
+        },
+        properties: {
+          proveedores: JSON.stringify(
+            proveedores.map((p) => ({
+              nombre: p.nombre,
+              color: p.color,
+            }))
+          ),
+        },
+      },
+    });
+
+    if (!map.hasImage("multi-icon")) {
+      map.addImage("multi-icon", iconoBitmap);
+    }
+
+    map.addLayer({
+      id: iconId,
+      type: "symbol",
+      source: sourceId,
+      layout: {
+        "icon-image": "multi-icon",
+        "icon-size": 0.6,
+        "icon-allow-overlap": true,
+      },
+    });
+
+    const popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+    });
+
+    map.on("mouseenter", iconId, (e) => {
+      map.getCanvas().style.cursor = "pointer";
+      const data = JSON.parse(e.features[0].properties.proveedores);
+      const content = data
+        .map(
+          (p) =>
+            `<div><span style="color:${p.color}">⬤</span> ${p.nombre}</div>`
+        )
+        .join("");
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(`<strong>Proveedores:</strong><br>${content}`)
+        .addTo(map);
+    });
+
+    map.on("mouseleave", iconId, () => {
+      map.getCanvas().style.cursor = "";
+      popup.remove();
     });
   });
 

@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthContext";
+import { useRole } from "../context/RoleContext";
 import { useEffect } from "react";
 import { IconCheck } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
@@ -28,12 +29,12 @@ const beneficiosPremium = [
 
 const Planes = () => {
   const { usuario } = useAuth();
+  const { plan } = useRole();
+  const planActual = plan || "basico";
 
   useEffect(() => {
     document.title = "Red-Fi | Planes";
   }, []);
-
-  const planActual = "premium"; // hardcodeado por ahora
 
   const renderBeneficios = (lista) => (
     <ul className="text-sm text-texto/80 space-y-2 mb-6 text-left">
@@ -55,7 +56,6 @@ const Planes = () => {
   return (
     <div className="w-full">
       <section className="py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
-        {/* Encabezado */}
         <div className="w-full text-center">
           <MainH1>Elija su plan Red-Fi</MainH1>
           <p className="mx-auto">
@@ -63,6 +63,7 @@ const Planes = () => {
             necesidades.
           </p>
         </div>
+
         <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Plan Básico */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg flex flex-col justify-between">
@@ -74,9 +75,15 @@ const Planes = () => {
               </p>
               {renderBeneficios(beneficiosBasico)}
             </div>
-            <MainLinkButton to="/cuenta" variant="primary">
-              Adquirir Plan
-            </MainLinkButton>
+            {usuario && planActual === "basico" ? (
+              <MainButton variant="disabled" className="px-6 py-3">
+                Este es tu plan actual
+              </MainButton>
+            ) : (
+              <MainLinkButton to="/cuenta" variant="primary">
+                Adquirir Plan
+              </MainLinkButton>
+            )}
           </div>
 
           {/* Plan Premium */}
@@ -90,10 +97,7 @@ const Planes = () => {
               {renderBeneficios(beneficiosPremium)}
             </div>
             {usuario && planActual === "premium" ? (
-              <MainButton
-                variant="disabled"
-                className="px-6 py-3"
-              >
+              <MainButton variant="disabled" className="px-6 py-3">
                 Este es tu plan actual
               </MainButton>
             ) : (
