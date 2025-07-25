@@ -22,10 +22,18 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     "Movistar",
   ].includes(boleta.proveedor);
 
+  const formatFecha = (fecha) => {
+    if (!fecha) return "";
+    const d = new Date(fecha);
+    return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
+  };
+
   const [form, setForm] = useState({
     ...boleta,
     proveedor: esProveedorValido ? boleta.proveedor : "Otro",
     proveedorOtro: esProveedorValido ? "" : boleta.proveedor,
+    vencimiento: formatFecha(boleta.vencimiento),
+    promoHasta: formatFecha(boleta.promo_hasta), // <-- este nombre depende del campo original
   });
 
   const [archivoNuevo, setArchivoNuevo] = useState(null);
@@ -79,7 +87,12 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
         ...form,
         proveedor:
           form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor,
+        promo_hasta: form.promoHasta, // mapear a snake_case si es necesario
       };
+
+      // Eliminar campos innecesarios o camelCase
+      delete datosFinales.proveedorOtro;
+      delete datosFinales.promoHasta;
 
       await actualizarBoletaConImagen(
         boleta,
@@ -87,6 +100,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
         archivoNuevo,
         imagenEliminada
       );
+
       mostrarExito("Boleta actualizada correctamente.");
       window.dispatchEvent(new Event("nueva-boleta"));
       onActualizar?.();
@@ -166,6 +180,16 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           value={form.vencimiento}
           onChange={handleChange}
           label="Fecha de vencimiento"
+          className="md:col-span-2"
+          icon={IconCalendar}
+        />
+
+        <Input
+          name="promoHasta"
+          type="date"
+          value={form.promoHasta}
+          onChange={handleChange}
+          label="Fin de promoción (opcional)"
           className="md:col-span-2"
           icon={IconCalendar}
         />

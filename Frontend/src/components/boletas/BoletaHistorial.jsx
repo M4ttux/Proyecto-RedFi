@@ -40,6 +40,20 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
     }
   };
 
+  const formatearFechaConTooltip = (fechaISO) => {
+    if (!fechaISO) return <span className="text-xs text-texto/40">—</span>;
+
+    const fecha = new Date(fechaISO);
+    const formatoCorto = fecha.toLocaleDateString("es-AR");
+    const formatoLargo = fecha.toLocaleDateString("es-AR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    return <span title={formatoLargo}>{formatoCorto}</span>;
+  };
+
   const boletasOrdenadas = [...boletas].sort(
     (a, b) => new Date(b.fecha_carga) - new Date(a.fecha_carga)
   );
@@ -69,31 +83,33 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "fecha_carga",
       label: "Carga",
       renderCell: (b) => (
-        <div className="flex items-center text-sm text-texto/60">
-          <IconCalendar size={16} className="mr-2" />
-          {b.fecha_carga
-            ? new Date(b.fecha_carga).toLocaleDateString("es-AR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            : "—"}
+        <div className="text-sm text-green-400/80">
+          {formatearFechaConTooltip(b.fecha_carga)}
         </div>
       ),
     },
+
     {
       id: "vencimiento",
       label: "Vencimiento",
       renderCell: (b) => (
-        <div className="flex items-center text-sm text-texto/60">
-          <IconCalendar size={16} className="mr-2" />
-          {new Date(b.vencimiento + "T12:00:00").toLocaleDateString("es-AR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+        <div className="text-sm text-red-400/80">
+          {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
         </div>
       ),
+    },
+
+    {
+      id: "promo_hasta",
+      label: "Promoción hasta",
+      renderCell: (b) =>
+        b.promo_hasta ? (
+          <div className="text-sm text-yellow-400/80">
+            {formatearFechaConTooltip(b.promo_hasta)}
+          </div>
+        ) : (
+          <span className="text-xs text-texto/40">—</span>
+        ),
     },
 
     {
@@ -185,25 +201,20 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                 </p>
                 <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
                   <strong className="text-texto">Carga:</strong>
-                  <span>
-                    {new Date(b.fecha_carga).toLocaleDateString("es-AR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
+                  <span className="text-green-400/80">
+                    {formatearFechaConTooltip(b.fecha_carga)}
                   </span>
                 </p>
                 <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
                   <strong className="text-texto">Vencimiento:</strong>
-                  <span>
-                    {new Date(b.vencimiento + "T12:00:00").toLocaleDateString(
-                      "es-AR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )}
+                  <span className="text-red-400/80">
+                    {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
+                  </span>
+                </p>
+                <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
+                  <strong className="text-texto">Promo hasta:</strong>
+                  <span className="text-yellow-400/80">
+                    {formatearFechaConTooltip(b.promo_hasta + "T12:00:00")}
                   </span>
                 </p>
               </div>

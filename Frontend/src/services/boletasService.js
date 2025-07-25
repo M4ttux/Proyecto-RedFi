@@ -2,77 +2,31 @@
 import { supabase } from "../supabase/client";
 
 /**
- * Obtiene las notificaciones relevantes a partir de las boletas del usuario.
- * - Boletas próximas a vencer (0-2 días).
- * - Comparación de monto entre las dos boletas más recientes.
- * @param {string} userId - ID del usuario autenticado
- * @returns {Promise<string[]>} Lista de mensajes de notificación
+ * Devuelve el usuario autenticado actual.
+ * @returns {Promise<Object|null>} Usuario o null
  */
-export const obtenerNotificacionesBoletas = async (userId) => {
-  const { data, error } = await supabase
-    .from("boletas")
-    .select("*")
-    .eq("user_id", userId);
-
-  if (error || !data) return [];
-
-  const ahora = new Date();
-  const alertas = [];
-
-  data.forEach((b) => {
-    const vencimiento = new Date(b.vencimiento + "T00:00:00");
-
-    const diferenciaMs = vencimiento - ahora;
-    const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-    const horas = Math.floor(
-      (diferenciaMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutos = Math.floor((diferenciaMs % (1000 * 60 * 60)) / (1000 * 60));
-
-    if (dias >= 0 && dias <= 2) {
-      let partes = [];
-
-      if (dias > 0) {
-        partes.push(`${dias} día${dias !== 1 ? "s" : ""}`);
-      }
-      if (horas > 0) {
-        partes.push(`${horas} hora${horas !== 1 ? "s" : ""}`);
-      }
-      if (minutos > 0) {
-        partes.push(`${minutos} minuto${minutos !== 1 ? "s" : ""}`);
-      }
-
-      const tiempo = partes.join(" y ");
-
-      alertas.push(`📅 ${b.proveedor} vence en ${tiempo}`);
-    }
-  });
-
-  const ordenadas = [...data].sort(
-    (a, b) => new Date(b.vencimiento) - new Date(a.vencimiento)
-  );
-  if (ordenadas.length >= 2) {
-    const actual = parseFloat(ordenadas[0].monto);
-    const anterior = parseFloat(ordenadas[1].monto);
-    const diferencia = actual - anterior;
-    if (diferencia > 0) {
-      alertas.push(`⚠️ Subió $${diferencia.toFixed(2)} este mes`);
-    }
-  }
-
-  return alertas;
+export const obtenerUsuarioActual = async () => {
+  const { data } = await supabase.auth.getUser();
+  return data?.user || null;
 };
 
 /**
  * Sube una imagen al bucket de Supabase y devuelve su URL pública.
+ * La imagen se guarda dentro de una carpeta con el ID del usuario.
  * @param {File} archivo - Archivo de imagen
  * @returns {Promise<string|null>} URL pública o null si falla
  */
 export const subirImagenBoleta = async (archivo) => {
+  const user = await obtenerUsuarioActual();
+  if (!user) throw new Error("Usuario no autenticado");
+
+  const folder = user.id;
   const fileName = `boleta-${Date.now()}-${archivo.name}`;
+  const fullPath = `${folder}/${fileName}`;
+
   const { error: uploadError } = await supabase.storage
     .from("boletas")
-    .upload(fileName, archivo);
+    .upload(fullPath, archivo);
 
   if (uploadError) {
     throw new Error("Error al subir la imagen.");
@@ -80,7 +34,7 @@ export const subirImagenBoleta = async (archivo) => {
 
   const { data: publicUrlData } = supabase.storage
     .from("boletas")
-    .getPublicUrl(fileName);
+    .getPublicUrl(fullPath);
 
   return publicUrlData.publicUrl;
 };
@@ -96,15 +50,6 @@ export const guardarBoleta = async (boleta) => {
 };
 
 /**
- * Devuelve el usuario autenticado actual.
- * @returns {Promise<Object|null>} Usuario o null
- */
-export const obtenerUsuarioActual = async () => {
-  const { data } = await supabase.auth.getUser();
-  return data?.user || null;
-};
-
-/**
  * Elimina una boleta y su imagen (si existe) de la base de datos y el storage.
  * @param {Object} boleta - Objeto de boleta con `id` y `url_imagen`
  * @returns {Promise<void>}
@@ -117,10 +62,12 @@ export const eliminarBoletaConImagen = async (boleta) => {
   }
 
   if (boleta.url_imagen) {
-    const fileName = boleta.url_imagen.split("/").pop();
+    const url = new URL(boleta.url_imagen);
+    const path = decodeURIComponent(url.pathname.split("/storage/v1/object/public/boletas/")[1]);
+
     const { error: storageError } = await supabase.storage
       .from("boletas")
-      .remove([fileName]);
+      .remove([path]);
 
     if (storageError) {
       console.warn(
@@ -136,6 +83,7 @@ export const eliminarBoletaConImagen = async (boleta) => {
  * @param {Object} boleta - La boleta original
  * @param {Object} nuevosDatos - Nuevos campos del formulario
  * @param {File|null} nuevaImagen - Imagen nueva (si se eligió)
+ * @param {boolean} eliminarImagen - Si se debe eliminar la imagen actual
  */
 export const actualizarBoletaConImagen = async (
   boleta,
@@ -145,25 +93,37 @@ export const actualizarBoletaConImagen = async (
 ) => {
   let url_imagen = boleta.url_imagen;
 
-  // Si el usuario quiere eliminar la imagen (sin subir una nueva)
+  // Eliminar imagen si el usuario así lo pidió (sin subir nueva)
   if (eliminarImagen && boleta.url_imagen) {
-    const fileName = boleta.url_imagen.split("/").pop();
-    await supabase.storage.from("boletas").remove([fileName]);
+    const url = new URL(boleta.url_imagen);
+    const path = decodeURIComponent(url.pathname.split("/storage/v1/object/public/boletas/")[1]);
+
+    const { error: deleteError } = await supabase.storage
+      .from("boletas")
+      .remove([path]);
+
+    if (deleteError) {
+      console.warn("Error al eliminar imagen existente:", deleteError.message);
+    }
+
     url_imagen = null;
   }
 
-  // Si se sube una nueva imagen
+  // Subir nueva imagen si hay archivo nuevo
   if (nuevaImagen) {
-    // Eliminar imagen anterior si existe
     if (boleta.url_imagen) {
-      const oldPath = boleta.url_imagen.split("/").pop();
+      const url = new URL(boleta.url_imagen);
+      const oldPath = decodeURIComponent(url.pathname.split("/storage/v1/object/public/boletas/")[1]);
       await supabase.storage.from("boletas").remove([oldPath]);
     }
 
+    const user = await obtenerUsuarioActual();
     const nuevoNombre = `boleta-${Date.now()}-${nuevaImagen.name}`;
+    const fullPath = `${user.id}/${nuevoNombre}`;
+
     const { error: errorSubida } = await supabase.storage
       .from("boletas")
-      .upload(nuevoNombre, nuevaImagen);
+      .upload(fullPath, nuevaImagen);
 
     if (errorSubida) {
       throw new Error("Error al subir la nueva imagen.");
@@ -171,18 +131,32 @@ export const actualizarBoletaConImagen = async (
 
     const { data: publicUrlData } = supabase.storage
       .from("boletas")
-      .getPublicUrl(nuevoNombre);
+      .getPublicUrl(fullPath);
 
     url_imagen = publicUrlData.publicUrl;
   }
 
-  // Actualizar la boleta con o sin imagen
-  const datosLimpios = { ...nuevosDatos };
+  const datosLimpios = {
+    ...nuevosDatos,
+    url_imagen,
+  };
+
   delete datosLimpios.proveedorOtro;
+
+  if ("promoHasta" in datosLimpios) {
+    datosLimpios.promo_hasta = datosLimpios.promoHasta;
+    delete datosLimpios.promoHasta;
+  }
+
+  Object.keys(datosLimpios).forEach((key) => {
+    if (datosLimpios[key] === undefined) {
+      delete datosLimpios[key];
+    }
+  });
 
   const { error } = await supabase
     .from("boletas")
-    .update({ ...datosLimpios, url_imagen })
+    .update(datosLimpios)
     .eq("id", boleta.id);
 
   if (error) throw new Error("Error al guardar cambios.");
@@ -209,4 +183,51 @@ export const obtenerBoletasDelUsuario = async () => {
   }
 
   return data;
+};
+
+/**
+ * Devuelve notificaciones relevantes sobre boletas.
+ * @param {string} userId
+ * @returns {Promise<string[]>}
+ */
+export const obtenerNotificacionesBoletas = async (userId) => {
+  const { data, error } = await supabase
+    .from("boletas")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error || !data) return [];
+
+  const ahora = new Date();
+  const alertas = [];
+
+  data.forEach((b) => {
+    const vencimiento = new Date(b.vencimiento + "T00:00:00");
+    const diferenciaMs = vencimiento - ahora;
+    const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diferenciaMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diferenciaMs % (1000 * 60 * 60)) / (1000 * 60));
+
+    if (dias >= 0 && dias <= 2) {
+      let partes = [];
+      if (dias > 0) partes.push(`${dias} día${dias !== 1 ? "s" : ""}`);
+      if (horas > 0) partes.push(`${horas} hora${horas !== 1 ? "s" : ""}`);
+      if (minutos > 0) partes.push(`${minutos} minuto${minutos !== 1 ? "s" : ""}`);
+      alertas.push(`📅 ${b.proveedor} vence en ${partes.join(" y ")}`);
+    }
+  });
+
+  const ordenadas = [...data].sort(
+    (a, b) => new Date(b.vencimiento) - new Date(a.vencimiento)
+  );
+  if (ordenadas.length >= 2) {
+    const actual = parseFloat(ordenadas[0].monto);
+    const anterior = parseFloat(ordenadas[1].monto);
+    const diferencia = actual - anterior;
+    if (diferencia > 0) {
+      alertas.push(`⚠️ Subió $${diferencia.toFixed(2)} este mes`);
+    }
+  }
+
+  return alertas;
 };

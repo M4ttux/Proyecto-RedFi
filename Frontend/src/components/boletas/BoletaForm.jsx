@@ -37,21 +37,29 @@ const BoletaForm = ({
   const { mostrarExito, mostrarError } = useAlerta();
 
   const meses = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
+    { label: "Seleccionar mes", value: "" },
+    { label: "Enero", value: "Enero" },
+    { label: "Febrero", value: "Febrero" },
+    { label: "Marzo", value: "Marzo" },
+    { label: "Abril", value: "Abril" },
+    { label: "Mayo", value: "Mayo" },
+    { label: "Junio", value: "Junio" },
+    { label: "Julio", value: "Julio" },
+    { label: "Agosto", value: "Agosto" },
+    { label: "Septiembre", value: "Septiembre" },
+    { label: "Octubre", value: "Octubre" },
+    { label: "Noviembre", value: "Noviembre" },
+    { label: "Diciembre", value: "Diciembre" },
   ];
 
-  const proveedores = ["Fibertel", "Telecentro", "Claro", "Movistar", "Otro"];
+  const proveedores = [
+    { label: "Seleccionar proveedor", value: "" },
+    { label: "Fibertel", value: "Fibertel" },
+    { label: "Telecentro", value: "Telecentro" },
+    { label: "Claro", value: "Claro" },
+    { label: "Movistar", value: "Movistar" },
+    { label: "Otro", value: "Otro" },
+  ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -63,16 +71,31 @@ const BoletaForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const user = await obtenerUsuarioActual();
-    if (!user) {
-      mostrarError("Debés iniciar sesión.");
-      return;
-    }
-
-    let url_imagen = null;
+    setLoading(true);
 
     try {
+      // Validaciones manuales
+      if (!form.mes) {
+        mostrarError("Debés seleccionar un mes válido.");
+        return;
+      }
+      if (!form.proveedor) {
+        mostrarError("Debés seleccionar un proveedor válido.");
+        return;
+      }
+
+      if (form.proveedor === "Otro" && !form.proveedorOtro.trim()) {
+        mostrarError("Debés ingresar el nombre del proveedor.");
+        return;
+      }
+
+      const user = await obtenerUsuarioActual();
+      if (!user) {
+        mostrarError("Debés iniciar sesión.");
+        return;
+      }
+
+      let url_imagen = null;
       if (archivo) {
         url_imagen = await subirImagenBoleta(archivo);
       }
@@ -113,14 +136,16 @@ const BoletaForm = ({
       setArchivo(null);
       setPreviewUrl(null);
 
-      if (onBoletaAgregada) onBoletaAgregada();
-      if (onActualizarNotificaciones) onActualizarNotificaciones();
+      onBoletaAgregada?.();
+      onActualizarNotificaciones?.();
       window.dispatchEvent(new Event("nueva-boleta"));
 
       setVista?.("historial");
     } catch (error) {
       console.error(error);
       mostrarError("Error al guardar la boleta.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,6 +164,8 @@ const BoletaForm = ({
             value={form.mes}
             onChange={handleSelectChange("mes")}
             options={meses}
+            getOptionValue={(opt) => opt.value}
+            getOptionLabel={(opt) => opt.label}
             required
           />
 
@@ -175,6 +202,8 @@ const BoletaForm = ({
             value={form.proveedor}
             onChange={handleSelectChange("proveedor")}
             options={proveedores}
+            getOptionValue={(opt) => opt.value}
+            getOptionLabel={(opt) => opt.label}
             required
             icon={IconWifi}
           />

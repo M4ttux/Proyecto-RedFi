@@ -1,5 +1,5 @@
 import { obtenerProveedores } from "../proveedorService";
-import { getVisible } from "./mapaBase";
+import { getVisible, getVisiblePorZona } from "./mapaBase";
 import maplibregl from "maplibre-gl";
 import { generarIconoMultiProveedor } from "./iconoTablerToImage";
 
@@ -232,9 +232,6 @@ export const cargarProveedoresEnMapa = async (
 
 export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
   proveedoresRef.current.forEach((prov) => {
-    const visible = getVisible(prov, filtros);
-    prov.visible = visible;
-
     if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) return;
 
     prov.ZonaProveedor.forEach((relacionZona) => {
@@ -243,6 +240,8 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
 
       const fillLayerId = `fill-${prov.id}-${zona.id}`;
       const lineLayerId = `line-${prov.id}-${zona.id}`;
+
+      const visible = getVisiblePorZona(prov, zona.id, filtros);
 
       if (map.getLayer(fillLayerId)) {
         map.setLayoutProperty(
@@ -261,3 +260,4 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
     });
   });
 };
+
