@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import MainButton from "../ui/MainButton";
 import MainH2 from "../ui/MainH2";
 import Input from "../ui/Input";
+import Select from "../ui/Select";
 import FileInput from "../ui/FileInput";
 import {
-  IconX,
   IconCalendar,
   IconCurrencyDollar,
   IconWifi,
@@ -27,14 +27,38 @@ const BoletaForm = ({
     monto: "",
     proveedor: "",
     vencimiento: "",
+    promoHasta: "",
+    proveedorOtro: "",
   });
 
+  const [loading, setLoading] = useState(false);
   const [archivo, setArchivo] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const { mostrarExito, mostrarError } = useAlerta();
 
+  const meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
+  const proveedores = ["Fibertel", "Telecentro", "Claro", "Movistar", "Otro"];
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectChange = (campo) => (valor) => {
+    setForm((prev) => ({ ...prev, [campo]: valor }));
   };
 
   const handleSubmit = async (e) => {
@@ -57,10 +81,21 @@ const BoletaForm = ({
         form.vencimiento + "T12:00:00"
       ).toISOString();
 
+      const promoHastaAjustado = form.promoHasta
+        ? new Date(form.promoHasta + "T12:00:00").toISOString()
+        : null;
+
+      const proveedorFinal =
+        form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor;
+
       await guardarBoleta({
-        ...form,
+        mes: form.mes,
+        anio: form.anio,
+        monto: form.monto,
+        proveedor: proveedorFinal,
         user_id: user.id,
         vencimiento: vencimientoAjustado,
+        promo_hasta: promoHastaAjustado,
         url_imagen,
       });
 
@@ -72,6 +107,8 @@ const BoletaForm = ({
         monto: "",
         proveedor: "",
         vencimiento: "",
+        promoHasta: "",
+        proveedorOtro: "",
       });
       setArchivo(null);
       setPreviewUrl(null);
@@ -95,21 +132,26 @@ const BoletaForm = ({
         className="space-y-6 bg-white/5 border border-white/10 p-6 rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
+          {/* Select de mes */}
+          <Select
             label="Mes *"
             name="mes"
             value={form.mes}
-            onChange={handleChange}
-            placeholder="Ej. Abril"
+            onChange={handleSelectChange("mes")}
+            options={meses}
             required
           />
 
           <Input
             label="Año *"
             name="anio"
+            type="number"
             value={form.anio}
             onChange={handleChange}
             placeholder="Ej. 2025"
+            min={2020}
+            max={2035}
+            maxLength={4}
             required
           />
 
@@ -119,38 +161,59 @@ const BoletaForm = ({
             type="number"
             value={form.monto}
             onChange={handleChange}
-            placeholder="Monto $"
+            placeholder="Monto"
             required
+            min="0"
+            step="0.01"
             icon={IconCurrencyDollar}
           />
 
-          <Input
+          {/* Select de proveedor */}
+          <Select
             label="Proveedor *"
             name="proveedor"
             value={form.proveedor}
-            onChange={handleChange}
-            placeholder="Ej. Fibertel"
+            onChange={handleSelectChange("proveedor")}
+            options={proveedores}
             required
             icon={IconWifi}
           />
 
-          <div className="md:col-span-2">
+          {/* Solo se muestra si elige "Otro" */}
+          {form.proveedor === "Otro" && (
             <Input
-              label="Fecha de vencimiento *"
-              name="vencimiento"
-              type="date"
-              value={form.vencimiento}
+              label="Nombre del proveedor"
+              name="proveedorOtro"
+              value={form.proveedorOtro}
               onChange={handleChange}
+              placeholder="Ej. Red Fibra Z"
               required
-              icon={IconCalendar}
             />
-          </div>
+          )}
 
-          {/* Selector de imagen */}
+          <Input
+            label="Fecha de vencimiento *"
+            name="vencimiento"
+            type="date"
+            value={form.vencimiento}
+            onChange={handleChange}
+            required
+            icon={IconCalendar}
+          />
+
+          <Input
+            label="Fin de promoción (opcional)"
+            name="promoHasta"
+            type="date"
+            value={form.promoHasta}
+            onChange={handleChange}
+            icon={IconCalendar}
+          />
+
           <div className="md:col-span-2 text-center">
             <FileInput
               id="archivo"
-              label="Imagen de la boleta *"
+              label="Imagen de la boleta (opcional)"
               value={archivo}
               onChange={setArchivo}
               previewUrl={previewUrl}
@@ -160,7 +223,12 @@ const BoletaForm = ({
         </div>
 
         <div className="flex justify-center">
-          <MainButton type="submit" variant="primary">
+          <MainButton
+            type="submit"
+            variant="primary"
+            loading={loading}
+            disabled={loading}
+          >
             Guardar boleta
           </MainButton>
         </div>

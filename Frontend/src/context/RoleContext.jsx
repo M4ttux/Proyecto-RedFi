@@ -61,32 +61,18 @@ export const RoleProvider = ({ children }) => {
     return false;
   };
 
-  const refrescarRol = async () => {
-    if (!usuario) return;
-    try {
-      setLoadingRole(true);
-      const perfil = await getPerfil();
-      setRol(perfil?.rol || null);
-      setPlan(perfil?.plan || null);
-    } catch (error) {
-      console.error("Error al refrescar el perfil:", error.message);
-    } finally {
-      setLoadingRole(false);
-    }
-  };
-
   return (
     <RoleContext.Provider
       value={{
         rol,
         plan,
+        setPlan,
         loadingRole,
         esAdmin,
         esUser,
         esPremium,
         esBasico,
         tieneAcceso,
-        refrescarRol,
       }}
     >
       {children}

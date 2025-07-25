@@ -44,7 +44,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        <div className="space-y-3 ml-10 mb-2 text-xl">
+        <div className="space-y-3 ml-0 sm:ml-5 text-xl">
           <p>
             <strong>Mes:</strong> {boleta.mes}
           </p>
@@ -68,14 +68,31 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
               year: "numeric",
             })}
           </p>
+
+          {boleta.promo_hasta && (
+            <p className="text-yellow-400">
+              <strong>Promoción hasta:</strong>{" "}
+              {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+          )}
         </div>
 
         <div className="flex justify-center">
-          <img
-            src={boleta.url_imagen}
-            alt="Boleta"
-            className="max-h-[300px] object-contain rounded border"
-          />
+          {boleta.url_imagen ? (
+            <img
+              src={boleta.url_imagen}
+              alt="Boleta"
+              className="max-h-[300px] object-contain rounded border"
+            />
+          ) : (
+            <div className="text-center text-gray-400 italic border border-dashed p-6 rounded max-w-xs">
+              ❌ El usuario no cargó una imagen de la boleta.
+            </div>
+          )}
         </div>
       </div>
     </ModalContenedor>

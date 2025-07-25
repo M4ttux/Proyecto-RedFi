@@ -17,6 +17,10 @@ const Input = ({
   className = "",
   isInvalid = false,
   onKeyDown,
+  maxLength = null,
+  min,
+  max,
+
 }) => {
   return (
     <div className="space-y-1 relative">
@@ -55,8 +59,20 @@ const Input = ({
             name={name}
             type={type}
             value={loading ? "" : value ?? ""}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
+            onChange={(e) => {
+              if (type === "number" && maxLength && e.target.value.length > maxLength) {
+                e.target.value = e.target.value.slice(0, maxLength);
+              }
+              onChange(e);
+            }}
+            onKeyDown={(e) => {
+              if (onKeyDown) onKeyDown(e);
+              if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            min={min}
+            max={max}
             placeholder={loading ? "Cargando..." : placeholder}
             required={required}
             disabled={disabled || loading}

@@ -177,9 +177,12 @@ export const actualizarBoletaConImagen = async (
   }
 
   // Actualizar la boleta con o sin imagen
+  const datosLimpios = { ...nuevosDatos };
+  delete datosLimpios.proveedorOtro;
+
   const { error } = await supabase
     .from("boletas")
-    .update({ ...nuevosDatos, url_imagen })
+    .update({ ...datosLimpios, url_imagen })
     .eq("id", boleta.id);
 
   if (error) throw new Error("Error al guardar cambios.");

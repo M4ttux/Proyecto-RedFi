@@ -3,6 +3,7 @@ import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import Input from "../../ui/Input";
 import FileInput from "../../ui/FileInput";
+import Select from "../../ui/Select";
 import ModalContenedor from "../../ui/ModalContenedor";
 import {
   IconX,
@@ -14,13 +15,42 @@ import { actualizarBoletaConImagen } from "../../../services/boletasService";
 import { useAlerta } from "../../../context/AlertaContext";
 
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
-  const [form, setForm] = useState({ ...boleta });
+  const esProveedorValido = [
+    "Fibertel",
+    "Telecentro",
+    "Claro",
+    "Movistar",
+  ].includes(boleta.proveedor);
+
+  const [form, setForm] = useState({
+    ...boleta,
+    proveedor: esProveedorValido ? boleta.proveedor : "Otro",
+    proveedorOtro: esProveedorValido ? "" : boleta.proveedor,
+  });
+
   const [archivoNuevo, setArchivoNuevo] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imagenEliminada, setImagenEliminada] = useState(false);
 
   const { mostrarExito, mostrarError } = useAlerta();
+
+  const meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
+  const proveedores = ["Fibertel", "Telecentro", "Claro", "Movistar", "Otro"];
 
   useEffect(() => {
     if (boleta.url_imagen) {
@@ -32,6 +62,10 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleSelectChange = (campo) => (valor) => {
+    setForm((prev) => ({ ...prev, [campo]: valor }));
+  };
+
   const handleClearImagen = () => {
     setArchivoNuevo(null);
     setPreview(null);
@@ -41,9 +75,15 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   const handleGuardarCambios = async () => {
     setLoading(true);
     try {
+      const datosFinales = {
+        ...form,
+        proveedor:
+          form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor,
+      };
+
       await actualizarBoletaConImagen(
         boleta,
-        form,
+        datosFinales,
         archivoNuevo,
         imagenEliminada
       );
@@ -77,11 +117,11 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
       {/* Formulario */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
+        <Select
           name="mes"
           value={form.mes}
-          onChange={handleChange}
-          placeholder="Mes"
+          onChange={handleSelectChange("mes")}
+          options={meses}
           label="Mes"
         />
         <Input
@@ -100,14 +140,26 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           label="Monto"
           icon={IconCurrencyDollar}
         />
-        <Input
+        <Select
           name="proveedor"
           value={form.proveedor}
-          onChange={handleChange}
-          placeholder="Proveedor"
+          onChange={handleSelectChange("proveedor")}
+          options={proveedores}
           label="Proveedor"
           icon={IconWifi}
         />
+
+        {form.proveedor === "Otro" && (
+          <Input
+            label="Nombre del proveedor"
+            name="proveedorOtro"
+            value={form.proveedorOtro}
+            onChange={handleChange}
+            placeholder="Ej. Red Fibra Z"
+            required
+          />
+        )}
+
         <Input
           name="vencimiento"
           type="date"

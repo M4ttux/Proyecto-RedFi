@@ -5,7 +5,7 @@ import { IconX } from "@tabler/icons-react";
 const FileInput = ({
   id = "archivo",
   label = "Seleccionar imagen",
-  accept = "image/*",
+  accept = "image/*, application/pdf",
   onChange,
   value = null,
   previewUrl = null,
