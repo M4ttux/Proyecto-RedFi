@@ -4,19 +4,21 @@ import MainButton from "../../ui/MainButton";
 import MainLinkButton from "../../ui/MainLinkButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
+import Avatar from "../../ui/Avatar";
 
 const ModalProveedor = ({ proveedor, onClose }) => {
   const navigate = useNavigate();
-
   if (!proveedor) return null;
 
-  // Datos simulados por ahora
-  const cantidadResenas = 20;
-  const promedioEstrellas = 4.3;
-  const descripcionPlaceholder =
-    "Proveedor destacado en la región, reconocido por su estabilidad y atención al cliente.";
+  // ⭐ Cálculo de reseñas (cantidad y promedio)
+  const reseñas = proveedor.reseñas || [];
+  const cantidadResenas = proveedor.reseñas?.length || 0;
+  const promedioEstrellas = proveedor.reseñas?.length
+    ? proveedor.reseñas.reduce((sum, r) => sum + r.estrellas, 0) /
+      proveedor.reseñas.length
+    : 0;
 
-  // ✅ Obtener tecnologías desde la relación muchos a muchos
+  // ✅ Obtener tecnologías desde relación
   const tecnologias =
     proveedor.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
     [];
@@ -33,14 +35,23 @@ const ModalProveedor = ({ proveedor, onClose }) => {
         <IconX size={24} />
       </MainButton>
 
-      {/* Imagen/ícono del proveedor */}
+      {/* Logotipo o ícono del proveedor */}
       <div className="flex justify-center mb-4">
-        <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center text-3xl">
-          🏢
-        </div>
+        {proveedor.logotipo ? (
+          <Avatar
+            fotoUrl={proveedor.logotipo}
+            nombre={proveedor.nombre}
+            size={20}
+            className="rounded-full"
+          />
+        ) : (
+          <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center text-3xl">
+            🏢
+          </div>
+        )}
       </div>
 
-      {/* Nombre del proveedor */}
+      {/* Nombre */}
       <MainH2 className="text-center">{proveedor.nombre}</MainH2>
 
       {/* Estrellas */}
@@ -55,7 +66,8 @@ const ModalProveedor = ({ proveedor, onClose }) => {
           )}
         </div>
         <span className="mt-1 text-sm text-texto/80">
-          {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseñas
+          {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseña
+          {cantidadResenas !== 1 && "s"}
         </span>
       </div>
 
@@ -79,7 +91,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
 
       {/* Descripción */}
       <p className="text-sm text-texto/80 text-center mb-6 px-2">
-        {descripcionPlaceholder}
+        {proveedor.descripcion || "Este proveedor aún no tiene descripción."}
       </p>
 
       {/* Botón "Más información" */}

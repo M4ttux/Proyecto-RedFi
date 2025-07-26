@@ -31,12 +31,46 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
       {
         id: "rol",
         label: "ROL",
-        renderCell: (row) => row.rol,
+        renderCell: (row) => {
+          const rol = row.rol;
+          const colores = {
+            admin: "bg-emerald-400/10 text-emerald-400",
+          };
+
+          return rol ? (
+            <span
+              className={`text-xs font-medium px-2 py-1 rounded-lg ${
+                colores[rol] || "bg-white/10 text-texto"
+              }`}
+            >
+              {rol.toUpperCase()}
+            </span>
+          ) : (
+            "—"
+          );
+        },
       },
       {
         id: "plan",
         label: "PLAN",
-        renderCell: (row) => row.plan,
+        renderCell: (row) => {
+          const plan = row.plan;
+          const colores = {
+            premium: "bg-yellow-400/10 text-yellow-400",
+          };
+
+          return plan ? (
+            <span
+              className={`text-xs font-medium px-2 py-1 rounded-lg ${
+                colores[plan] || "bg-white/10 text-texto"
+              }`}
+            >
+              {plan.toUpperCase()}
+            </span>
+          ) : (
+            "—"
+          );
+        },
       }
     );
   }
@@ -44,6 +78,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
   // 2. Proveedores
   else if (tabla === "proveedores") {
     columnasBase.push(
+      {
+        id: "avatar",
+        label: "AVATAR",
+        renderCell: (row) => (
+          <Avatar fotoUrl={row.logotipo} nombre={row.nombre} size={8} />
+        ),
+      },
       { id: "nombre", label: "NOMBRE", renderCell: (row) => row.nombre },
       {
         id: "descripcion",
@@ -69,40 +110,6 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           </div>
         ),
       },
-      {
-        id: "tecnologias",
-        label: "TECNOLOGÍAS",
-        renderCell: (row) => {
-          const tecnologias = row.tecnologias || [];
-          const maxToShow = 1;
-          const visibles = tecnologias.slice(0, maxToShow);
-          const restantes = tecnologias.length - visibles.length;
-
-          return tecnologias.length > 0 ? (
-            <div
-              className="flex flex-wrap gap-1 max-w-[225px] overflow-hidden"
-              title={tecnologias.join(", ")}
-            >
-              {visibles.map((tec, i) => (
-                <span
-                  key={i}
-                  className="bg-white/10 text-texto text-sm px-2 py-0.5 rounded-lg"
-                >
-                  {tec}
-                </span>
-              ))}
-              {restantes > 0 && (
-                <span className="text-texto/60 text-sm px-2 py-0.5 rounded-lg border border-white/10">
-                  +{restantes} más
-                </span>
-              )}
-            </div>
-          ) : (
-            "—"
-          );
-        },
-      },
-
       {
         id: "color",
         label: "COLOR",
@@ -179,7 +186,67 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 5. Fallback para tablas desconocidas
+  // 5. Proveedor y Tecnología
+  else if (tabla === "ProveedorTecnologia") {
+    columnasBase.push(
+      {
+        id: "proveedor_id",
+        label: "PROVEEDOR",
+        renderCell: (row) => row.proveedor || "—",
+      },
+      {
+        id: "tecnologias",
+        label: "TECNOLOGÍAS",
+        renderCell: (row) =>
+          Array.isArray(row.tecnologias) && row.tecnologias.length ? (
+            <div className="flex flex-wrap gap-1 max-w-[300px] overflow-hidden">
+              {row.tecnologias.map((tec, i) => (
+                <span
+                  key={i}
+                  className="bg-white/10 text-texto text-sm px-2 py-0.5 rounded-lg"
+                >
+                  {tec}
+                </span>
+              ))}
+            </div>
+          ) : (
+            "—"
+          ),
+      }
+    );
+  }
+
+  // 6. Proveedor y Zona
+  else if (tabla === "ZonaProveedor") {
+    columnasBase.push(
+      {
+        id: "proveedor_id",
+        label: "PROVEEDOR",
+        renderCell: (row) => row.proveedor || "—",
+      },
+      {
+        id: "zonas",
+        label: "ZONAS",
+        renderCell: (row) =>
+          Array.isArray(row.zonas) && row.zonas.length ? (
+            <div className="flex flex-wrap gap-1 max-w-[300px] overflow-hidden">
+              {row.zonas.map((zona, i) => (
+                <span
+                  key={i}
+                  className="bg-white/10 text-texto text-sm px-2 py-0.5 rounded-lg"
+                >
+                  {zona}
+                </span>
+              ))}
+            </div>
+          ) : (
+            "—"
+          ),
+      }
+    );
+  }
+
+  // 7. Fallback para tablas desconocidas
   else {
     const keys = Object.keys(ejemplo);
     keys.forEach((key) => {
@@ -191,42 +258,47 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     });
   }
 
-  // Acciones (común para todas)
+  // Acciones (común para todas, pero sin "Ver" en algunas tablas)
   if (acciones.onVer || acciones.onEditar || acciones.onEliminar) {
     columnasBase.push({
       id: "acciones",
       label: "ACCIONES",
-      renderCell: (row) => (
-        <div className="flex flex-wrap gap-2">
-          {acciones.onVer && (
-            <MainButton
-              onClick={() => acciones.onVer(row)}
-              title="Ver"
-              variant="see"
-            >
-              Ver
-            </MainButton>
-          )}
-          {acciones.onEditar && (
-            <MainButton
-              onClick={() => acciones.onEditar(row)}
-              title="Editar"
-              variant="edit"
-            >
-              Editar
-            </MainButton>
-          )}
-          {acciones.onEliminar && (
-            <MainButton
-              onClick={() => acciones.onEliminar(row)}
-              title="Eliminar"
-              variant="delete"
-            >
-              Eliminar
-            </MainButton>
-          )}
-        </div>
-      ),
+      renderCell: (row) => {
+        const ocultarVer =
+          tabla === "ProveedorTecnologia" || tabla === "ZonaProveedor";
+
+        return (
+          <div className="flex flex-wrap gap-2">
+            {!ocultarVer && acciones.onVer && (
+              <MainButton
+                onClick={() => acciones.onVer(row)}
+                title="Ver"
+                variant="see"
+              >
+                Ver
+              </MainButton>
+            )}
+            {acciones.onEditar && (
+              <MainButton
+                onClick={() => acciones.onEditar(row)}
+                title="Editar"
+                variant="edit"
+              >
+                Editar
+              </MainButton>
+            )}
+            {acciones.onEliminar && (
+              <MainButton
+                onClick={() => acciones.onEliminar(row)}
+                title="Eliminar"
+                variant="delete"
+              >
+                Eliminar
+              </MainButton>
+            )}
+          </div>
+        );
+      },
     });
   }
 

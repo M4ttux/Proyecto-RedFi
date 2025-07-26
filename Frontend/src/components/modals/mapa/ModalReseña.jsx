@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
@@ -6,6 +6,8 @@ import Avatar from "../../ui/Avatar";
 import ModalContenedor from "../../ui/ModalContenedor";
 
 const ModalReseña = ({ reseña, onClose }) => {
+  const navigate = useNavigate();
+  const userId = reseña?.usuario_id;
   if (!reseña) return null;
 
   const estrellasLlenas = Math.round(reseña.estrellas);
@@ -57,20 +59,21 @@ const ModalReseña = ({ reseña, onClose }) => {
       >
         <IconX size={24} />
       </MainButton>
-
       {/* Avatar */}
       <div className="flex justify-center mb-4">
         <Avatar fotoUrl={fotoUrl} nombre={nombre} size={20} />
       </div>
-
       {/* Nombre */}
-      <MainH2 className="text-2xl lg:text-3xl text-center">{nombre}</MainH2>
-
+      <MainH2
+        onClick={() => navigate(`/usuarios/${userId}`)}
+        className="text-2xl lg:text-3xl text-center cursor-pointer hover:underline text-acento"
+      >
+        {nombre}
+      </MainH2>
       {/* Proveedor */}
-      <p className="text-center text-xs text-texto/60 mb-4">
+      <p className="text-center text-texto/60 mb-4">
         Proveedor: {proveedor}
       </p>
-
       {/* Estrellas */}
       <div className="flex justify-center gap-1 text-yellow-400 text-2xl mb-4">
         {Array.from({ length: 5 }).map((_, i) =>
@@ -81,7 +84,6 @@ const ModalReseña = ({ reseña, onClose }) => {
           )
         )}
       </div>
-
       {/* Comentario */}
       <p className="text-sm text-texto/90 bg-white/5 rounded-md px-4 py-4 text-center leading-relaxed">
         “{reseña.comentario}”

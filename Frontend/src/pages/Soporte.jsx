@@ -113,58 +113,65 @@ const Soporte = () => {
   }, [mensajes, escribiendo]);
 
   return (
-    <div className="w-full px-4 sm:px-6">
-      <div className="max-w-lg mx-auto bg-[#222222] border border-white/10 rounded-lg shadow-lg p-2 sm:p-4  flex flex-col h-[70vh] sm:h-[700px]">
-        <MainH1 icon={IconMessageChatbot}>Asistente Red-Fi</MainH1>
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center mb-8">
+          <MainH1 icon={IconMessageChatbot}>Asistente Red-Fi</MainH1>
+          <p className="text-texto/70 text-lg">
+            Encuentra lo que buscas en nuestro asistente.
+          </p>
+        </div>
 
-        <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
-          {mensajes.map((m, index) => (
-            <div
-              key={index}
-              className={`flex ${
-                m.autor === "bot" ? "justify-start" : "justify-end"
-              }`}
-            >
+        <div className="max-w-lg mx-auto bg-[#222222] border border-white/10 rounded-lg shadow-lg p-2 sm:p-4 flex flex-col h-[60vh] sm:h-[600px]">
+          <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
+            {mensajes.map((m, index) => (
               <div
-                className={`p-3 rounded-lg max-w-[80%] ${
-                  m.autor === "bot"
-                    ? "bg-white/5 text-texto text-left"
-                    : "bg-blue-700 text-texto text-right"
+                key={index}
+                className={`flex ${
+                  m.autor === "bot" ? "justify-start" : "justify-end"
                 }`}
               >
-                {m.texto}
+                <div
+                  className={`p-3 rounded-lg max-w-[80%] ${
+                    m.autor === "bot"
+                      ? "bg-white/5 text-texto text-left"
+                      : "bg-blue-700 text-texto text-right"
+                  }`}
+                >
+                  {m.texto}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {escribiendo && (
-            <div className="flex justify-start">
-              <div className="p-3 rounded-lg bg-neutral-800 text-texto text-left animate-pulse">
-                Escribiendo...
+            {escribiendo && (
+              <div className="flex justify-start">
+                <div className="p-3 rounded-lg bg-neutral-800 text-texto text-left animate-pulse">
+                  Escribiendo...
+                </div>
               </div>
+            )}
+          </div>
+
+          {opciones && (
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {opciones.map((op, index) => (
+                <MainButton
+                  key={index}
+                  type="button"
+                  variant={
+                    op.texto === "Volver al inicio" ? "secondary" : "primary"
+                  }
+                  onClick={() => manejarSeleccion(op)}
+                  disabled={escribiendo}
+                >
+                  {op.texto}
+                </MainButton>
+              ))}
             </div>
           )}
         </div>
-
-        {opciones && (
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {opciones.map((op, index) => (
-              <MainButton
-                key={index}
-                type="button"
-                variant={
-                  op.texto === "Volver al inicio" ? "secondary" : "primary"
-                }
-                onClick={() => manejarSeleccion(op)}
-                disabled={escribiendo}
-              >
-                {op.texto}
-              </MainButton>
-            ))}
-          </div>
-        )}
       </div>
-    </div>
+    </section>
   );
 };
 

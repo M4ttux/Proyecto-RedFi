@@ -34,8 +34,8 @@ const Proveedores = () => {
   ) || [];
 
   return (
-    <div className="w-full bg-fondo px-4 sm:px-6 py-16">
-      <div className="max-w-4xl mx-auto">
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Info principal del proveedor */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
           {/* Avatar / ícono */}
@@ -152,7 +152,7 @@ const Proveedores = () => {
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

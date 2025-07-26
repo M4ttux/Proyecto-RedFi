@@ -12,6 +12,10 @@ export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
       ),
       ZonaProveedor (
         zonas (*)
+      ),
+      reseñas (
+        id,
+        estrellas
       )
     `
     )

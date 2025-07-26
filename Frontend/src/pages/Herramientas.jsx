@@ -12,10 +12,9 @@ const Herramientas = () => {
   }, []);
 
   return (
-    <div className="w-full">
-      <section className="py-16 px-4 sm:px-6 space-y-12 text-texto mx-auto">
-        {/* Encabezado */}
-        <div className="w-full text-center">
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center mb-8">
           <MainH1 icon={IconTool}>Herramientas Red-Fi</MainH1>
           <p className="mx-auto">
             Ejecute pruebas clave y obtenga información útil sobre su red
@@ -56,8 +55,8 @@ const Herramientas = () => {
           </div>
           <WifiScanner />
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

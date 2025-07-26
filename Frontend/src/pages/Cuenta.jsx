@@ -71,11 +71,11 @@ const Cuenta = () => {
     .toUpperCase();
 
   return (
-    <div className="w-full">
-      <section className="max-w-7xl mx-auto text-center px-4 sm:px-6 py-16 space-y-12">
-        <div className="w-full text-center">
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center mb-8">
           <MainH1 icon={IconUser}>Mi cuenta</MainH1>
-          <p className="mx-auto">
+          <p className="text-texto/70 text-lg">
             Modificá tus datos personales y tus preferencias.
           </p>
         </div>
@@ -164,8 +164,8 @@ const Cuenta = () => {
             </MainLinkButton>
           </div>
         )}
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

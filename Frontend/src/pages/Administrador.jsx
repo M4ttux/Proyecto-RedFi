@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPerfil } from "../services/perfil/getPerfil";
-import { obtenerPerfilesAdmin, eliminarPerfilPorId, } from "../services/perfil/adminPerfil";
+import {
+  obtenerPerfilesAdmin,
+  eliminarPerfilPorId,
+} from "../services/perfil/adminPerfil";
 import { obtenerProveedoresAdmin } from "../services/proveedores/obtenerProveedor";
 import { eliminarProveedor } from "../services/proveedores/crudProveedor";
-import { obtenerReseñasAdmin, actualizarReseñaAdmin, eliminarReseñaAdmin } from "../services/reseñas/adminReseña";
+import {
+  obtenerReseñasAdmin,
+  actualizarReseñaAdmin,
+  eliminarReseñaAdmin,
+} from "../services/reseñas/adminReseña";
 import {
   obtenerTecnologias,
   eliminarTecnologia,
 } from "../services/tecnologiaService";
+import {
+  obtenerProveedorTecnologia,
+  obtenerZonaProveedor,
+} from "../services/relaciones/adminRelaciones";
 
 import ModalEliminar from "../components/modals/ModalEliminar";
 
@@ -41,6 +52,8 @@ const tablasDisponibles = [
   { id: "proveedores", label: "Proveedores" },
   { id: "reseñas", label: "Reseñas" },
   { id: "tecnologias", label: "Tecnologías" },
+  { id: "ProveedorTecnologia", label: "Proveedor y Tecnología" },
+  { id: "ZonaProveedor", label: "Proveedor y Zona" },
 ];
 
 const Administrador = () => {
@@ -125,17 +138,68 @@ const Administrador = () => {
   const precargarDatos = async () => {
     setLoading(true);
     try {
-      const [perfiles, proveedores, reseñas, tecnologias] = await Promise.all([
+      const [
+        perfiles,
+        proveedores,
+        reseñas,
+        tecnologias,
+        proveedorTecnologia,
+        zonaProveedor,
+      ] = await Promise.all([
         obtenerPerfilesAdmin(),
         obtenerProveedoresAdmin(),
         obtenerReseñasAdmin(),
         obtenerTecnologias(),
+        obtenerProveedorTecnologia(),
+        obtenerZonaProveedor(),
       ]);
+
+      // Agrupar ProveedorTecnologia
+      const agrupadoPorProveedorTecnologia = Object.values(
+        proveedorTecnologia.reduce((acc, item) => {
+          const id = item.proveedor_id;
+          if (!acc[id]) {
+            acc[id] = {
+              id,
+              proveedor: item.proveedores?.nombre || "—",
+              tecnologias: [],
+            };
+          }
+          const tec = item.tecnologias?.tecnologia;
+          if (tec && !acc[id].tecnologias.includes(tec)) {
+            acc[id].tecnologias.push(tec);
+          }
+          return acc;
+        }, {})
+      );
+
+      // Agrupar ZonaProveedor
+      const agrupadoPorZonaProveedor = Object.values(
+        zonaProveedor.reduce((acc, item) => {
+          const id = item.proveedor_id;
+          if (!acc[id]) {
+            acc[id] = {
+              id,
+              proveedor: item.proveedores?.nombre || "—",
+              zonas: [],
+            };
+          }
+          const zona = item.zonas?.departamento;
+          if (zona && !acc[id].zonas.includes(zona)) {
+            acc[id].zonas.push(zona);
+          }
+          return acc;
+        }, {})
+      );
+
+      // Setear datos agrupados
       setTodosLosDatos({
         user_profiles: perfiles,
         proveedores,
         reseñas,
         tecnologias,
+        ProveedorTecnologia: agrupadoPorProveedorTecnologia,
+        ZonaProveedor: agrupadoPorZonaProveedor,
       });
     } catch (error) {
       mostrarError("Error al cargar datos.");
@@ -177,8 +241,8 @@ const Administrador = () => {
   const columnas = generarColumnas(tablaActual, datosActuales, acciones);
 
   return (
-    <div className="w-full bg-fondo px-4 sm:px-6 pb-12 self-start">
-      <div className="max-w-7xl mx-auto pt-16">
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1>Panel de Administración</MainH1>
           <p className="text-texto/70 text-lg">
@@ -395,7 +459,7 @@ const Administrador = () => {
           />
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

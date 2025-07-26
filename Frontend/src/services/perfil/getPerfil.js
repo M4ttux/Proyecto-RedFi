@@ -23,3 +23,37 @@ export const getPerfil = async (mostrarAlerta = () => {}) => {
   }
   return data;
 };
+
+export const obtenerPerfilPorId = async (id, mostrarAlerta = () => {}) => {
+  const { data, error } = await supabase
+    .from("user_profiles")
+    .select(
+      `
+      id,
+      nombre,
+      foto_url,
+      proveedor_preferido,
+      rol,
+      plan,
+      reseñas (
+        id,
+        comentario,
+        estrellas,
+        created_at,
+        proveedor_id (
+          id,
+          nombre
+        )
+      )
+    `
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    mostrarAlerta("Error al obtener el perfil del usuario");
+    throw error;
+  }
+
+  return data;
+};

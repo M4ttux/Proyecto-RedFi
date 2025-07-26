@@ -7,6 +7,7 @@ import Cuenta from "../pages/Cuenta";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import Proveedores from "../pages/Proveedores";
+import Usuarios from "../pages/Usuarios";
 import Mapa from "../pages/Mapa";
 import Boletas from "../pages/Boletas";
 import Reseñas from "../pages/Reseñas";
@@ -67,6 +68,7 @@ export const router = createBrowserRouter([
         ), 
       },
       { path: "proveedores/:id", element: <Proveedores /> },
+      { path: "usuarios/:id" , element: <Usuarios /> },
       { 
         path: "boletas", 
         element: (

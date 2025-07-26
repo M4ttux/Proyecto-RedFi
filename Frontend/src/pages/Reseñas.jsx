@@ -208,8 +208,8 @@ const Reseñas = () => {
   }
 
   return (
-    <div className="self-start w-full bg-fondo px-4 sm:px-6 pb-12 relative">
-      <div className="max-w-7xl mx-auto pt-16">
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1>Mis reseñas</MainH1>
           <p className="text-texto/70 text-lg">
@@ -357,7 +357,7 @@ const Reseñas = () => {
           loading={eliminando}
         />
       )}
-    </div>
+    </section>
   );
 };
 
