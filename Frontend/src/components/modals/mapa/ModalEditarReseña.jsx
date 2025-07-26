@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { IconX, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
-import { obtenerProveedores } from "../../../services/proveedorService";
+import { obtenerProveedores } from "../../../services/proveedores/obtenerProveedor";
 import ModalContenedor from "../../ui/ModalContenedor";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";

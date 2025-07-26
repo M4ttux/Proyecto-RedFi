@@ -2,7 +2,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { IconX } from "@tabler/icons-react";
-import { crearReseña } from "../../services/reseñaService";
+import { crearReseña } from "../../services/reseñas/reseñaCrud";
 import { BOUNDS_CORRIENTES } from "../../constants/constantes";
 import { useMapaInteractivo } from "../../hooks/useMapaInteractivo";
 import { useUbicacionActual } from "../../hooks/useUbicacionActual";

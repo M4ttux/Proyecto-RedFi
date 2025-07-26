@@ -2,7 +2,7 @@ import { useState } from "react";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
-import { actualizarPlanUsuario } from "../../../services/perfilService";
+import { actualizarPlanUsuario } from "../../../services/perfil/adminPerfil";
 import { useAlerta } from "../../../context/AlertaContext";
 import { useRole } from "../../../context/RoleContext";
 import { IconX, IconStar, IconAlertTriangle } from "@tabler/icons-react";

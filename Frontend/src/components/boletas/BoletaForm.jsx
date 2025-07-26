@@ -4,16 +4,10 @@ import MainH2 from "../ui/MainH2";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import FileInput from "../ui/FileInput";
-import {
-  IconCalendar,
-  IconCurrencyDollar,
-  IconWifi,
-} from "@tabler/icons-react";
-import {
-  obtenerUsuarioActual,
-  subirImagenBoleta,
-  guardarBoleta,
-} from "../../services/boletasService";
+import { IconCalendar, IconCurrencyDollar, IconWifi } from "@tabler/icons-react";
+import { obtenerUsuarioActual } from "../../services/boletas/auth";
+import { subirImagenBoleta } from "../../services/boletas/upload";
+import { guardarBoleta } from "../../services/boletas/crud";
 import { useAlerta } from "../../context/AlertaContext";
 
 const BoletaForm = ({
@@ -238,17 +232,17 @@ const BoletaForm = ({
             onChange={handleChange}
             icon={IconCalendar}
           />
-
-          <div className="md:col-span-2 text-center">
-            <FileInput
-              id="archivo"
-              label="Imagen de la boleta (opcional)"
-              value={archivo}
-              onChange={setArchivo}
-              previewUrl={previewUrl}
-              setPreviewUrl={setPreviewUrl}
-            />
-          </div>
+        </div>
+        <div className="flex justify-center text-center">
+          <FileInput
+            id="archivo"
+            label="Imagen de la boleta (opcional)"
+            value={archivo}
+            onChange={setArchivo}
+            previewUrl={previewUrl}
+            setPreviewUrl={setPreviewUrl}
+            accept="image/*"
+          />
         </div>
 
         <div className="flex justify-center">

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPerfil, obtenerPerfilesAdmin, eliminarPerfilPorId } from "../services/perfilService";
-import { obtenerProveedoresAdmin, eliminarProveedor } from "../services/proveedorService";
-import {
-  obtenerReseñasAdmin,
-  actualizarReseñaAdmin,
-  eliminarReseñaAdmin,
-} from "../services/reseñaService";
+import { getPerfil } from "../services/perfil/getPerfil";
+import { obtenerPerfilesAdmin, eliminarPerfilPorId, } from "../services/perfil/adminPerfil";
+import { obtenerProveedoresAdmin } from "../services/proveedores/obtenerProveedor";
+import { eliminarProveedor } from "../services/proveedores/crudProveedor";
+import { obtenerReseñasAdmin, actualizarReseñaAdmin, eliminarReseñaAdmin } from "../services/reseñas/adminReseña";
 import {
   obtenerTecnologias,
   eliminarTecnologia,
@@ -20,14 +18,17 @@ import ModalEditarPerfil from "../components/modals/admin/perfiles/ModalEditarPe
 import ModalVerReseña from "../components/modals/mapa/ModalReseña";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 
+import ModalAgregarTecnologia from "../components/modals/admin/tecnologias/ModalAgregarTecnologia";
 import ModalVerTecnologia from "../components/modals/admin/tecnologias/ModalVerTecnologia";
 import ModalEditarTecnologia from "../components/modals/admin/tecnologias/ModalEditarTecnologia";
 
+import ModalAgregarProveedor from "../components/modals/admin/proveedores/ModalAgregarProveedor";
 import ModalVerProveedor from "../components/modals/mapa/ModalProveedor";
 import ModalEditarProveedor from "../components/modals/admin/proveedores/ModalEditarProveedor";
 
 import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
+import MainButton from "../components/ui/MainButton";
 
 import TablaSelector from "../components/admin/TablaSelector";
 import LoaderAdmin from "../components/admin/LoaderAdmin";
@@ -53,6 +54,7 @@ const Administrador = () => {
   const [perfilAVer, setPerfilAVer] = useState(null);
   const [perfilAEliminar, setPerfilAEliminar] = useState(null);
 
+  const [proveedorNuevo, setProveedorNuevo] = useState(false);
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
   const [proveedorAVer, setProveedorAVer] = useState(null);
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
@@ -61,6 +63,7 @@ const Administrador = () => {
   const [reseñaAVer, setReseñaAVer] = useState(null);
   const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
 
+  const [tecnologiaNueva, setTecnologiaNueva] = useState(false);
   const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
   const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
   const [tecnologiaAEliminar, setTecnologiaAEliminar] = useState(null);
@@ -188,17 +191,31 @@ const Administrador = () => {
           tablaActual={tablaActual}
           setTablaActual={setTablaActual}
         />
+
+        <div className="flex justify-center mb-4">
+          {tablaActual === "proveedores" && (
+            <MainButton onClick={() => setProveedorNuevo(true)} variant="add">
+              Agregar Proveedor
+            </MainButton>
+          )}
+          {tablaActual === "tecnologias" && (
+            <MainButton onClick={() => setTecnologiaNueva(true)} variant="add">
+              Agregar Tecnología
+            </MainButton>
+          )}
+        </div>
+
         <Table columns={columnas} data={datosActuales} />
 
         {/* Perfiles */}
-          { /* Ver */}
+        {/* Ver */}
         {tablaActual === "user_profiles" && perfilAVer && (
           <ModalVerPerfil
             perfil={perfilAVer}
             onClose={() => setPerfilAVer(null)}
           />
         )}
-          {/* Editar */}
+        {/* Editar */}
         {tablaActual === "user_profiles" && perfilSeleccionado && (
           <ModalEditarPerfil
             perfil={perfilSeleccionado}
@@ -206,7 +223,7 @@ const Administrador = () => {
             onActualizar={precargarDatos}
           />
         )}
-          {/* Eliminar */}
+        {/* Eliminar */}
         {tablaActual === "user_profiles" && perfilAEliminar && (
           <ModalEliminar
             titulo="¿Eliminar perfil?"
@@ -227,16 +244,27 @@ const Administrador = () => {
               }
             }}
           />
-          )}
+        )}
         {/* Proveedores */}
-          { /* Ver */}
+        {/* Agregar */}
+        {tablaActual === "proveedores" && proveedorNuevo && (
+          <ModalAgregarProveedor
+            onClose={() => setProveedorNuevo(false)}
+            onActualizar={async () => {
+              setProveedorNuevo(false);
+              await precargarDatos();
+            }}
+          />
+        )}
+
+        {/* Ver */}
         {tablaActual === "proveedores" && proveedorAVer && (
           <ModalVerProveedor
             proveedor={proveedorAVer}
             onClose={() => setProveedorAVer(null)}
           />
         )}
-          {/* Editar */}
+        {/* Editar */}
         {tablaActual === "proveedores" && proveedorSeleccionado && (
           <ModalEditarProveedor
             proveedor={proveedorSeleccionado}
@@ -244,7 +272,7 @@ const Administrador = () => {
             onActualizar={precargarDatos}
           />
         )}
-          {/* Eliminar */}
+        {/* Eliminar */}
         {tablaActual === "proveedores" && proveedorAEliminar && (
           <ModalEliminar
             titulo="¿Eliminar proveedor?"
@@ -268,14 +296,14 @@ const Administrador = () => {
         )}
 
         {/* Reseñas */}
-          {/* Ver */}
+        {/* Ver */}
         {tablaActual === "reseñas" && reseñaAVer && (
           <ModalVerReseña
             reseña={reseñaAVer}
             onClose={() => setReseñaAVer(null)}
           />
         )}
-          {/* Editar */}
+        {/* Editar */}
         {tablaActual === "reseñas" && reseñaSeleccionada && (
           <ModalEditarReseña
             isOpen={!!reseñaSeleccionada}
@@ -283,7 +311,11 @@ const Administrador = () => {
             onClose={() => setReseñaSeleccionada(null)}
             onSave={async (datosActualizados) => {
               try {
-                await actualizarReseñaAdmin(reseñaSeleccionada.id, datosActualizados, mostrarError);
+                await actualizarReseñaAdmin(
+                  reseñaSeleccionada.id,
+                  datosActualizados,
+                  mostrarError
+                );
                 mostrarExito("Reseña actualizada correctamente");
                 await precargarDatos();
                 setReseñaSeleccionada(null);
@@ -293,7 +325,7 @@ const Administrador = () => {
             }}
           />
         )}
-          {/* Eliminar */}
+        {/* Eliminar */}
         {tablaActual === "reseñas" && reseñaAEliminar && (
           <ModalEliminar
             titulo="¿Eliminar reseña?"
@@ -317,14 +349,22 @@ const Administrador = () => {
         )}
 
         {/* Tecnologías */}
-          {/* Ver */}
+        {/* Agregar */}
+        {tablaActual === "tecnologias" && tecnologiaNueva && (
+          <ModalAgregarTecnologia
+            onClose={() => setTecnologiaNueva(false)}
+            onActualizar={precargarDatos}
+          />
+        )}
+
+        {/* Ver */}
         {tablaActual === "tecnologias" && tecnologiaAVer && (
           <ModalVerTecnologia
             tecnologia={tecnologiaAVer}
             onClose={() => setTecnologiaAVer(null)}
           />
         )}
-          {/* Editar */}
+        {/* Editar */}
         {tablaActual === "tecnologias" && tecnologiaSeleccionada && (
           <ModalEditarTecnologia
             tecnologia={tecnologiaSeleccionada}
@@ -332,7 +372,7 @@ const Administrador = () => {
             onActualizar={precargarDatos}
           />
         )}
-          {/* Eliminar */}
+        {/* Eliminar */}
         {tablaActual === "tecnologias" && tecnologiaAEliminar && (
           <ModalEliminar
             titulo="¿Eliminar tecnología?"

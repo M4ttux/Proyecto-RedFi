@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { IconUserEdit } from "@tabler/icons-react";
-import { obtenerProveedores } from "../../services/proveedorService";
-import { getPerfil, updatePerfilYFoto } from "../../services/perfilService";
+import { obtenerProveedores } from "../../services/proveedores/obtenerProveedor";
+import { getPerfil } from "../../services/perfil/getPerfil";
+import { updatePerfilYFoto } from "../../services/perfil/updatePerfil";
 
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
@@ -106,7 +107,7 @@ const EditarPerfil = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md mx-auto">
+        <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-lg mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Avatar */}
             <div className="flex flex-col items-center gap-3">

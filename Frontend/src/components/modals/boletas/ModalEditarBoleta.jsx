@@ -11,7 +11,7 @@ import {
   IconCurrencyDollar,
   IconWifi,
 } from "@tabler/icons-react";
-import { actualizarBoletaConImagen } from "../../../services/boletasService";
+import { actualizarBoletaConImagen } from "../../../services/boletas/crud";
 import { useAlerta } from "../../../context/AlertaContext";
 
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {

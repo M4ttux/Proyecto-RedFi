@@ -4,7 +4,7 @@ import PanelControlMapa from "../components/mapa/PanelControlMapa";
 import FiltrosMobile from "../components/mapa/filtros/FiltrosMobile";
 import { IconFilter } from "@tabler/icons-react";
 import { getZonas } from "../services/zonaService";
-import { obtenerProveedores } from "../services/proveedorService";
+import { obtenerProveedores } from "../services/proveedores/obtenerProveedor";
 import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
 import CargandoMapa from "../components/mapa/cargador/CargandoMapa";
 

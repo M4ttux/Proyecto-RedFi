@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRole } from "../../context/RoleContext";
-import { crearPerfil } from "../../services/perfilService";
+import { crearPerfil } from "../../services/perfil/crearPerfil";
 import { registerUser } from "../../services/authService";
 import { IconUserPlus, IconLogin, IconMail, IconLock, IconUser, IconWifi } from "@tabler/icons-react";
 import MainH1 from "../../components/ui/MainH1";

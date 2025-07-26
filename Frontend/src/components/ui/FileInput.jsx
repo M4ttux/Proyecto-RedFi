@@ -71,18 +71,6 @@ const FileInput = ({
         </label>
       )}
 
-      <label htmlFor={id} className="w-fit">
-        <MainButton
-          as="span"
-          variant="accent"
-          loading={loading}
-          disabled={disabled}
-          className="cursor-pointer"
-        >
-          {value || hayPreview ? "Cambiar imagen" : "Seleccionar imagen"}
-        </MainButton>
-      </label>
-
       <input
         id={id}
         ref={inputRef}
@@ -99,25 +87,38 @@ const FileInput = ({
           <img
             src={internalPreview}
             alt="Imagen seleccionada"
-            className="max-h-48 border rounded object-contain"
+            className="max-h-25 border border-white/10 rounded-lg object-contain"
           />
         </div>
       )}
 
+      <div className="flex flex-col sm:flex-row gap-2 justify-center">
+          {mostrarBotonQuitar && (
+            <div>
+              <MainButton
+                type="button"
+                variant="danger"
+                onClick={handleClear}
+                className="flex-1"
+                disabled={disabled || loading}
+              >
+                <IconX size={18} /> Quitar imagen
+              </MainButton>
+            </div>
+          )}
+          <label htmlFor={id}>
+            <MainButton
+              as="span"
+              variant="accent"
+              loading={loading}
+              disabled={disabled}
+              className="cursor-pointer flex-1"
+            >
+              {value || hayPreview ? "Cambiar imagen" : "Seleccionar imagen"}
+            </MainButton>
+          </label>
+      </div>
       {/* Botón de quitar */}
-      {mostrarBotonQuitar && (
-        <div className="pt-2">
-          <MainButton
-            type="button"
-            variant="danger"
-            onClick={handleClear}
-            className="gap-2"
-            disabled={disabled || loading}
-          >
-            <IconX size={18} /> Quitar imagen
-          </MainButton>
-        </div>
-      )}
     </div>
   );
 };

@@ -5,8 +5,7 @@ import MainButton from "../../../ui/MainButton";
 import MainH2 from "../../../ui/MainH2";
 import Input from "../../../ui/Input";
 import Select from "../../../ui/Select";
-import FileInput from "../../../ui/FileInput";
-import { actualizarPerfilPorId } from "../../../../services/perfilService";
+import { actualizarPerfilPorId } from "../../../../services/perfil/adminPerfil";
 import { useAlerta } from "../../../../context/AlertaContext";
 
 const opcionesRol = [

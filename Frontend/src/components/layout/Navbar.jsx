@@ -8,7 +8,7 @@ import {
   IconBell,
   IconBellFilled,
 } from "@tabler/icons-react";
-import { obtenerNotificacionesBoletas } from "../../services/boletasService";
+import { obtenerNotificacionesBoletas } from "../../services/boletas/notificaciones";
 import MainButton from "../ui/MainButton";
 import { logoutUser } from "../../services/authService";
 

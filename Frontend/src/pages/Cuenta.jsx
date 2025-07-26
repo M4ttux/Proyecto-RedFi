@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useRole } from "../context/RoleContext";
-import { getPerfil } from "../services/perfilService";
+import { getPerfil } from "../services/perfil/getPerfil";
 import { useAlerta } from "../context/AlertaContext";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";

@@ -1,4 +1,4 @@
-import { obtenerProveedores } from "../proveedorService";
+import { obtenerProveedores } from "../proveedores/obtenerProveedor";
 import { getVisible, getVisiblePorZona } from "./mapaBase";
 import maplibregl from "maplibre-gl";
 import { generarIconoMultiProveedor } from "./iconoTablerToImage";

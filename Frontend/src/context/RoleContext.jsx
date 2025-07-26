@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { getPerfil } from "../services/perfilService";
+import { getPerfil } from "../services/perfil/getPerfil";
 
 // Creamos el contexto
 const RoleContext = createContext();

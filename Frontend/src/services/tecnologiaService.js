@@ -35,3 +35,15 @@ export const eliminarTecnologia = async (id, mostrarAlerta = () => {}) => {
     throw error;
   } 
 };
+
+// Agregar nueva tecnología
+export const agregarTecnologia = async (nuevaTecno, mostrarAlerta = () => {}) => {
+  const { error } = await supabase
+    .from("tecnologias")
+    .insert([nuevaTecno]);
+
+  if (error) {
+    mostrarAlerta("Error al agregar la tecnología");
+    throw error;
+  }
+};

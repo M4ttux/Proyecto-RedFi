@@ -8,7 +8,7 @@ import {
   cargarReseñasEnMapa,
   actualizarVisibilidadReseñas,
 } from "../services/mapa";
-import { obtenerReseñas } from "../services/reseñaService";
+import { obtenerReseñas } from "../services/reseñas/reseñaCrud";
 
 // ✅ Helper para esperar que una capa esté completamente cargada
 const esperarCapaCargada = (map, layerId, timeout = 5000) => {

@@ -1,4 +1,4 @@
-import { obtenerReseñas } from "../reseñaService";
+import { obtenerReseñas } from "../reseñas/reseñaCrud";
 
 export const cargarReseñasEnMapa = async (
   map,

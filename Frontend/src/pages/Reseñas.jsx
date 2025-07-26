@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { obtenerReseñasUsuario, actualizarReseña, eliminarReseña } from "../services/reseñaService";
+import { obtenerReseñasUsuario , actualizarReseña, eliminarReseña } from "../services/reseñas/usuarioReseña";
 import { IconCarambolaFilled, IconCarambola, IconCalendar, IconLoader2 } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import ModalEliminar from "../components/modals/ModalEliminar";

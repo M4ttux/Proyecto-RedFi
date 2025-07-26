@@ -1,7 +1,7 @@
 import { supabase } from "../supabase/client";
 
 // Obtener todos los proveedores con tecnologías y zonas
-export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
+/* export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
@@ -22,10 +22,10 @@ export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
     throw error;
   }
   return data;
-};
+}; */
 
 // Obtener un proveedor por ID con sus reseñas y tecnologías
-export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
+/* export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
@@ -53,13 +53,14 @@ export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
     throw error;
   }
   return data;
-};
+}; */
 
-export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
+// Obtener proveedores para admin
+/* export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
-      "id, nombre, color, descripcion, sitio_web, ProveedorTecnologia(tecnologias(id, tecnologia)), ZonaProveedor(zonas(id, departamento))"
+      "id, nombre, color, descripcion, sitio_web, logotipo, ProveedorTecnologia(tecnologias(id, tecnologia)), ZonaProveedor(zonas(id, departamento))"
     )
     .order("nombre", { ascending: true });
 
@@ -70,12 +71,15 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
 
   return data.map((p) => ({
     ...p,
-    tecnologias: p.ProveedorTecnologia?.map((t) => String(t.tecnologias?.tecnologia)).filter(Boolean),
+    tecnologias: p.ProveedorTecnologia?.map((t) =>
+      String(t.tecnologias?.tecnologia)
+    ).filter(Boolean),
     zonas: p.ZonaProveedor?.map((z) => String(z.zonas?.id)).filter(Boolean),
   }));
-};
+}; */
 
-export const obtenerTecnologiasDisponibles = async (
+// Obtener tecnologías disponibles
+/* export const obtenerTecnologiasDisponibles = async (
   mostrarAlerta = () => {}
 ) => {
   const { data, error } = await supabase
@@ -86,9 +90,10 @@ export const obtenerTecnologiasDisponibles = async (
     throw error;
   }
   return data;
-};
+}; */
 
-export const obtenerZonasDisponibles = async (mostrarAlerta = () => {}) => {
+// Obtener zonas disponibles
+/* export const obtenerZonasDisponibles = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("zonas")
     .select("id, departamento");
@@ -97,14 +102,15 @@ export const obtenerZonasDisponibles = async (mostrarAlerta = () => {}) => {
     throw error;
   }
   return data;
-};
+}; */
 
 // Crear proveedor
-export const agregarProveedor = async (
-  datos, // { nombre, descripcion, sitio_web, color, tecnologias: [], zonas: [] }
+/* export const crearProveedor = async (
+  datos, // { nombre, descripcion, sitio_web, color, logotipo, tecnologias: [], zonas: [] }
   mostrarAlerta = () => {}
 ) => {
-  const { tecnologias, zonas, ...proveedorBase } = datos;
+  const { tecnologias, zonas, logotipo, ...resto } = datos;
+  const proveedorBase = { ...resto, logotipo };
 
   const { data: proveedor, error: errorInsert } = await supabase
     .from("proveedores")
@@ -118,7 +124,6 @@ export const agregarProveedor = async (
   }
 
   try {
-    // Relacionar tecnologías
     if (Array.isArray(tecnologias) && tecnologias.length > 0) {
       const relacionesTecnologias = tecnologias.map((tecnologia_id) => ({
         proveedor_id: proveedor.id,
@@ -132,7 +137,6 @@ export const agregarProveedor = async (
       if (errorTecnologias) throw errorTecnologias;
     }
 
-    // Relacionar zonas
     if (Array.isArray(zonas) && zonas.length > 0) {
       const relacionesZonas = zonas.map((zona_id) => ({
         proveedor_id: proveedor.id,
@@ -151,10 +155,10 @@ export const agregarProveedor = async (
     mostrarAlerta("El proveedor fue creado, pero fallaron las relaciones.");
     throw error;
   }
-};
+}; */
 
 // Editar proveedor
-export const actualizarProveedor = async (
+/* export const actualizarProveedor = async (
   proveedorId,
   datos, // { nombre, descripcion, sitio_web, color, tecnologias: [], zonas: [] }
   mostrarAlerta = () => {}
@@ -230,10 +234,10 @@ export const actualizarProveedor = async (
     );
     throw error;
   }
-};
+}; */
 
 // Eliminar proveedor
-export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
+/* export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
   const { error } = await supabase.from("proveedores").delete().eq("id", id);
 
   if (error) {
@@ -241,4 +245,59 @@ export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
     mostrarAlerta("Error al eliminar el proveedor.");
     throw error;
   }
-};
+}; */
+
+// subirLogoProveedor
+/* export const subirLogoProveedor = async (nombreProveedor, file) => {
+  const slugify = (str) =>
+    str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "");
+
+  const safeNombre = slugify(nombreProveedor);
+  const path = `${safeNombre}/logo.png`;
+
+  console.log("📤 Subiendo logo en ruta:", path);
+  console.log("📄 Archivo recibido:", file);
+
+  const { error: uploadError } = await supabase.storage
+    .from("proveedores")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: true,
+      contentType: file?.type || "image/png",
+    });
+
+  if (uploadError) {
+    console.error("❌ Error al subir logo:", uploadError);
+    throw uploadError;
+  }
+
+  const { data } = supabase.storage.from("proveedores").getPublicUrl(path);
+  return data.publicUrl;
+}; */
+
+// Eliminar logo de proveedor desde el bucket
+/* export const eliminarLogoProveedor = async (nombreProveedor) => {
+  const slugify = (str) =>
+    str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "");
+
+  const safeNombre = slugify(nombreProveedor);
+  const path = `${safeNombre}/logo.png`;
+
+  const { error } = await supabase.storage.from("proveedores").remove([path]);
+  if (error) {
+    console.error("❌ Error al eliminar el logo:", error);
+    throw error;
+  }
+}; */

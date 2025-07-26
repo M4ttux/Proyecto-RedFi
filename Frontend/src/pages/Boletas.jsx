@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { obtenerBoletasDelUsuario } from "../services/boletasService";
+import { obtenerBoletasDelUsuario } from "../services/boletas/crud";
 import BoletaForm from "../components/boletas/BoletaForm";
 import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import BoletasLayout from "../components/boletas/BoletasLayout";

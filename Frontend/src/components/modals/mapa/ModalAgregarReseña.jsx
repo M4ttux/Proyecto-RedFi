@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { obtenerProveedores } from "../../../services/proveedorService";
+import { obtenerProveedores } from "../../../services/proveedores/obtenerProveedor";
 import { IconX, IconMapPin, IconLoader2 } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";

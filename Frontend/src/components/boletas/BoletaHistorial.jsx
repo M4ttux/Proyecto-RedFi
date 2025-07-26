@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { eliminarBoletaConImagen } from "../../services/boletasService";
+import { eliminarBoletaConImagen } from "../../services/boletas/crud";
 import { IconLoader2, IconCalendar } from "@tabler/icons-react";
 import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
 import ModalVerBoleta from "../modals/boletas/ModalVerBoleta";

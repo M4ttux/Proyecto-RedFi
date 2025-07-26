@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { obtenerProveedorPorId } from "../services/proveedorService";
+import { obtenerProveedorPorId } from "../services/proveedores/obtenerProveedor";
 import {
   IconCarambola,
   IconCarambolaFilled,

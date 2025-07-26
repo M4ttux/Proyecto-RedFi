@@ -1,22 +1,21 @@
-// src/services/boletasService.js
-import { supabase } from "../supabase/client";
+/* import { supabase } from "../supabase/client"; */
 
-/**
- * Devuelve el usuario autenticado actual.
- * @returns {Promise<Object|null>} Usuario o null
+/*
+  Devuelve el usuario autenticado actual.
+  @returns {Promise<Object|null>} Usuario o null
  */
-export const obtenerUsuarioActual = async () => {
+/* export const obtenerUsuarioActual = async () => {
   const { data } = await supabase.auth.getUser();
   return data?.user || null;
-};
+}; */
 
-/**
- * Sube una imagen al bucket de Supabase y devuelve su URL pública.
- * La imagen se guarda dentro de una carpeta con el ID del usuario.
- * @param {File} archivo - Archivo de imagen
- * @returns {Promise<string|null>} URL pública o null si falla
+/*
+  Sube una imagen al bucket de Supabase y devuelve su URL pública.
+  La imagen se guarda dentro de una carpeta con el ID del usuario.
+  @param {File} archivo - Archivo de imagen
+  @returns {Promise<string|null>} URL pública o null si falla
  */
-export const subirImagenBoleta = async (archivo) => {
+/* export const subirImagenBoleta = async (archivo) => {
   const user = await obtenerUsuarioActual();
   if (!user) throw new Error("Usuario no autenticado");
 
@@ -37,24 +36,24 @@ export const subirImagenBoleta = async (archivo) => {
     .getPublicUrl(fullPath);
 
   return publicUrlData.publicUrl;
-};
+}; */
 
-/**
+/*
  * Inserta una nueva boleta en la base de datos.
  * @param {Object} boleta - Objeto con los campos de la boleta
  * @returns {Promise<void>}
  */
-export const guardarBoleta = async (boleta) => {
+/* export const guardarBoleta = async (boleta) => {
   const { error } = await supabase.from("boletas").insert(boleta);
   if (error) throw error;
-};
+}; */
 
-/**
+/*
  * Elimina una boleta y su imagen (si existe) de la base de datos y el storage.
  * @param {Object} boleta - Objeto de boleta con `id` y `url_imagen`
  * @returns {Promise<void>}
  */
-export const eliminarBoletaConImagen = async (boleta) => {
+/*export const eliminarBoletaConImagen = async (boleta) => {
   const { error } = await supabase.from("boletas").delete().eq("id", boleta.id);
 
   if (error) {
@@ -77,15 +76,16 @@ export const eliminarBoletaConImagen = async (boleta) => {
     }
   }
 };
+*/
 
-/**
+/*
  * Actualiza una boleta y reemplaza su imagen si se indica.
  * @param {Object} boleta - La boleta original
  * @param {Object} nuevosDatos - Nuevos campos del formulario
  * @param {File|null} nuevaImagen - Imagen nueva (si se eligió)
  * @param {boolean} eliminarImagen - Si se debe eliminar la imagen actual
  */
-export const actualizarBoletaConImagen = async (
+/*export const actualizarBoletaConImagen = async (
   boleta,
   nuevosDatos,
   nuevaImagen,
@@ -160,13 +160,13 @@ export const actualizarBoletaConImagen = async (
     .eq("id", boleta.id);
 
   if (error) throw new Error("Error al guardar cambios.");
-};
+};*/
 
-/**
+/*
  * Devuelve todas las boletas del usuario autenticado.
  * @returns {Promise<Array>} Lista de boletas
  */
-export const obtenerBoletasDelUsuario = async () => {
+/* export const obtenerBoletasDelUsuario = async () => {
   const { data: auth } = await supabase.auth.getUser();
   const user = auth?.user;
   if (!user) return [];
@@ -183,14 +183,14 @@ export const obtenerBoletasDelUsuario = async () => {
   }
 
   return data;
-};
+}; */
 
-/**
+/*
  * Devuelve notificaciones relevantes sobre boletas.
  * @param {string} userId
  * @returns {Promise<string[]>}
  */
-export const obtenerNotificacionesBoletas = async (userId) => {
+/*export const obtenerNotificacionesBoletas = async (userId) => {
   const { data, error } = await supabase
     .from("boletas")
     .select("*")
@@ -231,3 +231,4 @@ export const obtenerNotificacionesBoletas = async (userId) => {
 
   return alertas;
 };
+*/

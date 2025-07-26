@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { IconLoader2, IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconLoader2, IconPlus, IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
 
 const Button = ({
   children,
@@ -38,7 +38,7 @@ const Button = ({
     danger: "bg-red-600 text-texto hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     cross: "text-texto/60 hover:text-red-400",
-    add: "bg-green-900 text-texto hover:bg-green-700",
+    add: "bg-green-400/10 text-green-400 hover:text-green-300 hover:bg-green-400/20",
     see: "bg-blue-400/10 text-blue-400 hover:text-blue-300 hover:bg-blue-400/20",
     edit: "bg-yellow-400/10 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/20",
     delete: "bg-red-400/10 text-red-400 hover:text-red-300 hover:bg-red-400/20",
@@ -53,6 +53,7 @@ const Button = ({
   const autoIcon =
     !Icon &&
     {
+      add: IconPlus,
       see: IconEye,
       edit: IconEdit,
       delete: IconTrash,
