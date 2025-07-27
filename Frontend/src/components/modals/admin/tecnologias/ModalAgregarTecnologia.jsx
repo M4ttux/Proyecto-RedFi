@@ -41,7 +41,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar tecnología</MainH2>
         <MainButton
           onClick={onClose}
@@ -91,7 +91,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
             disabled={loading}
             className="flex-1"
           >
-            {loading ? "Guardando..." : "Guardar"}
+            {loading ? "Creando..." : "Crear tecnología"}
           </MainButton>
         </div>
       </form>

@@ -28,6 +28,7 @@ const ModalAgregarReseña = ({
   const [errorProveedor, setErrorProveedor] = useState(false);
   const [errorUbicacion, setErrorUbicacion] = useState(false);
   const [errorComentario, setErrorComentario] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const estrellasOptions = [1, 2, 3, 4, 5];
 
@@ -82,46 +83,54 @@ const ModalAgregarReseña = ({
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let mensajeError = "";
-    let hayError = false;
 
+    // Reset errores visuales
+    setErrorProveedor(false);
+    setErrorUbicacion(false);
+    setErrorComentario(false);
+
+    // Validar manualmente cada campo en orden
     const proveedorInvalido = proveedorSeleccionado === "__disabled__";
-    setErrorProveedor(proveedorInvalido);
-    if (proveedorInvalido && !mensajeError) {
-      mensajeError = "Debes seleccionar un proveedor.";
-      hayError = true;
-    }
-
     const ubicacionInvalida = !coordenadasSeleccionadas;
-    setErrorUbicacion(ubicacionInvalida);
-    if (ubicacionInvalida && !mensajeError) {
-      mensajeError = "Debes seleccionar una ubicación en el mapa.";
-      hayError = true;
-    }
-
     const comentarioInvalido = !comentario.trim();
-    setErrorComentario(comentarioInvalido);
-    if (comentarioInvalido && !mensajeError) {
-      mensajeError = "Debes escribir un comentario.";
-      hayError = true;
-    }
 
-    if (hayError) {
-      mostrarError(mensajeError);
+    if (proveedorInvalido) {
+      setErrorProveedor(true);
+      mostrarError("Debes seleccionar un proveedor.");
       return;
     }
 
-    onEnviar({
-      comentario,
-      estrellas,
-      proveedor_id: proveedorSeleccionado,
-      ubicacion: coordenadasSeleccionadas,
-      ubicacionTexto,
-    });
+    if (ubicacionInvalida) {
+      setErrorUbicacion(true);
+      mostrarError("Debes seleccionar una ubicación en el mapa.");
+      return;
+    }
 
-    onClose();
+    if (comentarioInvalido) {
+      setErrorComentario(true);
+      mostrarError("Debes escribir un comentario.");
+      return;
+    }
+
+    // Si pasó todas las validaciones, enviar
+    setLoading(true);
+    try {
+      await onEnviar({
+        comentario,
+        estrellas,
+        proveedor_id: proveedorSeleccionado,
+        ubicacion: coordenadasSeleccionadas,
+        ubicacionTexto,
+      });
+      onClose();
+    } catch (e) {
+      mostrarError("Error al publicar reseña");
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -142,7 +151,7 @@ const ModalAgregarReseña = ({
 
   return (
     <ModalContenedor onClose={onClose}>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar reseña</MainH2>
         <MainButton
           onClick={onClose}
@@ -155,7 +164,7 @@ const ModalAgregarReseña = ({
         </MainButton>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
         <Select
           label="Proveedor *"
           value={proveedorSeleccionado}
@@ -170,7 +179,6 @@ const ModalAgregarReseña = ({
           getOptionValue={(p) => p.id}
           getOptionLabel={(p) => p.nombre}
           loading={proveedores.length === 0}
-          required
           isInvalid={errorProveedor}
           renderOption={(p) => (
             <option
@@ -248,7 +256,6 @@ const ModalAgregarReseña = ({
         <Select
           label="Estrellas *"
           value={estrellas}
-          required
           onChange={setEstrellas}
           options={estrellasOptions}
           getOptionValue={(e) => e}
@@ -264,13 +271,28 @@ const ModalAgregarReseña = ({
             setErrorComentario(false);
           }}
           placeholder="Escribe tu opinión..."
-          required
           isInvalid={errorComentario}
         />
 
-        <MainButton type="submit" variant="primary" className="w-full">
-          Enviar Reseña
-        </MainButton>
+        <div className="flex gap-3 pt-4">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1"
+          >
+            Cancelar
+          </MainButton>
+          <MainButton
+            type="submit"
+            variant="primary"
+            disabled={loading}
+            className="flex-1"
+          >
+            {loading ? "Publicando..." : "Publicar Reseña"}
+          </MainButton>
+        </div>
       </form>
     </ModalContenedor>
   );

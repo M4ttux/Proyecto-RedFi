@@ -16,15 +16,18 @@ import {
   obtenerTecnologias,
   eliminarTecnologia,
 } from "../services/tecnologiaService";
-import {
-  obtenerProveedorTecnologia,
-  obtenerZonaProveedor,
-} from "../services/relaciones/adminRelaciones";
+
+import { obtenerProveedorTecnologia, eliminarProveedorTecnologia } from "../services/relaciones/proveedorTecnologiaService";
+import { obtenerProveedorZona, eliminarProveedorZona } from "../services/relaciones/proveedorZonaService";
 
 import ModalEliminar from "../components/modals/ModalEliminar";
 
 import ModalVerPerfil from "../components/modals/admin/perfiles/ModalVerPerfil";
 import ModalEditarPerfil from "../components/modals/admin/perfiles/ModalEditarPerfil";
+
+import ModalAgregarProveedor from "../components/modals/admin/proveedores/ModalAgregarProveedor";
+import ModalVerProveedor from "../components/modals/mapa/ModalProveedor";
+import ModalEditarProveedor from "../components/modals/admin/proveedores/ModalEditarProveedor";
 
 import ModalVerReseña from "../components/modals/mapa/ModalReseña";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
@@ -33,9 +36,11 @@ import ModalAgregarTecnologia from "../components/modals/admin/tecnologias/Modal
 import ModalVerTecnologia from "../components/modals/admin/tecnologias/ModalVerTecnologia";
 import ModalEditarTecnologia from "../components/modals/admin/tecnologias/ModalEditarTecnologia";
 
-import ModalAgregarProveedor from "../components/modals/admin/proveedores/ModalAgregarProveedor";
-import ModalVerProveedor from "../components/modals/mapa/ModalProveedor";
-import ModalEditarProveedor from "../components/modals/admin/proveedores/ModalEditarProveedor";
+import ModalAgregarProveedorTecnologia from "../components/modals/admin/proveedorTecnologia/ModalAgregarProveedorTecnologia";
+import ModalEditarProveedorTecnologia from "../components/modals/admin/proveedorTecnologia/ModalEditarProveedorTecnologia";
+
+
+
 
 import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
@@ -80,6 +85,13 @@ const Administrador = () => {
   const [tecnologiaSeleccionada, setTecnologiaSeleccionada] = useState(null);
   const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
   const [tecnologiaAEliminar, setTecnologiaAEliminar] = useState(null);
+
+  const [proveedorTecnologiaNuevo, setProveedorTecnologiaNuevo] = useState(false);
+  const [proveedorTecnologiaSeleccionado, setProveedorTecnologiaSeleccionado] = useState(null);
+  const [proveedorTecnologiaAEliminar, setProveedorTecnologiaAEliminar] = useState(null);
+
+
+
   const [eliminando, setEliminando] = useState(false);
 
   const [todosLosDatos, setTodosLosDatos] = useState({
@@ -118,6 +130,10 @@ const Administrador = () => {
       if (tablaActual === "tecnologias") {
         setTecnologiaSeleccionada(row);
       }
+      if (tablaActual === "ProveedorTecnologia") {
+        setProveedorTecnologiaSeleccionado(row);
+      }
+
     },
     onEliminar: (row) => {
       if (tablaActual === "user_profiles") {
@@ -131,6 +147,9 @@ const Administrador = () => {
       }
       if (tablaActual === "tecnologias") {
         setTecnologiaAEliminar(row);
+      }
+      if (tablaActual === "ProveedorTecnologia") {
+        setProveedorTecnologiaAEliminar(row);
       }
     },
   };
@@ -151,7 +170,7 @@ const Administrador = () => {
         obtenerReseñasAdmin(),
         obtenerTecnologias(),
         obtenerProveedorTecnologia(),
-        obtenerZonaProveedor(),
+        obtenerProveedorZona(),
       ]);
 
       // Agrupar ProveedorTecnologia
@@ -265,6 +284,11 @@ const Administrador = () => {
           {tablaActual === "tecnologias" && (
             <MainButton onClick={() => setTecnologiaNueva(true)} variant="add">
               Agregar Tecnología
+            </MainButton>
+          )}
+          {tablaActual === "ProveedorTecnologia" && (
+            <MainButton onClick={() => setProveedorTecnologiaNuevo(true)} variant="add">
+              Asignar Tecnologías
             </MainButton>
           )}
         </div>
@@ -458,6 +482,48 @@ const Administrador = () => {
             }}
           />
         )}
+        {/* Proveedor y Tecnología */}
+        {/* Agregar */}
+        {tablaActual === "ProveedorTecnologia" && proveedorTecnologiaNuevo && (
+          <ModalAgregarProveedorTecnologia
+            onClose={() => setProveedorTecnologiaNuevo(false)}
+            onActualizar={async () => {
+              setProveedorTecnologiaNuevo(false);
+              await precargarDatos();
+            }}
+          />
+        )}
+        {/* Editar */}
+        {tablaActual === "ProveedorTecnologia" && proveedorTecnologiaSeleccionado && (
+          <ModalEditarProveedorTecnologia
+            proveedor={proveedorTecnologiaSeleccionado}
+            onClose={() => setProveedorTecnologiaSeleccionado(null)}
+            onActualizar={precargarDatos}
+          />
+        )}
+        {/* Eliminar */}
+        {tablaActual === "ProveedorTecnologia" && proveedorTecnologiaAEliminar && (
+          <ModalEliminar
+            titulo="¿Eliminar relación proveedor-tecnología?"
+            descripcion={`¿Estás seguro de que querés eliminar todas las tecnologías del proveedor "${proveedorTecnologiaAEliminar.proveedor}"?`}
+            loading={eliminando}
+            onCancelar={() => setProveedorTecnologiaAEliminar(null)}
+            onConfirmar={async () => {
+              setEliminando(true);
+              try {
+                await eliminarProveedorTecnologia(proveedorTecnologiaAEliminar.id, mostrarError);
+                mostrarExito("Relación proveedor-tecnología eliminada.");
+                setProveedorTecnologiaAEliminar(null);
+                await precargarDatos();
+              } catch (e) {
+                mostrarError("Error al eliminar relación: " + e.message);
+              } finally {
+                setEliminando(false);
+              }
+            }}
+          />
+        )}
+
       </div>
     </section>
   );

@@ -116,7 +116,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   return (
     <ModalContenedor onClose={onClose}>
       {/* Encabezado */}
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Modificar boleta</MainH2>
         <MainButton
           onClick={onClose}

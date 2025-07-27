@@ -24,7 +24,7 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
   return (
     <ModalContenedor onClose={onClose}>
       {/* Encabezado */}
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-6">
         <MainH2 className="mb-0">Detalle del Perfil</MainH2>
         <MainButton
           onClick={onClose}

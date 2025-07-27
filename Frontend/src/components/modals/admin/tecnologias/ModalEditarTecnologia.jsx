@@ -53,7 +53,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
   return (
     <ModalContenedor onClose={onClose}>
         {/* Encabezado */}
-        <div className="flex justify-between mb-4">
+        <div className="flex justify-between mb-6">
           <MainH2 className="mb-0">Editar tecnología</MainH2>
           <MainButton
             onClick={onClose}
@@ -103,7 +103,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
               disabled={loading}
               className="flex-1"
             >
-              {loading ? "Guardando..." : "Guardar"}
+              {loading ? "Guardando..." : "Guardar cambios"}
             </MainButton>
           </div>
         </form>

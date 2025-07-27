@@ -18,20 +18,20 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
     sitio_web: "",
     descripcion: "",
     color: "#000000",
-    tecnologias: [],
-    zonas: [],
+    /* tecnologias: [],
+    zonas: [], */
   });
 
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [tecnologias, setTecnologias] = useState([]);
-  const [zonas, setZonas] = useState([]);
+  /* const [tecnologias, setTecnologias] = useState([]);
+  const [zonas, setZonas] = useState([]); */
 
   const { mostrarError, mostrarExito } = useAlerta();
 
-  useEffect(() => {
+  /* useEffect(() => {
     const cargarOpciones = async () => {
       try {
         const [tec, zon] = await Promise.all([
@@ -45,7 +45,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
       }
     };
     cargarOpciones();
-  }, [mostrarError]);
+  }, [mostrarError]); */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,12 +70,18 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         console.log("✅ Logo subido con URL:", logoUrl);
       }
 
-      const nuevoProveedor = await crearProveedor({
+      /* const nuevoProveedor = await crearProveedor({
         ...form,
         tecnologias: form.tecnologias.filter((id) => !!id),
         zonas: form.zonas.filter((id) => !!id),
         logotipo: logoUrl,
+      }); */
+
+      const nuevoProveedor = await crearProveedor({
+        ...form,
+        logotipo: logoUrl,
       });
+
 
       mostrarExito("Proveedor creado exitosamente");
       onActualizar?.();
@@ -93,7 +99,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar proveedor</MainH2>
         <MainButton
           onClick={onClose}
@@ -193,7 +199,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row">
+        {/* <div className="flex flex-col gap-4 sm:flex-row">
           <CheckboxDropdown
             label="Tecnologías"
             options={tecnologias}
@@ -212,7 +218,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
             getOptionValue={(opt) => String(opt.id)}
             disabled={loading}
           />
-        </div>
+        </div> */}
 
         <div className="flex gap-3 pt-4">
           <MainButton
@@ -231,7 +237,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
             disabled={loading}
             className="flex-1"
           >
-            Crear proveedor
+            {loading ? "Creando..." : "Crear proveedor"}
           </MainButton>
         </div>
       </form>

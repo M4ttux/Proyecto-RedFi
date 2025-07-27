@@ -15,14 +15,14 @@ import ModalContenedor from "../../../ui/ModalContenedor";
 const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   const [form, setForm] = useState({ ...proveedor });
   const [loading, setLoading] = useState(false);
-  const [tecnologias, setTecnologias] = useState([]);
-  const [zonas, setZonas] = useState([]);
+  /* const [tecnologias, setTecnologias] = useState([]);
+  const [zonas, setZonas] = useState([]); */
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const { mostrarError, mostrarExito } = useAlerta();
 
-  useEffect(() => {
+  /* useEffect(() => {
     const cargarOpciones = async () => {
       try {
         const [tec, zon] = await Promise.all([
@@ -36,7 +36,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
       }
     };
     cargarOpciones();
-  }, [mostrarError]);
+  }, [mostrarError]); */
 
   useEffect(() => {
     const prepararPreviewDesdeURL = async (url) => {
@@ -54,7 +54,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
     };
 
     if (proveedor) {
-      setForm({
+      /* setForm({
         ...proveedor,
         tecnologias:
           proveedor.ProveedorTecnologia?.map((t) =>
@@ -62,7 +62,16 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           ) || [],
         zonas: proveedor.ZonaProveedor?.map((z) => String(z.zonas?.id)) || [],
         eliminarLogo: false,
+      }); */
+      setForm({
+        nombre: proveedor.nombre || "",
+        sitio_web: proveedor.sitio_web || "",
+        descripcion: proveedor.descripcion || "",
+        color: proveedor.color || "#000000",
+        logotipo: proveedor.logotipo || null,
+        eliminarLogo: false,
       });
+
 
       if (proveedor.logotipo) {
         prepararPreviewDesdeURL(proveedor.logotipo);
@@ -95,12 +104,17 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
 
       const { eliminarLogo, ...restoForm } = form;
 
-      await actualizarProveedor(proveedor.id, {
+      /* await actualizarProveedor(proveedor.id, {
         ...restoForm,
         logotipo: logoUrl,
         tecnologias: form.tecnologias.filter((id) => !!id),
         zonas: form.zonas.filter((id) => !!id),
+      }); */
+      await actualizarProveedor(proveedor.id, {
+        ...restoForm,
+        logotipo: logoUrl,
       });
+
 
       mostrarExito("Proveedor actualizado correctamente");
       onActualizar?.();
@@ -112,7 +126,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Editar proveedor</MainH2>
         <MainButton
           onClick={onClose}
@@ -236,7 +250,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row">
+        {/* <div className="flex flex-col gap-4 sm:flex-row">
           <div className="flex-1">
             <CheckboxDropdown
               label="Tecnologías"
@@ -259,7 +273,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
               disabled={loading}
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="flex gap-3 pt-4">
           <MainButton
@@ -278,7 +292,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             disabled={loading}
             className="flex-1"
           >
-            Guardar cambios
+            {loading ? "Guardando..." : "Guardar cambios"}
           </MainButton>
         </div>
       </form>

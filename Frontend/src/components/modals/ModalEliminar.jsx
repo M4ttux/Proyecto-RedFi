@@ -12,7 +12,7 @@ const ModalEliminar = ({
 }) => {
   return (
     <ModalContenedor onClose={onCancelar}>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-6">
           <MainH2 className="mb-0">{titulo}</MainH2>
           <MainButton
             onClick={onCancelar}

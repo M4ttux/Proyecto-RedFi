@@ -96,7 +96,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
   return (
     <ModalContenedor onClose={onClose}>
       {/* Encabezado */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Editar Perfil</MainH2>
         <MainButton
           onClick={onClose}

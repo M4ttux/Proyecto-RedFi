@@ -7,7 +7,7 @@ const ModalVerTecnologia = ({ tecnologia, onClose }) => {
     if (!tecnologia) return null;
   return (
     <ModalContenedor onClose={onClose}>
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex justify-between items-start mb-6">
           <MainH2 className="mb-0">Detalle de Tecnología</MainH2>
           <MainButton
             onClick={onClose}

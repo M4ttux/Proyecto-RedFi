@@ -252,7 +252,7 @@ const BoletaForm = ({
             loading={loading}
             disabled={loading}
           >
-            Guardar boleta
+            {loading ? "Guardando..." : "Guardar boleta"}
           </MainButton>
         </div>
       </form>

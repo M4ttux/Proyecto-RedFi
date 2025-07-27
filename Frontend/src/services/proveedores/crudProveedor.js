@@ -1,7 +1,7 @@
 import { supabase } from "../../supabase/client";
 
 // Crear proveedor
-export const crearProveedor = async (
+/* export const crearProveedor = async (
   datos, // { nombre, descripcion, sitio_web, color, logotipo, tecnologias: [], zonas: [] }
   mostrarAlerta = () => {}
 ) => {
@@ -51,12 +51,33 @@ export const crearProveedor = async (
     mostrarAlerta("El proveedor fue creado, pero fallaron las relaciones.");
     throw error;
   }
+}; */
+
+export const crearProveedor = async (
+  datos, // { nombre, descripcion, sitio_web, color, logotipo }
+  mostrarAlerta = () => {}
+) => {
+  const { tecnologias, zonas, ...proveedorBase } = datos;
+
+  const { data: proveedor, error } = await supabase
+    .from("proveedores")
+    .insert([proveedorBase])
+    .select()
+    .single();
+
+  if (error) {
+    mostrarAlerta("Error al agregar el proveedor.");
+    throw error;
+  }
+
+  return proveedor;
 };
 
+
 // Editar proveedor
-export const actualizarProveedor = async (
+/* export const actualizarProveedor = async (
   proveedorId,
-  datos, // { nombre, descripcion, sitio_web, color, tecnologias: [], zonas: [] }
+  datos, // { nombre, descripcion, sitio_web, color, logotipo }
   mostrarAlerta = () => {}
 ) => {
   const {
@@ -130,6 +151,28 @@ export const actualizarProveedor = async (
     );
     throw error;
   }
+}; */
+
+// Editar proveedor sin modificar relaciones
+export const actualizarProveedor = async (
+  proveedorId,
+  datos, // { nombre, descripcion, sitio_web, color, logotipo }
+  mostrarAlerta = () => {}
+) => {
+  const { tecnologias, zonas, eliminarLogo, ...proveedorBase } = datos;
+
+  const { error: errorUpdate } = await supabase
+    .from("proveedores")
+    .update(proveedorBase)
+    .eq("id", proveedorId);
+
+  if (errorUpdate) {
+    console.error(errorUpdate);
+    mostrarAlerta("Error al actualizar el proveedor.");
+    throw errorUpdate;
+  }
+
+  return true;
 };
 
 // Eliminar proveedor
