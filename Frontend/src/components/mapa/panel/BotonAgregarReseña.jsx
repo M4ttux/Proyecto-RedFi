@@ -17,7 +17,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
       <MainButton
         onClick={handleClick}
         disabled={!usuario}
-        variant={usuario ? "accent" : "disabled"}
+        variant={usuario ? "add" : "disabled"}
         className="w-full"
         title={
           usuario

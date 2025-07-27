@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/layout/NavbarV2";
+import MobileBottomNav from "../components/layout/MobileBottomNav";
 import Footer from "../components/layout/Footer";
 import { AuthProvider } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
@@ -17,6 +18,7 @@ const Layout = () => {
         <Outlet />
       </main>
       {!esVistaMapa && <Footer />}
+      <MobileBottomNav />
     </AuthProvider>
   );
 };

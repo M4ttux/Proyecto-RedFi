@@ -91,7 +91,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
-            className="max-w-[100px] truncate text-ellipsis overflow-hidden"
+            className="truncate text-ellipsis overflow-hidden"
             title={row.descripcion}
           >
             {row.descripcion || "—"}
@@ -103,7 +103,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "SITIO WEB",
         renderCell: (row) => (
           <div
-            className="max-w-[100px] truncate text-ellipsis overflow-hidden"
+            className="truncate text-ellipsis overflow-hidden"
             title={row.sitio_web}
           >
             {row.sitio_web || "—"}
@@ -115,7 +115,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "COLOR",
         renderCell: (row) => (
           <div
-            className="w-5 h-5 rounded max-w-[50px]"
+            className="w-5 h-5 rounded"
             style={{ backgroundColor: row.color }}
           />
         ),
@@ -160,7 +160,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "COMENTARIO",
         renderCell: (row) => (
           <div
-            className="max-w-[250px] truncate text-ellipsis overflow-hidden"
+            className="truncate text-ellipsis overflow-hidden"
             title={row.comentario}
           >
             {row.comentario || "—"}
@@ -199,7 +199,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "TECNOLOGÍAS",
         renderCell: (row) =>
           Array.isArray(row.tecnologias) && row.tecnologias.length ? (
-            <div className="flex flex-wrap gap-1 max-w-[300px] overflow-hidden">
+            <div className="flex flex-wrap gap-1 overflow-hidden">
               {row.tecnologias.map((tec, i) => (
                 <span
                   key={i}
@@ -229,7 +229,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "ZONAS",
         renderCell: (row) =>
           Array.isArray(row.zonas) && row.zonas.length ? (
-            <div className="flex flex-wrap gap-1 max-w-[300px] overflow-hidden">
+            <div className="flex flex-wrap gap-1 overflow-hidden">
               {row.zonas.map((zona, i) => (
                 <span
                   key={i}
@@ -268,7 +268,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           tabla === "ProveedorTecnologia" || tabla === "ZonaProveedor";
 
         return (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 max-w-[350px] overflow-auto">
             {!ocultarVer && acciones.onVer && (
               <MainButton
                 onClick={() => acciones.onVer(row)}

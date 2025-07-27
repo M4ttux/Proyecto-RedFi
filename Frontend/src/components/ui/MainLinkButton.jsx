@@ -40,6 +40,8 @@ const LinkButton = ({
     accent: "bg-acento text-texto hover:bg-primario",
     secondary: "bg-white/10 text-texto hover:bg-white/20",
     danger: "bg-red-600 text-texto hover:bg-red-700",
+    navbar: "bg-transparent text-texto hover:bg-white/10",
+    navbarIcon: "bg-transparent text-acento hover:scale-110 hover:text-texto",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     card: getCardVariant(),
     cardAdmin:
