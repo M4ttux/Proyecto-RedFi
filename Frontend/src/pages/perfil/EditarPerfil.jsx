@@ -98,16 +98,16 @@ const EditarPerfil = () => {
   };
 
   return (
-    <div className="w-full bg-fondo flex items-center justify-center px-4 py-16 relative">
+    <div className="w-full flex items-center justify-center px-4 py-16 relative">
       <div className="w-full max-w-lg">
         {/* Título */}
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconUserEdit}>Editar perfil</MainH1>
-          <p className="mx-auto">Modificá tu información personal.</p>
+          <p className="text-lg">Modificá tu información personal.</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-lg mx-auto">
+        <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 max-w-lg mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Avatar */}
             <div className="flex flex-col items-center gap-3">

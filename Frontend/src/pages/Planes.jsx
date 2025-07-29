@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useRole } from "../context/RoleContext";
 import { useEffect, useState } from "react";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconReceiptDollar, IconArrowLeft } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainButton from "../components/ui/MainButton";
@@ -46,15 +46,15 @@ const Planes = () => {
   };
 
   const renderBeneficios = (lista) => (
-    <ul className="text-sm text-texto/80 space-y-2 mb-6 text-left">
+    <ul className="text-sm text-texto space-y-2 mb-6 text-left">
       {lista.map((b, i) => (
         <li
           key={i}
-          className={`flex items-center ${!b.disponible ? "opacity-50" : ""}`}
+          className={`flex items-center ${!b.disponible ? "opacity-75" : ""}`}
         >
           <IconCheck
             size={18}
-            className={`${b.disponible ? "text-acento" : "text-gray-400"} mr-2`}
+            className={`${b.disponible ? "text-acento" : "text-texto"} mr-2`}
           />
           {b.texto}
         </li>
@@ -64,10 +64,10 @@ const Planes = () => {
 
   return (
     <section className="py-16 px-4 sm:px-6 text-texto w-full">
-      <div className="max-w-7xl mx-auto space-y-12">
+      <div className="max-w-7xl mx-auto space-y-12 mb-8">
         <div className="text-center mb-8">
-          <MainH1>Elija su plan Red-Fi</MainH1>
-          <p className="mx-auto">
+          <MainH1 icon={IconReceiptDollar}>Elija su plan Red-Fi</MainH1>
+          <p className="text-lg">
             Compare los planes y seleccione el que mejor se adapte a sus
             necesidades.
           </p>
@@ -75,10 +75,10 @@ const Planes = () => {
 
         <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Plan Básico */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg flex flex-col justify-between">
+          <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 flex flex-col justify-between">
             <div>
               <MainH2>Plan Básico</MainH2>
-              <p className="text-texto/70 mb-4">
+              <p className="text-texto mb-4">
                 Ideal para usuarios que quieren explorar Red-Fi sin funciones
                 avanzadas.
               </p>
@@ -99,10 +99,10 @@ const Planes = () => {
           </div>
 
           {/* Plan Premium */}
-          <div className="bg-white/5 border border-acento/50 rounded-xl p-6 shadow-lg flex flex-col justify-between">
+          <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 flex flex-col justify-between">
             <div>
               <MainH2 className="text-acento">Plan Premium</MainH2>
-              <p className="text-texto/70 mb-4">
+              <p className="text-texto mb-4">
                 Acceda a todos los beneficios de Red-Fi sin límites de uso y sin
                 anuncios.
               </p>
@@ -124,6 +124,14 @@ const Planes = () => {
         </div>
       </div>
 
+      {/* 🔙 Botón volver al perfil */}
+      <div className="text-center">
+        <MainLinkButton to="/cuenta" variant="secondary">
+          <IconArrowLeft />
+          Volver al perfil
+        </MainLinkButton>
+      </div>
+
       {mostrarModal && (
         <ModalConfirmacionPlan
           usuarioId={usuario.id}
@@ -131,7 +139,6 @@ const Planes = () => {
           onClose={() => setMostrarModal(false)}
         />
       )}
-    
     </section>
   );
 };

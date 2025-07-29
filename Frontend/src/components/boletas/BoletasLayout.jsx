@@ -6,7 +6,7 @@ const BoletasLayout = ({ children }) => {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1 icon={IconFileDescription}>Mis boletas</MainH1>
-          <p className="text-texto/70 text-lg">
+          <p className="text-lg">
             Visualizá tus boletas y hacé tu seguimiento.
           </p>
         </div>

@@ -5,7 +5,9 @@ import BoletaHistorial from "../components/boletas/BoletaHistorial";
 import BoletasLayout from "../components/boletas/BoletasLayout";
 import { useNotificaciones } from "../components/layout/Navbar";
 import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 import { useAlerta } from "../context/AlertaContext";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const Boletas = () => {
   useEffect(() => {
@@ -55,11 +57,16 @@ const Boletas = () => {
           setVista={setVista}
         />
       ) : (
-        <BoletaHistorial
-          boletas={boletas}
-          recargarBoletas={cargarBoletas}
-        />
+        <BoletaHistorial boletas={boletas} recargarBoletas={cargarBoletas} />
       )}
+
+      {/* 🔙 Botón volver al perfil */}
+      <div className="text-center">
+        <MainLinkButton to="/cuenta" variant="secondary">
+          <IconArrowLeft />
+          Volver al perfil
+        </MainLinkButton>
+      </div>
     </BoletasLayout>
   );
 };

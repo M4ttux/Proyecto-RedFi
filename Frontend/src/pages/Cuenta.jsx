@@ -75,7 +75,7 @@ const Cuenta = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1 icon={IconUser}>Mi cuenta</MainH1>
-          <p className="text-texto/70 text-lg">
+          <p className="text-lg">
             Modificá tus datos personales y tus preferencias.
           </p>
         </div>
@@ -85,16 +85,16 @@ const Cuenta = () => {
             <img
               src={foto}
               alt="Foto de perfil"
-              className="size-50 rounded-full object-cover border-4 border-white/10 mx-auto mb-4 shadow-lg"
+              className="size-50 rounded-full object-cover border-4 border-texto/10 mx-auto mb-4 shadow-lg"
             />
           ) : (
-            <div className="size-50 rounded-full bg-white/10 border-4 border-white/10 mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <div className="size-50 rounded-full bg-texto/10 border-4 border-texto/10 mx-auto mb-4 flex items-center justify-center shadow-lg">
               <span className="text-3xl font-bold text-texto">{iniciales}</span>
             </div>
           )}
           <MainH2>{nombre}</MainH2>
-          <p className="text-texto/60 mb-4">{usuario.email}</p>
-          <p className="text-sm text-texto/40 mb-4">
+          <p className="text-texto mb-4">{usuario.email}</p>
+          <p className="text-sm text-texto mb-4">
             Usuario <span className="font-bold text-acento">{perfil.plan}</span>
           </p>
         </div>

@@ -45,7 +45,7 @@ const Select = ({
           disabled={disabled || loading}
           required={required}
           className={classNames(
-            "w-full px-3 py-2 bg-white/5 text-texto rounded-lg border transition",
+            "w-full px-3 py-2 bg-texto/5 text-texto rounded-lg border transition",
             multiple
               ? "h-40 overflow-y-auto"
               : "appearance-none pr-10 max-w-full truncate",
@@ -53,7 +53,7 @@ const Select = ({
             (disabled || loading) && "cursor-not-allowed opacity-70",
             isInvalid
               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-white/10 focus:border-acento focus:ring-1 focus:ring-acento",
+              : "border-texto/10 focus:border-acento focus:ring-1 focus:ring-acento",
             className
           )}
         >

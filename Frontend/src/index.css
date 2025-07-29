@@ -73,7 +73,7 @@
 }
 
 select option {
-  background-color: #393939
+  background-color: var(--color-secundario);
 }
 
 input:-webkit-autofill,

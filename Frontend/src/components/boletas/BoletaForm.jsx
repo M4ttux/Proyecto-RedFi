@@ -148,7 +148,7 @@ const BoletaForm = ({
       <MainH2 className="text-center">Carga de boletas</MainH2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white/5 border border-white/10 p-6 rounded-lg"
+        className="space-y-6 bg-secundario border border-secundario/50 shadow-lg p-6 rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Select de mes */}

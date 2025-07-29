@@ -25,7 +25,7 @@ const ModalEliminar = ({
           <IconX size={24} />
         </MainButton>
       </div>
-      <p className="text-center">{descripcion}</p>
+      <p className="text-center font-bold">{descripcion}</p>
 
       <div className="flex justify-center gap-4 pt-4">
         <MainButton onClick={onCancelar} variant="secondary" disabled={loading}>

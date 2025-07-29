@@ -71,7 +71,7 @@ const ModalReseña = ({ reseña, onClose }) => {
         {nombre}
       </MainH2>
       {/* Proveedor */}
-      <p className="text-center text-texto/60 mb-4">
+      <p className="text-center text-texto mb-4 font-semibold">
         Proveedor: {proveedor}
       </p>
       {/* Estrellas */}
@@ -85,7 +85,7 @@ const ModalReseña = ({ reseña, onClose }) => {
         )}
       </div>
       {/* Comentario */}
-      <p className="text-sm text-texto/90 bg-white/5 rounded-lg px-4 py-4 text-center leading-relaxed">
+      <p className="text-texto bg-texto/5 border border-texto/50 rounded-lg px-4 py-4 text-center leading-relaxed">
         {reseña.comentario}
       </p>
     </ModalContenedor>

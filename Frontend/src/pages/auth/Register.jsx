@@ -8,6 +8,7 @@ import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import Input from "../../components/ui/Input";
+import { useTheme } from "../../context/ThemeContext";
 
 import { useAlerta } from "../../context/AlertaContext";
 
@@ -27,6 +28,7 @@ const Register = () => {
   const navigate = useNavigate();
   const { mostrarError, mostrarExito } = useAlerta();
   const { refrescarRol } = useRole();
+  const { currentTheme } = useTheme();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -57,14 +59,20 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full bg-fondo flex items-center justify-center px-4 py-16 relative">
+    <div className="w-full flex items-center justify-center px-4 py-16 relative">
       <div className="w-full max-w-md">
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconLogin}>Crear cuenta</MainH1>
-          <p className="mx-auto">Únete a la comunidad de Red-Fi.</p>
+          <p className="text-lg">Únete a la comunidad de Red-Fi.</p>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+        <div className={`rounded-lg p-6
+        ${
+          currentTheme === "light"
+            ? "bg-secundario border border-secundario/50 shadow-lg"
+            : "bg-white/5 border border-white/10"
+        } `}
+        >
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Correo electrónico *"
@@ -122,10 +130,10 @@ const Register = () => {
         {/* Divider */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/10"></div>
+            <div className="w-full border-t border-texto/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-texto/60">
+            <span className="px-2 bg-fondo text-texto">
               ¿Ya tienes cuenta?
             </span>
           </div>
@@ -137,7 +145,7 @@ const Register = () => {
         </MainLinkButton>
 
         <div className="text-center mt-6">
-          <p className="text-xs text-texto/50">
+          <p className="text-xs text-texto">
             Al registrarte, aceptas nuestros términos y condiciones
           </p>
         </div>

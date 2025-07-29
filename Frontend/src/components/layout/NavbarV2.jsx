@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
+import { THEME_ICONS } from "../../constants/themes";
 import Logo from "../../icons/logotipo/imagotipo";
 import {
   IconX,
@@ -13,6 +15,7 @@ import {
   IconUser,
   IconDots,
   IconLogout,
+  IconPalette,
 } from "@tabler/icons-react";
 import { obtenerNotificacionesBoletas } from "../../services/boletas/notificaciones";
 import MainButton from "../ui/MainButton";
@@ -42,9 +45,19 @@ export const useNotificaciones = () => {
 const NavbarV2 = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
   const [mostrarMenu, setMostrarMenu] = useState(false);
+  const [mostrarTemas, setMostrarTemas] = useState(false);
   const { usuario, logout } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
+  const { currentTheme, availableThemes, changeTheme, toggleTheme, themeData } = useTheme();
   const location = useLocation();
+
+  // Función para obtener el color principal del logo según el tema
+  const getLogoColorPrincipal = () => {
+    if (currentTheme === 'light') {
+      return '#1f2a40'; // Secundario del tema dark
+    }
+    return themeData?.texto || "#FFFFFF";
+  };
 
   const linkClase = "hover:text-acento transition px-4 py-2 font-bold";
 
@@ -64,8 +77,8 @@ const NavbarV2 = () => {
           <Link to="/" className="flex items-center gap-2">
             <Logo
               className="h-10"
-              colorPrincipal="#FFFFFF"
-              colorAcento="#FB8531"
+              colorPrincipal={getLogoColorPrincipal()}
+              colorAcento={themeData?.acento || "#FB8531"}
             />
           </Link>
 
@@ -82,6 +95,38 @@ const NavbarV2 = () => {
             <Link to="/soporte" className={linkClase}>
               Soporte
             </Link>
+
+            {/* Botón de tema - siempre visible */}
+            <div className="relative">
+              <MainButton
+                onClick={() => setMostrarTemas(!mostrarTemas)}
+                variant="secondary"
+                className="!bg-transparent hover:text-acento"
+                icon={IconPalette}
+                iconSize={26}
+                title="Cambiar tema"
+              />
+
+              {mostrarTemas && (
+                <div className="absolute right-0 mt-2 w-48 bg-fondo text-texto rounded-lg shadow-lg z-50 p-2 space-y-1">
+                  {availableThemes.map((theme) => (
+                    <button
+                      key={theme}
+                      onClick={() => {
+                        changeTheme(theme);
+                        setMostrarTemas(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded hover:bg-white/10 transition flex items-center gap-2 ${
+                        currentTheme === theme ? "bg-primario" : ""
+                      }`}
+                    >
+                      <span>{THEME_ICONS[theme]}</span>
+                      <span className="capitalize">{theme}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {!usuario ? (
               <>
@@ -172,8 +217,8 @@ const NavbarV2 = () => {
           <Link to="/" className="flex items-center gap-2">
             <Logo
               className="h-8"
-              colorPrincipal="#FFFFFF"
-              colorAcento="#FB8531"
+              colorPrincipal={getLogoColorPrincipal()}
+              colorAcento={themeData?.acento || "#FB8531"}
             />
           </Link>
         </div>

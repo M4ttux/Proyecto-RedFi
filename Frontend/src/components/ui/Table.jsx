@@ -1,33 +1,35 @@
 // components/ui/Table.jsx
 import classNames from "classnames";
+import { useTheme } from "../../context/ThemeContext";
 
 const Table = ({ columns = [], data = [], className = "" }) => {
+  const { currentTheme } = useTheme();
   return (
     <div
       className={classNames(
-        "bg-white/5 backdrop-blur-md border border-white/10 rounded-lg overflow-hidden",
+        "backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg overflow-hidden",
         className
       )}
     >
       <table className="w-full">
-        <thead className="bg-white/10">
+        <thead className="bg-texto/15">
           <tr>
             {columns.map((col) => (
               <th
                 key={col.id}
-                className="px-6 py-4 text-left text-sm font-medium text-texto uppercase tracking-wider"
+                className="px-6 py-4 text-left text-sm font-bold text-texto uppercase tracking-wider"
               >
                 {col.label}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-white/10">
+        <tbody className="divide-y divide-texto/10">
           {data.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-6 py-4 text-center text-texto/60"
+                className="px-6 py-4 text-center text-texto"
               >
                 No hay datos para mostrar.
               </td>
@@ -39,7 +41,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
                   <td
                     key={col.id}
                     className={classNames(
-                      "px-6 py-4 text-texto text-sm"
+                      "px-6 py-4 text-texto text-sm font-semibold"
                     )}
                   >
                     {typeof col.renderCell === "function"

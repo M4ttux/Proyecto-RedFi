@@ -1,5 +1,6 @@
 import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
+import { useTheme } from "../../context/ThemeContext";
 
 const preguntas = [
   {
@@ -35,8 +36,13 @@ const preguntas = [
 ];
 
 const PreguntasFrecuentes = () => {
+  const { currentTheme } = useTheme();
   return (
-    <section className="py-16 px-4 sm:px-6 bg-white/5 text-texto">
+    <section
+      className={`py-16 px-4 sm:px-6 text-texto ${
+        currentTheme === "light" ? "bg-secundario" : "bg-white/5"
+      }`}
+    >
       <div className="max-w-7xl mx-auto">
         <MainH2 className="text-center">Preguntas frecuentes</MainH2>
 

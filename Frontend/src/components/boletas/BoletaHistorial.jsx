@@ -83,7 +83,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "fecha_carga",
       label: "Carga",
       renderCell: (b) => (
-        <div className="text-sm text-green-400/80">
+        <div className="text-green-400">
           {formatearFechaConTooltip(b.fecha_carga)}
         </div>
       ),
@@ -93,7 +93,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "vencimiento",
       label: "Vencimiento",
       renderCell: (b) => (
-        <div className="text-sm text-red-400/80">
+        <div className="text-red-400">
           {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
         </div>
       ),
@@ -104,11 +104,11 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       label: "Promoción hasta",
       renderCell: (b) =>
         b.promo_hasta ? (
-          <div className="text-sm text-yellow-400/80">
+          <div className="text-yellow-400">
             {formatearFechaConTooltip(b.promo_hasta)}
           </div>
         ) : (
-          <span className="text-xs text-texto/40">—</span>
+          <span className="text-texto">—</span>
         ),
     },
 
@@ -148,12 +148,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       <MainH2 className="text-center">Historial de boletas</MainH2>
 
       {cargando ? (
-        <div className="flex justify-center items-center text-texto/60 gap-2 mt-10">
+        <div className="flex justify-center items-center text-texto gap-2 mt-10">
           <IconLoader2 className="animate-spin" size={24} />
           Cargando boletas...
         </div>
       ) : boletas.length === 0 ? (
-        <p className="text-texto/60 text-center mt-6">
+        <p className="text-texto text-center mt-6">
           No cargaste boletas aún.
         </p>
       ) : (
@@ -168,7 +168,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
             {boletasOrdenadas.map((b) => (
               <div
                 key={b.id}
-                className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-4"
+                className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4"
               >
                 <div className="flex justify-between items-start mb-3">
                   <MainH3>{b.proveedor}</MainH3>
@@ -193,27 +193,27 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                     />
                   </div>
                 </div>
-                <p className="text-sm text-texto mb-1">
+                <p className="text-texto mb-1">
                   <strong>Mes:</strong> {b.mes}
                 </p>
-                <p className="text-sm text-texto mb-1">
+                <p className="text-texto mb-1">
                   <strong>Monto:</strong> ${parseFloat(b.monto).toFixed(2)}
                 </p>
-                <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
+                <p className="mb-1 flex items-center gap-2 text-texto">
                   <strong className="text-texto">Carga:</strong>
-                  <span className="text-green-400/80">
+                  <span className="text-green-400">
                     {formatearFechaConTooltip(b.fecha_carga)}
                   </span>
                 </p>
-                <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
+                <p className="mb-1 flex items-center gap-2 text-texto">
                   <strong className="text-texto">Vencimiento:</strong>
-                  <span className="text-red-400/80">
+                  <span className="text-red-400">
                     {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
                   </span>
                 </p>
-                <p className="text-sm mb-1 flex items-center gap-2 text-texto/60">
+                <p className="mb-1 flex items-center gap-2 text-texto">
                   <strong className="text-texto">Promo hasta:</strong>
-                  <span className="text-yellow-400/80">
+                  <span className="text-yellow-400">
                     {formatearFechaConTooltip(b.promo_hasta + "T12:00:00")}
                   </span>
                 </p>

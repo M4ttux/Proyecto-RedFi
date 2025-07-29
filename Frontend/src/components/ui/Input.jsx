@@ -49,7 +49,7 @@ const Input = ({
             className={classNames(
               "w-14 h-14 rounded-lg border transition p-0 cursor-pointer",
               (disabled || loading) && "cursor-not-allowed opacity-70",
-              isInvalid ? "border-red-500" : "border-white/10",
+              isInvalid ? "border-red-500" : "border-texto/10",
               className
             )}
           />
@@ -77,7 +77,7 @@ const Input = ({
             required={required}
             disabled={disabled || loading}
             className={classNames(
-              "w-full bg-white/5 text-texto rounded-lg border transition",
+              "w-full bg-texto/5 text-texto rounded-lg border transition",
               "focus:outline-none focus:ring-1",
               Icon ? "pl-10" : "pl-3",
               loading || isInvalid || endIconAction ? "pr-10" : "pr-3",
@@ -85,7 +85,7 @@ const Input = ({
               (disabled || loading) && "cursor-not-allowed opacity-70",
               isInvalid
                 ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                : "border-white/10 focus:border-acento focus:ring-acento",
+                : "border-texto/10 focus:border-acento focus:ring-acento",
               className
             )}
           />

@@ -69,7 +69,7 @@ const AcademyHome = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1 icon={IconBook2}>Cursos destacados</MainH1>
-          <p className="text-texto/70 text-lg">
+          <p className="text-lg">
             Aprende a mejorar tu experiencia con internet y redes.
           </p>
         </div>
@@ -97,23 +97,23 @@ const AcademyHome = () => {
 
         <div className="text-center max-w-2xl mx-auto mb-6">
           <MainH2>¿Por qué elegir Red-Fi Academy?</MainH2>
-          <p className="text-gray-300">
+          <p className="text-lg">
             En Red-Fi Academy te brindamos formación práctica y de calidad para
             que puedas mejorar tu experiencia con internet y redes.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4 mb-12 text-sm">
-          <div className="bg-white/10 p-4 rounded">
-            <h4 className="font-semibold text-texto">
+        <div className="grid md:grid-cols-3 gap-4 mb-12">
+          <div className="bg-secundario border border-secundario/50 shadow-lg p-4 rounded-lg">
+            <h4 className="font-semibold text-texto mb-4">
               👨‍🏫 Instructores expertos
             </h4>
             <p>
               Aprende con profesionales con experiencia real en la industria.
             </p>
           </div>
-          <div className="bg-white/10 p-4 rounded">
-            <h4 className="font-semibold text-texto">
+          <div className="bg-secundario border border-secundario/50 shadow-lg p-4 rounded-lg">
+            <h4 className="font-semibold text-texto mb-4">
               📅 Aprendizaje flexible
             </h4>
             <p>
@@ -121,36 +121,42 @@ const AcademyHome = () => {
               momento.
             </p>
           </div>
-          <div className="bg-white/10 p-4 rounded">
-            <h4 className="font-semibold text-texto">🛠 Contenido práctico</h4>
+          <div className="bg-secundario border border-secundario/50 shadow-lg p-4 rounded-lg">
+            <h4 className="font-semibold text-texto mb-4">
+              🛠 Contenido práctico
+            </h4>
             <p>Aplica lo aprendido con ejercicios reales y casos concretos.</p>
           </div>
         </div>
 
-        <div className="text-center mx-auto mb-6">
+        <div className="text-center max-w-2xl mx-auto mb-6">
           <MainH2>Historias de estudiantes</MainH2>
-          <div className="space-y-6 mb-12 w-full text-left">
-            {testimonios.map((t, i) => (
-              <div
-                key={i}
-                className="bg-white/5 p-4 rounded-lg border border-white/10"
-              >
-                <div className="flex justify-between mb-2 text-sm">
-                  <span className="font-semibold text-texto">{t.nombre}</span>
-                  <span className="text-gray-400">{t.fecha}</span>
-                </div>
-                <div className="text-yellow-400 mb-2">
-                  {"★".repeat(t.estrellas)}
-                  {"☆".repeat(5 - t.estrellas)}
-                </div>
-                <p className="text-gray-200">{t.mensaje}</p>
-                <div className="mt-2 text-sm text-gray-400 flex gap-4">
-                  <span>👍 {t.likes}</span>
-                  <span>💬 {t.comentarios}</span>
-                </div>
+          <p className="text-lg">
+            Revisa las historias de nuestros estudiantes
+          </p>
+        </div>
+
+        <div className="space-y-6 mb-12 w-full text-left">
+          {testimonios.map((t, i) => (
+            <div
+              key={i}
+              className="p-4 rounded-lg bg-secundario border border-secundario/50 shadow-lg"
+            >
+              <div className="flex justify-between mb-2 text-sm">
+                <span className="font-semibold text-texto">{t.nombre}</span>
+                <span className="text-texto font-semibold">{t.fecha}</span>
               </div>
-            ))}
-          </div>
+              <div className="text-yellow-400 mb-2">
+                {"★".repeat(t.estrellas)}
+                {"☆".repeat(5 - t.estrellas)}
+              </div>
+              <p className="text-texto">{t.mensaje}</p>
+              <div className="mt-2 text-texto flex gap-4">
+                <span>👍 {t.likes}</span>
+                <span>💬 {t.comentarios}</span>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* 🔙 Botón volver al perfil */}

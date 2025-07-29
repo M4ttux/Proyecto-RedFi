@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { IconLoader2, IconPlus, IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
+import { useTheme } from "../../context/ThemeContext";
 
 const Button = ({
   children,
@@ -31,20 +32,26 @@ const Button = ({
     defaultPy
   );
 
+  const { currentTheme } = useTheme();
+
   const variants = {
-    primary: "bg-primario text-texto hover:bg-acento",
-    accent: "bg-acento text-texto hover:bg-primario",
-    secondary: "bg-white/10 text-texto hover:bg-white/20",
-    danger: "bg-red-600 text-texto hover:bg-red-400",
+    primary: "bg-primario text-white hover:bg-[#336ef0]",
+    accent: "bg-acento text-white hover:bg-[#fca75f]",
+    secondary: currentTheme === "light" 
+  ? "bg-secundario text-texto hover:bg-[#d2e4ff]" 
+  : "bg-secundario text-texto hover:bg-[#2a3955]",
+    danger: "bg-red-600 text-white hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     cross: "text-texto/60 hover:text-red-400",
-    add: "bg-green-400/10 text-green-400 hover:text-green-300 hover:bg-green-400/20",
-    see: "bg-blue-400/10 text-blue-400 hover:text-blue-300 hover:bg-blue-400/20",
-    edit: "bg-yellow-400/10 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/20",
-    delete: "bg-red-400/10 text-red-400 hover:text-red-300 hover:bg-red-400/20",
+    add: "bg-green-600 text-white hover:bg-green-400",
+    see: "bg-blue-600 text-white hover:bg-blue-400",
+    edit: "bg-yellow-600 text-white hover:bg-yellow-400",
+    delete: "bg-red-600 text-white hover:bg-red-400",
     toggle: active
-      ? "bg-primario text-texto hover:bg-acento"
-      : "bg-white/10 text-texto hover:bg-white/20",
+      ? "bg-primario text-white hover:bg-[#336ef0]"
+      : currentTheme === "light"
+        ? "bg-secundario text-texto hover:bg-[#d2e4ff]" 
+        : "bg-secundario text-texto hover:bg-[#2a3955]",
   };
 
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { cambiarPassword } from "../../services/authService";
-import { IconLock, IconUserEdit } from "@tabler/icons-react";
+import { IconLock, IconUserEdit, IconArrowLeft } from "@tabler/icons-react";
 
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
@@ -55,11 +55,11 @@ const CambiarContraseña = () => {
         {/* Título */}
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconUserEdit}>Cambiar contraseña</MainH1>
-          <p className="mx-auto">Asegurate de elegir una contraseña segura.</p>
+          <p className="text-lg">Asegurate de elegir una contraseña segura.</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md mx-auto">
+        <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 max-w-md mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Nueva contraseña *"
@@ -102,32 +102,30 @@ const CambiarContraseña = () => {
         {/* Divider */}
         <div className="relative my-6 max-w-md mx-auto">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/10"></div>
+            <div className="w-full border-t border-texto/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-texto/60">
-              Opciones de cuenta
-            </span>
+            <span className="px-2 bg-fondo text-texto">Opciones de cuenta</span>
           </div>
         </div>
 
         {/* Botones de navegación */}
-        <div className="flex flex-row flex-wrap justify-center gap-3 max-w-md mx-auto">
+        <div className="flex flex-row flex-wrap justify-center gap-3 mx-auto">
           <MainLinkButton
             to="/editar-perfil"
             disabled={loading}
             variant="secondary"
-            className="px-4 py-2"
           >
-            Ir a <span className="text-acento">Editar Perfil</span>
+            <IconArrowLeft />
+            Volver a editar perfil
           </MainLinkButton>
           <MainLinkButton
             to="/cuenta"
             disabled={loading}
             variant="secondary"
-            className="px-4 py-2"
           >
-            Ir a <span className="text-acento">Mi Cuenta</span>
+            <IconArrowLeft />
+            Volver al perfil
           </MainLinkButton>
         </div>
       </div>

@@ -29,7 +29,7 @@ const CargandoMapa = ({ cargandoMapa }) => {
     >
       <div className="flex flex-col items-center gap-3 text-texto">
         <IconLoader2 size={42} className="animate-spin text-texto" />
-        <p className="text-lg sm:text-xl font-semibold tracking-wide">
+        <p className="text-lg sm:text-xl font-bold tracking-wide">
           Cargando mapa...
         </p>
       </div>

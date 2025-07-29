@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { IconMessageChatbot } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainButton from "../components/ui/MainButton";
+import { useTheme } from "../context/ThemeContext";
 
 const flujoConversacion = {
   inicio: {
@@ -70,6 +71,8 @@ const Soporte = () => {
     document.title = "Red-Fi | Soporte";
   }, []);
 
+  const { currentTheme } = useTheme();
+
   const [mensajes, setMensajes] = useState([
     { autor: "bot", texto: flujoConversacion.inicio.mensaje },
   ]);
@@ -117,12 +120,19 @@ const Soporte = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1 icon={IconMessageChatbot}>Asistente Red-Fi</MainH1>
-          <p className="text-texto/70 text-lg">
+          <p className="text-lg">
             Encuentra lo que buscas en nuestro asistente.
           </p>
         </div>
 
-        <div className="max-w-lg mx-auto bg-[#222222] border border-white/10 rounded-lg shadow-lg p-2 sm:p-4 flex flex-col h-[60vh] sm:h-[600px]">
+        <div
+          className={`max-w-lg mx-auto rounded-lg p-2 sm:p-4 flex flex-col h-[60vh] sm:h-[600px]
+        ${
+          currentTheme === "light"
+            ? "bg-secundario border border-secundario/50 shadow-lg"
+            : "bg-white/5 border border-white/10"
+        } `}
+        >
           <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
             {mensajes.map((m, index) => (
               <div
@@ -134,8 +144,12 @@ const Soporte = () => {
                 <div
                   className={`p-3 rounded-lg max-w-[80%] ${
                     m.autor === "bot"
-                      ? "bg-white/5 text-texto text-left"
-                      : "bg-blue-700 text-texto text-right"
+                      ? currentTheme === "light"
+                        ? "bg-white/50 border border-white/50 text-texto text-left"
+                        : "bg-white/5 text-texto text-left"
+                      : currentTheme === "light"
+                      ? "bg-primario text-white text-right"
+                      : "bg-primario text-texto text-right"
                   }`}
                 >
                   {m.texto}
@@ -145,7 +159,7 @@ const Soporte = () => {
 
             {escribiendo && (
               <div className="flex justify-start">
-                <div className="p-3 rounded-lg bg-neutral-800 text-texto text-left animate-pulse">
+                <div className="p-3 rounded-lg bg-fondo text-texto text-left animate-pulse">
                   Escribiendo...
                 </div>
               </div>

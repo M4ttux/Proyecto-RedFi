@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MainH3 from "../ui/MainH3";
+import { useTheme } from "../../context/ThemeContext";
 
 const DetectorProveedor = () => {
+  const { currentTheme } = useTheme();
   const [datos, setDatos] = useState(null);
   const [error, setError] = useState(null);
 
@@ -13,7 +15,13 @@ const DetectorProveedor = () => {
   }, []);
 
   return (
-    <div className="p-6 max-w-xl mx-auto text-center rounded-lg">
+    <div
+      className={`p-6 max-w-xl mx-auto text-center rounded-lg ${
+        currentTheme === "light"
+                ? "bg-white/50 border border-white/50 shadow-lg"
+                : "bg-white/5 border border-white/10"
+            }`}
+          >
       <MainH3>Tu conexión actual</MainH3>
 
       {error && <p className="text-red-600">{error}</p>}

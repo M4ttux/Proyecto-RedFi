@@ -4,6 +4,7 @@ import { obtenerProveedores } from "../../../services/proveedores/obtenerProveed
 import ModalContenedor from "../../ui/ModalContenedor";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
+import TextArea from "../../ui/Textarea";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
   const [formData, setFormData] = useState({
@@ -88,10 +89,10 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-texto mb-2">
+            <label className="block font-medium text-texto mb-2">
               Proveedor
             </label>
-            <div className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-texto">
+            <div className="w-full px-3 py-2 bg-texto/5 border border-texto/50 rounded-lg text-texto">
               {(() => {
                 const proveedor = proveedores.find(
                   (p) => p.id === formData.proveedor_id
@@ -106,7 +107,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
 
           {/* Estrellas */}
           <div>
-            <label className="block text-sm font-medium text-texto mb-2">
+            <label className="block font-medium text-texto mb-2">
               Calificación *
             </label>
             <div className="flex gap-1 text-yellow-400">
@@ -129,16 +130,15 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-texto mb-2">
+            <label className="block font-medium text-texto mb-2">
               Comentario *
             </label>
-            <textarea
+            <TextArea
               name="comentario"
               value={formData.comentario}
               onChange={handleChange}
               required
               rows={4}
-              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-texto placeholder-white/40 focus:outline-none focus:border-acento resize-none"
               placeholder="Escribe tu experiencia con este proveedor..."
               disabled={loading}
             />

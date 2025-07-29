@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { IconLoader2 } from "@tabler/icons-react";
 import classNames from "classnames";
 import { useRole } from "../../context/RoleContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const LinkButton = ({
   to,
@@ -18,7 +19,7 @@ const LinkButton = ({
   const { plan } = useRole();
   const esCard = variant === "card" || variant === "cardAdmin";
   const hasCustomPadding = /\bp[trblxy]?-\d+\b/.test(className);
-
+  const { currentTheme } = useTheme();
   const bloquearAcceso = isPremium && plan === "basico";
 
   const baseStyles = classNames(
@@ -36,9 +37,11 @@ const LinkButton = ({
   };
 
   const variants = {
-    primary: "bg-primario text-texto hover:bg-acento",
-    accent: "bg-acento text-texto hover:bg-primario",
-    secondary: "bg-white/10 text-texto hover:bg-white/20",
+    primary: "bg-primario text-white hover:bg-[#336ef0]",
+    accent: "bg-acento text-white hover:bg-[#fca75f]",
+    secondary: currentTheme === "light" 
+  ? "bg-secundario text-texto hover:bg-[#d2e4ff]" 
+  : "bg-secundario text-texto hover:bg-[#2a3955]",
     danger: "bg-red-600 text-texto hover:bg-red-700",
     navbar: "bg-transparent text-texto hover:bg-white/10",
     navbarIcon: "bg-transparent text-acento hover:scale-110 hover:text-texto",
@@ -46,8 +49,7 @@ const LinkButton = ({
     card: getCardVariant(),
     cardAdmin:
       "bg-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:bg-purple-800/40 text-texto min-h-[130px] flex flex-col justify-center",
-    curso:
-      "flex flex-col bg-white/10 rounded-lg overflow-hidden transition duration-300 hover:scale-105 hover:shadow-lg text-texto block",
+    curso: "flex flex-col bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition hover:scale-105 shadow-lg text-texto block",
   };
 
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";

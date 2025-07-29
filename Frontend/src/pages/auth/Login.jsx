@@ -14,12 +14,14 @@ import MainLinkButton from "../../components/ui/MainLinkButton";
 import Input from "../../components/ui/Input";
 
 import { useAlerta } from "../../context/AlertaContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const Login = () => {
   useEffect(() => {
     document.title = "Red-Fi | Login";
   }, []);
 
+  const { currentTheme } = useTheme();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -51,11 +53,17 @@ const Login = () => {
         {/* Título */}
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconLogin}>Iniciar sesión</MainH1>
-          <p className="mx-auto">Accede a tu cuenta para continuar.</p>
+          <p className="text-lg">Accede a tu cuenta para continuar.</p>
         </div>
 
         {/* Formulario */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+        <div className={`rounded-lg p-6
+        ${
+          currentTheme === "light"
+            ? "bg-secundario border border-secundario/50 shadow-lg"
+            : "bg-white/5 border border-white/10"
+        } `}
+        >
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Correo electrónico"
@@ -91,10 +99,10 @@ const Login = () => {
         {/* Divider */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/10"></div>
+            <div className="w-full border-t border-texto/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-texto/60">
+            <span className="px-2 bg-fondo text-texto">
               ¿No tienes cuenta?
             </span>
           </div>
@@ -107,7 +115,7 @@ const Login = () => {
         </MainLinkButton>
 
         <div className="text-center mt-6">
-          <p className="text-xs text-texto/50">
+          <p className="text-xs text-texto">
             Al iniciar sesión, aceptas nuestros términos y condiciones.
           </p>
         </div>

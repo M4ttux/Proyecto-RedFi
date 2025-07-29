@@ -92,22 +92,18 @@ const FiltrosZona = ({
 
       {/* Valoración exacta */}
       <div>
-        <p className="block text-texto mb-1">Valoración exacta</p>
+        <p className="block mb-1">Valoración exacta</p>
         <div className="flex items-center gap-3 flex-wrap">
-          <button
+          <MainButton
             type="button"
             onClick={() =>
               setFiltros((prev) => ({ ...prev, valoracionMin: 0 }))
             }
-            className={`px-3 py-1 rounded-lg text-sm font-medium border transition
-              ${
-                filtros.valoracionMin === 0
-                  ? "bg-acento text-texto border-acento"
-                  : "bg-white/5 text-texto/70 border-white/10 hover:bg-white/10"
-              }`}
+            variant="toggle"
+            active={filtros.valoracionMin === 0}
           >
             Todas
-          </button>
+          </MainButton>
 
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((v) => {

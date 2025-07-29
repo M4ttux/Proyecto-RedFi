@@ -7,11 +7,13 @@ import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedores/obtenerProveedor";
 import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
 import CargandoMapa from "../components/mapa/cargador/CargandoMapa";
+import { useTheme } from "../context/ThemeContext";
 
 const Mapa = () => {
   useEffect(() => {
     document.title = "Red-Fi | Mapa";
   }, []);
+  const { theme } = useTheme();
 
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [mapRefReal, setMapRefReal] = useState(null);
@@ -45,7 +47,7 @@ const Mapa = () => {
       const zonasSupabase = await getZonas();
       const proveedoresSupabase = await obtenerProveedores();
 
-      // 🔄 Obtener zonas usadas por proveedores (relación muchos a muchos)
+      // Obtener zonas usadas por proveedores (relación muchos a muchos)
       const zonasRelacionadas = new Set();
       proveedoresSupabase.forEach((prov) => {
         prov.ZonaProveedor?.forEach((rel) => {
@@ -57,7 +59,7 @@ const Mapa = () => {
         zonasRelacionadas.has(z.id)
       );
 
-      // 🔄 Obtener tecnologías únicas desde la relación muchos a muchos
+      // Obtener tecnologías únicas desde la relación muchos a muchos
       const tecnologiasSet = new Set();
       proveedoresSupabase.forEach((prov) => {
         prov.ProveedorTecnologia?.forEach((rel) => {
@@ -107,7 +109,12 @@ const Mapa = () => {
           cargandoMapa ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
-        <aside className="hidden lg:block lg:col-span-3 bg-[#222222] border border-white/10 h-full z-10 overflow-y-auto lg:p-4">
+        <aside
+          className={`hidden lg:block lg:col-span-3 h-full z-10 overflow-y-auto lg:p-4
+          ${theme === "light"
+            ? "bg-secundario border border-secundario/50 shadow-lg"
+            : "bg-fondo border border-white/10"}`}
+        >
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}
             mapRef={mapRefReal}

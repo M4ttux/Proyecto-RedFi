@@ -1,5 +1,6 @@
 import { IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 import MainH2 from "../ui/MainH2";
+import { useTheme } from "../../context/ThemeContext";
 
 const reseñas = [
   {
@@ -41,6 +42,7 @@ const reseñas = [
 ];
 
 const ReseñasDestacadas = () => {
+  const { currentTheme } = useTheme();
   return (
     <section className="py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto text-center">
@@ -50,7 +52,11 @@ const ReseñasDestacadas = () => {
           {reseñas.map((r, i) => (
             <div
               key={i}
-              className="flex flex-col items-center bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-lg text-center transition-transform transform hover:scale-110 duration-300"
+              className={`flex flex-col items-center backdrop-blur-md p-6 rounded-lg text-center transition-transform transform hover:scale-110 ${
+                currentTheme === "light"
+                  ? "bg-secundario border border-secundario/50 shadow-lg"
+                  : "bg-white/5 border border-white/10"
+              }`}
             >
               <img
                 src={`https://randomuser.me/api/portraits/${
@@ -61,7 +67,7 @@ const ReseñasDestacadas = () => {
               />
               <p className="text-acento font-bold mb-2">{r.nombre}</p>
 
-              <p className="text-texto italic mb-4">“{r.comentario}”</p>
+              <p className="text-texto mb-4">{r.comentario}</p>
 
               <div className="flex gap-1 text-yellow-400 justify-center">
                 {Array.from({ length: 5 }, (_, idx) =>

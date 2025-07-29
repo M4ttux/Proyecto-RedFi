@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { obtenerReseñasUsuario , actualizarReseña, eliminarReseña } from "../services/reseñas/usuarioReseña";
-import { IconCarambolaFilled, IconCarambola, IconCalendar, IconLoader2 } from "@tabler/icons-react";
+import {
+  obtenerReseñasUsuario,
+  actualizarReseña,
+  eliminarReseña,
+} from "../services/reseñas/usuarioReseña";
+import {
+  IconCarambolaFilled,
+  IconCarambola,
+  IconCalendar,
+  IconLoader2,
+  IconStars,
+  IconArrowLeft,
+} from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import ModalEliminar from "../components/modals/ModalEliminar";
 import ModalReseña from "../components/modals/mapa/ModalReseña";
 import MainH1 from "../components/ui/MainH1";
 import MainH3 from "../components/ui/MainH3";
 import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 import Table from "../components/ui/Table";
 
 import { useAlerta } from "../context/AlertaContext";
@@ -211,17 +223,17 @@ const Reseñas = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
-          <MainH1>Mis reseñas</MainH1>
-          <p className="text-texto/70 text-lg">
+          <MainH1 icon={IconStars}>Mis reseñas</MainH1>
+          <p className="text-lg">
             Administre todas las reseñas que ha publicado.
           </p>
         </div>
 
         {reseñas.length === 0 ? (
           <div className="text-center py-16">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-8">
+            <div className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-8">
               <MainH3>No tienes reseñas publicadas</MainH3>
-              <p className="text-texto/70 mb-4">
+              <p className="text-texto mb-4">
                 Comienza compartiendo tu experiencia con diferentes proveedores
                 de internet.
               </p>
@@ -237,7 +249,7 @@ const Reseñas = () => {
               {reseñas.map((reseña) => (
                 <div
                   key={reseña.id}
-                  className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-4"
+                  className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
@@ -246,7 +258,7 @@ const Reseñas = () => {
                           "Proveedor no disponible"}
                       </MainH3>
                       {reseña.proveedores?.tecnologia && (
-                        <p className="text-sm text-texto/60">
+                        <p className="text-sm text-texto">
                           {reseña.proveedores.tecnologia}
                         </p>
                       )}
@@ -277,11 +289,11 @@ const Reseñas = () => {
                     {renderEstrellas(reseña.estrellas)}
                   </div>
 
-                  <p className="text-sm text-texto mb-3 line-clamp-3">
+                  <p className="text-texto mb-3 line-clamp-3">
                     {reseña.comentario}
                   </p>
 
-                  <div className="flex items-center text-xs text-texto/60">
+                  <div className="flex items-center">
                     <IconCalendar size={14} className="mr-1" />
                     {formatearFecha(reseña.created_at)}
                   </div>
@@ -291,16 +303,14 @@ const Reseñas = () => {
 
             {/* Estadísticas */}
             <div className="mt-8 text-center">
-              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-lg p-6">
+              <div className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6">
                 <MainH3>Estadísticas de tus reseñas</MainH3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                   <div>
                     <div className="text-2xl font-bold text-acento">
                       {reseñas.length}
                     </div>
-                    <div className="text-sm text-texto/60">
-                      Total de reseñas
-                    </div>
+                    <div className="text-sm text-texto">Total de reseñas</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-acento">
@@ -309,7 +319,7 @@ const Reseñas = () => {
                         reseñas.length
                       ).toFixed(1)}
                     </div>
-                    <div className="text-sm text-texto/60">
+                    <div className="text-sm text-texto">
                       Calificación promedio
                     </div>
                   </div>
@@ -317,7 +327,7 @@ const Reseñas = () => {
                     <div className="text-2xl font-bold text-acento">
                       {new Set(reseñas.map((r) => r.proveedor_id)).size}
                     </div>
-                    <div className="text-sm text-texto/60">
+                    <div className="text-sm text-texto">
                       Proveedores evaluados
                     </div>
                   </div>
@@ -326,6 +336,14 @@ const Reseñas = () => {
             </div>
           </>
         )}
+
+        {/* 🔙 Botón volver al perfil */}
+        <div className="text-center">
+          <MainLinkButton to="/cuenta" variant="secondary">
+            <IconArrowLeft />
+            Volver al perfil
+          </MainLinkButton>
+        </div>
       </div>
 
       {/* Modal ver reseña */}
