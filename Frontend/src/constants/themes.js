@@ -16,9 +16,3 @@ export const THEMES = {
     acento: '#fb8531'
   },
 }
-
-// Iconos para cada tema (opcional, para el selector)
-export const THEME_ICONS = {
-  dark: '🌙',
-  light: '☀️',
-}

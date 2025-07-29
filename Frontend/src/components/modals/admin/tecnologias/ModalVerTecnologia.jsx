@@ -21,23 +21,14 @@ const ModalVerTecnologia = ({ tecnologia, onClose }) => {
 
         <div className="space-y-3">
           <div>
-            <p className="text-sm text-texto/60">Nombre</p>
-            <p className="text-lg font-medium">{tecnologia.tecnologia}</p>
+            <p className="font-bold">Nombre</p>
+            <p>{tecnologia.tecnologia}</p>
           </div>
 
           <div>
-            <p className="text-sm text-texto/60">Descripcion</p>
-            <p className="text-base">{tecnologia.descripcion || "-"}</p>
+            <p className="font-bold">Descripcion</p>
+            <p>{tecnologia.descripcion || "-"}</p>
           </div>
-
-          {tecnologia.created_at && (
-            <div>
-              <p className="text-sm text-texto/60">Fecha de creación</p>
-              <p className="text-base">
-                {new Date(tecnologia.created_at).toLocaleString()}
-              </p>
-            </div>
-          )}
         </div>
 
         <div className="mt-6 flex justify-end">

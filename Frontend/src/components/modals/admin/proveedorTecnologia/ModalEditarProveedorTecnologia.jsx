@@ -67,10 +67,10 @@ const ModalEditarProveedorTecnologia = ({
       </div>
 
       {/* Información del proveedor */}
-      <div className="bg-white/10 rounded-lg p-4 mb-6">
+      <div className="bg-texto/10 rounded-lg p-4 mb-6">
         <div className="flex items-center gap-2">
-          <span className="text-texto/80">Proveedor:</span>
-          <span className="text-texto">
+          <span className="font-bold">Proveedor:</span>
+          <span>
             {proveedor.proveedor}
           </span>
         </div>

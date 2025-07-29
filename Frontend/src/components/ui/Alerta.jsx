@@ -71,14 +71,14 @@ const Alerta = ({
           ? "fixed bottom-6 right-6 z-50 w-[calc(100%-3rem)] max-w-md"
           : "relative"
       }
-      bg-[#222222] px-4 py-3 pr-12 rounded-lg border transition-all duration-300 transform
+      bg-gray-800 px-4 py-3 pr-12 rounded-lg border transition-all duration-300 transform
       ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}
       ${estilos[tipo] || estilos.error}
     `}
     >
       <div className="flex items-center gap-3">
         <Icono size={20} />
-        <span className="flex-1">{mensaje}</span>
+        <span className="flex-1 font-bold">{mensaje}</span>
       </div>
       
       {/* Botón de cerrar - siempre visible */}
@@ -86,7 +86,7 @@ const Alerta = ({
         onClick={cerrarAlerta}
         type="button"
         variant="cross"
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 z-10"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 z-10 text-white"
       >
         <IconX size={18} />
       </MainButton>

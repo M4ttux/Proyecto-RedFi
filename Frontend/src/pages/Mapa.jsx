@@ -113,7 +113,7 @@ const Mapa = () => {
           className={`hidden lg:block lg:col-span-3 h-full z-10 overflow-y-auto lg:p-4
           ${theme === "light"
             ? "bg-secundario border border-secundario/50 shadow-lg"
-            : "bg-fondo border border-white/10"}`}
+            : "bg-fondo border border-texto/10"}`}
         >
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}
@@ -140,10 +140,10 @@ const Mapa = () => {
             setCargandoMapa={setCargandoMapa}
           />
 
-          <div className="lg:hidden absolute bottom-4 right-4 flex flex-col gap-3 z-30">
+          <div className="lg:hidden absolute bottom-6 right-6 flex flex-col gap-3 z-30">
             <button
               onClick={() => setMostrarFiltros(true)}
-              className="bg-primario p-3 rounded-full shadow-md hover:bg-acento transition"
+              className="bg-fondo p-4 rounded-full shadow-md hover:bg-acento transition border-2 border-acento"
               title="Filtros"
             >
               <IconFilter className="text-texto" />

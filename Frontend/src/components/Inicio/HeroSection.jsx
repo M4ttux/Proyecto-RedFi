@@ -23,7 +23,7 @@ const HeroSection = () => {
           </p>
           <MainLinkButton
             to="/mapa"
-            className="mt-8 hover:scale-110"
+            className="mt-8 hover:scale-105"
             icon={IconMap2}
             loading={false}
             variant="primary"

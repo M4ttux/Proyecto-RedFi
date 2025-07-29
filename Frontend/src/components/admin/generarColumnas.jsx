@@ -34,13 +34,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         renderCell: (row) => {
           const rol = row.rol;
           const colores = {
-            admin: "bg-emerald-400/10 text-emerald-400",
+            admin: "bg-acento text-texto",
           };
 
           return rol ? (
             <span
-              className={`text-xs font-medium px-2 py-1 rounded-lg ${
-                colores[rol] || "bg-white/10 text-texto"
+              className={`text-xs font-bold px-2 py-1 rounded-lg ${
+                colores[rol] || "bg-texto/10 text-texto"
               }`}
             >
               {rol.toUpperCase()}
@@ -56,13 +56,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         renderCell: (row) => {
           const plan = row.plan;
           const colores = {
-            premium: "bg-yellow-400/10 text-yellow-400",
+            premium: "bg-yellow-500 text-texto",
           };
 
           return plan ? (
             <span
-              className={`text-xs font-medium px-2 py-1 rounded-lg ${
-                colores[plan] || "bg-white/10 text-texto"
+              className={`text-xs font-bold px-2 py-1 rounded-lg ${
+                colores[plan] || "bg-texto/10 text-texto"
               }`}
             >
               {plan.toUpperCase()}
@@ -115,7 +115,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "COLOR",
         renderCell: (row) => (
           <div
-            className="w-5 h-5 rounded"
+            className="w-5 h-5 rounded outline-2 outline-offset-0 outline-texto/50"
             style={{ backgroundColor: row.color }}
           />
         ),
@@ -203,7 +203,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {row.tecnologias.map((tec, i) => (
                 <span
                   key={i}
-                  className="bg-white/10 text-texto text-sm px-2 py-0.5 rounded-lg"
+                  className="bg-texto/10 text-texto text-sm px-2 py-0.5 rounded-lg"
                 >
                   {tec}
                 </span>
@@ -233,7 +233,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {row.zonas.map((zona, i) => (
                 <span
                   key={i}
-                  className="bg-white/10 text-texto text-sm px-2 py-0.5 rounded-lg"
+                  className="bg-texto/10 text-texto text-sm px-2 py-0.5 rounded-lg"
                 >
                   {zona}
                 </span>

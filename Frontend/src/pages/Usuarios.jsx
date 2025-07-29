@@ -40,7 +40,7 @@ const Usuarios = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Info del usuario */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
+        <div className="bg-texto/5 border border-texto/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
           {/* Avatar */}
           <div className="flex justify-center mb-4">
             <Avatar fotoUrl={foto_url} nombre={nombre} size={50} />
@@ -50,19 +50,19 @@ const Usuarios = () => {
           <MainH1>{nombre}</MainH1>
 
           {/* Proveedor preferido */}
-          <p className="text-texto/70 mt-2">
+          <p className="text-texto mt-2">
             Proveedor preferido:{" "}
-            <span className="font-medium text-texto">
+            <span className="font-bold text-texto">
               {proveedor_preferido || "No especificado"}
             </span>
           </p>
 
           {/* Rol y Plan */}
           <div className="flex justify-center gap-3 mt-4">
-            <span className="bg-white/10 text-sm px-3 py-1 rounded-full border border-white/10">
+            <span className="bg-texto/10 text-sm px-3 py-1 rounded-full border border-texto/10">
               Rol: <span className="font-semibold text-acento">{rol}</span>
             </span>
-            <span className="bg-white/10 text-sm px-3 py-1 rounded-full border border-white/10">
+            <span className="bg-texto/10 text-sm px-3 py-1 rounded-full border border-texto/10">
               Plan: <span className="font-semibold text-acento">{plan}</span>
             </span>
           </div>
@@ -86,7 +86,7 @@ const Usuarios = () => {
                 return (
                   <li
                     key={r.id}
-                    className="bg-white/5 border border-white/10 p-5 rounded-xl flex flex-col gap-3"
+                    className="bg-texto/5 border border-texto/10 p-5 rounded-xl flex flex-col gap-3"
                   >
                     <div className="flex justify-between items-center">
                       <p className="font-medium text-texto">
@@ -104,9 +104,9 @@ const Usuarios = () => {
                       </div>
                     </div>
 
-                    <p className="text-sm text-texto/70">{fecha}</p>
+                    <p className="text-sm text-texto">{fecha}</p>
 
-                    <p className="text-texto/90 leading-relaxed">
+                    <p className="text-texto leading-relaxed">
                       “{r.comentario}”
                     </p>
                   </li>
@@ -114,7 +114,7 @@ const Usuarios = () => {
               })}
             </ul>
           ) : (
-            <p className="text-texto/60 text-center">
+            <p className="text-texto text-center">
               Este usuario aún no ha publicado reseñas.
             </p>
           )}

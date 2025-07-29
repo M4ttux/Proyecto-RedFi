@@ -87,7 +87,7 @@ const FileInput = ({
           <img
             src={internalPreview}
             alt="Imagen seleccionada"
-            className="max-h-25 border border-white/10 rounded-lg object-contain"
+            className="max-h-25 border border-texto/10 rounded-lg object-contain"
           />
         </div>
       )}

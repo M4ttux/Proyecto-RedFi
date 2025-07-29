@@ -37,10 +37,10 @@ const Proveedores = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Info principal del proveedor */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
+        <div className="bg-texto/5 border border-texto/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
           {/* Avatar / ícono */}
           <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 rounded-full bg-white/10 text-3xl flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-texto/10 text-3xl flex items-center justify-center">
               🏢
             </div>
           </div>
@@ -50,18 +50,18 @@ const Proveedores = () => {
 
           {/* Tecnologías */}
           {tecnologias.length > 0 ? (
-            <p className="text-texto/70 mt-2">
+            <p className="text-texto mt-2">
               Tecnologías:{" "}
               <span className="font-medium text-texto">
                 {tecnologias.join(", ")}
               </span>
             </p>
           ) : (
-            <p className="text-texto/60 mt-2">Tecnologías no especificadas</p>
+            <p className="text-texto mt-2">Tecnologías no especificadas</p>
           )}
 
           {/* Descripción breve */}
-          <p className="text-sm text-texto/70 mt-4 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm text-texto mt-4 max-w-xl mx-auto leading-relaxed">
             {proveedor.descripcion ||
               "Proveedor destacado en Corrientes por su cobertura, estabilidad y servicio al cliente. Red-Fi lo destaca por su presencia activa en múltiples zonas urbanas y rurales."}
           </p>
@@ -71,7 +71,7 @@ const Proveedores = () => {
             href={proveedor.sitio_web || "https://www.google.com"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center mt-6 px-5 py-2 bg-primario hover:bg-acento transition text-texto rounded-lg font-medium"
+            className="inline-flex items-center justify-center mt-6 px-5 py-2 bg-primario text-white hover:bg-[#336ef0] transition rounded-lg font-bold"
           >
             Visitar sitio oficial <IconExternalLink size={18} className="ml-2" />
           </a>
@@ -104,7 +104,7 @@ const Proveedores = () => {
                 return (
                   <div
                     key={r.id}
-                    className="bg-white/5 border border-white/10 p-5 rounded-xl flex flex-col gap-3"
+                    className="bg-texto/5 border border-texto/10 p-5 rounded-xl flex flex-col gap-3"
                   >
                     {/* Usuario + estrellas */}
                     <div className="flex items-center justify-between">
@@ -116,13 +116,13 @@ const Proveedores = () => {
                             className="w-10 h-10 rounded-full object-cover border border-acento"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-white/10 text-texto font-bold flex items-center justify-center text-sm border border-acento">
+                          <div className="w-10 h-10 rounded-full bg-texto/10 text-texto font-bold flex items-center justify-center text-sm border border-acento">
                             {iniciales}
                           </div>
                         )}
                         <div>
                           <p className="font-medium text-texto">{nombre}</p>
-                          <p className="text-xs text-texto/60">{fecha}</p>
+                          <p className="text-xs text-texto">{fecha}</p>
                         </div>
                       </div>
 
@@ -138,7 +138,7 @@ const Proveedores = () => {
                     </div>
 
                     {/* Comentario */}
-                    <p className="text-texto/90 leading-relaxed">
+                    <p className="text-texto leading-relaxed">
                       “{r.comentario}”
                     </p>
                   </div>
@@ -146,7 +146,7 @@ const Proveedores = () => {
               })}
             </div>
           ) : (
-            <p className="text-texto/60 text-center">
+            <p className="text-texto text-center">
               Este proveedor aún no tiene reseñas.
             </p>
           )}

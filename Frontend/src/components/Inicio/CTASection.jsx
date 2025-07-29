@@ -13,7 +13,7 @@ const CTASection = () => {
         </p>
         <MainLinkButton
           to="/mapa"
-          className="hover:scale-110"
+          className="hover:scale-105"
           icon={IconMap2}
           loading={false}
           variant="accent"

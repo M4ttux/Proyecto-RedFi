@@ -13,16 +13,16 @@ const Footer = () => {
         <p className="mb-3">© {year} <span className="font-semibold text-texto">Red-Fi</span>. Todos los derechos reservados.</p>
 
         <div className="flex justify-center gap-4 mt-2">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-110">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-105">
             <IconBrandFacebook size={18} />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-110">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-105">
             <IconBrandInstagram size={18} />
           </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-110">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-105">
             <IconBrandX size={18} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-110">
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-texto transition-transform transform hover:scale-105">
             <IconBrandLinkedin size={18} />
           </a>
         </div>

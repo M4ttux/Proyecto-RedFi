@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
-import { THEME_ICONS } from "../../constants/themes";
 import Logo from "../../icons/logotipo/imagotipo";
 import {
   IconX,
@@ -11,11 +10,8 @@ import {
   IconHome,
   IconMap,
   IconTool,
-  IconHeadset,
-  IconUser,
-  IconDots,
-  IconLogout,
-  IconPalette,
+  IconSun,
+  IconMoon,
 } from "@tabler/icons-react";
 import { obtenerNotificacionesBoletas } from "../../services/boletas/notificaciones";
 import MainButton from "../ui/MainButton";
@@ -44,12 +40,12 @@ export const useNotificaciones = () => {
 
 const NavbarV2 = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
-  const [mostrarMenu, setMostrarMenu] = useState(false);
   const [mostrarTemas, setMostrarTemas] = useState(false);
   const { usuario, logout } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
-  const { currentTheme, availableThemes, changeTheme, toggleTheme, themeData } = useTheme();
+  const { currentTheme, availableThemes, changeTheme, themeData } = useTheme();
   const location = useLocation();
+  const esVistaMapa = location.pathname === "/mapa";
 
   // Función para obtener el color principal del logo según el tema
   const getLogoColorPrincipal = () => {
@@ -57,6 +53,10 @@ const NavbarV2 = () => {
       return '#1f2a40'; // Secundario del tema dark
     }
     return themeData?.texto || "#FFFFFF";
+  };
+
+  const getThemeIcon = () => {
+    return currentTheme === 'light' ? IconSun : IconMoon;
   };
 
   const linkClase = "hover:text-acento transition px-4 py-2 font-bold";
@@ -102,7 +102,7 @@ const NavbarV2 = () => {
                 onClick={() => setMostrarTemas(!mostrarTemas)}
                 variant="secondary"
                 className="!bg-transparent hover:text-acento"
-                icon={IconPalette}
+                icon={getThemeIcon()}
                 iconSize={26}
                 title="Cambiar tema"
               />
@@ -116,12 +116,11 @@ const NavbarV2 = () => {
                         changeTheme(theme);
                         setMostrarTemas(false);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded hover:bg-white/10 transition flex items-center gap-2 ${
-                        currentTheme === theme ? "bg-primario" : ""
+                      className={`w-full text-left px-3 py-2 rounded hover:bg-secundario transition flex items-center gap-2 ${
+                        currentTheme === theme ? "bg-primario text-white" : ""
                       }`}
                     >
-                      <span>{THEME_ICONS[theme]}</span>
-                      <span className="capitalize">{theme}</span>
+                      <span className="capitalize font-bold">{theme}</span>
                     </button>
                   ))}
                 </div>
@@ -132,7 +131,7 @@ const NavbarV2 = () => {
               <>
                 <Link
                   to="/login"
-                  className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-110 transition font-bold cursor-pointer"
+                  className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-105 transition font-bold cursor-pointer"
                 >
                   Login
                 </Link>
@@ -160,17 +159,17 @@ const NavbarV2 = () => {
                     title="Notificaciones"
                   >
                     {notificaciones.length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-texto text-xs px-2 py-0.5 rounded-full shadow-md">
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full shadow-md">
                         {notificaciones.length}
                       </span>
                     )}
                   </MainButton>
 
                   {mostrarNotis && (
-                    <div className="absolute right-0 mt-2 w-72 bg-[#393939] text-texto rounded-lg shadow-lg z-50 p-4 space-y-2">
+                    <div className="absolute right-0 mt-2 w-72 bg-secundario text-texto rounded-lg shadow-lg z-50 p-4 space-y-2">
                       {notificaciones.length === 0 ? (
-                        <p className="text-gray-300 italic text-center">
-                          Sin notificaciones
+                        <p className="italic text-center">
+                          No hay notificaciones
                         </p>
                       ) : (
                         notificaciones.map((msg, i) => (
@@ -201,7 +200,7 @@ const NavbarV2 = () => {
                   onClick={async () => {
                     await logoutUser();
                   }}
-                  className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold"
+                  className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-105 transition font-bold"
                 >
                   Cerrar sesión
                 </button>
@@ -212,17 +211,19 @@ const NavbarV2 = () => {
       </nav>
 
       {/* Mobile Top Bar - Solo Logo */}
-      <nav className="lg:hidden bg-fondo px-4 py-4">
-        <div className="flex justify-center">
-          <Link to="/" className="flex items-center gap-2">
-            <Logo
-              className="h-8"
-              colorPrincipal={getLogoColorPrincipal()}
-              colorAcento={themeData?.acento || "#FB8531"}
-            />
-          </Link>
-        </div>
-      </nav>
+      {!esVistaMapa && (
+        <nav className="lg:hidden bg-fondo px-4 py-4">
+          <div className="flex justify-center">
+            <Link to="/" className="flex items-center gap-2">
+              <Logo
+                className="h-8"
+                colorPrincipal={getLogoColorPrincipal()}
+                colorAcento={themeData?.acento || "#FB8531"}
+              />
+            </Link>
+          </div>
+        </nav>
+      )}
     </>
   );
 };

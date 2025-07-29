@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IconArrowLeft, IconSettings } from "@tabler/icons-react"
 import { getPerfil } from "../services/perfil/getPerfil";
 import {
   obtenerPerfilesAdmin,
@@ -51,6 +52,7 @@ import ModalEditarProveedorZona from "../components/modals/admin/proveedorZona/M
 import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
 import MainButton from "../components/ui/MainButton";
+import MainLinkButton from "../components/ui/MainLinkButton";
 
 import TablaSelector from "../components/admin/TablaSelector";
 import LoaderAdmin from "../components/admin/LoaderAdmin";
@@ -276,7 +278,7 @@ const Administrador = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
-          <MainH1>Panel de Administración</MainH1>
+          <MainH1 icon={IconSettings}>Panel de Administración</MainH1>
           <p className="text-lg">
             Visualizá los datos de todas las tablas del sistema.
           </p>
@@ -316,6 +318,14 @@ const Administrador = () => {
         </div>
 
         <Table columns={columnas} data={datosActuales} />
+
+        {/* 🔙 Botón volver al perfil */}
+      <div className="text-center">
+        <MainLinkButton to="/cuenta" variant="secondary">
+          <IconArrowLeft />
+          Volver al perfil
+        </MainLinkButton>
+      </div>
 
         {/* Perfiles */}
         {/* Ver */}

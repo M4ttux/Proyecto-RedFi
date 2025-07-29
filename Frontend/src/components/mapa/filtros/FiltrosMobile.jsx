@@ -23,7 +23,7 @@ const FiltrosMobile = ({
   };
 
   return (
-    <div className="absolute bottom-0 left-0 w-full bg-[#222222] rounded-t-lg z-40 overflow-y-auto max-h-[90vh] p-4">
+    <div className="absolute bottom-0 left-0 w-full bg-secundario rounded-t-lg z-40 overflow-y-auto max-h-[90vh] p-4">
       <PanelControlMapa
         boundsCorrientes={boundsCorrientes}
         mapRef={mapRef}

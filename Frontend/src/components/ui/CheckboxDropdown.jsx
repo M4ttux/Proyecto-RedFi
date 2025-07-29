@@ -59,7 +59,7 @@ const CheckboxDropdown = ({
   return (
     <div className="relative w-full" ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-medium text-texto mb-1">
+        <label className="block font-bold text-texto mb-1">
           {label}
         </label>
       )}
@@ -68,8 +68,8 @@ const CheckboxDropdown = ({
         disabled={disabled}
         onClick={() => setOpen(!open)}
         className={classNames(
-          "w-full px-3 py-2 bg-white/5 text-texto rounded-lg border text-left",
-          "border-white/20 focus:outline-none focus:ring-1 focus:ring-acento",
+          "w-full px-3 py-2 bg-texto/5 text-texto rounded-lg border text-left",
+          "border-texto/10 focus:outline-none focus:ring-1 focus:ring-acento",
           disabled && "opacity-60 cursor-not-allowed",
           "flex items-center justify-between min-w-0" // Agregado min-w-0
         )}
@@ -81,7 +81,7 @@ const CheckboxDropdown = ({
       </button>
 
       {open && (
-        <div className="absolute mt-1 w-full max-h-60 overflow-y-auto bg-secundario border border-white/20 rounded-lg shadow-lg z-60 p-2 space-y-1">
+        <div className="absolute mt-1 w-full max-h-60 overflow-y-auto bg-secundario border border-secundario/50 rounded-lg shadow-lg z-60 p-2 space-y-1">
           {options.map((opt) => {
             const val = String(getOptionValue(opt));
             const label = getOptionLabel(opt);
@@ -90,13 +90,13 @@ const CheckboxDropdown = ({
             return (
               <label
                 key={val}
-                className="flex items-center gap-2 p-2 rounded hover:bg-white/10 cursor-pointer transition"
+                className="flex items-center gap-2 p-2 rounded hover:bg-texto/10 cursor-pointer transition"
               >
                 <input
                   type="checkbox"
                   checked={checked}
                   onChange={() => toggleOption(val)}
-                  className="accent-acento flex-shrink-0"
+                  className="accent-acento flex-shrink-0 rounded"
                 />
                 <span className="text-sm">{label}</span>
               </label>

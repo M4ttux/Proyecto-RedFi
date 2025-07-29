@@ -85,11 +85,11 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-110 transition font-bold cursor-pointer"
+                className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-105 transition font-bold cursor-pointer"
               >
                 Login
               </Link>
-              {/* <Link to="/register" className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-110 transition font-bold cursor-pointer">Registro</Link> */}
+              {/* <Link to="/register" className="bg-acento px-3 py-1 rounded hover:bg-acento/80 hover:scale-105 transition font-bold cursor-pointer">Registro</Link> */}
             </>
           ) : (
             <>
@@ -156,7 +156,7 @@ const Navbar = () => {
                   await logoutUser();
                   setMenuAbierto(false);
                 }}
-                className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold"
+                className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-105 transition font-bold"
               >
                 Cerrar sesión
               </button>
@@ -234,7 +234,7 @@ const Navbar = () => {
                     await logoutUser();
                     setMenuAbierto(false);
                   }}
-                  className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-110 transition font-bold"
+                  className="bg-red-400 px-3 py-1 rounded hover:bg-red-600 hover:scale-105 transition font-bold"
                 >
                   Cerrar sesión
                 </button>

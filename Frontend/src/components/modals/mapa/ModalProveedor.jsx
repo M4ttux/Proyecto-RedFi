@@ -45,7 +45,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
             className="rounded-full"
           />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center text-3xl">
+          <div className="w-20 h-20 rounded-full bg-texto/10 flex items-center justify-center text-3xl">
             🏢
           </div>
         )}
@@ -65,7 +65,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
             )
           )}
         </div>
-        <span className="mt-1 text-sm text-texto/80">
+        <span className="mt-1 text-sm text-texto">
           {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseña
           {cantidadResenas !== 1 && "s"}
         </span>
@@ -77,20 +77,20 @@ const ModalProveedor = ({ proveedor, onClose }) => {
           tecnologias.map((tec, index) => (
             <span
               key={index}
-              className="bg-white/10 border border-white/10 text-xs px-3 py-1 rounded-full"
+              className="bg-texto/10 border border-texto/10 text-xs px-3 py-1 rounded-full"
             >
               {tec}
             </span>
           ))
         ) : (
-          <span className="text-sm text-texto/60">
+          <span className="text-sm text-texto">
             Sin tecnologías asociadas
           </span>
         )}
       </div>
 
       {/* Descripción */}
-      <p className="text-sm text-texto/80 text-center mb-6 px-2">
+      <p className="text-sm text-texto text-center mb-6 px-2">
         {proveedor.descripcion || "Este proveedor aún no tiene descripción."}
       </p>
 

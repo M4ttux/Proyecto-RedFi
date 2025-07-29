@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { conceptosRed } from "../../data/conceptosValidos";
 import MainH1 from "../../components/ui/MainH1";
+import MainH3 from "../../components/ui/MainH3";
 import { IconSearch } from "@tabler/icons-react";
 
 const Glosario = () => {
@@ -99,9 +100,7 @@ const Glosario = () => {
       {/* Resultado mostrado */}
       {resultado && (
         <div className="mt-6 bg-gray-800 p-5 rounded shadow text-left">
-          <h3 className="text-xl font-semibold text-texto">
-            {resultado.title}
-          </h3>
+          <MainH3 className="text-center justify-center">{resultado.title}</MainH3>
           <p className="mt-3 text-gray-300">{resultado.extract}</p>
           {resultado.thumbnail && (
             <img

@@ -7,11 +7,11 @@ import classNames from "classnames";
 
 const badgeEstilo = (tipo) =>
   classNames(
-    "px-2 py-1 text-xs rounded-full font-medium inline-block",
+    "px-3 py-1 rounded-lg font-bold inline-block",
     {
-      admin: "bg-red-600 text-texto",
+      admin: "bg-acento text-texto",
       user: "bg-blue-600 text-texto",
-      premium: "bg-emerald-500 text-texto",
+      premium: "bg-yellow-500 text-texto",
       basico: "bg-gray-500 text-texto",
     }[tipo] || "bg-white/20 text-texto"
   );
@@ -43,19 +43,19 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
       </div>
 
       {/* Detalles */}
-      <div className="bg-white/5 rounded-xl px-4 py-4 space-y-4 text-texto border border-white/10">
+      <div className="bg-secundario rounded-lg px-4 py-4 space-y-4 text-texto border border-secundario/50">
         <div>
-          <p className="text-sm text-texto/60">Proveedor preferido</p>
-          <p className="text-base font-medium">{proveedor_preferido || "—"}</p>
+          <p className="font-bold">Proveedor preferido</p>
+          <p>{proveedor_preferido || "—"}</p>
         </div>
 
         <div className="flex flex-row gap-4">
           <div className="flex-1">
-            <p className="text-texto/60">Rol</p>
+            <p className="text-texto font-bold">Rol</p>
             <span className={badgeEstilo(rol)}>{rol}</span>
           </div>
           <div className="flex-1">
-            <p className="text-texto/60">Plan</p>
+            <p className="text-texto font-bold">Plan</p>
             <span className={badgeEstilo(plan)}>{plan}</span>
           </div>
         </div>

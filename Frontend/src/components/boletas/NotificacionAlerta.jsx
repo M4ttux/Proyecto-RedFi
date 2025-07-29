@@ -34,7 +34,7 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
         }}
         type="button"
         variant="cross"
-        title="Cerrara"
+        title="Cerrar"
       />
     </div>
   );

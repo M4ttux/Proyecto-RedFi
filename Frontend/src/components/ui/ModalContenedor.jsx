@@ -8,7 +8,7 @@ const ModalContenedor = ({ children, onClose = null, maxWidth = "max-w-xl" }) =>
       }}
     >
       <div
-        className={`bg-secundario border border-white/10 rounded-lg w-full ${maxWidth} max-h-[90vh] overflow-visible p-6 text-texto relative`}
+        className={`bg-secundario border border-texto/10 rounded-lg w-full ${maxWidth} max-h-[90vh] overflow-visible p-6 text-texto relative`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

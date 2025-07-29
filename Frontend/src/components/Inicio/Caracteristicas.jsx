@@ -50,7 +50,7 @@ const features = [
 const Caracteristicas = () => {
   const { currentTheme } = useTheme();
   return (
-    <section className="py-16 px-4 sm:px-6 bg-fondo">
+    <section className="py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto text-center space-y-12">
         <div className="space-y-5">
           <MainH2>
@@ -68,7 +68,7 @@ const Caracteristicas = () => {
           {features.map((f, i) => (
             <div
               key={i}
-              className={`w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0 p-6 rounded-lg transition-transform transform hover:scale-110 backdrop-blur-md ${
+              className={`w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0 p-6 rounded-lg transition-transform transform hover:scale-105 backdrop-blur-md ${
                 currentTheme === "light"
                   ? "bg-secundario border border-secundario/50 shadow-lg"
                   : "bg-white/5 border border-white/10"
@@ -77,7 +77,7 @@ const Caracteristicas = () => {
               <div className="flex justify-center mb-4 sm:mb-5 text-acento">
                 <div>{f.icono}</div>
               </div>
-              <MainH3 className="text-acento">{f.titulo}</MainH3>
+              <MainH3 className="text-acento text-center justify-center">{f.titulo}</MainH3>
               <p className="text-texto leading-relaxed">{f.descripcion}</p>
             </div>
           ))}

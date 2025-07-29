@@ -15,28 +15,10 @@ import ModalContenedor from "../../../ui/ModalContenedor";
 const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   const [form, setForm] = useState({ ...proveedor });
   const [loading, setLoading] = useState(false);
-  /* const [tecnologias, setTecnologias] = useState([]);
-  const [zonas, setZonas] = useState([]); */
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const { mostrarError, mostrarExito } = useAlerta();
-
-  /* useEffect(() => {
-    const cargarOpciones = async () => {
-      try {
-        const [tec, zon] = await Promise.all([
-          obtenerTecnologiasDisponibles(),
-          obtenerZonasDisponibles(),
-        ]);
-        setTecnologias(tec);
-        setZonas(zon);
-      } catch (error) {
-        mostrarError("Error al cargar tecnologías o zonas disponibles");
-      }
-    };
-    cargarOpciones();
-  }, [mostrarError]); */
 
   useEffect(() => {
     const prepararPreviewDesdeURL = async (url) => {
@@ -54,15 +36,6 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
     };
 
     if (proveedor) {
-      /* setForm({
-        ...proveedor,
-        tecnologias:
-          proveedor.ProveedorTecnologia?.map((t) =>
-            String(t.tecnologias?.id)
-          ) || [],
-        zonas: proveedor.ZonaProveedor?.map((z) => String(z.zonas?.id)) || [],
-        eliminarLogo: false,
-      }); */
       setForm({
         nombre: proveedor.nombre || "",
         sitio_web: proveedor.sitio_web || "",
@@ -103,19 +76,10 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
       }
 
       const { eliminarLogo, ...restoForm } = form;
-
-      /* await actualizarProveedor(proveedor.id, {
-        ...restoForm,
-        logotipo: logoUrl,
-        tecnologias: form.tecnologias.filter((id) => !!id),
-        zonas: form.zonas.filter((id) => !!id),
-      }); */
       await actualizarProveedor(proveedor.id, {
         ...restoForm,
         logotipo: logoUrl,
       });
-
-
       mostrarExito("Proveedor actualizado correctamente");
       onActualizar?.();
       onClose();

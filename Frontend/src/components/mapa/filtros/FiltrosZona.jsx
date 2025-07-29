@@ -1,6 +1,5 @@
 import { IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import Select from "../../ui/Select";
-import MainH3 from "../../ui/MainH3";
 import MainButton from "../../ui/MainButton";
 
 const FiltrosZona = ({
@@ -122,7 +121,7 @@ const FiltrosZona = ({
                 >
                   <StarIcon
                     size={24}
-                    className={`transition hover:scale-110 ${
+                    className={`transition hover:scale-105 ${
                       isActive ? "text-yellow-400" : "text-texto/30"
                     }`}
                   />

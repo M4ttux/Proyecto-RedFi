@@ -92,7 +92,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             <label className="block font-medium text-texto mb-2">
               Proveedor
             </label>
-            <div className="w-full px-3 py-2 bg-texto/5 border border-texto/50 rounded-lg text-texto">
+            <div className="w-full px-3 py-2 bg-texto/5 border border-texto/10 rounded-lg text-texto">
               {(() => {
                 const proveedor = proveedores.find(
                   (p) => p.id === formData.proveedor_id
@@ -116,7 +116,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
                   key={star}
                   type="button"
                   onClick={() => handleStarClick(star)}
-                  className="text-2xl hover:scale-110 transition"
+                  className="text-2xl hover:scale-105 transition"
                   disabled={loading}
                 >
                   {star <= formData.estrellas ? (

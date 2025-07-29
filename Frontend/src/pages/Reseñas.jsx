@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import {
   obtenerReseñasUsuario,
   actualizarReseña,
@@ -34,6 +35,7 @@ const Reseñas = () => {
   const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     document.title = "Red-Fi | Mis Reseñas";
@@ -232,7 +234,9 @@ const Reseñas = () => {
         {reseñas.length === 0 ? (
           <div className="text-center py-16">
             <div className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-8">
-              <MainH3>No tienes reseñas publicadas</MainH3>
+              <MainH3 className="text-center justify-center">
+                No tienes reseñas publicadas
+              </MainH3>
               <p className="text-texto mb-4">
                 Comienza compartiendo tu experiencia con diferentes proveedores
                 de internet.
@@ -253,7 +257,7 @@ const Reseñas = () => {
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <MainH3>
+                      <MainH3 className="text-center justify-center">
                         {reseña.proveedores?.nombre ||
                           "Proveedor no disponible"}
                       </MainH3>
@@ -303,8 +307,16 @@ const Reseñas = () => {
 
             {/* Estadísticas */}
             <div className="mt-8 text-center">
-              <div className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6">
-                <MainH3>Estadísticas de tus reseñas</MainH3>
+              <div
+                className={`backdrop-blur-md rounded-lg p-6 ${
+                  currentTheme === "light"
+                    ? "bg-secundario border border-secundario/50 shadow-lg"
+                    : "bg-white/5 border border-white/10"
+                }`}
+              >
+                <MainH3 className="text-center justify-center">
+                  Estadísticas de tus reseñas
+                </MainH3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                   <div>
                     <div className="text-2xl font-bold text-acento">

@@ -181,7 +181,7 @@ const WifiScanner = () => {
 
       {Object.keys(resultados).length > 0 && (
         <div className="mt-6 text-left">
-          <MainH3>Resultados:</MainH3>
+          <MainH3 className="text-center justify-center">Resultados:</MainH3>
           <ul className="space-y-2">
             {Object.entries(resultados).map(([zona, datos]) => (
               <li

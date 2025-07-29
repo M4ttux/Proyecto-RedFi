@@ -22,7 +22,7 @@ const DetectorProveedor = () => {
                 : "bg-white/5 border border-white/10"
             }`}
           >
-      <MainH3>Tu conexión actual</MainH3>
+      <MainH3 className="text-center justify-center">Tu conexión actual</MainH3>
 
       {error && <p className="text-red-600">{error}</p>}
 

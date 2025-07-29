@@ -25,31 +25,39 @@ const LinkButton = ({
   const baseStyles = classNames(
     esCard
       ? "block text-center rounded-lg transition relative overflow-hidden"
-      : "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none duration-300",
+      : "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none",
     !hasCustomPadding && (esCard ? "p-4" : "px-6 py-3")
   );
 
   const getCardVariant = () => {
-    if (variant !== "card") return null;
+  if (variant !== "card") return null;
+  
+  if (currentTheme === "light") {
     return isPremium
-      ? "bg-white/5 backdrop-blur-md border border-white/10 hover:bg-acento/30 text-texto min-h-[130px] flex flex-col justify-center"
-      : "bg-white/5 backdrop-blur-md border border-white/10 hover:bg-acento/30 text-texto min-h-[130px] flex flex-col justify-center";
-  };
+      ? "bg-secundario border border-secundario hover:bg-[#2a3955]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center"
+      : "bg-secundario border border-secundario hover:bg-[#2a3955]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center";
+  } else {
+    return isPremium
+      ? "bg-primario/20 backdrop-blur-md border border-white/10 hover:bg-[#336ef0]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center"
+      : "bg-primario/20 backdrop-blur-md border border-white/10 hover:bg-[#336ef0]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center";
+  }
+};
 
   const variants = {
     primary: "bg-primario text-white hover:bg-[#336ef0]",
     accent: "bg-acento text-white hover:bg-[#fca75f]",
     secondary: currentTheme === "light" 
-  ? "bg-secundario text-texto hover:bg-[#d2e4ff]" 
-  : "bg-secundario text-texto hover:bg-[#2a3955]",
+  ? "bg-secundario text-texto hover:bg-[#d2e4ff]"  // Light
+  : "bg-secundario text-texto hover:bg-[#2a3955]", // Dark
     danger: "bg-red-600 text-texto hover:bg-red-700",
     navbar: "bg-transparent text-texto hover:bg-white/10",
-    navbarIcon: "bg-transparent text-acento hover:scale-110 hover:text-texto",
+    navbarIcon: "bg-transparent text-acento hover:scale-105 hover:text-texto",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     card: getCardVariant(),
-    cardAdmin:
-      "bg-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:bg-purple-800/40 text-texto min-h-[130px] flex flex-col justify-center",
-    curso: "flex flex-col bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition hover:scale-105 shadow-lg text-texto block",
+    cardAdmin: currentTheme === "light"
+    ? "bg-acento/20 backdrop-blur-md border border-acento hover:bg-[#fca75f]/60 text-texto min-h-[130px] flex flex-col justify-center shadow-lg"
+    : "bg-acento/20 backdrop-blur-md border border-white/10 hover:bg-[#fca75f]/30 text-texto min-h-[130px] flex flex-col justify-center shadow-lg",
+    curso: "flex flex-col bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full",
   };
 
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";

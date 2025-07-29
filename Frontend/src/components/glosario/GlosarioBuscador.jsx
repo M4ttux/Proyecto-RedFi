@@ -155,7 +155,7 @@ const GlosarioBuscador = () => {
             <img
               src={resultado.thumbnail.source}
               alt={resultado.title}
-              className="mt-4 mx-auto rounded-lg bg-white w-full max-w-[300px] h-auto"
+              className="mt-4 mx-auto rounded-lg bg-white w-full max-w-[300px] h-auto p-4"
             />
           )}
 

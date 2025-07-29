@@ -85,7 +85,7 @@ const ModalReseña = ({ reseña, onClose }) => {
         )}
       </div>
       {/* Comentario */}
-      <p className="text-texto bg-texto/5 border border-texto/50 rounded-lg px-4 py-4 text-center leading-relaxed">
+      <p className="text-texto bg-texto/5 border border-texto/10 rounded-lg px-4 py-4 text-center leading-relaxed">
         {reseña.comentario}
       </p>
     </ModalContenedor>
