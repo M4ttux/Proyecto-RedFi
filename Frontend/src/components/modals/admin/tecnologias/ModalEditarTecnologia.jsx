@@ -69,7 +69,11 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             name="tecnologia"
-            label="Nombre de la tecnología *"
+            label={
+              <>
+                Nombre de la tecnología <span className="text-red-600">*</span>
+              </>
+            }
             value={formData.tecnologia}
             onChange={handleChange}
             placeholder="Ej. Fibra óptica"
@@ -106,6 +110,12 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
               {loading ? "Guardando..." : "Guardar cambios"}
             </MainButton>
           </div>
+          <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
+        </div>
         </form>
       </ModalContenedor>
   );
