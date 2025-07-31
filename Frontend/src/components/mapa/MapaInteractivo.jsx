@@ -11,6 +11,7 @@ import { useSeleccionUbicacion } from "../../hooks/useSeleccionUbicacion";
 import ModalProveedor from "../modals/mapa/ModalProveedor";
 import ModalReseña from "../modals/mapa/ModalReseña";
 import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
+import ModalZonaMultiProveedor from "../modals/mapa/ModalZonaMultiProveedor";
 
 import MainButton from "../ui/MainButton";
 
@@ -21,9 +22,21 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
   const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
     useState(false);
+  
+  // Estado para modal de zona con múltiples proveedores
+  const [modalZonaMultiAbierto, setModalZonaMultiAbierto] = useState(false);
+  const [proveedoresZona, setProveedoresZona] = useState([]);
+  const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
 
   const boundsCorrientes = BOUNDS_CORRIENTES;
   const navigate = useNavigate();
+
+  // Función para manejar click en zona con múltiples proveedores
+  const handleZonaMultiProveedorClick = (proveedores, zona) => {
+    setProveedoresZona(proveedores);
+    setZonaSeleccionada(zona);
+    setModalZonaMultiAbierto(true);
+  };
 
   const {
     mapContainer,
@@ -34,7 +47,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     reseñaActiva,
     setReseñaActiva,
     cargarReseñasIniciales,
-  } = useMapaInteractivo(filtros, boundsCorrientes);
+  } = useMapaInteractivo(filtros, boundsCorrientes, handleZonaMultiProveedorClick);
 
   useEffect(() => {
     if (!cargandoMapa && mapRef?.current && onMapRefReady) {
@@ -167,6 +180,12 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
         boundsCorrientes={boundsCorrientes}
         coordenadasSeleccionadas={coordenadasSeleccionadas}
         onSeleccionarUbicacion={handleSeleccionarUbicacion}
+      />
+      <ModalZonaMultiProveedor
+        isOpen={modalZonaMultiAbierto}
+        onClose={() => setModalZonaMultiAbierto(false)}
+        proveedores={proveedoresZona}
+        zonaInfo={zonaSeleccionada}
       />
     </div>
   );

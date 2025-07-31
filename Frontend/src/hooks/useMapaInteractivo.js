@@ -41,7 +41,7 @@ const esperarCapaCargada = (map, layerId, timeout = 5000) => {
   });
 };
 
-export const useMapaInteractivo = (filtros, boundsCorrientes) => {
+export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveedorClick = null) => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
   const navControlRef = useRef(null);
@@ -68,7 +68,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
   const [reseñaActiva, setReseñaActiva] = useState(null);
 
   const manejarClickGlobal = useCallback((e) => {
-    if (!mapRef.current || window.modoSeleccionActivo) return;
+    if (!mapRef.current || window.modoSeleccionActivo || window.zonaMultipleHandled) return;
 
     const features = mapRef.current.queryRenderedFeatures(e.point);
     const reseñaFeature = features.find((f) => f.layer.id === "reseñas-layer");
@@ -188,7 +188,8 @@ export const useMapaInteractivo = (filtros, boundsCorrientes) => {
         proveedoresRef.current = await cargarProveedoresEnMapa(
           map,
           filtrosNormalizados,
-          null
+          setProveedorActivo,
+          onZonaMultiProveedorClick
         );
         await cargarReseñasIniciales(filtrosNormalizados);
 

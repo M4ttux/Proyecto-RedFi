@@ -18,7 +18,8 @@ const calcularCentroide = (geom) => {
 export const cargarProveedoresEnMapa = async (
   map,
   filtros,
-  setProveedorActivo
+  setProveedorActivo,
+  onZonaMultiProveedorClick = null
 ) => {
   const proveedores = await obtenerProveedores();
   const proveedoresConEstado = proveedores.map((p) => ({
@@ -146,10 +147,75 @@ export const cargarProveedoresEnMapa = async (
         clearTimeout(popupTimeout);
         popup.remove();
       });
+
+      // Solo manejar hover, el click lo manejaremos después globalmente
     }
   }
 
-
+  // Handler global de click después de procesar todas las zonas
+  const handleGlobalClick = (e) => {
+    if (window.modoSeleccionActivo) return;
+    
+    // Buscar todas las features en el punto clickeado
+    const features = map.queryRenderedFeatures(e.point);
+    
+    // Si hay reseñas, dejar que useMapaInteractivo las maneje
+    const reseñaFeature = features.find(f => f.layer.id === "reseñas-layer");
+    if (reseñaFeature) return;
+    
+    // Filtrar solo las features de proveedores visibles
+    const proveedorFeatures = features.filter(feature => {
+      const layerId = feature.layer.id;
+      return layerId.startsWith('fill-') && feature.layer.layout?.visibility !== 'none';
+    });
+    
+    if (proveedorFeatures.length === 0) return;
+    
+    // Obtener información de las zonas clickeadas
+    const zonasClickeadas = new Set();
+    const proveedoresEnClick = [];
+    
+    proveedorFeatures.forEach(feature => {
+      const layerId = feature.layer.id;
+      const match = layerId.match(/^fill-(\d+)-(\d+)$/);
+      if (match) {
+        const [, proveedorId, zonaId] = match;
+        zonasClickeadas.add(parseInt(zonaId));
+        
+        // Buscar el proveedor correspondiente
+        const proveedor = proveedoresConEstado.find(p => p.id === parseInt(proveedorId));
+        if (proveedor && proveedor.visible) {
+          proveedoresEnClick.push({ proveedor, zonaId: parseInt(zonaId) });
+        }
+      }
+    });
+    
+    // Si hay múltiples proveedores en la misma zona, abrir modal múltiple
+    for (const zonaId of zonasClickeadas) {
+      const zonaInfo = zonasConProveedores.get(zonaId);
+      
+      if (zonaInfo?.proveedores?.length > 1 && onZonaMultiProveedorClick) {
+        // Marcar globalmente que se manejó como zona múltiple
+        window.zonaMultipleHandled = true;
+        setTimeout(() => {
+          window.zonaMultipleHandled = false;
+        }, 100);
+        
+        onZonaMultiProveedorClick(zonaInfo.proveedores, zonaInfo.zona);
+        return; // Salir temprano para evitar abrir modal individual
+      }
+    }
+    
+    // Si solo hay un proveedor, abrir modal individual
+    if (proveedoresEnClick.length === 1) {
+      setProveedorActivo(proveedoresEnClick[0].proveedor);
+    }
+  };
+  
+  // Remover event listener anterior si existe
+  map.off('click', handleGlobalClick);
+  // Agregar el nuevo event listener
+  map.on('click', handleGlobalClick);
 
   return proveedoresConEstado;
 };

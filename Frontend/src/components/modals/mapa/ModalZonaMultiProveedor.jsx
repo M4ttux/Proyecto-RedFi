@@ -1,0 +1,156 @@
+import { useNavigate } from "react-router-dom";
+import { IconX, IconStar, IconStarFilled, IconArrowRight } from "@tabler/icons-react";
+import MainButton from "../../ui/MainButton";
+import MainH2 from "../../ui/MainH2";
+import ModalContenedor from "../../ui/ModalContenedor";
+
+const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo = null }) => {
+  const navigate = useNavigate();
+
+  if (!isOpen) return null;
+
+  const handleNavigateToProvider = (proveedorId) => {
+    onClose();
+    navigate(`/proveedores/${proveedorId}`);
+  };
+
+  const renderStars = (promedio) => {
+    const stars = [];
+    const promedioRedondeado = Math.round(promedio || 0);
+    
+    for (let i = 1; i <= 5; i++) {
+      if (i <= promedioRedondeado) {
+        stars.push(<IconStarFilled key={i} size={16} className="text-yellow-500" />);
+      } else {
+        stars.push(<IconStar key={i} size={16} className="text-gray-300" />);
+      }
+    }
+    
+    return (
+      <div className="flex items-center gap-1">
+        <div className="flex">
+          {stars}
+        </div>
+        <span className="text-sm text-texto/70 ml-1">
+          ({promedio ? promedio.toFixed(1) : '0.0'})
+        </span>
+      </div>
+    );
+  };
+
+  const calcularPromedioCalificacion = (reseñas) => {
+    if (!reseñas || reseñas.length === 0) return 0;
+    const suma = reseñas.reduce((acc, reseña) => acc + reseña.estrellas, 0);
+    return suma / reseñas.length;
+  };
+
+  return (
+    <ModalContenedor onClose={onClose}>
+      <div className="flex justify-between mb-6">
+        <MainH2 className="mb-0">Proveedores en esta zona</MainH2>
+        <MainButton
+          onClick={onClose}
+          type="button"
+          variant="cross"
+          title="Cerrar modal"
+          className="px-0"
+        >
+          <IconX size={24} />
+        </MainButton>
+      </div>
+
+      {zonaInfo && (
+        <div className="mb-4 p-3 bg-texto/5 rounded-lg border border-texto/15">
+          <p className="text-sm text-texto/70">
+            <strong>Zona:</strong> {zonaInfo.departamento || 'Zona seleccionada'}
+          </p>
+          <p className="text-sm text-texto/70 mt-1">
+            Se encontraron <strong>{proveedores.length} proveedores</strong> en esta área
+          </p>
+        </div>
+      )}
+
+      <div className="space-y-4 max-h-96 overflow-y-auto">
+        {proveedores.map((proveedor) => {
+          const promedioCalificacion = calcularPromedioCalificacion(proveedor.reseñas);
+          
+          return (
+            <div
+              key={proveedor.id}
+              className="flex items-center gap-4 p-4 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10 transition-colors"
+            >
+              {/* Logo del proveedor */}
+              <div className="flex-shrink-0">
+                {proveedor.logotipo ? (
+                  <img
+                    src={proveedor.logotipo}
+                    alt={`Logo de ${proveedor.nombre}`}
+                    className="w-12 h-12 object-contain rounded-lg bg-white p-1"
+                  />
+                ) : (
+                  <div
+                    className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg"
+                    style={{ backgroundColor: proveedor.color || '#888888' }}
+                  >
+                    {proveedor.nombre?.charAt(0)?.toUpperCase() || 'P'}
+                  </div>
+                )}
+              </div>
+
+              {/* Información del proveedor */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-texto text-lg mb-1 truncate">
+                  {proveedor.nombre}
+                </h3>
+                
+                {/* Calificación */}
+                <div className="mb-2">
+                  {renderStars(promedioCalificacion)}
+                </div>
+
+                {/* Tecnologías */}
+                {proveedor.ProveedorTecnologia && proveedor.ProveedorTecnologia.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {proveedor.ProveedorTecnologia.slice(0, 3).map((tech, index) => (
+                      <span
+                        key={index}
+                        className="text-xs px-2 py-1 bg-acento/20 text-acento rounded-full"
+                      >
+                        {tech.tecnologias?.tecnologia}
+                      </span>
+                    ))}
+                    {proveedor.ProveedorTecnologia.length > 3 && (
+                      <span className="text-xs px-2 py-1 bg-texto/10 text-texto/70 rounded-full">
+                        +{proveedor.ProveedorTecnologia.length - 3} más
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Botón para ver más */}
+              <div className="flex-shrink-0">
+                <MainButton
+                  onClick={() => handleNavigateToProvider(proveedor.id)}
+                  variant="primary"
+                  className="flex items-center gap-2"
+                >
+                  Ver más
+                  <IconArrowRight size={16} />
+                </MainButton>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-6 text-center">
+        <p className="text-sm text-texto/50 italic">
+          Haz clic en "Ver más" para obtener información detallada de cada proveedor
+        </p>
+      </div>
+    </ModalContenedor>
+  );
+};
+
+export default ModalZonaMultiProveedor;
