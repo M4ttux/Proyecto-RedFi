@@ -22,12 +22,21 @@ const FileInput = ({
   // Detectar si es PDF
   const esPDF = (url) => {
     if (!url) return false;
-    return url.toLowerCase().includes('.pdf') || url.toLowerCase().includes('application/pdf');
+    // Detectar URLs de blob (archivos temporales) o URLs que contienen .pdf
+    return url.toLowerCase().includes('.pdf') || 
+           url.toLowerCase().includes('application/pdf') ||
+           (url.startsWith('blob:') && value?.type === 'application/pdf');
   };
 
   // Obtener nombre del archivo
   const obtenerNombreArchivo = (url) => {
     if (!url) return 'archivo.pdf';
+    
+    // Si es un blob URL y tenemos el archivo original, usar su nombre
+    if (url.startsWith('blob:') && value?.name) {
+      return value.name;
+    }
+    
     const nombreCompleto = url.split('/').pop() || url.split('\\').pop();
     return nombreCompleto || 'archivo.pdf';
   };
@@ -60,12 +69,20 @@ const FileInput = ({
     onChange?.(file);
 
     if (!sinPreview) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setInternalPreview(reader.result);
-        setPreviewUrl?.(reader.result);
-      };
-      reader.readAsDataURL(file);
+      // Para PDFs, crear URL temporal en lugar de base64
+      if (file.type === 'application/pdf') {
+        const objectUrl = URL.createObjectURL(file);
+        setInternalPreview(objectUrl);
+        setPreviewUrl?.(objectUrl);
+      } else {
+        // Para imágenes, usar base64 como antes
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInternalPreview(reader.result);
+          setPreviewUrl?.(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -73,6 +90,12 @@ const FileInput = ({
     if (inputRef.current) {
       inputRef.current.value = "";
     }
+    
+    // Limpiar URL de objeto si existe
+    if (internalPreview && internalPreview.startsWith('blob:')) {
+      URL.revokeObjectURL(internalPreview);
+    }
+    
     onChange?.(null);
     setInternalPreview(null);
     if (!sinPreview) setPreviewUrl?.(null);

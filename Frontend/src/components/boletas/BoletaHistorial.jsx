@@ -145,17 +145,22 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   return (
     <div className="max-w-7xl mx-auto relative">
-      <MainH2 className="text-center justify-center">Historial de boletas</MainH2>
-
       {cargando ? (
-        <div className="flex justify-center items-center text-texto gap-2 mt-10">
-          <IconLoader2 className="animate-spin" size={24} />
-          Cargando boletas...
+        <div className="flex flex-row items-center justify-center gap-3 text-texto">
+          <IconLoader2 size={42} className="animate-spin text-texto" />
+          <p className="text-lg sm:text-xl font-bold tracking-wide">
+            Cargando boletas...
+          </p>
         </div>
       ) : boletas.length === 0 ? (
-        <p className="text-texto text-center mt-6">
-          No cargaste boletas aún.
-        </p>
+        <div className="text-center py-16">
+          <MainH3 className="text-center justify-center">
+            No tienes boletas cargadas.
+          </MainH3>
+          <p className="text-texto mb-4">
+            Comienza cargando tus boletas para poder verlas aquí.
+          </p>
+        </div>
       ) : (
         <>
           {/* Tabla en escritorio */}
@@ -201,19 +206,19 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                 </p>
                 <p className="mb-1 flex items-center gap-2 text-texto">
                   <strong className="text-texto">Carga:</strong>
-                  <span className="text-green-700">
+                  <span className="text-green-700 font-semibold">
                     {formatearFechaConTooltip(b.fecha_carga)}
                   </span>
                 </p>
                 <p className="mb-1 flex items-center gap-2 text-texto">
                   <strong className="text-texto">Vencimiento:</strong>
-                  <span className="text-red-600">
+                  <span className="text-red-600 font-semibold">
                     {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
                   </span>
                 </p>
                 <p className="mb-1 flex items-center gap-2 text-texto">
                   <strong className="text-texto">Promo hasta:</strong>
-                  <span className="text-yellow-600">
+                  <span className="text-yellow-600 font-semibold">
                     {formatearFechaConTooltip(b.promo_hasta + "T12:00:00")}
                   </span>
                 </p>

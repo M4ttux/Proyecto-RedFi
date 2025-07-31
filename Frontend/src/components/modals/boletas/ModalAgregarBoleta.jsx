@@ -1,24 +1,22 @@
 import { useState } from "react";
-import MainButton from "../ui/MainButton";
-import MainH2 from "../ui/MainH2";
-import Input from "../ui/Input";
-import Select from "../ui/Select";
-import FileInput from "../ui/FileInput";
+import MainButton from "../../ui/MainButton";
+import MainH2 from "../../ui/MainH2";
+import Input from "../../ui/Input";
+import Select from "../../ui/Select";
+import FileInput from "../../ui/FileInput";
+import ModalContenedor from "../../ui/ModalContenedor";
 import {
   IconCalendar,
   IconCurrencyDollar,
   IconWifi,
+  IconX,
 } from "@tabler/icons-react";
-import { obtenerUsuarioActual } from "../../services/boletas/auth";
-import { subirImagenBoleta } from "../../services/boletas/upload";
-import { guardarBoleta } from "../../services/boletas/crud";
-import { useAlerta } from "../../context/AlertaContext";
+import { obtenerUsuarioActual } from "../../../services/boletas/auth";
+import { subirImagenBoleta } from "../../../services/boletas/upload";
+import { guardarBoleta } from "../../../services/boletas/crud";
+import { useAlerta } from "../../../context/AlertaContext";
 
-const BoletaForm = ({
-  onBoletaAgregada,
-  onActualizarNotificaciones,
-  setVista,
-}) => {
+const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificaciones }) => {
   const [form, setForm] = useState({
     mes: "",
     anio: "",
@@ -138,7 +136,7 @@ const BoletaForm = ({
       onActualizarNotificaciones?.();
       window.dispatchEvent(new Event("nueva-boleta"));
 
-      setVista?.("historial");
+      onClose();
     } catch (error) {
       console.error(error);
       mostrarError("Error al guardar la boleta.");
@@ -148,12 +146,20 @@ const BoletaForm = ({
   };
 
   return (
-    <div>
-      <MainH2 className="text-center justify-center">Carga de boletas</MainH2>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 bg-secundario border border-secundario/50 shadow-lg p-6 rounded-lg"
-      >
+    <ModalContenedor onClose={onClose}>
+      <div className="flex justify-between mb-6">
+        <MainH2 className="mb-0">Agregar Nueva Boleta</MainH2>
+        <MainButton
+          onClick={onClose}
+          type="button"
+          variant="cross"
+          aria-label="Cerrar"
+        >
+          <IconX />
+        </MainButton>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Select de mes */}
           <Select
@@ -253,12 +259,7 @@ const BoletaForm = ({
           />
 
           <Input
-            label={
-              <>
-                Fin de promoción{" "}
-                <span className="text-texto text-xs ml-1">(opcional)</span>
-              </>
-            }
+            label="Fin de promoción"
             name="promoHasta"
             type="date"
             value={form.promoHasta}
@@ -266,15 +267,11 @@ const BoletaForm = ({
             icon={IconCalendar}
           />
         </div>
+        
         <div className="flex justify-center text-center">
           <FileInput
             id="archivo"
-            label={
-              <>
-                Archivo de la boleta{" "}
-                <span className="text-texto text-xs ml-1">(opcional)</span>
-              </>
-            }
+            label="Archivo de la boleta"
             value={archivo}
             onChange={setArchivo}
             previewUrl={previewUrl}
@@ -283,7 +280,14 @@ const BoletaForm = ({
           />
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cancelar
+          </MainButton>
           <MainButton
             type="submit"
             variant="primary"
@@ -293,6 +297,7 @@ const BoletaForm = ({
             {loading ? "Guardando..." : "Guardar boleta"}
           </MainButton>
         </div>
+        
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
             Los campos marcados con <span className="text-red-600">*</span> son
@@ -300,8 +305,8 @@ const BoletaForm = ({
           </p>
         </div>
       </form>
-    </div>
+    </ModalContenedor>
   );
 };
 
-export default BoletaForm;
+export default ModalAgregarBoleta;
