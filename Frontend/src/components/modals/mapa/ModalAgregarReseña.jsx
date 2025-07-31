@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { obtenerProveedores } from "../../../services/proveedores/obtenerProveedor";
-import { IconX, IconMapPin, IconLoader2 } from "@tabler/icons-react";
+import { IconX, IconMapPin, IconLoader2, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Select from "../../ui/Select";
@@ -29,8 +29,6 @@ const ModalAgregarReseña = ({
   const [errorUbicacion, setErrorUbicacion] = useState(false);
   const [errorComentario, setErrorComentario] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const estrellasOptions = [1, 2, 3, 4, 5];
 
   useEffect(() => {
     const cargarProveedores = async () => {
@@ -81,6 +79,10 @@ const ModalAgregarReseña = ({
       setUbicacionTexto(`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`);
       console.error("Error al convertir coordenadas:", error);
     }
+  };
+
+  const handleStarClick = (rating) => {
+    setEstrellas(rating);
   };
 
   const handleSubmit = async (e) => {
@@ -259,18 +261,29 @@ const ModalAgregarReseña = ({
           </MainButton>
         </div>
 
-        <Select
-          label={
-            <>
-              Estrellas <span className="text-red-600">*</span>
-            </>
-          }
-          value={estrellas}
-          onChange={setEstrellas}
-          options={estrellasOptions}
-          getOptionValue={(e) => e}
-          getOptionLabel={(e) => `${e}★`}
-        />
+        {/* Estrellas */}
+        <div>
+          <label className="block font-medium text-texto mb-2">
+            Calificación <span className="text-red-600">*</span>
+          </label>
+          <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit ">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => handleStarClick(star)}
+                className="text-2xl hover:scale-105 transition p-1"
+                disabled={loading}
+              >
+                {star <= estrellas ? (
+                  <IconCarambolaFilled size={24} />
+                ) : (
+                  <IconCarambola size={24} />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <Textarea
           label={
