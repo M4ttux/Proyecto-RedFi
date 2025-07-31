@@ -139,7 +139,11 @@ const EditarPerfil = () => {
             </div>
 
             <Input
-              label="Nombre *"
+              label={
+                <>
+                  Nombre <span className="text-red-600">*</span>
+                </>
+              }
               name="nombre"
               value={form.nombre}
               onChange={handleChange}
@@ -149,7 +153,7 @@ const EditarPerfil = () => {
             />
 
             <Select
-              label="Proveedor preferido"
+              label="Proveedor actual"
               name="proveedor_preferido"
               value={form.proveedor_preferido}
               onChange={(value) =>
@@ -165,15 +169,17 @@ const EditarPerfil = () => {
             />
 
             <div className="flex gap-3">
-              <MainLinkButton
-                type="button"
-                to="/cuenta"
-                disabled={loading}
-                className="flex-1 px-4 py-2"
-                variant="secondary"
-              >
-                Volver
-              </MainLinkButton>
+              <div className="flex-1">
+                <MainLinkButton
+                  type="button"
+                  to="/cuenta"
+                  disabled={loading}
+                  variant="secondary"
+                  className="w-full"
+                >
+                  Volver
+                </MainLinkButton>
+              </div>
               <MainButton
                 type="submit"
                 variant="primary"
@@ -183,6 +189,13 @@ const EditarPerfil = () => {
               >
                 {loading ? "Guardando..." : "Guardar"}
               </MainButton>
+            </div>
+
+            <div className="text-center mt-6">
+              <p className="text-sm text-texto/50 italic">
+                Los campos marcados con <span className="text-red-600">*</span>{" "}
+                son obligatorios.
+              </p>
             </div>
           </form>
         </div>

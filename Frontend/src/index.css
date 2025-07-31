@@ -79,9 +79,10 @@ select option {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset !important;
-  -webkit-text-fill-color: #e5e7eb !important; /* Tailwind's text-texto/80 */
-  caret-color: #ffffff;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  -webkit-text-fill-color: var(--color-texto) !important;
+  caret-color: var(--color-texto);
   transition: background-color 5000s ease-in-out 0s;
 }
 

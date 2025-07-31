@@ -110,18 +110,15 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* <FileInput
-          label="Foto de perfil"
-          onFileChange={handleFileChange}
-          previewUrl={formData.preview}
-          onRemove={handleEliminarFoto}
-          disabled={loading}
-        /> */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
               name="nombre"
-              label="Nombre *"
+              label={
+                <>
+                  Nombre <span className="text-red-600">*</span>
+                </>
+              }
               value={formData.nombre}
               onChange={handleChange}
               required
@@ -142,7 +139,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
           <div className="flex-1">
             <Select
               name="rol"
-              label="Rol *"
+              label="Rol"
               value={formData.rol}
               onChange={(value) => handleSelectChange("rol", value)}
               options={opcionesRol}
@@ -154,7 +151,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
           <div className="flex-1">
             <Select
               name="plan"
-              label="Plan *"
+              label="Plan"
               value={formData.plan}
               onChange={(value) => handleSelectChange("plan", value)}
               options={opcionesPlan}
@@ -184,6 +181,12 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
           >
             {loading ? "Guardando..." : "Guardar"}
           </MainButton>
+        </div>
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </ModalContenedor>

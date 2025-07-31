@@ -10,6 +10,7 @@ import {
   IconCalendar,
   IconCurrencyDollar,
   IconWifi,
+  IconFileTypePdf,
 } from "@tabler/icons-react";
 import { actualizarBoletaConImagen } from "../../../services/boletas/crud";
 import { useAlerta } from "../../../context/AlertaContext";
@@ -189,7 +190,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           type="date"
           value={form.promoHasta}
           onChange={handleChange}
-          label="Fin de promoción (opcional)"
+          label="Fin de promoción"
           className="md:col-span-2"
           icon={IconCalendar}
         />
@@ -198,7 +199,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
         <div className="md:col-span-2 text-center">
           <FileInput
             id="archivoNuevo"
-            label="Nueva imagen (opcional)"
+            label="Nuevo archivo"
+            accept="image/*, application/pdf"
             value={archivoNuevo}
             onChange={(file) => {
               setArchivoNuevo(file);

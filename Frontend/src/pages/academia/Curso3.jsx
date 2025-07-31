@@ -95,7 +95,7 @@ const Curso3 = () => {
           </MainH1>
         </div>
 
-        {/* 🎥 VIDEO */}
+        {/* VIDEO */}
         <div className="aspect-video">
           <iframe
             className="w-full h-full rounded-lg"
@@ -105,7 +105,7 @@ const Curso3 = () => {
           ></iframe>
         </div>
 
-        {/* 📄 TEXTO INFORMATIVO */}
+        {/* TEXTO INFORMATIVO */}
         <div className="text-texto space-y-4">
           <p>
             Elegir un proveedor de internet no debería basarse solo en la
@@ -132,7 +132,7 @@ const Curso3 = () => {
           </p>
         </div>
 
-        {/* ✅ QUIZ */}
+        {/* QUIZ */}
         <div className="bg-texto/5 p-6 rounded-lg border border-texto/15">
           <MainH2 icon={IconBrain} className="text-center justify-center">
             Quiz final
@@ -205,7 +205,7 @@ const Curso3 = () => {
           </form>
         </div>
 
-        {/* 🔙 Botón volver a Academy */}
+        {/* Botón volver a Academy */}
         <div className="text-center">
           <MainLinkButton to="/academy" variant="secondary">
             <IconArrowLeft />

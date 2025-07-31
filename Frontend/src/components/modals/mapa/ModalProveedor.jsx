@@ -10,7 +10,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
   const navigate = useNavigate();
   if (!proveedor) return null;
 
-  // ⭐ Cálculo de reseñas (cantidad y promedio)
+  // Cálculo de reseñas (cantidad y promedio)
   const reseñas = proveedor.reseñas || [];
   const cantidadResenas = proveedor.reseñas?.length || 0;
   const promedioEstrellas = proveedor.reseñas?.length
@@ -18,7 +18,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       proveedor.reseñas.length
     : 0;
 
-  // ✅ Obtener tecnologías desde relación
+  // Obtener tecnologías desde relación
   const tecnologias =
     proveedor.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
     [];
@@ -55,7 +55,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       <MainH2 className="text-center justify-center">{proveedor.nombre}</MainH2>
 
       {/* Estrellas */}
-      <div className="flex flex-col items-center mb-4">
+      <div className="flex items-center justify-center gap-3 mb-4 w-full">
         <div className="flex gap-1 text-yellow-600 text-2xl bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
           {Array.from({ length: 5 }).map((_, i) =>
             i < Math.round(promedioEstrellas) ? (
@@ -65,7 +65,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
             )
           )}
         </div>
-        <span className="mt-1 text-sm text-texto">
+        <span className="text-sm text-texto font-medium">
           {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseña
           {cantidadResenas !== 1 && "s"}
         </span>
@@ -90,7 +90,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       </div>
 
       {/* Descripción */}
-      <p className="text-sm text-texto text-center mb-6 px-2">
+      <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-center leading-relaxed mb-6">
         {proveedor.descripcion || "Este proveedor aún no tiene descripción."}
       </p>
 

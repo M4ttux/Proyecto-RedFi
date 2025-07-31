@@ -158,12 +158,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
         </p>
       ) : (
         <>
-          {/* 🖥️ Tabla en escritorio */}
+          {/* Tabla en escritorio */}
           <div className="hidden md:block">
             <Table columns={columnas} data={boletasOrdenadas} />
           </div>
 
-          {/* 📱 Tarjetas en mobile */}
+          {/* Tarjetas en mobile */}
           <div className="md:hidden space-y-4 mt-6">
             {boletasOrdenadas.map((b) => (
               <div

@@ -6,15 +6,15 @@ import MainLinkButton from "../ui/MainLinkButton";
 const HeroSection = () => {
   return (
     <section className="relative flex items-center justify-center px-4 sm:px-6 py-28 bg-secundario">
-      {/* 🔳 Patrón decorativo en el fondo */}
+      {/* Patrón decorativo en el fondo */}
       <div
         className="absolute inset-0 bg-[url('/imgs/diagonal-lines.svg')] opacity-10 pointer-events-none z-0"
         aria-hidden="true"
       />
 
-      {/* 🧾 Contenido principal */}
+      {/* Contenido principal */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-12">
-        {/* 📄 Texto a la izquierda */}
+        {/* Texto a la izquierda */}
         <div className="flex-1 text-center lg:text-left">
           <MainH1 variant="noflex" className="font-bold text-5xl lg:text-6xl leading-tight text-center lg:text-left">Encuentre el <span className="text-acento">mejor internet</span> para su zona.</MainH1>
           <p className="mt-6 text-lg">
@@ -32,7 +32,7 @@ const HeroSection = () => {
           </MainLinkButton>
         </div>
 
-        {/* 🗺 Imagen del mapa */}
+        {/* Imagen del mapa */}
         <div className="flex-1 hidden md:flex justify-end ">
           <img
             src="/imgs/hero-placeholder2.png"

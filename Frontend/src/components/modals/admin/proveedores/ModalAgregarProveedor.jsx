@@ -18,34 +18,14 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
     sitio_web: "",
     descripcion: "",
     color: "#000000",
-    /* tecnologias: [],
-    zonas: [], */
   });
 
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  /* const [tecnologias, setTecnologias] = useState([]);
-  const [zonas, setZonas] = useState([]); */
 
   const { mostrarError, mostrarExito } = useAlerta();
-
-  /* useEffect(() => {
-    const cargarOpciones = async () => {
-      try {
-        const [tec, zon] = await Promise.all([
-          obtenerTecnologiasDisponibles(),
-          obtenerZonasDisponibles(),
-        ]);
-        setTecnologias(tec);
-        setZonas(zon);
-      } catch (error) {
-        mostrarError("Error al cargar tecnologías o zonas disponibles");
-      }
-    };
-    cargarOpciones();
-  }, [mostrarError]); */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,13 +49,6 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         logoUrl = await subirLogoProveedor(form.nombre, logoFile);
         console.log("✅ Logo subido con URL:", logoUrl);
       }
-
-      /* const nuevoProveedor = await crearProveedor({
-        ...form,
-        tecnologias: form.tecnologias.filter((id) => !!id),
-        zonas: form.zonas.filter((id) => !!id),
-        logotipo: logoUrl,
-      }); */
 
       const nuevoProveedor = await crearProveedor({
         ...form,
@@ -116,7 +89,11 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
-              label="Nombre *"
+              label={
+                <>
+                  Nombre del proveedor <span className="text-red-600">*</span>
+                </>
+              }
               name="nombre"
               value={form.nombre}
               onChange={handleChange}
@@ -162,7 +139,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         </div>
 
         <div>
-          <label className="block text-texto mb-1">Color *</label>
+          <label className="block text-texto mb-1">Color <span className="text-red-600">*</span></label>
           <div className="flex items-center gap-4">
             <Input
               type="color"
@@ -199,27 +176,6 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           </div>
         </div>
 
-        {/* <div className="flex flex-col gap-4 sm:flex-row">
-          <CheckboxDropdown
-            label="Tecnologías"
-            options={tecnologias}
-            value={form.tecnologias}
-            onChange={(val) => handleSelectChange("tecnologias", val)}
-            getOptionLabel={(opt) => opt.tecnologia}
-            getOptionValue={(opt) => String(opt.id)}
-            disabled={loading}
-          />
-          <CheckboxDropdown
-            label="Zonas"
-            options={zonas}
-            value={form.zonas}
-            onChange={(val) => handleSelectChange("zonas", val)}
-            getOptionLabel={(opt) => opt.departamento}
-            getOptionValue={(opt) => String(opt.id)}
-            disabled={loading}
-          />
-        </div> */}
-
         <div className="flex gap-3 pt-4">
           <MainButton
             type="button"
@@ -239,6 +195,13 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           >
             {loading ? "Creando..." : "Crear proveedor"}
           </MainButton>
+        </div>
+
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </ModalContenedor>

@@ -166,7 +166,11 @@ const ModalAgregarReseña = ({
 
       <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
         <Select
-          label="Proveedor *"
+          label={
+            <>
+              Proveedor <span className="text-red-600">*</span>
+            </>
+          }
           value={proveedorSeleccionado}
           onChange={(id) => {
             setProveedorSeleccionado(id);
@@ -194,7 +198,9 @@ const ModalAgregarReseña = ({
 
         {/* Ubicación */}
         <div className="space-y-2">
-          <label className="block font-medium text-texto">Ubicación *</label>
+          <label className="block font-medium text-texto">
+            Ubicación <span className="text-red-600">*</span>
+          </label>
           {coordenadasSeleccionadas ? (
             <div className="bg-green-600/20 border border-green-700/50 rounded-lg p-3">
               <div className="flex items-center gap-2 text-green-700 font-bold mb-1">
@@ -254,7 +260,11 @@ const ModalAgregarReseña = ({
         </div>
 
         <Select
-          label="Estrellas *"
+          label={
+            <>
+              Estrellas <span className="text-red-600">*</span>
+            </>
+          }
           value={estrellas}
           onChange={setEstrellas}
           options={estrellasOptions}
@@ -263,7 +273,11 @@ const ModalAgregarReseña = ({
         />
 
         <Textarea
-          label="Comentario *"
+          label={
+            <>
+              Comentario <span className="text-red-600">*</span>
+            </>
+          }
           name="comentario"
           value={comentario}
           onChange={(e) => {
@@ -292,6 +306,12 @@ const ModalAgregarReseña = ({
           >
             {loading ? "Publicando..." : "Publicar Reseña"}
           </MainButton>
+        </div>
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </ModalContenedor>

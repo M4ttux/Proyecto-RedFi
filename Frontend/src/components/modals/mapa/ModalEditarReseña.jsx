@@ -108,7 +108,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           {/* Estrellas */}
           <div>
             <label className="block font-medium text-texto mb-2">
-              Calificación *
+              Calificación
             </label>
             <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -130,10 +130,12 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           </div>
 
           <div>
-            <label className="block font-medium text-texto mb-2">
-              Comentario *
-            </label>
             <TextArea
+              label={
+              <>
+                Comentario <span className="text-red-600">*</span>
+              </>
+            }
               name="comentario"
               value={formData.comentario}
               onChange={handleChange}
@@ -163,6 +165,12 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           >
             {loading ? "Guardando..." : "Guardar"}
           </MainButton>
+        </div>
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </ModalContenedor>

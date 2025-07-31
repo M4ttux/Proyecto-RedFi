@@ -107,7 +107,11 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
-              label="Nombre *"
+              label={
+                <>
+                  Nombre del proveedor <span className="text-red-600">*</span>
+                </>
+              }
               name="nombre"
               value={form.nombre || ""}
               onChange={handleChange}
@@ -169,7 +173,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           </div>
         </div>
         <div>
-          <label className="block text-texto mb-1">Color *</label>
+          <label className="block text-texto mb-1">Color <span className="text-red-600">*</span></label>
           <div className="flex items-center gap-4">
             {/* Color picker visual */}
             <Input
@@ -214,31 +218,6 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           </div>
         </div>
 
-        {/* <div className="flex flex-col gap-4 sm:flex-row">
-          <div className="flex-1">
-            <CheckboxDropdown
-              label="Tecnologías"
-              options={tecnologias}
-              value={form.tecnologias || []}
-              onChange={(val) => handleSelectChange("tecnologias", val)}
-              getOptionLabel={(opt) => opt.tecnologia}
-              getOptionValue={(opt) => String(opt.id)}
-              disabled={loading}
-            />
-          </div>
-          <div className="flex-1">
-            <CheckboxDropdown
-              label="Zonas"
-              options={zonas}
-              value={form.zonas || []}
-              onChange={(val) => handleSelectChange("zonas", val)}
-              getOptionLabel={(opt) => opt.departamento}
-              getOptionValue={(opt) => String(opt.id)}
-              disabled={loading}
-            />
-          </div>
-        </div> */}
-
         <div className="flex gap-3 pt-4">
           <MainButton
             type="button"
@@ -258,6 +237,12 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           >
             {loading ? "Guardando..." : "Guardar cambios"}
           </MainButton>
+        </div>
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </ModalContenedor>

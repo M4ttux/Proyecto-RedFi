@@ -59,7 +59,7 @@ const CheckboxDropdown = ({
   return (
     <div className="relative w-full" ref={dropdownRef}>
       {label && (
-        <label className="block font-bold text-texto mb-1">
+        <label className="block text-texto mb-1">
           {label}
         </label>
       )}

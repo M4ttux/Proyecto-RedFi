@@ -4,7 +4,11 @@ import MainH2 from "../ui/MainH2";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import FileInput from "../ui/FileInput";
-import { IconCalendar, IconCurrencyDollar, IconWifi } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconCurrencyDollar,
+  IconWifi,
+} from "@tabler/icons-react";
 import { obtenerUsuarioActual } from "../../services/boletas/auth";
 import { subirImagenBoleta } from "../../services/boletas/upload";
 import { guardarBoleta } from "../../services/boletas/crud";
@@ -153,7 +157,11 @@ const BoletaForm = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Select de mes */}
           <Select
-            label="Mes *"
+            label={
+              <>
+                Mes <span className="text-red-600">*</span>
+              </>
+            }
             name="mes"
             value={form.mes}
             onChange={handleSelectChange("mes")}
@@ -164,7 +172,11 @@ const BoletaForm = ({
           />
 
           <Input
-            label="Año *"
+            label={
+              <>
+                Año <span className="text-red-600">*</span>
+              </>
+            }
             name="anio"
             type="number"
             value={form.anio}
@@ -177,7 +189,11 @@ const BoletaForm = ({
           />
 
           <Input
-            label="Monto *"
+            label={
+              <>
+                Monto <span className="text-red-600">*</span>
+              </>
+            }
             name="monto"
             type="number"
             value={form.monto}
@@ -191,7 +207,11 @@ const BoletaForm = ({
 
           {/* Select de proveedor */}
           <Select
-            label="Proveedor *"
+            label={
+              <>
+                Proveedor <span className="text-red-600">*</span>
+              </>
+            }
             name="proveedor"
             value={form.proveedor}
             onChange={handleSelectChange("proveedor")}
@@ -205,7 +225,11 @@ const BoletaForm = ({
           {/* Solo se muestra si elige "Otro" */}
           {form.proveedor === "Otro" && (
             <Input
-              label="Nombre del proveedor"
+              label={
+                <>
+                  Nombre del proveedor <span className="text-red-600">*</span>
+                </>
+              }
               name="proveedorOtro"
               value={form.proveedorOtro}
               onChange={handleChange}
@@ -215,7 +239,11 @@ const BoletaForm = ({
           )}
 
           <Input
-            label="Fecha de vencimiento *"
+            label={
+              <>
+                Fecha de vencimiento <span className="text-red-600">*</span>
+              </>
+            }
             name="vencimiento"
             type="date"
             value={form.vencimiento}
@@ -225,7 +253,12 @@ const BoletaForm = ({
           />
 
           <Input
-            label="Fin de promoción (opcional)"
+            label={
+              <>
+                Fin de promoción{" "}
+                <span className="text-texto text-xs ml-1">(opcional)</span>
+              </>
+            }
             name="promoHasta"
             type="date"
             value={form.promoHasta}
@@ -236,12 +269,17 @@ const BoletaForm = ({
         <div className="flex justify-center text-center">
           <FileInput
             id="archivo"
-            label="Imagen de la boleta (opcional)"
+            label={
+              <>
+                Archivo de la boleta{" "}
+                <span className="text-texto text-xs ml-1">(opcional)</span>
+              </>
+            }
             value={archivo}
             onChange={setArchivo}
             previewUrl={previewUrl}
             setPreviewUrl={setPreviewUrl}
-            accept="image/*"
+            accept="image/*, application/pdf"
           />
         </div>
 
@@ -254,6 +292,12 @@ const BoletaForm = ({
           >
             {loading ? "Guardando..." : "Guardar boleta"}
           </MainButton>
+        </div>
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/50 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </div>

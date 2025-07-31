@@ -60,7 +60,7 @@ const Boletas = () => {
         <BoletaHistorial boletas={boletas} recargarBoletas={cargarBoletas} />
       )}
 
-      {/* 🔙 Botón volver al perfil */}
+      {/* Botón volver al perfil */}
       <div className="text-center">
         <MainLinkButton to="/cuenta" variant="secondary">
           <IconArrowLeft />

@@ -93,7 +93,7 @@ const Curso1 = () => {
           <MainH1 icon={IconWifi}>Mejora tu Wi-Fi en casa</MainH1>
         </div>
 
-        {/* 🎥 VIDEO */}
+        {/* VIDEO */}
         <div className="aspect-video">
           <iframe
             className="w-full h-full rounded-lg"
@@ -103,7 +103,7 @@ const Curso1 = () => {
           ></iframe>
         </div>
 
-        {/* 📄 TEXTO EXPLICATIVO */}
+        {/* TEXTO EXPLICATIVO */}
         <div className="text-texto space-y-4">
           <p>
             ¿Tienes problemas de conexión en tu casa? Muchas veces, el problema
@@ -212,7 +212,7 @@ const Curso1 = () => {
           </form>
         </div>
 
-        {/* 🔙 Botón volver a Academy */}
+        {/* Botón volver a Academy */}
         <div className="text-center">
           <MainLinkButton to="/academy" variant="secondary">
             <IconArrowLeft />

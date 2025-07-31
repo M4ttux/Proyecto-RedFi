@@ -62,7 +62,11 @@ const CambiarContraseña = () => {
         <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 max-w-md mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="Nueva contraseña *"
+              label={
+                <>
+                  Nueva contraseña <span className="text-red-600">*</span>
+                </>
+              }
               name="nueva"
               type="password"
               placeholder="Mínimo 6 caracteres"
@@ -75,7 +79,11 @@ const CambiarContraseña = () => {
             />
 
             <Input
-              label="Repetir contraseña *"
+              label={
+                <>
+                  Repetir contraseña <span className="text-red-600">*</span>
+                </>
+              }
               name="repetir"
               type="password"
               placeholder="Debe coincidir con la anterior"
@@ -96,6 +104,12 @@ const CambiarContraseña = () => {
             >
               {loading ? "Guardando..." : "Guardar nueva contraseña"}
             </MainButton>
+            <div className="text-center mt-6">
+              <p className="text-sm text-texto/50 italic">
+                Los campos marcados con <span className="text-red-600">*</span>{" "}
+                son obligatorios.
+              </p>
+            </div>
           </form>
         </div>
 
@@ -119,11 +133,7 @@ const CambiarContraseña = () => {
             <IconArrowLeft />
             Volver a editar perfil
           </MainLinkButton>
-          <MainLinkButton
-            to="/cuenta"
-            disabled={loading}
-            variant="secondary"
-          >
+          <MainLinkButton to="/cuenta" disabled={loading} variant="secondary">
             <IconArrowLeft />
             Volver al perfil
           </MainLinkButton>

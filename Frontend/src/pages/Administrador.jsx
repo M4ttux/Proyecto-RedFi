@@ -319,7 +319,7 @@ const Administrador = () => {
 
         <Table columns={columnas} data={datosActuales} />
 
-        {/* 🔙 Botón volver al perfil */}
+        {/* Botón volver al perfil */}
       <div className="text-center">
         <MainLinkButton to="/cuenta" variant="secondary">
           <IconArrowLeft />

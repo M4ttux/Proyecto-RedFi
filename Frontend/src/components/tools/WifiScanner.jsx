@@ -147,7 +147,7 @@ const WifiScanner = () => {
         </MainButton>
       </div>
 
-      {/* ✅ Barra de progreso */}
+      {/* Barra de progreso */}
       {(enProgreso || completado) && (
         <div className="mt-4 w-full">
           <p

@@ -1,4 +1,4 @@
-import { IconX, IconEye, IconTrash, IconEdit } from "@tabler/icons-react";
+import { IconX, IconEye, IconTrash, IconEdit, IconDownload, IconFileTypePdf } from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
@@ -27,6 +27,29 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
       diferenciaColor = "text-yellow-600";
     }
   }
+
+  const esPDF = (url) => {
+    if (!url) return false;
+    return url.toLowerCase().includes('.pdf') || url.toLowerCase().includes('application/pdf');
+  };
+
+  const obtenerNombreArchivo = (url) => {
+    if (!url) return 'archivo.pdf';
+    const nombreCompleto = url.split('/').pop() || url.split('\\').pop();
+    return nombreCompleto || `boleta-${boleta.mes}-${boleta.anio}.pdf`;
+  };
+
+  const descargarArchivo = () => {
+    if (!boleta.url_imagen) return;
+    
+    const link = document.createElement('a');
+    link.href = boleta.url_imagen;
+    link.download = `boleta-${boleta.mes}-${boleta.anio}-${boleta.proveedor}`;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <ModalContenedor onClose={onClose}>
@@ -81,16 +104,35 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
           )}
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-4">
           {boleta.url_imagen ? (
-            <img
-              src={boleta.url_imagen}
-              alt="Boleta"
-              className="max-h-[300px] object-contain rounded border"
-            />
+            <>
+              {esPDF(boleta.url_imagen) ? (
+                <div className="flex flex-col items-center gap-3 p-6 border border-dashed rounded-lg">
+                  <IconFileTypePdf size={80} className="text-red-500" />
+                  <p className="text-sm text-center font-medium break-all max-w-xs">
+                    {obtenerNombreArchivo(boleta.url_imagen)}
+                  </p>
+                </div>
+              ) : (
+                <img
+                  src={boleta.url_imagen}
+                  alt="Boleta"
+                  className="max-h-[300px] object-contain rounded border"
+                />
+              )}
+              <MainButton
+                onClick={descargarArchivo}
+                variant="accent"
+                className="flex items-center gap-2"
+              >
+                <IconDownload size={18} />
+                Descargar archivo
+              </MainButton>
+            </>
           ) : (
             <div className="text-center text-gray-400 italic border border-dashed p-6 rounded max-w-xs">
-              ❌ El usuario no cargó una imagen de la boleta.
+              ❌ El usuario no cargó un archivo de la boleta.
             </div>
           )}
         </div>

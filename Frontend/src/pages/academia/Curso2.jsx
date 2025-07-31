@@ -93,7 +93,7 @@ const Curso2 = () => {
           <MainH1 icon={IconBrandSpeedtest}>Velocidad y Latencia</MainH1>
         </div>
 
-        {/* 🎥 VIDEO */}
+        {/* VIDEO */}
         <div className="aspect-video">
           <iframe
             className="w-full h-full rounded-lg"
@@ -103,7 +103,7 @@ const Curso2 = () => {
           ></iframe>
         </div>
 
-        {/* 📄 TEXTO EXPLICATIVO */}
+        {/* TEXTO EXPLICATIVO */}
         <div className="text-texto space-y-4">
           <p>
             La velocidad de internet se mide en megabits por segundo (Mbps) e
@@ -203,7 +203,7 @@ const Curso2 = () => {
           </form>
         </div>
 
-        {/* 🔙 Botón volver a Academy */}
+        {/* Botón volver a Academy */}
         <div className="text-center">
           <MainLinkButton to="/academy" variant="secondary">
             <IconArrowLeft />
