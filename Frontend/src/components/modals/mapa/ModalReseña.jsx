@@ -66,7 +66,7 @@ const ModalReseña = ({ reseña, onClose }) => {
       </div>
       {/* Nombre */}
       <MainH2
-        className="text-2xl lg:text-3xl text-center justify-center text-acento"
+        className="text-center justify-center"
       >
         {nombre}
       </MainH2>
