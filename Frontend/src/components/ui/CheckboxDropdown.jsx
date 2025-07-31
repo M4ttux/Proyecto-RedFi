@@ -69,7 +69,7 @@ const CheckboxDropdown = ({
         onClick={() => setOpen(!open)}
         className={classNames(
           "w-full px-3 py-2 bg-texto/5 text-texto rounded-lg border text-left",
-          "border-texto/10 focus:outline-none focus:ring-1 focus:ring-acento",
+          "border-texto/15 focus:outline-none focus:ring-1 focus:ring-acento",
           disabled && "opacity-60 cursor-not-allowed",
           "flex items-center justify-between min-w-0" // Agregado min-w-0
         )}
@@ -90,7 +90,7 @@ const CheckboxDropdown = ({
             return (
               <label
                 key={val}
-                className="flex items-center gap-2 p-2 rounded hover:bg-texto/10 cursor-pointer transition"
+                className="flex items-center gap-2 p-2 rounded hover:bg-texto/5 cursor-pointer transition"
               >
                 <input
                   type="checkbox"

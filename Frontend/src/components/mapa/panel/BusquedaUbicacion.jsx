@@ -76,12 +76,12 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
 
           {/* Sugerencias flotantes */}
           {input && sugerencias.length > 0 && (
-            <ul className="absolute z-10 left-0 right-0 bg-fondo border border-white/10 rounded-lg mt-1 max-h-40 overflow-auto text-texto shadow-lg">
+            <ul className="absolute z-10 left-0 right-0 bg-fondo border border-texto/15 rounded-lg mt-1 max-h-40 overflow-auto text-texto shadow-lg">
               {sugerencias.map((sug, index) => (
                 <li
                   key={index}
                   onClick={() => handleSeleccionarSugerencia(sug)}
-                  className="px-3 py-2 cursor-pointer hover:bg-white/10 transition"
+                  className="px-3 py-2 cursor-pointer hover:bg-texto/20 transition"
                 >
                   {sug.formatted}
                 </li>

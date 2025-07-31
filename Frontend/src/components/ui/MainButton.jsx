@@ -38,12 +38,12 @@ const Button = ({
     primary: "bg-primario text-white hover:bg-[#336ef0]",
     accent: "bg-acento text-white hover:bg-[#fca75f]",
     secondary: currentTheme === "light" 
-  ? "bg-secundario text-texto hover:bg-[#d2e4ff]" 
-  : "bg-secundario text-texto hover:bg-[#2a3955]",
+  ? "bg-texto/5 text-texto hover:bg-[#d2e4ff]" 
+  : "bg-texto/5 text-texto hover:bg-[#2a3955]",
     danger: "bg-red-600 text-white hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     cross: "text-texto/60 hover:text-red-400",
-    add: "bg-green-600 text-white hover:bg-green-400",
+    add: "bg-green-700 text-white hover:bg-green-500",
     see: "bg-blue-600 text-white hover:bg-blue-400",
     edit: "bg-yellow-600 text-white hover:bg-yellow-400",
     delete: "bg-red-600 text-white hover:bg-red-400",

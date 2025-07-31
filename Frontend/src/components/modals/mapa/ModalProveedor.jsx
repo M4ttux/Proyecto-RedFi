@@ -45,18 +45,18 @@ const ModalProveedor = ({ proveedor, onClose }) => {
             className="rounded-full"
           />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-texto/10 flex items-center justify-center text-3xl">
+          <div className="w-20 h-20 rounded-full bg-texto/5 flex items-center justify-center text-3xl">
             🏢
           </div>
         )}
       </div>
 
       {/* Nombre */}
-      <MainH2 className="text-center">{proveedor.nombre}</MainH2>
+      <MainH2 className="text-center justify-center">{proveedor.nombre}</MainH2>
 
       {/* Estrellas */}
       <div className="flex flex-col items-center mb-4">
-        <div className="flex gap-1 text-yellow-400 text-2xl">
+        <div className="flex gap-1 text-yellow-600 text-2xl bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
           {Array.from({ length: 5 }).map((_, i) =>
             i < Math.round(promedioEstrellas) ? (
               <IconCarambolaFilled key={i} size={22} />
@@ -77,7 +77,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
           tecnologias.map((tec, index) => (
             <span
               key={index}
-              className="bg-texto/10 border border-texto/10 text-xs px-3 py-1 rounded-full"
+              className="bg-texto/5 border border-texto/15 text-xs px-3 py-1 rounded-full"
             >
               {tec}
             </span>

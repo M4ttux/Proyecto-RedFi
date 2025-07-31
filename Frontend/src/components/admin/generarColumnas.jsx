@@ -40,7 +40,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           return rol ? (
             <span
               className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                colores[rol] || "bg-texto/10 text-texto"
+                colores[rol] || "bg-texto/5 text-texto"
               }`}
             >
               {rol.toUpperCase()}
@@ -62,7 +62,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           return plan ? (
             <span
               className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                colores[plan] || "bg-texto/10 text-texto"
+                colores[plan] || "bg-texto/5 text-texto"
               }`}
             >
               {plan.toUpperCase()}
@@ -140,16 +140,16 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         id: "estrellas",
         label: "ESTRELLAS",
         renderCell: (row) => (
-          <div className="flex gap-1">
+          <div className="inline-flex items-center gap-1 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
             {Array.from({ length: 5 }, (_, i) =>
               i < row.estrellas ? (
                 <IconCarambolaFilled
                   key={i}
                   size={18}
-                  className="text-yellow-400"
+                  className="text-yellow-600"
                 />
               ) : (
-                <IconCarambola key={i} size={18} className="text-yellow-400" />
+                <IconCarambola key={i} size={18} className="text-yellow-600" />
               )
             )}
           </div>
@@ -203,7 +203,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {row.tecnologias.map((tec, i) => (
                 <span
                   key={i}
-                  className="bg-texto/10 text-texto text-sm px-2 py-0.5 rounded-lg"
+                  className="bg-texto/5 text-texto text-sm px-2 py-0.5 rounded-lg"
                 >
                   {tec}
                 </span>
@@ -233,7 +233,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {row.zonas.map((zona, i) => (
                 <span
                   key={i}
-                  className="bg-texto/10 text-texto text-sm px-2 py-0.5 rounded-lg"
+                  className="bg-texto/5 text-texto text-sm px-2 py-0.5 rounded-lg"
                 >
                   {zona}
                 </span>

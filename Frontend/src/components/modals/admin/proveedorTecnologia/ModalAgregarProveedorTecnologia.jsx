@@ -103,7 +103,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
         />
       </div>
 
-      <hr className="border-white/10 mb-6" />
+      <hr className="border-texto/15 mb-6" />
 
       <div className="flex flex-col sm:flex-row gap-3">
         <MainButton

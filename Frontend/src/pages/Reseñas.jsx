@@ -114,7 +114,7 @@ const Reseñas = () => {
   const renderEstrellas = (estrellas) => {
     const estrellasLlenas = Math.round(estrellas);
     return (
-      <div className="flex gap-1 text-yellow-400">
+      <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
         {Array.from({ length: 5 }).map((_, i) =>
           i < estrellasLlenas ? (
             <IconCarambolaFilled key={i} size={16} />
@@ -311,7 +311,7 @@ const Reseñas = () => {
                 className={`backdrop-blur-md rounded-lg p-6 ${
                   currentTheme === "light"
                     ? "bg-secundario border border-secundario/50 shadow-lg"
-                    : "bg-white/5 border border-white/10"
+                    : "bg-texto/5 border border-texto/15"
                 }`}
               >
                 <MainH3 className="text-center justify-center">

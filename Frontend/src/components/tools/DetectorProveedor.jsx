@@ -16,12 +16,7 @@ const DetectorProveedor = () => {
 
   return (
     <div
-      className={`p-6 max-w-xl mx-auto text-center rounded-lg ${
-        currentTheme === "light"
-                ? "bg-white/50 border border-white/50 shadow-lg"
-                : "bg-white/5 border border-white/10"
-            }`}
-          >
+      className="p-6 max-w-xl mx-auto text-center rounded-lg">
       <MainH3 className="text-center justify-center">Tu conexión actual</MainH3>
 
       {error && <p className="text-red-600">{error}</p>}

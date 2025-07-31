@@ -18,13 +18,13 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
     const diferencia = montoActual - montoAnterior;
     if (diferencia > 0) {
       diferenciaTexto = `📈 Subió $${diferencia.toFixed(2)}`;
-      diferenciaColor = "text-green-400";
+      diferenciaColor = "text-green-700";
     } else if (diferencia < 0) {
       diferenciaTexto = `📉 Bajó $${Math.abs(diferencia).toFixed(2)}`;
-      diferenciaColor = "text-red-400";
+      diferenciaColor = "text-red-600";
     } else {
       diferenciaTexto = `🟰 Sin cambios`;
-      diferenciaColor = "text-yellow-300";
+      diferenciaColor = "text-yellow-600";
     }
   }
 
@@ -70,7 +70,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
           </p>
 
           {boleta.promo_hasta && (
-            <p className="text-yellow-400">
+            <p className="text-yellow-600">
               <strong>Promoción hasta:</strong>{" "}
               {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
                 day: "2-digit",
@@ -94,6 +94,13 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Botón */}
+      <div className="mt-6 flex justify-end">
+        <MainButton variant="primary" onClick={onClose}>
+          Cerrar
+        </MainButton>
       </div>
     </ModalContenedor>
   );

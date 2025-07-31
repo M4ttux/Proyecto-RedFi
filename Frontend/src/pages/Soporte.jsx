@@ -130,7 +130,7 @@ const Soporte = () => {
         ${
           currentTheme === "light"
             ? "bg-secundario border border-secundario/50 shadow-lg"
-            : "bg-white/5 border border-white/10"
+            : "bg-texto/5 border border-texto/15"
         } `}
         >
           <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-2">
@@ -146,7 +146,7 @@ const Soporte = () => {
                     m.autor === "bot"
                       ? currentTheme === "light"
                         ? "bg-white/50 border border-white/50 text-texto text-left"
-                        : "bg-white/5 text-texto text-left"
+                        : "bg-texto/5 text-texto text-left"
                       : currentTheme === "light"
                       ? "bg-primario text-white text-right"
                       : "bg-primario text-texto text-right"

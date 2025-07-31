@@ -45,7 +45,7 @@ const AcademyHome = () => {
         </div>
 
         <div className="text-center mb-8">
-          <MainH2>Ingresá a nuestros cursos</MainH2>
+          <MainH2 className="text-center justify-center">Ingresá a nuestros cursos</MainH2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
           {cursos.map((curso) => (
@@ -58,7 +58,7 @@ const AcademyHome = () => {
               <img
                 src={curso.imagen}
                 alt={curso.titulo}
-                className="w-full h-48 object-cover"
+                className="w-full h-48 object-cover rounded-lg"
               />
               <div className="p-4 flex flex-col gap-2 flex-1">
                 <MainH3 className="text-center justify-center">{curso.titulo}</MainH3>
@@ -69,7 +69,7 @@ const AcademyHome = () => {
         </div>
 
         <div className="text-center max-w-2xl mx-auto mb-6">
-          <MainH2>¿Por qué elegir Red-Fi Academy?</MainH2>
+          <MainH2 className="text-center justify-center">¿Por qué elegir Red-Fi Academy?</MainH2>
           <p className="text-lg">
             En Red-Fi Academy te brindamos formación práctica y de calidad para
             que puedas mejorar tu experiencia con internet y redes.
@@ -77,20 +77,20 @@ const AcademyHome = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 mb-12">
-          <div className="bg-texto/5 border border-texto/10 shadow-lg p-4 rounded-lg">
+          <div className="bg-texto/5 border border-texto/15 shadow-lg p-4 rounded-lg">
             <MainH3 icon={IconSchool} className="text-center justify-center">Instructores expertos</MainH3>
             <p>
               Aprende con profesionales con experiencia real en la industria.
             </p>
           </div>
-          <div className="bg-texto/5 border border-texto/10 shadow-lg p-4 rounded-lg">
+          <div className="bg-texto/5 border border-texto/15 shadow-lg p-4 rounded-lg">
             <MainH3 icon={IconCalendarWeek} className="text-center justify-center">Aprendizaje flexible</MainH3>
             <p>
               Estudia a tu ritmo desde cualquier dispositivo, en cualquier
               momento.
             </p>
           </div>
-          <div className="bg-texto/5 border border-texto/10 shadow-lg p-4 rounded-lg">
+          <div className="bg-texto/5 border border-texto/15 shadow-lg p-4 rounded-lg">
             <MainH3 icon={IconTools} className="text-center justify-center">Contenido práctico</MainH3>
             <p>Aplica lo aprendido con ejercicios reales y casos concretos.</p>
           </div>

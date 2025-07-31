@@ -199,7 +199,7 @@ const GlosarioBuscador = () => {
       )}
 
       <div className="mt-12">
-        <MainH2 className="text-center">Conceptos destacados</MainH2>
+        <MainH2 className="text-center justify-center">Conceptos destacados</MainH2>
         <div className="grid md:grid-cols-3 gap-4">
           {[
             {

@@ -40,11 +40,11 @@ const PreguntasFrecuentes = () => {
   return (
     <section
       className={`py-16 px-4 sm:px-6 text-texto ${
-        currentTheme === "light" ? "bg-secundario" : "bg-white/5"
+        currentTheme === "light" ? "bg-secundario" : "bg-texto/5"
       }`}
     >
       <div className="max-w-7xl mx-auto">
-        <MainH2 className="text-center">Preguntas frecuentes</MainH2>
+        <MainH2 className="text-center justify-center">Preguntas frecuentes</MainH2>
 
         <div className="grid gap-16 sm:grid-cols-2">
           {preguntas.map((item, i) => (

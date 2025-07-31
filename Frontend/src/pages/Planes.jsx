@@ -77,7 +77,7 @@ const Planes = () => {
           {/* Plan Básico */}
           <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 flex flex-col justify-between">
             <div>
-              <MainH2>Plan Básico</MainH2>
+              <MainH2 className="text-center justify-center">Plan Básico</MainH2>
               <p className="text-texto mb-4">
                 Ideal para usuarios que quieren explorar Red-Fi sin funciones
                 avanzadas.
@@ -101,7 +101,7 @@ const Planes = () => {
           {/* Plan Premium */}
           <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 flex flex-col justify-between">
             <div>
-              <MainH2 className="text-acento">Plan Premium</MainH2>
+              <MainH2 className="text-acento text-center justify-center">Plan Premium</MainH2>
               <p className="text-texto mb-4">
                 Acceda a todos los beneficios de Red-Fi sin límites de uso y sin
                 anuncios.

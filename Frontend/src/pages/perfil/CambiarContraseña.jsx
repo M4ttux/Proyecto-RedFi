@@ -102,7 +102,7 @@ const CambiarContraseña = () => {
         {/* Divider */}
         <div className="relative my-6 max-w-md mx-auto">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-texto/10"></div>
+            <div className="w-full border-t border-texto/15"></div>
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-fondo text-texto">Opciones de cuenta</span>

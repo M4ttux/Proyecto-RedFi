@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
+import MainButton from "../../components/ui/MainButton";
+import MainLinkButton from "../../components/ui/MainLinkButton";
+import { IconArrowLeft, IconRadar2, IconBrain } from "@tabler/icons-react";
 
 const Curso3 = () => {
   const navigate = useNavigate();
@@ -22,7 +25,8 @@ const Curso3 = () => {
     },
     {
       id: "p2",
-      texto: "¿Qué herramienta puede ayudarte a medir la calidad del proveedor?",
+      texto:
+        "¿Qué herramienta puede ayudarte a medir la calidad del proveedor?",
       correcta: "c",
       opciones: {
         a: "Facebook",
@@ -83,114 +87,131 @@ const Curso3 = () => {
   };
 
   return (
-    <section className="p-6 max-w-4xl mx-auto space-y-10">
-      <MainH1>Cómo elegir tu proveedor de internet</MainH1>
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center mb-8">
+          <MainH1 icon={IconRadar2}>
+            Cómo elegir tu proveedor de internet
+          </MainH1>
+        </div>
 
-      {/* 🎥 VIDEO */}
-      <div className="aspect-video">
-        <iframe
-          className="w-full h-full rounded-lg"
-          src="https://www.youtube.com/embed/GH7RXCO1L0g"
-          title="Video Proveedor"
-          allowFullScreen
-        ></iframe>
-      </div>
+        {/* 🎥 VIDEO */}
+        <div className="aspect-video">
+          <iframe
+            className="w-full h-full rounded-lg"
+            src="https://www.youtube.com/embed/GH7RXCO1L0g"
+            title="Video Proveedor"
+            allowFullScreen
+          ></iframe>
+        </div>
 
-      {/* 📄 TEXTO INFORMATIVO */}
-      <div className="text-gray-300 space-y-4">
-        <p>
-          Elegir un proveedor de internet no debería basarse solo en la publicidad. Es clave considerar la experiencia real de otros usuarios en tu zona.
-        </p>
-        <p>
-          La cobertura geográfica asegura que recibas buena señal. No todos los proveedores ofrecen el mismo rendimiento en todas las zonas.
-        </p>
-        <p>
-          Las reseñas y quejas en redes sociales, foros o apps como Red-Fi te pueden dar una idea clara del servicio técnico y estabilidad que brindan.
-        </p>
-        <p>
-          Medí la velocidad real que ofrecen con herramientas como SpeedTest. Si la velocidad es mucho menor que la contratada, probablemente no sea buena opción.
-        </p>
-        <p>
-          Un buen proveedor también ofrece atención rápida y eficaz. Si los problemas persisten o no responden, eso habla mal del soporte.
-        </p>
-      </div>
+        {/* 📄 TEXTO INFORMATIVO */}
+        <div className="text-texto space-y-4">
+          <p>
+            Elegir un proveedor de internet no debería basarse solo en la
+            publicidad. Es clave considerar la experiencia real de otros
+            usuarios en tu zona.
+          </p>
+          <p>
+            La cobertura geográfica asegura que recibas buena señal. No todos
+            los proveedores ofrecen el mismo rendimiento en todas las zonas.
+          </p>
+          <p>
+            Las reseñas y quejas en redes sociales, foros o apps como Red-Fi te
+            pueden dar una idea clara del servicio técnico y estabilidad que
+            brindan.
+          </p>
+          <p>
+            Medí la velocidad real que ofrecen con herramientas como SpeedTest.
+            Si la velocidad es mucho menor que la contratada, probablemente no
+            sea buena opción.
+          </p>
+          <p>
+            Un buen proveedor también ofrece atención rápida y eficaz. Si los
+            problemas persisten o no responden, eso habla mal del soporte.
+          </p>
+        </div>
 
-      {/* ✅ QUIZ */}
-      <div className="bg-white/5 p-6 rounded-lg border border-white/10">
-        <MainH2 className="text-center">🧠 Quiz final</MainH2>
-
-        <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
-          {preguntas.map((p) => {
-            const respuestaUsuario = respuestas[p.id];
-            const esCorrecta = respuestaUsuario === p.correcta;
-            return (
-              <div key={p.id} className="space-y-2">
-                <p className="font-medium text-texto">{p.texto}</p>
-                <div className="flex flex-col gap-1 text-sm">
-                  {Object.entries(p.opciones).map(([key, text]) => (
-                    <label key={key} className="cursor-pointer">
-                      <input
-                        type="radio"
-                        name={p.id}
-                        value={key}
-                        onChange={() => handleChange(p.id, key)}
-                        checked={respuestaUsuario === key}
-                        className="mr-2"
-                      />
-                      {text}
-                    </label>
-                  ))}
-                </div>
-
-                {mostrarResultados && (
-                  <div
-                    className={`p-2 rounded font-semibold text-sm ${
-                      esCorrecta
-                        ? "bg-green-600 text-texto"
-                        : "bg-red-600 text-texto"
-                    }`}
-                  >
-                    {esCorrecta
-                      ? "✅ ¡Respuesta correcta!"
-                      : `❌ Incorrecto. La respuesta correcta era: "${p.opciones[p.correcta]}"`}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          <div className="flex justify-center gap-4 flex-wrap mt-6">
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-texto font-semibold px-4 py-2 rounded"
-            >
-              Enviar respuestas
-            </button>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="bg-gray-500 hover:bg-gray-600 text-texto font-semibold px-4 py-2 rounded"
-            >
-              Reiniciar
-            </button>
-          </div>
+        {/* ✅ QUIZ */}
+        <div className="bg-texto/5 p-6 rounded-lg border border-texto/15">
+          <MainH2 icon={IconBrain} className="text-center justify-center">
+            Quiz final
+          </MainH2>
 
           {mostrarResultados && (
-            <p className="mt-4 font-bold text-lg text-center text-texto">
-              ✅ Acertaste {resultado} de {preguntas.length} preguntas.
+            <p className="mt-8 font-bold text-lg text-center text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 w-fit mx-auto">
+              Acertaste {resultado} de {preguntas.length} preguntas.
             </p>
           )}
-        </form>
-      </div>
 
-      {/* 🔙 Volver a Academy */}
-      <div className="text-center">
-        <button
-          onClick={() => navigate("/academy")}
-          className="mt-6 bg-white/10 hover:bg-white/20 text-texto font-medium px-6 py-2 rounded"
-        >
-          ← Volver a Red-Fi Academy
-        </button>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 max-w-2xl mx-auto  mt-8"
+          >
+            {preguntas.map((p) => {
+              const respuestaUsuario = respuestas[p.id];
+              const esCorrecta = respuestaUsuario === p.correcta;
+              return (
+                <div key={p.id} className="space-y-2">
+                  <p className="font-medium text-texto">{p.texto}</p>
+                  <div className="flex flex-col gap-1 text-sm">
+                    {Object.entries(p.opciones).map(([key, text]) => (
+                      <label key={key} className="cursor-pointer">
+                        <input
+                          type="radio"
+                          name={p.id}
+                          value={key}
+                          onChange={() => handleChange(p.id, key)}
+                          checked={respuestaUsuario === key}
+                          className="mr-2"
+                        />
+                        {text}
+                      </label>
+                    ))}
+                  </div>
+
+                  {mostrarResultados && (
+                    <div
+                      className={`p-2 rounded-lg font-bold ${
+                        esCorrecta
+                          ? "bg-green-600 text-texto"
+                          : "bg-red-600 text-texto"
+                      }`}
+                    >
+                      {esCorrecta
+                        ? "¡Respuesta correcta!"
+                        : `Incorrecto. La respuesta correcta era: "${
+                            p.opciones[p.correcta]
+                          }"`}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            <div className="flex justify-center gap-4 flex-wrap mt-6">
+              <MainButton
+                type="button"
+                onClick={handleReset}
+                variant="secondary"
+              >
+                Reiniciar
+              </MainButton>
+
+              <MainButton type="submit" variant="primary">
+                Enviar respuestas
+              </MainButton>
+            </div>
+          </form>
+        </div>
+
+        {/* 🔙 Botón volver a Academy */}
+        <div className="text-center">
+          <MainLinkButton to="/academy" variant="secondary">
+            <IconArrowLeft />
+            Volver a Red-Fi Academy
+          </MainLinkButton>
+        </div>
       </div>
     </section>
   );

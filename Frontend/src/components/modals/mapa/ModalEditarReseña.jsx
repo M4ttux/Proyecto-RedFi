@@ -92,7 +92,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             <label className="block font-medium text-texto mb-2">
               Proveedor
             </label>
-            <div className="w-full px-3 py-2 bg-texto/5 border border-texto/10 rounded-lg text-texto">
+            <div className="w-full px-3 py-2 bg-texto/5 border border-texto/15 rounded-lg text-texto">
               {(() => {
                 const proveedor = proveedores.find(
                   (p) => p.id === formData.proveedor_id
@@ -110,7 +110,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             <label className="block font-medium text-texto mb-2">
               Calificación *
             </label>
-            <div className="flex gap-1 text-yellow-400">
+            <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}

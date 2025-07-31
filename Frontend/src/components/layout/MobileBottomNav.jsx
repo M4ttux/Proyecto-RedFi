@@ -49,7 +49,7 @@ const MobileBottomNav = () => {
   return (
     <>
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-fondo border-t border-texto/10 z-[9999] safe-area-inset-bottom">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-fondo border-t border-texto/15 z-[9999] safe-area-inset-bottom">
         <div className="flex justify-around items-center py-3 px-2">
           {/* Main Navigation Items */}
           {mainNavigationItems.map(({ path, label, icon: Icon }) => (
@@ -131,7 +131,7 @@ const MobileBottomNav = () => {
                     toggleTheme();
                     setMostrarMenu(false);
                   }}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors w-full text-left"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-texto/5 transition-colors w-full text-left"
                 >
                   {currentTheme === "light" ? (
                     <IconSun size={20} />
@@ -179,7 +179,7 @@ const MobileBottomNav = () => {
                     notificaciones.map((msg, i) => (
                       <div
                         key={i}
-                        className="border-b border-texto/10 pb-2 last:border-b-0 flex justify-between items-start gap-2"
+                        className="border-b border-texto/15 pb-2 last:border-b-0 flex justify-between items-start gap-2"
                       >
                         <span className="break-words">{msg}</span>
                         <MainButton

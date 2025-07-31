@@ -113,7 +113,7 @@ const Mapa = () => {
           className={`hidden lg:block lg:col-span-3 h-full z-10 overflow-y-auto lg:p-4
           ${theme === "light"
             ? "bg-secundario border border-secundario/50 shadow-lg"
-            : "bg-fondo border border-texto/10"}`}
+            : "bg-fondo border border-texto/15"}`}
         >
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}

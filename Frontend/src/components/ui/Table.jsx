@@ -12,7 +12,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
       )}
     >
       <table className="w-full">
-        <thead className="bg-texto/15">
+        <thead className="bg-texto/5">
           <tr>
             {columns.map((col) => (
               <th

@@ -11,9 +11,9 @@ import { DURACION_ALERTA } from "../../constants/constantes";
 
 const estilos = {
   error: "text-red-400 border-red-500/30",
-  exito: "text-green-400 border-green-500/30",
+  exito: "text-green-700 border-green-500/30",
   info: "text-blue-400 border-blue-500/30",
-  advertencia: "text-yellow-400 border-yellow-500/30",
+  advertencia: "text-yellow-600 border-yellow-700/30",
 };
 
 const iconos = {

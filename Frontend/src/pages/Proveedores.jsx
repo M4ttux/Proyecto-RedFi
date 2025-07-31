@@ -29,18 +29,18 @@ const Proveedores = () => {
     );
   }
 
-  const tecnologias = proveedor?.ProveedorTecnologia?.map(
-    (rel) => rel.tecnologias?.tecnologia
-  ) || [];
+  const tecnologias =
+    proveedor?.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
+    [];
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Info principal del proveedor */}
-        <div className="bg-texto/5 border border-texto/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
+        <div className="bg-texto/5 border border-texto/15 rounded-2xl p-6 mb-10 shadow-lg text-center">
           {/* Avatar / ícono */}
           <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 rounded-full bg-texto/10 text-3xl flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-texto/5 text-3xl flex items-center justify-center">
               🏢
             </div>
           </div>
@@ -49,16 +49,24 @@ const Proveedores = () => {
           <MainH1>{proveedor.nombre}</MainH1>
 
           {/* Tecnologías */}
-          {tecnologias.length > 0 ? (
-            <p className="text-texto mt-2">
-              Tecnologías:{" "}
-              <span className="font-medium text-texto">
-                {tecnologias.join(", ")}
-              </span>
-            </p>
-          ) : (
-            <p className="text-texto mt-2">Tecnologías no especificadas</p>
-          )}
+          <div className="mt-2">
+            {tecnologias.length > 0 ? (
+              <div className="flex flex-wrap justify-center gap-2">
+                {tecnologias.map((tec, index) => (
+                  <span
+                    key={index}
+                    className="bg-texto/5 border border-texto/15 text-xs px-3 py-1 rounded-full"
+                  >
+                    {tec}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-texto text-center">
+                Tecnologías no especificadas
+              </p>
+            )}
+          </div>
 
           {/* Descripción breve */}
           <p className="text-sm text-texto mt-4 max-w-xl mx-auto leading-relaxed">
@@ -73,13 +81,16 @@ const Proveedores = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center mt-6 px-5 py-2 bg-primario text-white hover:bg-[#336ef0] transition rounded-lg font-bold"
           >
-            Visitar sitio oficial <IconExternalLink size={18} className="ml-2" />
+            Visitar sitio oficial{" "}
+            <IconExternalLink size={18} className="ml-2" />
           </a>
         </div>
 
         {/* Reseñas */}
         <div>
-          <MainH2>Opiniones de usuarios</MainH2>
+          <MainH2 className="text-center justify-center">
+            Opiniones de usuarios
+          </MainH2>
 
           {proveedor.reseñas && proveedor.reseñas.length > 0 ? (
             <div className="space-y-6">
@@ -104,7 +115,7 @@ const Proveedores = () => {
                 return (
                   <div
                     key={r.id}
-                    className="bg-texto/5 border border-texto/10 p-5 rounded-xl flex flex-col gap-3"
+                    className="bg-texto/5 border border-texto/15 p-5 rounded-xl flex flex-col gap-3"
                   >
                     {/* Usuario + estrellas */}
                     <div className="flex items-center justify-between">
@@ -116,7 +127,7 @@ const Proveedores = () => {
                             className="w-10 h-10 rounded-full object-cover border border-acento"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-texto/10 text-texto font-bold flex items-center justify-center text-sm border border-acento">
+                          <div className="w-10 h-10 rounded-full bg-texto/5 text-texto font-bold flex items-center justify-center text-sm border border-acento">
                             {iniciales}
                           </div>
                         )}
@@ -126,7 +137,7 @@ const Proveedores = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-1 text-yellow-400 pl-2">
+                      <div className="flex gap-1 text-yellow-600 pl-2 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
                         {Array.from({ length: 5 }, (_, i) =>
                           i < r.estrellas ? (
                             <IconCarambolaFilled size={18} key={i} />

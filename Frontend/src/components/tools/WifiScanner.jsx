@@ -152,7 +152,7 @@ const WifiScanner = () => {
         <div className="mt-4 w-full">
           <p
             className={`text-center text-sm mb-2 ${
-              completado ? "text-green-400" : "text-yellow-300"
+              completado ? "text-green-700" : "text-yellow-600"
             }`}
           >
             {completado

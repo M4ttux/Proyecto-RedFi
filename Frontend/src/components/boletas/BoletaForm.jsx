@@ -145,7 +145,7 @@ const BoletaForm = ({
 
   return (
     <div>
-      <MainH2 className="text-center">Carga de boletas</MainH2>
+      <MainH2 className="text-center justify-center">Carga de boletas</MainH2>
       <form
         onSubmit={handleSubmit}
         className="space-y-6 bg-secundario border border-secundario/50 shadow-lg p-6 rounded-lg"

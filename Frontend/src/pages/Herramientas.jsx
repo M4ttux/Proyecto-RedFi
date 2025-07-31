@@ -32,10 +32,10 @@ const Herramientas = () => {
             className={`w-full p-8 rounded-lg self-start ${
               currentTheme === "light"
                 ? "bg-secundario border border-secundario/50 shadow-lg"
-                : "bg-white/5 border border-white/10"
+                : "bg-texto/5 border border-texto/15"
             }`}
           >
-            <MainH2>Información de tu red</MainH2>
+            <MainH2 className="text-center justify-center">Información de tu red</MainH2>
             <DetectorProveedor />
           </div>
           {/* Test de velocidad */}
@@ -43,10 +43,10 @@ const Herramientas = () => {
             className={`w-full p-8 rounded-lg ${
               currentTheme === "light"
                 ? "bg-secundario border border-secundario/50 shadow-lg"
-                : "bg-white/5 border border-white/10"
+                : "bg-texto/5 border border-texto/15"
             }`}
           >
-            <MainH2>Test de velocidad</MainH2>
+            <MainH2 className="text-center justify-center">Test de velocidad</MainH2>
             <SpeedTest />
           </div>
         </div>
@@ -55,12 +55,12 @@ const Herramientas = () => {
         <div
           className={`mx-auto max-w-7xl p-8 rounded-lg ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/10 shadow-lg"
-              : "bg-white/5 border border-white/10"
+              ? "bg-secundario border border-secundario/50 shadow-lg"
+              : "bg-texto/5 border border-texto/15"
           }`}
         >
           <div className="w-full text-center">
-            <MainH2>Análisis de conexión por zonas de tu casa</MainH2>
+            <MainH2 className="text-center justify-center">Análisis de conexión por zonas de tu casa</MainH2>
             <div className=" text-texto p-4 rounded leading-relaxed">
               <p>
                 Medí la calidad de tu Wi-Fi en distintas zonas de tu casa

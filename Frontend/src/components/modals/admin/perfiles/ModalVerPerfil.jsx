@@ -13,7 +13,7 @@ const badgeEstilo = (tipo) =>
       user: "bg-blue-600 text-texto",
       premium: "bg-yellow-500 text-texto",
       basico: "bg-gray-500 text-texto",
-    }[tipo] || "bg-white/20 text-texto"
+    }[tipo] || "bg-texto/5 text-texto"
   );
 
 const ModalVerPerfil = ({ perfil, onClose }) => {

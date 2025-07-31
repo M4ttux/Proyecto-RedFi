@@ -49,7 +49,7 @@ const Input = ({
             className={classNames(
               "w-14 h-14 rounded-lg border transition p-0 cursor-pointer",
               (disabled || loading) && "cursor-not-allowed opacity-70",
-              isInvalid ? "border-red-500" : "border-texto/10",
+              isInvalid ? "border-red-500" : "border-texto/15",
               className
             )}
           />
@@ -85,7 +85,7 @@ const Input = ({
               (disabled || loading) && "cursor-not-allowed opacity-70",
               isInvalid
                 ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                : "border-texto/10 focus:border-acento focus:ring-acento",
+                : "border-texto/15 focus:border-acento focus:ring-acento",
               className
             )}
           />

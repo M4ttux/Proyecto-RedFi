@@ -40,7 +40,7 @@ const Usuarios = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Info del usuario */}
-        <div className="bg-texto/5 border border-texto/10 rounded-2xl p-6 mb-10 shadow-lg text-center">
+        <div className="bg-texto/5 border border-texto/15 rounded-2xl p-6 mb-10 shadow-lg text-center">
           {/* Avatar */}
           <div className="flex justify-center mb-4">
             <Avatar fotoUrl={foto_url} nombre={nombre} size={50} />
@@ -59,10 +59,10 @@ const Usuarios = () => {
 
           {/* Rol y Plan */}
           <div className="flex justify-center gap-3 mt-4">
-            <span className="bg-texto/10 text-sm px-3 py-1 rounded-full border border-texto/10">
+            <span className="bg-texto/5 text-sm px-3 py-1 rounded-full border border-texto/15">
               Rol: <span className="font-semibold text-acento">{rol}</span>
             </span>
-            <span className="bg-texto/10 text-sm px-3 py-1 rounded-full border border-texto/10">
+            <span className="bg-texto/5 text-sm px-3 py-1 rounded-full border border-texto/15">
               Plan: <span className="font-semibold text-acento">{plan}</span>
             </span>
           </div>
@@ -70,7 +70,7 @@ const Usuarios = () => {
 
         {/* Reseñas del usuario */}
         <div>
-          <MainH2>Reseñas publicadas</MainH2>
+          <MainH2 className="text-center justify-center">Reseñas publicadas</MainH2>
 
           {reseñas && reseñas.length > 0 ? (
             <ul className="space-y-6">
@@ -86,14 +86,14 @@ const Usuarios = () => {
                 return (
                   <li
                     key={r.id}
-                    className="bg-texto/5 border border-texto/10 p-5 rounded-xl flex flex-col gap-3"
+                    className="bg-texto/5 border border-texto/15 p-5 rounded-xl flex flex-col gap-3"
                   >
                     <div className="flex justify-between items-center">
                       <p className="font-medium text-texto">
                         
                         {r.proveedor_id?.nombre || "Proveedor desconocido"}
                       </p>
-                      <div className="flex gap-1 text-yellow-400">
+                      <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
                         {Array.from({ length: 5 }, (_, i) =>
                           i < r.estrellas ? (
                             <IconCarambolaFilled key={i} size={18} />

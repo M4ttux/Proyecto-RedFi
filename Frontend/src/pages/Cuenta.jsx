@@ -85,18 +85,21 @@ const Cuenta = () => {
             <img
               src={foto}
               alt="Foto de perfil"
-              className="size-50 rounded-full object-cover border-4 border-texto/10 mx-auto mb-4 shadow-lg"
+              className="size-50 rounded-full object-cover border-4 border-texto/15 mx-auto mb-4 shadow-lg"
             />
           ) : (
-            <div className="size-50 rounded-full bg-texto/10 border-4 border-texto/10 mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <div className="size-50 rounded-full bg-texto/5 border-4 border-texto/15 mx-auto mb-4 flex items-center justify-center shadow-lg">
               <span className="text-3xl font-bold text-texto">{iniciales}</span>
             </div>
           )}
-          <MainH2>{nombre}</MainH2>
-          <p className="text-texto mb-4">{usuario.email}</p>
-          <p className="text-sm text-texto mb-4">
-            Usuario <span className="font-bold text-acento">{perfil.plan}</span>
+          <MainH2 className="text-center justify-center">{nombre}</MainH2>
+          <div className="flex justify-center gap-3 mb-4">
+            <p className="bg-texto/5 px-3 py-1 rounded-full border border-texto/15">{usuario.email}</p>
+            <p className="bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
+            Usuario <span className="text-acento">{perfil.plan}</span>
           </p>
+          </div>
+          
         </div>
 
         {/* Acciones */}

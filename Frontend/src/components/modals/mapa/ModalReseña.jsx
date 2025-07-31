@@ -4,6 +4,7 @@ import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Avatar from "../../ui/Avatar";
 import ModalContenedor from "../../ui/ModalContenedor";
+import MainLinkButton from "../../ui/MainLinkButton";
 
 const ModalReseña = ({ reseña, onClose }) => {
   const navigate = useNavigate();
@@ -65,17 +66,16 @@ const ModalReseña = ({ reseña, onClose }) => {
       </div>
       {/* Nombre */}
       <MainH2
-        onClick={() => navigate(`/usuarios/${userId}`)}
-        className="text-2xl lg:text-3xl text-center cursor-pointer hover:underline text-acento"
+        className="text-2xl lg:text-3xl text-center justify-center text-acento"
       >
         {nombre}
       </MainH2>
       {/* Proveedor */}
-      <p className="text-center text-texto mb-4 font-semibold">
-        Proveedor: {proveedor}
-      </p>
+      <span className="block text-center bg-texto/5 px-3 py-1 rounded-full border border-texto/15 mb-4 w-fit mx-auto">
+        Proveedor: <span className="font-bold">{proveedor}</span>
+      </span>
       {/* Estrellas */}
-      <div className="flex justify-center gap-1 text-yellow-400 text-2xl mb-4">
+      <div className="flex justify-center gap-1 text-yellow-600 text-2xl mb-4 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit mx-auto">
         {Array.from({ length: 5 }).map((_, i) =>
           i < estrellasLlenas ? (
             <IconCarambolaFilled key={i} size={24} />
@@ -85,9 +85,17 @@ const ModalReseña = ({ reseña, onClose }) => {
         )}
       </div>
       {/* Comentario */}
-      <p className="text-texto bg-texto/5 border border-texto/10 rounded-lg px-4 py-4 text-center leading-relaxed">
+      <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-center leading-relaxed mb-6">
         {reseña.comentario}
       </p>
+
+      {/* Botón "Ver perfil" */}
+      <MainLinkButton
+        onClick={() => navigate(`/usuarios/${userId}`)}
+        className="w-full px-4 py-2"
+      >
+        Ver perfil
+      </MainLinkButton>
     </ModalContenedor>
   );
 };

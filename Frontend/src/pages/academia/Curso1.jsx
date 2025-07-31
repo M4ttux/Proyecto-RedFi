@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
+import MainButton from "../../components/ui/MainButton";
+import MainLinkButton from "../../components/ui/MainLinkButton";
+import { IconArrowLeft, IconWifi, IconBrain } from "@tabler/icons-react";
 
 const Curso1 = () => {
   const navigate = useNavigate();
@@ -84,140 +87,138 @@ const Curso1 = () => {
   };
 
   return (
-    <section className="p-6 max-w-4xl mx-auto space-y-10">
-      <MainH1>Mejora tu Wi-Fi en casa</MainH1>
+    <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center mb-8">
+          <MainH1 icon={IconWifi}>Mejora tu Wi-Fi en casa</MainH1>
+        </div>
 
-      {/* 🎥 VIDEO */}
-      <div className="aspect-video">
-        <iframe
-          className="w-full h-full rounded-lg"
-          src="https://www.youtube.com/embed/Gqq71BWfDpI"
-          title="Video WiFi"
-          allowFullScreen
-        ></iframe>
-      </div>
+        {/* 🎥 VIDEO */}
+        <div className="aspect-video">
+          <iframe
+            className="w-full h-full rounded-lg"
+            src="https://www.youtube.com/embed/Gqq71BWfDpI"
+            title="Video WiFi"
+            allowFullScreen
+          ></iframe>
+        </div>
 
-      {/* 📄 TEXTO EXPLICATIVO */}
-      <div className="text-gray-300 space-y-4">
-        <p>
-          ¿Tienes problemas de conexión en tu casa? Muchas veces, el problema no
-          es el proveedor, sino cómo está distribuida la red Wi-Fi.
-        </p>
-        <p>
-          Uno de los factores más importantes es la ubicación del router.
-          Dejarlo cerca del piso, detrás del televisor o en una esquina, afecta
-          negativamente la señal.
-        </p>
-        <p>
-          Las señales Wi-Fi funcionan mejor cuando el router está en el centro
-          de la vivienda, a una altura elevada y sin obstáculos como metales o
-          espejos.
-        </p>
-        <p>
-          Las redes de 2.4 GHz tienen mayor alcance, pero son más susceptibles a
-          interferencias. Las redes de 5 GHz ofrecen más velocidad, pero menos
-          cobertura.
-        </p>
-        <p>
-          Un canal saturado también afecta tu red. Elegí siempre entre los
-          canales 1, 6 u 11 para 2.4 GHz, ya que no se superponen entre sí.
-        </p>
-        <p>
-          Para extender la cobertura puedes usar repetidores, sistemas mesh o
-          adaptadores PLC. No hace falta cambiar de proveedor si la solución
-          está dentro del hogar.
-        </p>
-        <p>
-          Finalmente, recuerda cambiar la contraseña predeterminada de tu router
-          para evitar accesos no deseados y optimizar el rendimiento de la red.
-        </p>
-        <p>
-          Mantener tu router actualizado y reiniciarlo cada cierto tiempo
-          también puede ayudar a resolver errores intermitentes o caídas de
-          señal.
-        </p>
-      </div>
+        {/* 📄 TEXTO EXPLICATIVO */}
+        <div className="text-texto space-y-4">
+          <p>
+            ¿Tienes problemas de conexión en tu casa? Muchas veces, el problema
+            no es el proveedor, sino cómo está distribuida la red Wi-Fi.
+          </p>
+          <p>
+            Uno de los factores más importantes es la ubicación del router.
+            Dejarlo cerca del piso, detrás del televisor o en una esquina,
+            afecta negativamente la señal.
+          </p>
+          <p>
+            Las señales Wi-Fi funcionan mejor cuando el router está en el centro
+            de la vivienda, a una altura elevada y sin obstáculos como metales o
+            espejos.
+          </p>
+          <p>
+            Las redes de 2.4 GHz tienen mayor alcance, pero son más susceptibles
+            a interferencias. Las redes de 5 GHz ofrecen más velocidad, pero
+            menos cobertura.
+          </p>
+          <p>
+            Un canal saturado también afecta tu red. Elegí siempre entre los
+            canales 1, 6 u 11 para 2.4 GHz, ya que no se superponen entre sí.
+          </p>
+          <p>
+            Para extender la cobertura puedes usar repetidores, sistemas mesh o
+            adaptadores PLC. No hace falta cambiar de proveedor si la solución
+            está dentro del hogar.
+          </p>
+          <p>
+            Finalmente, recuerda cambiar la contraseña predeterminada de tu
+            router para evitar accesos no deseados y optimizar el rendimiento de
+            la red.
+          </p>
+          <p>
+            Mantener tu router actualizado y reiniciarlo cada cierto tiempo
+            también puede ayudar a resolver errores intermitentes o caídas de
+            señal.
+          </p>
+        </div>
 
-      {/* ✅ QUIZ */}
-      <div className="bg-white/5 p-6 rounded-lg border border-white/10">
-        <MainH2 className="text-center">🧠 Quiz final</MainH2>
-
-        <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
-          {preguntas.map((p) => {
-            const respuestaUsuario = respuestas[p.id];
-            const esCorrecta = respuestaUsuario === p.correcta;
-            return (
-              <div key={p.id} className="space-y-2">
-                <p className="font-medium text-texto">{p.texto}</p>
-                <div className="flex flex-col gap-1 text-sm">
-                  {Object.entries(p.opciones).map(([key, text]) => (
-                    <label key={key} className="cursor-pointer">
-                      <input
-                        type="radio"
-                        name={p.id}
-                        value={key}
-                        onChange={() => handleChange(p.id, key)}
-                        checked={respuestaUsuario === key}
-                        className="mr-2"
-                      />
-                      {text}
-                    </label>
-                  ))}
-                </div>
-
-                {mostrarResultados && (
-                  <div
-                    className={`p-2 rounded font-semibold text-sm ${
-                      esCorrecta
-                        ? "bg-green-600 text-texto"
-                        : "bg-red-600 text-texto"
-                    }`}
-                  >
-                    {esCorrecta
-                      ? "✅ ¡Respuesta correcta!"
-                      : `❌ Incorrecto. La respuesta correcta era: "${
-                          p.opciones[p.correcta]
-                        }"`}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          <div className="flex justify-center gap-4 flex-wrap mt-6">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="bg-gray-500 hover:bg-gray-600 text-texto font-semibold px-4 py-2 rounded"
-            >
-              Reiniciar
-            </button>
-
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-texto font-semibold px-4 py-2 rounded"
-            >
-              Enviar respuestas
-            </button>
-            
-          </div>
+        {/* QUIZ */}
+        <div className="bg-texto/5 p-6 rounded-lg border border-texto/15">
+          <MainH2 icon={IconBrain} className="text-center justify-center">Quiz final</MainH2>
 
           {mostrarResultados && (
-            <p className="mt-4 font-bold text-lg text-center text-texto">
-              ✅ Acertaste {resultado} de {preguntas.length} preguntas.
+            <p className="mt-8 font-bold text-lg text-center text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 w-fit mx-auto">
+              Acertaste {resultado} de {preguntas.length} preguntas.
             </p>
           )}
-        </form>
-      </div>
 
-      {/* 🔙 Botón volver atrás */}
-      <div className="text-center">
-        <button
-          onClick={() => navigate("/academy")}
-          className="mt-6 bg-white/10 hover:bg-white/20 text-texto font-medium px-6 py-2 rounded"
-        >
-          ← Volver a Red-Fi Academy
-        </button>
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto mt-8">
+            {preguntas.map((p) => {
+              const respuestaUsuario = respuestas[p.id];
+              const esCorrecta = respuestaUsuario === p.correcta;
+              return (
+                <div key={p.id} className="space-y-2">
+                  <p className="font-medium text-texto">{p.texto}</p>
+                  <div className="flex flex-col gap-1 text-sm">
+                    {Object.entries(p.opciones).map(([key, text]) => (
+                      <label key={key} className="cursor-pointer">
+                        <input
+                          type="radio"
+                          name={p.id}
+                          value={key}
+                          onChange={() => handleChange(p.id, key)}
+                          checked={respuestaUsuario === key}
+                          className="mr-2"
+                        />
+                        {text}
+                      </label>
+                    ))}
+                  </div>
+
+                  {mostrarResultados && (
+                    <div
+                      className={`p-2 rounded-lg font-bold ${esCorrecta
+                          ? "bg-green-600 text-texto"
+                          : "bg-red-600 text-texto"
+                        }`}
+                    >
+                      {esCorrecta
+                        ? "¡Respuesta correcta!"
+                        : `Incorrecto. La respuesta correcta era: "${p.opciones[p.correcta]
+                        }"`}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            <div className="flex justify-center gap-4 flex-wrap mt-6">
+              <MainButton
+                type="button"
+                onClick={handleReset}
+                variant="secondary"
+              >
+                Reiniciar
+              </MainButton>
+
+              <MainButton type="submit" variant="primary">
+                Enviar respuestas
+              </MainButton>
+            </div>
+
+          </form>
+        </div>
+
+        {/* 🔙 Botón volver a Academy */}
+        <div className="text-center">
+          <MainLinkButton to="/academy" variant="secondary">
+            <IconArrowLeft />
+            Volver a Red-Fi Academy
+          </MainLinkButton>
+        </div>
       </div>
     </section>
   );

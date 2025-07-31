@@ -104,7 +104,7 @@ const FiltrosZona = ({
             Todas
           </MainButton>
 
-          <div className="flex gap-1">
+          <div className="flex gap-1 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
             {[1, 2, 3, 4, 5].map((v) => {
               const isActive = filtros.valoracionMin >= v;
               const StarIcon = isActive ? IconCarambolaFilled : IconCarambola;
@@ -122,7 +122,7 @@ const FiltrosZona = ({
                   <StarIcon
                     size={24}
                     className={`transition hover:scale-105 ${
-                      isActive ? "text-yellow-400" : "text-texto/30"
+                      isActive ? "text-yellow-600" : "text-texto/30"
                     }`}
                   />
                 </button>

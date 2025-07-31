@@ -203,7 +203,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             </div>
 
             <div
-              className="w-10 h-10 rounded border border-white/10"
+              className="w-10 h-10 rounded border border-texto/15"
               style={{
                 backgroundColor: /^#[0-9A-Fa-f]{6}$/.test(form.color || "")
                   ? form.color

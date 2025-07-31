@@ -18,7 +18,7 @@ const Avatar = ({ fotoUrl, nombre = "Usuario", size = 20, className = "" }) => {
   return (
     <div
       className={classNames(
-        "rounded-full border-2 border-acento shadow-md overflow-hidden flex items-center justify-center bg-texto/10 text-texto font-bold",
+        "rounded-full border-2 border-acento shadow-md overflow-hidden flex items-center justify-center bg-texto/5 text-texto font-bold",
         className
       )}
       style={{

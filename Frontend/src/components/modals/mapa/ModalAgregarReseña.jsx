@@ -196,16 +196,16 @@ const ModalAgregarReseña = ({
         <div className="space-y-2">
           <label className="block font-medium text-texto">Ubicación *</label>
           {coordenadasSeleccionadas ? (
-            <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
-              <div className="flex items-center gap-2 text-green-400 font-medium mb-1">
+            <div className="bg-green-600/20 border border-green-700/50 rounded-lg p-3">
+              <div className="flex items-center gap-2 text-green-700 font-bold mb-1">
                 <IconMapPin size={16} />
                 Ubicación seleccionada
               </div>
-              <p className="text-texto break-words">
+              <p className="text-texto break-words font-medium">
                 {ubicacionTexto ? (
                   ubicacionTexto
                 ) : (
-                  <span className="flex items-center gap-2 text-texto/60">
+                  <span className="flex items-center gap-2 text-texto ">
                     <IconLoader2 className="animate-spin" size={16} />
                     Cargando dirección...
                   </span>
@@ -222,7 +222,7 @@ const ModalAgregarReseña = ({
               className={`rounded-lg p-3 transition border ${
                 errorUbicacion
                   ? "bg-red-500/10 border-red-500/50"
-                  : "bg-texto/5 border-texto/20"
+                  : "bg-texto/5 border-texto/15"
               }`}
             >
               <p

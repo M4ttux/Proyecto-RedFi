@@ -61,7 +61,7 @@ const Login = () => {
         ${
           currentTheme === "light"
             ? "bg-secundario border border-secundario/50 shadow-lg"
-            : "bg-white/5 border border-white/10"
+            : "bg-texto/5 border border-texto/15"
         } `}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,7 +99,7 @@ const Login = () => {
         {/* Divider */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-texto/10"></div>
+            <div className="w-full border-t border-texto/15"></div>
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-fondo text-texto">
