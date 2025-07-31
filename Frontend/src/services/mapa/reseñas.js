@@ -53,10 +53,32 @@ export const cargarReseñasEnMapa = async (
         type: "circle",
         source: reseñasSourceId,
         paint: {
-          "circle-radius": 6,
-          "circle-color": "#FB8531",
-          "circle-stroke-width": 1,
+          // Radio basado en las estrellas (4-8px)
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["get", "estrellas"],
+            1, 6,   // 1 estrella = 4px
+            2, 6,   // 2 estrellas = 5px
+            3, 6,   // 3 estrellas = 6px
+            4, 6,   // 4 estrellas = 7px
+            5, 6    // 5 estrellas = 8px
+          ],
+          // Color basado en las estrellas
+          "circle-color": [
+            "interpolate",
+            ["linear"],
+            ["get", "estrellas"],
+            1, "#D7263D",   // 1 estrella = rojo
+            2, "#F46036",   // 2 estrellas = naranja
+            3, "#FFD23F",   // 3 estrellas = amarillo
+            4, "#6CC551",   // 4 estrellas = verde claro
+            5, "#36C9C6"    // 5 estrellas = verde
+          ],
+          "circle-stroke-width": 2,
           "circle-stroke-color": "#fff",
+          // Opacidad para mayor contraste
+          "circle-opacity": 0.8
         },
       });
 
