@@ -1,7 +1,6 @@
 import { obtenerProveedores } from "../proveedores/obtenerProveedor";
 import { getVisible, getVisiblePorZona } from "./mapaBase";
 import maplibregl from "maplibre-gl";
-import { generarIconoMultiProveedor } from "./iconoTablerToImage";
 
 // Utilidad para calcular centroide de una zona
 const calcularCentroide = (geom) => {
@@ -150,82 +149,7 @@ export const cargarProveedoresEnMapa = async (
     }
   }
 
-  // Renderizar íconos para zonas con múltiples proveedores
-  const iconoBitmap = await generarIconoMultiProveedor();
 
-  zonasConProveedores.forEach(({ zona, proveedores }) => {
-    if (proveedores.length <= 1) return;
-
-    const iconId = `multi-icon-${zona.id}`;
-    const sourceId = `multi-source-${zona.id}`;
-    const coordinates =
-      zona?.centro || zona?.centroid || calcularCentroide(zona.geom);
-    if (!coordinates) return;
-
-    if (map.getSource(sourceId)) {
-      map.removeLayer(iconId);
-      map.removeSource(sourceId);
-    }
-
-    map.addSource(sourceId, {
-      type: "geojson",
-      data: {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates,
-        },
-        properties: {
-          proveedores: JSON.stringify(
-            proveedores.map((p) => ({
-              nombre: p.nombre,
-              color: p.color,
-            }))
-          ),
-        },
-      },
-    });
-
-    if (!map.hasImage("multi-icon")) {
-      map.addImage("multi-icon", iconoBitmap);
-    }
-
-    map.addLayer({
-      id: iconId,
-      type: "symbol",
-      source: sourceId,
-      layout: {
-        "icon-image": "multi-icon",
-        "icon-size": 0.6,
-        "icon-allow-overlap": true,
-      },
-    });
-
-    const popup = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-    });
-
-    map.on("mouseenter", iconId, (e) => {
-      map.getCanvas().style.cursor = "pointer";
-      const data = JSON.parse(e.features[0].properties.proveedores);
-      const content = data
-        .map(
-          (p) =>
-            `<div><span style="color:${p.color}">⬤</span> ${p.nombre}</div>`
-        )
-        .join("");
-      popup
-        .setLngLat(e.lngLat)
-        .setHTML(`<strong>Proveedores:</strong><br>${content}`)
-        .addTo(map);
-    });
-
-    map.on("mouseleave", iconId, () => {
-      map.getCanvas().style.cursor = "";
-      popup.remove();
-    });
-  });
 
   return proveedoresConEstado;
 };
@@ -260,4 +184,3 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
     });
   });
 };
-
