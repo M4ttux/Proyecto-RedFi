@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/layout/NavbarV2";
+import Navbar from "../components/layout/Navbar";
 import MobileBottomNav from "../components/layout/MobileBottomNav";
 import Footer from "../components/layout/Footer";
 import { AuthProvider } from "../context/AuthContext";
@@ -11,7 +11,7 @@ const Layout = () => {
 
   return (
     <AuthProvider>
-      <header className="drop-shadow-xl z-50">
+      <header className="z-50">
         <Navbar />
       </header>
       <main className="flex-grow flex items-center justify-center">

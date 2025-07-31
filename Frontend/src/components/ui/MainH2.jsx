@@ -18,8 +18,7 @@ const H2 = ({
   return (
     <h2
       className={classNames(
-        applyFlex && "flex",
-        applyFlex && "items-center",
+        applyFlex && "flex items-center gap-2",
         !hasCustomJustify && applyFlex && "justify-start",
         !hasCustomTextAlign && "text-left",
         !hasCustomSize && "text-3xl lg:text-4xl",
@@ -29,7 +28,7 @@ const H2 = ({
       )}
       {...props}
     >
-      {Icon && <Icon size={32} className="inline-block mr-2 text-acento" />}
+      {Icon && <Icon size={32} className="inline-block text-acento" />}
       {children}
     </h2>
   );
