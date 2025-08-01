@@ -116,24 +116,12 @@ const ModalAgregarReseña = ({
 
   useEffect(() => {
     if (isOpen) {
-      // Limpiar todos los estados siempre que se abra el modal
-      setProveedorSeleccionado("__disabled__");
-      setComentario("");
-      setUbicacionTexto("");
-      setEstrellas(5);
-      // Solo resetear ubicacionSeleccionada si no hay coordenadas
-      if (!coordenadasSeleccionadas) {
-        setUbicacionSeleccionada(false);
-      }
-      setZonaDetectada(undefined);
-      setProveedores([]);
-      
-      // Limpiar errores
+      // Solo limpiar errores al abrir (los estados se limpian al cerrar)
       setErrorProveedor(false);
       setErrorUbicacion(false);
       setErrorComentario(false);
     }
-  }, [isOpen, coordenadasSeleccionadas]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (coordenadasSeleccionadas) {
@@ -166,6 +154,26 @@ const ModalAgregarReseña = ({
 
   const handleStarClick = (rating) => {
     setEstrellas(rating);
+  };
+
+  const handleClose = () => {
+    // Limpiar todos los estados inmediatamente al cerrar
+    setProveedorSeleccionado("__disabled__");
+    setComentario("");
+    setUbicacionTexto("");
+    setEstrellas(5);
+    setUbicacionSeleccionada(false);
+    setZonaDetectada(undefined);
+    setProveedores([]);
+    setErrorProveedor(false);
+    setErrorUbicacion(false);
+    setErrorComentario(false);
+    
+    // Limpiar coordenadas del componente padre al cerrar
+    if (onSeleccionarUbicacion) {
+      onSeleccionarUbicacion(null);
+    }
+    onClose();
   };
 
   const handleSubmit = async (e) => {
@@ -206,7 +214,7 @@ const ModalAgregarReseña = ({
         ubicacion: coordenadasSeleccionadas,
         ubicacionTexto,
       });
-      onClose();
+      handleClose();
     } catch (e) {
       mostrarError("Error al publicar reseña");
       console.error(e);
@@ -217,7 +225,7 @@ const ModalAgregarReseña = ({
 
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === "Escape" && isOpen) onClose();
+      if (e.key === "Escape" && isOpen) handleClose();
     };
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
@@ -232,11 +240,11 @@ const ModalAgregarReseña = ({
   if (!isOpen) return null;
 
   return (
-    <ModalContenedor onClose={onClose}>
+    <ModalContenedor onClose={handleClose}>
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar reseña</MainH2>
         <MainButton
-          onClick={onClose}
+          onClick={handleClose}
           type="button"
           variant="cross"
           title="Cerrar modal"
@@ -377,10 +385,6 @@ const ModalAgregarReseña = ({
             <MainH3 icon={IconCircleNumber2} className="text-lg">
               Elige el proveedor
             </MainH3>
-            <p className="text-texto text-sm mb-3">
-              Selecciona el proveedor de internet que quieres reseñar en esta
-              zona.
-            </p>
 
             <Select
               label={
@@ -500,11 +504,11 @@ const ModalAgregarReseña = ({
         {/* Botones de acción solo cuando se puede completar */}
         {ubicacionSeleccionada && zonaDetectada?.id && proveedorSeleccionado !== "__disabled__" && (
           <>
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-3">
               <MainButton
                 type="button"
                 variant="secondary"
-                onClick={onClose}
+                onClick={handleClose}
                 disabled={loading}
                 className="flex-1"
               >
@@ -519,7 +523,7 @@ const ModalAgregarReseña = ({
                 {loading ? "Publicando..." : "Publicar Reseña"}
               </MainButton>
             </div>
-            <div className="text-center mt-6">
+            <div className="text-center">
               <p className="text-sm text-texto/50 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.
@@ -532,11 +536,11 @@ const ModalAgregarReseña = ({
         {!(
           ubicacionSeleccionada && zonaDetectada?.id && proveedorSeleccionado !== "__disabled__"
         ) && (
-          <div className="flex justify-center pt-4">
+          <div className="flex justify-center">
             <MainButton
               type="button"
               variant="secondary"
-              onClick={onClose}
+              onClick={handleClose}
               className="w-32"
             >
               Cerrar
