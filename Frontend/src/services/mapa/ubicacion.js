@@ -43,7 +43,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
     // Verificar si la geolocalización está disponible
     if (!navigator.geolocation) {
       mostrarAlerta("La geolocalización no está disponible en este dispositivo.");
-      resolve();
+      resolve(null);
       return;
     }
 
@@ -73,10 +73,12 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
               mostrarAlerta(`Estás en ${ciudad}, ${provincia}`);
               map.flyTo({ center: [longitude, latitude], zoom: 13 });
               colocarMarcadorUbicacion(map, [longitude, latitude]);
+              resolve({ lat: latitude, lng: longitude });
             } else {
               mostrarAlerta(
                 `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${provincia}.`
               );
+              resolve(null);
             }
           }, 50);
 
@@ -84,7 +86,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
         } catch (error) {
           console.error("Error al obtener datos de ubicación:", error);
           mostrarAlerta("No se pudo obtener tu ubicación exacta.");
-          resolve();
+          resolve(null);
         }
       },
       (error) => {
@@ -107,7 +109,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
         }
         
         mostrarAlerta(mensaje);
-        resolve();
+        resolve(null);
       },
       {
         enableHighAccuracy: true,
@@ -151,4 +153,55 @@ export const eliminarMarcadorUbicacion = (map) => {
     map.__marcadorUbicacion.remove();
     map.__marcadorUbicacion = null;
   }
+};
+
+
+export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = () => {}) => {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      mostrarAlerta("La geolocalización no está disponible en este dispositivo.");
+      resolve(null);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        const { latitude, longitude } = coords;
+        console.log("📍 Coordenadas obtenidas:", { latitude, longitude });
+
+        try {
+          const response = await fetch(
+            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${API_KEY}`
+          );
+          const data = await response.json();
+          const address = data.results[0].components;
+
+          const provincia = address.state || "";
+
+          if (provincia.toLowerCase() === "corrientes") {
+            resolve({ lat: latitude, lng: longitude });
+          } else {
+            mostrarAlerta(
+              `Estás fuera de Corrientes. Estás en ${provincia || "una provincia desconocida"}.`
+            );
+            resolve(null);
+          }
+        } catch (error) {
+          console.error("Error al obtener datos de ubicación:", error);
+          mostrarAlerta("No se pudo obtener tu ubicación exacta.");
+          resolve(null);
+        }
+      },
+      (error) => {
+        console.error("❌ Error de geolocalización:", error);
+        mostrarAlerta("No se pudo obtener tu ubicación.");
+        resolve(null);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000,
+      }
+    );
+  });
 };

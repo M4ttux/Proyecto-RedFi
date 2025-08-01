@@ -62,6 +62,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     activarSeleccion,
     desactivarSeleccion,
     limpiarSeleccion,
+    setCoordenadasSeleccionadas,
   } = useSeleccionUbicacion(mapRef, boundsCorrientes, setModalReseñaAbierto);
 
   useEffect(() => {
@@ -87,6 +88,16 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     setModalReseñaAbierto(false);
     setModalReseñaCerradaManual(false);
     activarSeleccion();
+  };
+
+  // Nueva función para manejar ubicación actual sin activar modo selección
+  const handleUbicacionActualModal = (coords) => {
+    // Establecer las coordenadas directamente sin activar modo selección
+    setCoordenadasSeleccionadas(coords);
+    // Asegurar que el modal esté abierto
+    if (!modalReseñaAbierto) {
+      setModalReseñaAbierto(true);
+    }
   };
 
   useEffect(() => {
@@ -180,6 +191,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
         boundsCorrientes={boundsCorrientes}
         coordenadasSeleccionadas={coordenadasSeleccionadas}
         onSeleccionarUbicacion={handleSeleccionarUbicacion}
+        onUbicacionActual={handleUbicacionActualModal}
       />
       <ModalZonaMultiProveedor
         isOpen={modalZonaMultiAbierto}

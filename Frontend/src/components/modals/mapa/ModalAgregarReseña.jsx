@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { obtenerProveedores } from "../../../services/proveedores/obtenerProveedor";
-import { IconX, IconMapPin, IconLoader2, IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
+import {
+  IconX,
+  IconMapPin,
+  IconLoader2,
+  IconCarambola,
+  IconCarambolaFilled,
+} from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
 import Select from "../../ui/Select";
 import Textarea from "../../ui/Textarea";
 import ModalContenedor from "../../ui/ModalContenedor";
 
+import { obtenerCoordenadasSiEstanEnCorrientes } from "../../../services/mapa/ubicacion";
 import { useAlerta } from "../../../context/AlertaContext";
 
 const ModalAgregarReseña = ({
@@ -17,10 +24,10 @@ const ModalAgregarReseña = ({
   boundsCorrientes,
   coordenadasSeleccionadas,
   onSeleccionarUbicacion,
+  onUbicacionActual, // Nueva prop para manejar ubicación actual
 }) => {
   const [proveedores, setProveedores] = useState([]);
-  const [proveedorSeleccionado, setProveedorSeleccionado] =
-    useState("__disabled__");
+  const [proveedorSeleccionado, setProveedorSeleccionado] = useState("__disabled__");
   const [comentario, setComentario] = useState("");
   const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
@@ -29,6 +36,24 @@ const ModalAgregarReseña = ({
   const [errorUbicacion, setErrorUbicacion] = useState(false);
   const [errorComentario, setErrorComentario] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+
+  const usarUbicacionActual = async () => {
+    setCargandoUbicacion(true);
+    const coords = await obtenerCoordenadasSiEstanEnCorrientes(boundsCorrientes, mostrarError);
+    if (coords) {
+      // Usar la nueva prop si está disponible, sino usar la función original
+      if (onUbicacionActual) {
+        onUbicacionActual(coords);
+      } else {
+        onSeleccionarUbicacion(coords);
+      }
+      setUbicacionTexto("Ubicación actual");
+      setErrorUbicacion(false);
+    }
+    setCargandoUbicacion(false);
+  };
 
   useEffect(() => {
     const cargarProveedores = async () => {
@@ -42,7 +67,6 @@ const ModalAgregarReseña = ({
 
   useEffect(() => {
     if (isOpen && !coordenadasSeleccionadas) {
-      // Solo reinicia si no hay coordenadas seleccionadas (primera apertura)
       setProveedorSeleccionado("__disabled__");
       setComentario("");
       setUbicacionTexto("");
@@ -88,12 +112,10 @@ const ModalAgregarReseña = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Reset errores visuales
     setErrorProveedor(false);
     setErrorUbicacion(false);
     setErrorComentario(false);
 
-    // Validar manualmente cada campo en orden
     const proveedorInvalido = proveedorSeleccionado === "__disabled__";
     const ubicacionInvalida = !coordenadasSeleccionadas;
     const comentarioInvalido = !comentario.trim();
@@ -116,7 +138,6 @@ const ModalAgregarReseña = ({
       return;
     }
 
-    // Si pasó todas las validaciones, enviar
     setLoading(true);
     try {
       await onEnviar({
@@ -155,18 +176,12 @@ const ModalAgregarReseña = ({
     <ModalContenedor onClose={onClose}>
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar reseña</MainH2>
-        <MainButton
-          onClick={onClose}
-          type="button"
-          variant="cross"
-          title="Cerrar modal"
-          className="px-0"
-        >
+        <MainButton onClick={onClose} type="button" variant="cross" title="Cerrar modal" className="px-0">
           <IconX size={24} />
         </MainButton>
       </div>
 
-      <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Select
           label={
             <>
@@ -178,10 +193,7 @@ const ModalAgregarReseña = ({
             setProveedorSeleccionado(id);
             setErrorProveedor(false);
           }}
-          options={[
-            { id: "__disabled__", nombre: "Todos los Proveedores" },
-            ...proveedores,
-          ]}
+          options={[{ id: "__disabled__", nombre: "Todos los Proveedores" }, ...proveedores]}
           getOptionValue={(p) => p.id}
           getOptionLabel={(p) => p.nombre}
           loading={proveedores.length === 0}
@@ -213,16 +225,14 @@ const ModalAgregarReseña = ({
                 {ubicacionTexto ? (
                   ubicacionTexto
                 ) : (
-                  <span className="flex items-center gap-2 text-texto ">
+                  <span className="flex items-center gap-2 text-texto">
                     <IconLoader2 className="animate-spin" size={16} />
                     Cargando dirección...
                   </span>
                 )}
               </p>
               <p className="text-texto/60 text-xs mt-1">
-                {"Coordenadas: "}
-                {coordenadasSeleccionadas.lat.toFixed(6)},{" "}
-                {coordenadasSeleccionadas.lng.toFixed(6)}
+                Coordenadas: {coordenadasSeleccionadas.lat.toFixed(6)}, {coordenadasSeleccionadas.lng.toFixed(6)}
               </p>
             </div>
           ) : (
@@ -233,11 +243,7 @@ const ModalAgregarReseña = ({
                   : "bg-texto/5 border-texto/15"
               }`}
             >
-              <p
-                className={`mb-2 ${
-                  errorUbicacion ? "text-red-400" : "text-texto/60"
-                }`}
-              >
+              <p className={`${errorUbicacion ? "text-red-400" : "text-texto/60"} mb-2`}>
                 No has seleccionado una ubicación
               </p>
             </div>
@@ -247,17 +253,20 @@ const ModalAgregarReseña = ({
             type="button"
             onClick={onSeleccionarUbicacion}
             variant="primary"
-            className={`w-full ${
-              errorUbicacion
-                ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900"
-                : ""
-            }`}
+            className={`w-full ${errorUbicacion ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900" : ""}`}
             title="Seleccionar ubicación en el mapa"
             icon={IconMapPin}
           >
-            {coordenadasSeleccionadas
-              ? "Cambiar ubicación"
-              : "Seleccionar en mapa"}
+            {coordenadasSeleccionadas ? "Cambiar ubicación" : "Seleccionar en mapa"}
+          </MainButton>
+
+          <MainButton
+            type="button"
+            onClick={usarUbicacionActual}
+            loading={cargandoUbicacion}
+            variant="accent"
+          >
+            📍 Usar mi ubicación actual
           </MainButton>
         </div>
 
@@ -266,7 +275,7 @@ const ModalAgregarReseña = ({
           <label className="block font-medium text-texto mb-2">
             Calificación <span className="text-red-600">*</span>
           </label>
-          <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit ">
+          <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
@@ -275,11 +284,7 @@ const ModalAgregarReseña = ({
                 className="text-2xl hover:scale-105 transition p-1"
                 disabled={loading}
               >
-                {star <= estrellas ? (
-                  <IconCarambolaFilled size={24} />
-                ) : (
-                  <IconCarambola size={24} />
-                )}
+                {star <= estrellas ? <IconCarambolaFilled size={24} /> : <IconCarambola size={24} />}
               </button>
             ))}
           </div>
@@ -302,28 +307,16 @@ const ModalAgregarReseña = ({
         />
 
         <div className="flex gap-3 pt-4">
-          <MainButton
-            type="button"
-            variant="secondary"
-            onClick={onClose}
-            disabled={loading}
-            className="flex-1"
-          >
+          <MainButton type="button" variant="secondary" onClick={onClose} disabled={loading} className="flex-1">
             Cancelar
           </MainButton>
-          <MainButton
-            type="submit"
-            variant="primary"
-            disabled={loading}
-            className="flex-1"
-          >
+          <MainButton type="submit" variant="primary" disabled={loading} className="flex-1">
             {loading ? "Publicando..." : "Publicar Reseña"}
           </MainButton>
         </div>
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
-            Los campos marcados con <span className="text-red-600">*</span> son
-            obligatorios.
+            Los campos marcados con <span className="text-red-600">*</span> son obligatorios.
           </p>
         </div>
       </form>

@@ -92,5 +92,6 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
     activarSeleccion,
     desactivarSeleccion,
     limpiarSeleccion,
+    setCoordenadasSeleccionadas, // Agregar esta función para uso externo
   };
 };
