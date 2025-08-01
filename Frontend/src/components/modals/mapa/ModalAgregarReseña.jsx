@@ -6,6 +6,7 @@ import {
   IconLoader2,
   IconCarambola,
   IconCarambolaFilled,
+  IconHandFinger,
 } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
 import MainButton from "../../ui/MainButton";
@@ -27,7 +28,8 @@ const ModalAgregarReseña = ({
   onUbicacionActual, // Nueva prop para manejar ubicación actual
 }) => {
   const [proveedores, setProveedores] = useState([]);
-  const [proveedorSeleccionado, setProveedorSeleccionado] = useState("__disabled__");
+  const [proveedorSeleccionado, setProveedorSeleccionado] =
+    useState("__disabled__");
   const [comentario, setComentario] = useState("");
   const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
@@ -41,7 +43,10 @@ const ModalAgregarReseña = ({
 
   const usarUbicacionActual = async () => {
     setCargandoUbicacion(true);
-    const coords = await obtenerCoordenadasSiEstanEnCorrientes(boundsCorrientes, mostrarError);
+    const coords = await obtenerCoordenadasSiEstanEnCorrientes(
+      boundsCorrientes,
+      mostrarError
+    );
     if (coords) {
       // Usar la nueva prop si está disponible, sino usar la función original
       if (onUbicacionActual) {
@@ -176,7 +181,13 @@ const ModalAgregarReseña = ({
     <ModalContenedor onClose={onClose}>
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar reseña</MainH2>
-        <MainButton onClick={onClose} type="button" variant="cross" title="Cerrar modal" className="px-0">
+        <MainButton
+          onClick={onClose}
+          type="button"
+          variant="cross"
+          title="Cerrar modal"
+          className="px-0"
+        >
           <IconX size={24} />
         </MainButton>
       </div>
@@ -193,7 +204,10 @@ const ModalAgregarReseña = ({
             setProveedorSeleccionado(id);
             setErrorProveedor(false);
           }}
-          options={[{ id: "__disabled__", nombre: "Todos los Proveedores" }, ...proveedores]}
+          options={[
+            { id: "__disabled__", nombre: "Todos los Proveedores" },
+            ...proveedores,
+          ]}
           getOptionValue={(p) => p.id}
           getOptionLabel={(p) => p.nombre}
           loading={proveedores.length === 0}
@@ -232,42 +246,63 @@ const ModalAgregarReseña = ({
                 )}
               </p>
               <p className="text-texto/60 text-xs mt-1">
-                Coordenadas: {coordenadasSeleccionadas.lat.toFixed(6)}, {coordenadasSeleccionadas.lng.toFixed(6)}
+                Coordenadas: {coordenadasSeleccionadas.lat.toFixed(6)},{" "}
+                {coordenadasSeleccionadas.lng.toFixed(6)}
               </p>
             </div>
           ) : (
             <div
-              className={`rounded-lg p-3 transition border ${
+              className={`rounded-lg p-3 transition border mb-4 ${
                 errorUbicacion
                   ? "bg-red-500/10 border-red-500/50"
                   : "bg-texto/5 border-texto/15"
               }`}
             >
-              <p className={`${errorUbicacion ? "text-red-400" : "text-texto/60"} mb-2`}>
+              <p
+                className={`${
+                  errorUbicacion ? "text-red-400" : "text-texto/60"
+                } mb-2`}
+              >
                 No has seleccionado una ubicación
               </p>
             </div>
           )}
-
-          <MainButton
-            type="button"
-            onClick={onSeleccionarUbicacion}
-            variant="primary"
-            className={`w-full ${errorUbicacion ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900" : ""}`}
-            title="Seleccionar ubicación en el mapa"
-            icon={IconMapPin}
-          >
-            {coordenadasSeleccionadas ? "Cambiar ubicación" : "Seleccionar en mapa"}
-          </MainButton>
-
-          <MainButton
-            type="button"
-            onClick={usarUbicacionActual}
-            loading={cargandoUbicacion}
-            variant="accent"
-          >
-            📍 Usar mi ubicación actual
-          </MainButton>
+          <div className="flex flex-row gap-4">
+            <div className="flex-1">
+              <MainButton
+                type="button"
+                onClick={onSeleccionarUbicacion}
+                variant="primary"
+                className={`w-full ${
+                  errorUbicacion
+                    ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900"
+                    : ""
+                }`}
+                title="Seleccionar ubicación en el mapa"
+                icon={IconHandFinger}
+              >
+                {coordenadasSeleccionadas
+                  ? "Cambiar ubicación"
+                  : "Seleccionar en mapa"}
+              </MainButton>
+            </div>
+            <div className="flex-1">
+              <MainButton
+                type="button"
+                onClick={usarUbicacionActual}
+                loading={cargandoUbicacion}
+                variant="accent"
+                icon={IconMapPin}
+                className={`w-full ${
+                  errorUbicacion
+                    ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900"
+                    : ""
+                }`}
+              >
+                Usar mi ubicación actual
+              </MainButton>
+            </div>
+          </div>
         </div>
 
         {/* Estrellas */}
@@ -284,7 +319,11 @@ const ModalAgregarReseña = ({
                 className="text-2xl hover:scale-105 transition p-1"
                 disabled={loading}
               >
-                {star <= estrellas ? <IconCarambolaFilled size={24} /> : <IconCarambola size={24} />}
+                {star <= estrellas ? (
+                  <IconCarambolaFilled size={24} />
+                ) : (
+                  <IconCarambola size={24} />
+                )}
               </button>
             ))}
           </div>
@@ -307,16 +346,28 @@ const ModalAgregarReseña = ({
         />
 
         <div className="flex gap-3 pt-4">
-          <MainButton type="button" variant="secondary" onClick={onClose} disabled={loading} className="flex-1">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1"
+          >
             Cancelar
           </MainButton>
-          <MainButton type="submit" variant="primary" disabled={loading} className="flex-1">
+          <MainButton
+            type="submit"
+            variant="primary"
+            disabled={loading}
+            className="flex-1"
+          >
             {loading ? "Publicando..." : "Publicar Reseña"}
           </MainButton>
         </div>
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
-            Los campos marcados con <span className="text-red-600">*</span> son obligatorios.
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
           </p>
         </div>
       </form>

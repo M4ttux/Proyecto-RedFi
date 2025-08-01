@@ -32,7 +32,7 @@ const Textarea = ({
         disabled={disabled}
         rows={rows}
         className={classNames(
-          "w-full bg-texto/5 border border-texto/15 text-texto rounded-lg transition px-3 py-2 resize-none",
+          "w-full bg-texto/5 border text-texto rounded-lg transition px-3 py-2 resize-none",
           "focus:outline-none focus:ring-1",
           disabled && "cursor-not-allowed opacity-70",
           isInvalid
