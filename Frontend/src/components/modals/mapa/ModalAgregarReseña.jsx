@@ -49,7 +49,7 @@ const ModalAgregarReseña = ({
   const [loading, setLoading] = useState(false);
 
   const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
-  const [zonaDetectada, setZonaDetectada] = useState(null);
+  const [zonaDetectada, setZonaDetectada] = useState(undefined);
   const [cargandoProveedores, setCargandoProveedores] = useState(false);
   const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState(false);
 
@@ -79,6 +79,8 @@ const ModalAgregarReseña = ({
   const detectarZonaYCargarProveedores = async (coords) => {
     try {
       setCargandoProveedores(true);
+      // Resetear zona mientras se detecta para evitar mostrar estado anterior
+      setZonaDetectada(undefined);
 
       // Detectar la zona basada en las coordenadas
       const zona = await determinarZonaPorCoordenadas(
@@ -113,22 +115,25 @@ const ModalAgregarReseña = ({
   // Ahora solo cargamos proveedores después de seleccionar ubicación
 
   useEffect(() => {
-    if (isOpen && !coordenadasSeleccionadas) {
+    if (isOpen) {
+      // Limpiar todos los estados siempre que se abra el modal
       setProveedorSeleccionado("__disabled__");
       setComentario("");
       setUbicacionTexto("");
       setEstrellas(5);
-      setUbicacionSeleccionada(false);
-      setZonaDetectada(null);
+      // Solo resetear ubicacionSeleccionada si no hay coordenadas
+      if (!coordenadasSeleccionadas) {
+        setUbicacionSeleccionada(false);
+      }
+      setZonaDetectada(undefined);
       setProveedores([]);
-    }
-
-    if (isOpen) {
+      
+      // Limpiar errores
       setErrorProveedor(false);
       setErrorUbicacion(false);
       setErrorComentario(false);
     }
-  }, [isOpen]);
+  }, [isOpen, coordenadasSeleccionadas]);
 
   useEffect(() => {
     if (coordenadasSeleccionadas) {
@@ -254,15 +259,30 @@ const ModalAgregarReseña = ({
 
           {coordenadasSeleccionadas ? (
             <div className={`rounded-lg p-3 mb-3 ${
-              zonaDetectada 
-                ? "bg-green-600/20 border border-green-700/50" 
-                : "bg-red-600/20 border border-red-700/50"
+              zonaDetectada === undefined
+                ? "bg-blue-600/20 border border-blue-700/50"
+                : zonaDetectada 
+                  ? "bg-green-600/20 border border-green-700/50" 
+                  : "bg-red-600/20 border border-red-700/50"
             }`}>
               <div className={`flex items-center gap-2 font-bold mb-1 ${
-                zonaDetectada ? "text-green-700" : "text-red-700"
+                zonaDetectada === undefined
+                  ? "text-blue-700"
+                  : zonaDetectada 
+                    ? "text-green-700" 
+                    : "text-red-700"
               }`}>
-                <IconCheck size={16} />
-                {zonaDetectada ? "Ubicación seleccionada" : "Ubicación fuera del área"}
+                {zonaDetectada === undefined ? (
+                  <IconLoader2 className="animate-spin" size={16} />
+                ) : (
+                  <IconCheck size={16} />
+                )}
+                {zonaDetectada === undefined 
+                  ? "Detectando zona..." 
+                  : zonaDetectada 
+                    ? "Ubicación seleccionada" 
+                    : "Ubicación fuera del área"
+                }
               </div>
               <p
                 className="text-texto break-words font-medium line-clamp-1"
@@ -277,7 +297,11 @@ const ModalAgregarReseña = ({
                   </span>
                 )}
               </p>
-              {zonaDetectada ? (
+              {zonaDetectada === undefined ? (
+                <p className="text-blue-600 text-sm mt-1 font-medium">
+                  🔍 Analizando ubicación...
+                </p>
+              ) : zonaDetectada ? (
                 <p className="text-texto/75 text-sm mt-1 font-medium">
                   Zona detectada: {zonaDetectada.departamento}
                 </p>
@@ -348,7 +372,7 @@ const ModalAgregarReseña = ({
         </div>
 
         {/* Paso 2: Proveedor (solo se muestra después de seleccionar ubicación válida) */}
-        {ubicacionSeleccionada && zonaDetectada && (
+        {ubicacionSeleccionada && zonaDetectada?.id && (
           <div className="space-y-4">
             <MainH3 icon={IconCircleNumber2} className="text-lg">
               Elige el proveedor
@@ -425,7 +449,7 @@ const ModalAgregarReseña = ({
         )}
 
         {/* Paso 3: Calificación y comentario (solo se muestra después de seleccionar proveedor) */}
-        {ubicacionSeleccionada && zonaDetectada && proveedorSeleccionado !== "__disabled__" && (
+        {ubicacionSeleccionada && zonaDetectada?.id && proveedorSeleccionado !== "__disabled__" && (
           <div className="space-y-4">
             <MainH3 icon={IconCircleNumber3} className="text-lg">
               Califica tu experiencia
@@ -474,7 +498,7 @@ const ModalAgregarReseña = ({
         )}
 
         {/* Botones de acción solo cuando se puede completar */}
-        {ubicacionSeleccionada && zonaDetectada && proveedorSeleccionado !== "__disabled__" && (
+        {ubicacionSeleccionada && zonaDetectada?.id && proveedorSeleccionado !== "__disabled__" && (
           <>
             <div className="flex gap-3 pt-4">
               <MainButton
@@ -506,7 +530,7 @@ const ModalAgregarReseña = ({
 
         {/* Botón para cerrar si no se ha completado el flujo */}
         {!(
-          ubicacionSeleccionada && zonaDetectada && proveedorSeleccionado !== "__disabled__"
+          ubicacionSeleccionada && zonaDetectada?.id && proveedorSeleccionado !== "__disabled__"
         ) && (
           <div className="flex justify-center pt-4">
             <MainButton
