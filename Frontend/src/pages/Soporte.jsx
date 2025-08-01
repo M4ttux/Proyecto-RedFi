@@ -139,21 +139,21 @@ const Soporte = () => {
             }`}>
               <MainH2 className="mb-4">Ayuda Rápida</MainH2>
               <div className="space-y-3">
-                <div className="p-3 rounded border border-texto/15">
+                <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">¿Qué es Red-Fi?</MainH3>
-                  <p className="text-sm text-texto/70">
+                  <p className="text-sm text-texto">
                     Una plataforma para conocer la cobertura y calidad de proveedores de Internet.
                   </p>
                 </div>
-                <div className="p-3 rounded border border-texto/15">
+                <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">Herramientas disponibles</MainH3>
-                  <p className="text-sm text-texto/70">
+                  <p className="text-sm text-texto">
                     Mapa interactivo, test de velocidad, reseñas y buscador de proveedores.
                   </p>
                 </div>
-                <div className="p-3 rounded border border-texto/15">
+                <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">¿Cómo registrarse?</MainH3>
-                  <p className="text-sm text-texto/70">
+                  <p className="text-sm text-texto">
                     Solo necesitas tu correo electrónico. ¡Es gratis y rápido!
                   </p>
                 </div>
@@ -168,21 +168,21 @@ const Soporte = () => {
             }`}>
               <MainH2 className="mb-4">Problemas Comunes</MainH2>
               <div className="space-y-3">
-                <div className="p-3 rounded border border-texto/15">
+                <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">Internet lento</MainH3>
-                  <p className="text-sm text-texto/70">
+                  <p className="text-sm text-texto">
                     Reinicia el router y desconecta dispositivos innecesarios.
                   </p>
                 </div>
-                <div className="p-3 rounded border border-texto/15">
+                <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">Sin conexión</MainH3>
-                  <p className="text-sm text-texto/70">
+                  <p className="text-sm text-texto">
                     Verifica cables y luces del router. Contacta a tu proveedor si persiste.
                   </p>
                 </div>
-                <div className="p-3 rounded border border-texto/15">
+                <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">Problemas WiFi</MainH3>
-                  <p className="text-sm text-texto/70">
+                  <p className="text-sm text-texto">
                     Ubica el router en lugar central y alto. Evita interferencias.
                   </p>
                 </div>
