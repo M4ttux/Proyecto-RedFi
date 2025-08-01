@@ -91,7 +91,8 @@ const EditarPerfil = () => {
       await updatePerfilYFoto({ ...form, preview });
       mostrarExito("Perfil actualizado correctamente.");
     } catch (error) {
-      mostrarError(error?.message || "Ocurrió un error inesperado.");
+      mostrarError("Ocurrió un error inesperado: " + error.message);
+      console.error("Error completo:", error);
     }
 
     setLoading(false);

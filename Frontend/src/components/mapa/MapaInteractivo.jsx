@@ -189,6 +189,6 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       />
     </div>
   );
-};
+}
 
-export default memo(MapaInteractivo);
+export default MapaInteractivo;

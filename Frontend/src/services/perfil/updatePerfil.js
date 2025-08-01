@@ -1,4 +1,5 @@
 import { supabase } from "../../supabase/client";
+import { getPerfil } from "../../services/perfil/getPerfil";
 
 // Actualizar perfil
 export const updatePerfil = async (fields, mostrarAlerta = () => {}) => {
@@ -24,13 +25,10 @@ export const updatePerfil = async (fields, mostrarAlerta = () => {}) => {
 };
 
 // Actualizar perfil y foto
-export const updatePerfilYFoto = async ({
-  nombre,
-  proveedor_preferido,
-  foto,
-  preview,
-  eliminarFoto = false,
-}, mostrarAlerta = () => {}) => {
+export const updatePerfilYFoto = async (
+  { nombre, proveedor_preferido, foto, preview, eliminarFoto = false },
+  mostrarAlerta = () => {}
+) => {
   const {
     data: { user },
     error: userError,
@@ -94,10 +92,11 @@ export const updatePerfilYFoto = async ({
           resolve(true);
         }
       };
-      img.onerror = () => reject(
-        mostrarAlerta("No se pudo procesar la imagen."),
-        new Error("No se pudo procesar la imagen.")
-      );
+      img.onerror = () =>
+        reject(
+          mostrarAlerta("No se pudo procesar la imagen."),
+          new Error("No se pudo procesar la imagen.")
+        );
       img.src = URL.createObjectURL(foto);
     });
 
@@ -160,7 +159,8 @@ export const updatePerfilYFoto = async ({
     })
     .eq("id", user.id);
 
-  if (perfilError)
+  if (perfilError) {
     mostrarAlerta("Error al actualizar los datos en la base de datos.");
     throw perfilError;
+  }
 };

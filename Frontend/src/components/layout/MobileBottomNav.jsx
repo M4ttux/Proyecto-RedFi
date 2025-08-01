@@ -43,10 +43,6 @@ const MobileBottomNav = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  const getThemeIcon = () => {
-    return currentTheme === "light" ? IconSun : IconMoon;
-  };
-
   return (
     <>
       {/* Mobile Bottom Navigation */}

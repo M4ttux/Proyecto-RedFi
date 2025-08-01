@@ -7,9 +7,6 @@ import {
   IconX,
   IconBell,
   IconBellFilled,
-  IconHome,
-  IconMap,
-  IconTool,
   IconSun,
   IconMoon,
 } from "@tabler/icons-react";
@@ -42,7 +39,7 @@ export const useNotificaciones = () => {
 const Navbar = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
   const [mostrarTemas, setMostrarTemas] = useState(false);
-  const { usuario, logout } = useAuth();
+  const { usuario } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
   const { currentTheme, availableThemes, changeTheme, themeData } = useTheme();
   const location = useLocation();
@@ -59,16 +56,6 @@ const Navbar = () => {
   const getThemeIcon = () => {
     return currentTheme === "light" ? IconSun : IconMoon;
   };
-
-  const linkClase = "hover:text-acento transition px-4 py-2 font-bold";
-
-  const mainNavigationItems = [
-    { path: "/", label: "Inicio", icon: IconHome },
-    { path: "/mapa", label: "Mapa", icon: IconMap },
-    { path: "/herramientas", label: "Herramientas", icon: IconTool },
-  ];
-
-  const isActive = (path) => location.pathname === path;
 
   return (
     <>
