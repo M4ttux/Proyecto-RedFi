@@ -10,13 +10,13 @@ const Inicio = () => {
     document.title = "Red-Fi | Inicio";
   }, []);
   return (
-    <div className="w-full">
+    <article className="w-full">
       <HeroSection />
       <Caracteristicas />
       <PreguntasFrecuentes />
       <ReseñasDestacadas />
       <CTASection />
-    </div>
+    </article>
   );
 };
 
