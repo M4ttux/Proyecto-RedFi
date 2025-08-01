@@ -40,9 +40,18 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
 
 export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, map) => {
   return new Promise((resolve) => {
+    // Verificar si la geolocalización está disponible
+    if (!navigator.geolocation) {
+      mostrarAlerta("La geolocalización no está disponible en este dispositivo.");
+      resolve();
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const { latitude, longitude } = coords;
+        console.log("📍 Ubicación obtenida:", { latitude, longitude });
+        
         try {
           const response = await fetch(
             `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${API_KEY}`
@@ -56,6 +65,8 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
             address.village ||
             "una ciudad desconocida";
           const provincia = address.state || "una provincia desconocida";
+
+          console.log("🏙️ Ubicación detectada:", { ciudad, provincia });
 
           setTimeout(() => {
             if (provincia.toLowerCase() === "corrientes") {
@@ -76,14 +87,32 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
           resolve();
         }
       },
-      () => {
-        mostrarAlerta("No se pudo obtener tu ubicación.");
+      (error) => {
+        console.error("❌ Error de geolocalización:", error);
+        
+        let mensaje = "No se pudo obtener tu ubicación.";
+        
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            mensaje = "Permiso de ubicación denegado. Habilita la geolocalización en tu navegador.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            mensaje = "Ubicación no disponible. Si estás en un emulador, configura una ubicación mock.";
+            break;
+          case error.TIMEOUT:
+            mensaje = "Tiempo de espera agotado. Intenta nuevamente.";
+            break;
+          default:
+            mensaje = `Error de ubicación: ${error.message || "Desconocido"}`;
+        }
+        
+        mostrarAlerta(mensaje);
         resolve();
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
+        timeout: 15000, // Aumentado de 10s a 15s
+        maximumAge: 60000, // Acepta ubicaciones hasta 1 minuto de antigüedad
       }
     );
   });
