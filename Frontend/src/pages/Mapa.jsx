@@ -8,6 +8,7 @@ import { obtenerProveedores } from "../services/proveedores/obtenerProveedor";
 import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
 import CargandoMapa from "../components/mapa/cargador/CargandoMapa";
 import { useTheme } from "../context/ThemeContext";
+import { useValidacionUbicacion } from "../hooks/useValidacionUbicacion";
 
 const Mapa = () => {
   useEffect(() => {
@@ -17,7 +18,6 @@ const Mapa = () => {
 
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [mapRefReal, setMapRefReal] = useState(null);
-  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
   const [cargandoMapa, setCargandoMapa] = useState(true);
 
   const [zonas, setZonas] = useState([]);
@@ -41,6 +41,14 @@ const Mapa = () => {
     tecnologia: "",
     valoracionMin: 0,
   });
+
+  // Hook para validación de ubicación
+  const {
+    ubicacionActual,
+    zonaActual,
+    ubicacionValida,
+    cargandoUbicacion,
+  } = useValidacionUbicacion(BOUNDS_CORRIENTES);
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -130,6 +138,11 @@ const Mapa = () => {
             cargandoProveedores={cargandoProveedores}
             cargandoTecnologias={cargandoTecnologias}
             onFiltrar={(f) => setFiltrosAplicados(f)}
+            // Nuevas props para el estado de ubicación
+            ubicacionActual={ubicacionActual}
+            zonaActual={zonaActual}
+            ubicacionValida={ubicacionValida}
+            cargandoUbicacion={cargandoUbicacion}
           />
         </aside>
 

@@ -1,5 +1,6 @@
 import { useAlerta } from "../../../context/AlertaContext";
 import MainButton from "../../ui/MainButton";
+import { IconPlus } from "@tabler/icons-react";
 
 const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
   const { mostrarError } = useAlerta();
@@ -9,6 +10,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
       mostrarError("Debes iniciar sesión para agregar una reseña");
       return;
     }
+    
     onAbrirModalReseña();
   };
 
@@ -19,6 +21,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
         disabled={!usuario}
         variant={usuario ? "add" : "disabled"}
         className="w-full"
+        icon={IconPlus}
         title={
           usuario
             ? "Agregar reseña"

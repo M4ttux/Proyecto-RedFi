@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaAbierto) => {
+export const useSeleccionUbicacion = (mapRef, boundsCorrientes) => {
   const [modoSeleccion, setModoSeleccion] = useState(false);
   const [coordenadasSeleccionadas, setCoordenadasSeleccionadas] = useState(null);
   const [clickListener, setClickListener] = useState(null);
@@ -14,12 +14,11 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
     // Cambiar cursor del mapa
     mapRef.current.getCanvas().style.cursor = 'crosshair';
     
-    // 🔧 Deshabilitar interacciones con marcadores durante selección
     const map = mapRef.current;
     
     // Crear listener para el click
     const handleMapClick = (e) => {
-      // 🔧 Prevenir que el evento llegue a otros elementos
+      // Prevenir que el evento llegue a otros elementos
       e.preventDefault();
       e.originalEvent?.stopPropagation();
       
@@ -34,29 +33,21 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
       ) {
         setCoordenadasSeleccionadas({ lat, lng });
         desactivarSeleccion();
-        
-        // 🔧 REABRIR la modal después de seleccionar ubicación
-        setTimeout(() => {
-          if (setModalReseñaAbierto) {
-            setModalReseñaAbierto(true);
-          }
-        }, 150); // Aumentar el delay un poco
-        
       } else {
         console.warn("❌ Ubicación fuera de Corrientes");
       }
     };
 
-    // 🔧 Agregar listener con alta prioridad
+    // Agregar listener con alta prioridad
     map.on('click', handleMapClick);
     setClickListener(() => handleMapClick);
     
-    // 🔧 Opcional: Deshabilitar interacciones con marcadores
+    // Opcional: Deshabilitar interacciones con marcadores
     if (map.getLayer('proveedores-layer')) {
       map.setLayoutProperty('proveedores-layer', 'visibility', 'none');
     }
     
-  }, [mapRef, boundsCorrientes, setModalReseñaAbierto]);
+  }, [mapRef, boundsCorrientes]);
 
   const desactivarSeleccion = useCallback(() => {
     if (!mapRef.current) return;
@@ -69,7 +60,7 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
     // Restaurar cursor
     map.getCanvas().style.cursor = '';
     
-    // 🔧 Restaurar visibilidad de marcadores
+    // Restaurar visibilidad de marcadores
     if (map.getLayer('proveedores-layer')) {
       map.setLayoutProperty('proveedores-layer', 'visibility', 'visible');
     }
@@ -92,6 +83,6 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes, setModalReseñaA
     activarSeleccion,
     desactivarSeleccion,
     limpiarSeleccion,
-    setCoordenadasSeleccionadas, // Agregar esta función para uso externo
+    setCoordenadasSeleccionadas,
   };
 };

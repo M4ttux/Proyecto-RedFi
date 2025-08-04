@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { obtenerProveedores } from "../../../services/proveedores/obtenerProveedor";
 import {
   IconX,
   IconMapPin,
@@ -7,182 +6,396 @@ import {
   IconCarambola,
   IconCarambolaFilled,
   IconHandFinger,
+  IconCheck,
+  IconAlertCircle,
 } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
+import MainH3 from "../../ui/MainH3";
 import MainButton from "../../ui/MainButton";
 import Select from "../../ui/Select";
 import Textarea from "../../ui/Textarea";
 import ModalContenedor from "../../ui/ModalContenedor";
-
-import { obtenerCoordenadasSiEstanEnCorrientes } from "../../../services/mapa/ubicacion";
-import { useAlerta } from "../../../context/AlertaContext";
+import { useValidacionUbicacion } from "../../../hooks/useValidacionUbicacion";
+import { BOUNDS_CORRIENTES } from "../../../constants/constantes";
 
 const ModalAgregarReseña = ({
   isOpen,
   onClose,
   onEnviar,
   mapRef,
-  boundsCorrientes,
+  boundsCorrientes = BOUNDS_CORRIENTES,
   coordenadasSeleccionadas,
   onSeleccionarUbicacion,
-  onUbicacionActual, // Nueva prop para manejar ubicación actual
 }) => {
-  const [proveedores, setProveedores] = useState([]);
-  const [proveedorSeleccionado, setProveedorSeleccionado] =
-    useState("__disabled__");
+  const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [comentario, setComentario] = useState("");
-  const [ubicacionTexto, setUbicacionTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
-  const { mostrarError } = useAlerta();
-  const [errorProveedor, setErrorProveedor] = useState(false);
-  const [errorUbicacion, setErrorUbicacion] = useState(false);
-  const [errorComentario, setErrorComentario] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [pasoActual, setPasoActual] = useState(1); // 1: Ubicación, 2: Proveedor, 3: Calificación, 4: Comentario
 
-  const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
+  const {
+    ubicacionActual,
+    zonaActual,
+    proveedoresDisponibles,
+    cargandoUbicacion,
+    cargandoProveedores,
+    ubicacionValida,
+    validarUbicacion,
+    usarUbicacionActual,
+    limpiarUbicacion,
+  } = useValidacionUbicacion(boundsCorrientes);
 
-  const usarUbicacionActual = async () => {
-    setCargandoUbicacion(true);
-    const coords = await obtenerCoordenadasSiEstanEnCorrientes(
-      boundsCorrientes,
-      mostrarError
-    );
-    if (coords) {
-      // Usar la nueva prop si está disponible, sino usar la función original
-      if (onUbicacionActual) {
-        onUbicacionActual(coords);
-      } else {
-        onSeleccionarUbicacion(coords);
-      }
-      setUbicacionTexto("Ubicación actual");
-      setErrorUbicacion(false);
+  // Resetear estado cuando se abre el modal
+  useEffect(() => {
+    if (isOpen) {
+      setPasoActual(1);
+      setProveedorSeleccionado("");
+      setComentario("");
+      setEstrellas(5);
+      limpiarUbicacion();
     }
-    setCargandoUbicacion(false);
+  }, [isOpen, limpiarUbicacion]);
+
+  // Validar coordenadas seleccionadas desde el mapa
+  useEffect(() => {
+    if (coordenadasSeleccionadas && isOpen) {
+      const validarYAvanzar = async () => {
+        // Validar silenciosamente (ya se mostró mensaje en MapaInteractivo)
+        await validarUbicacion(coordenadasSeleccionadas, true);
+        // Avanzar automáticamente al paso 2
+        setPasoActual(2);
+      };
+      validarYAvanzar();
+    }
+  }, [coordenadasSeleccionadas, isOpen, validarUbicacion]); // Remover validarUbicacion de las dependencias
+
+  const handleUbicacionActual = async () => {
+    const success = await usarUbicacionActual();
+    if (success) {
+      setPasoActual(2); // Avanzar automáticamente
+    }
   };
 
-  useEffect(() => {
-    const cargarProveedores = async () => {
-      const data = await obtenerProveedores();
-      setProveedores(data);
-    };
-    if (isOpen && proveedores.length === 0) {
-      cargarProveedores();
-    }
-  }, [isOpen, proveedores.length]);
+  const handleSeleccionarEnMapa = () => {
+    onClose();
+    onSeleccionarUbicacion();
+  };
 
-  useEffect(() => {
-    if (isOpen && !coordenadasSeleccionadas) {
-      setProveedorSeleccionado("__disabled__");
-      setComentario("");
-      setUbicacionTexto("");
-      setEstrellas(5);
-    }
-
-    if (isOpen) {
-      setErrorProveedor(false);
-      setErrorUbicacion(false);
-      setErrorComentario(false);
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (coordenadasSeleccionadas) {
-      convertirCoordenadasATexto(coordenadasSeleccionadas);
-      setErrorUbicacion(false);
-    }
-  }, [coordenadasSeleccionadas]);
-
-  const convertirCoordenadasATexto = async (coords) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json`
-      );
-      const data = await response.json();
-
-      if (data && data.display_name) {
-        setUbicacionTexto(data.display_name);
-      } else {
-        setUbicacionTexto(`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`);
-      }
-    } catch (error) {
-      setUbicacionTexto(`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`);
-      console.error("Error al convertir coordenadas:", error);
-    }
+  const handleProveedorChange = (proveedorId) => {
+    setProveedorSeleccionado(proveedorId);
   };
 
   const handleStarClick = (rating) => {
     setEstrellas(rating);
   };
 
+  const handleComentarioChange = (e) => {
+    setComentario(e.target.value);
+  };
+
+  const handleContinuar = () => {
+    if (pasoActual === 1) {
+      // En el paso 1, validar que se haya seleccionado una ubicación
+      if (ubicacionValida) {
+        setPasoActual(2);
+      }
+    } else if (pasoActual === 2) {
+      // En el paso 2, validar que se haya seleccionado un proveedor
+      if (proveedorSeleccionado) {
+        setPasoActual(3);
+      }
+    } else if (pasoActual === 3) {
+      // En el paso 3, avanzar al paso 4 (comentario)
+      setPasoActual(4);
+    }
+  };
+
+  const handleAtras = () => {
+    if (pasoActual > 1) {
+      setPasoActual(pasoActual - 1);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setErrorProveedor(false);
-    setErrorUbicacion(false);
-    setErrorComentario(false);
-
-    const proveedorInvalido = proveedorSeleccionado === "__disabled__";
-    const ubicacionInvalida = !coordenadasSeleccionadas;
-    const comentarioInvalido = !comentario.trim();
-
-    if (proveedorInvalido) {
-      setErrorProveedor(true);
-      mostrarError("Debes seleccionar un proveedor.");
-      return;
-    }
-
-    if (ubicacionInvalida) {
-      setErrorUbicacion(true);
-      mostrarError("Debes seleccionar una ubicación en el mapa.");
-      return;
-    }
-
-    if (comentarioInvalido) {
-      setErrorComentario(true);
-      mostrarError("Debes escribir un comentario.");
+    if (!ubicacionActual || !proveedorSeleccionado || !comentario.trim()) {
       return;
     }
 
     setLoading(true);
     try {
       await onEnviar({
-        comentario,
+        comentario: comentario.trim(),
         estrellas,
         proveedor_id: proveedorSeleccionado,
-        ubicacion: coordenadasSeleccionadas,
-        ubicacionTexto,
+        ubicacion: ubicacionActual,
+        ubicacionTexto: zonaActual?.departamento || "Ubicación seleccionada",
       });
       onClose();
-    } catch (e) {
-      mostrarError("Error al publicar reseña");
-      console.error(e);
+    } catch (error) {
+      console.error("Error al publicar reseña:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === "Escape" && isOpen) onClose();
-    };
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+  const handleCerrar = () => {
+    onClose();
+    limpiarUbicacion();
+  };
+
+  const renderPasoUbicacion = () => (
+    <div className="space-y-4">
+      <div className="text-center">
+        <IconMapPin size={48} className="mx-auto mb-4 text-acento" />
+        <MainH3 className="text-center justify-center">
+          Selecciona tu ubicación
+        </MainH3>
+        <p className="text-texto">
+          Necesitamos verificar que estés en una zona con cobertura de internet
+        </p>
+      </div>
+
+      <div className="flex flex-row gap-3">
+        <MainButton
+          type="button"
+          onClick={handleSeleccionarEnMapa}
+          variant="accent"
+          icon={IconHandFinger}
+          className="w-full"
+          loading={cargandoUbicacion}
+        >
+          {cargandoUbicacion
+            ? "Verificando ubicación..."
+            : "Seleccionar en el mapa"}
+        </MainButton>
+
+        <MainButton
+          type="button"
+          onClick={handleUbicacionActual}
+          loading={cargandoUbicacion}
+          variant="primary"
+          icon={IconMapPin}
+          className="w-full"
+        >
+          {cargandoUbicacion
+            ? "Verificando ubicación..."
+            : "Usar mi ubicación actual"}
+        </MainButton>
+      </div>
+
+      {/* Botones de navegación */}
+      <div className="flex gap-3 pt-4">
+        <MainButton
+          type="button"
+          variant="secondary"
+          onClick={handleCerrar}
+          className="flex-1"
+        >
+          Cancelar
+        </MainButton>
+        <MainButton
+          type="button"
+          variant="primary"
+          onClick={handleContinuar}
+          disabled={!ubicacionValida || cargandoUbicacion}
+          className="flex-1"
+        >
+          Continuar
+        </MainButton>
+      </div>
+    </div>
+  );
+
+  const renderPasoProveedor = () => (
+    <div className="space-y-4">
+      <div className="text-center">
+        <IconCheck size={48} className="mx-auto mb-4 text-green-700" />
+        <MainH3 className="text-center justify-center">Ubicación válida</MainH3>
+        <p className="text-texto">
+          Estás en <strong>{zonaActual?.departamento}</strong>
+        </p>
+      </div>
+
+      <Select
+        label="Selecciona tu proveedor de internet"
+        value={proveedorSeleccionado}
+        onChange={handleProveedorChange}
+        options={[
+          { id: "", nombre: "Seleccionar proveedores disponibles" },
+          ...proveedoresDisponibles,
+        ]}
+        getOptionValue={(p) => p.id}
+        getOptionLabel={(p) => p.nombre}
+        loading={cargandoProveedores}
+        placeholder="Seleccionar proveedores disponibles"
+      />
+
+      {proveedoresDisponibles.length === 0 && !cargandoProveedores && (
+        <div className="text-center text-texto">
+          <IconAlertCircle size={24} className="mx-auto mb-2" />
+          <p>No hay proveedores disponibles en esta zona</p>
+        </div>
+      )}
+
+      {/* Botones de navegación */}
+      <div className="flex gap-3 pt-4">
+        <MainButton
+          type="button"
+          variant="secondary"
+          onClick={handleAtras}
+          className="flex-1"
+        >
+          Atrás
+        </MainButton>
+        <MainButton
+          type="button"
+          variant="primary"
+          onClick={handleContinuar}
+          disabled={!proveedorSeleccionado || cargandoProveedores}
+          className="flex-1"
+        >
+          Continuar
+        </MainButton>
+      </div>
+    </div>
+  );
+
+  const renderPasoCalificacion = () => (
+    <div className="space-y-4">
+      <div className="text-center">
+        <MainH3 className="text-center justify-center">
+          Califica tu experiencia
+        </MainH3>
+        <p className="text-texto">
+          ¿Cómo calificarías el servicio de{" "}
+          <strong>
+            {
+              proveedoresDisponibles.find(
+                (p) => p.id === Number(proveedorSeleccionado)
+              )?.nombre
+            }
+          </strong>
+          ?
+        </p>
+      </div>
+
+      <div className="flex justify-center gap-1 text-yellow-600 bg-texto/5 font-bold px-6 py-4 rounded-full border border-texto/15">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            onClick={() => handleStarClick(star)}
+            className="text-3xl hover:scale-110 transition p-2"
+            disabled={loading}
+          >
+            {star <= estrellas ? (
+              <IconCarambolaFilled size={32} />
+            ) : (
+              <IconCarambola size={32} />
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div className="text-center">
+        <p className="text-sm text-texto/75">
+          {estrellas === 1 && "Muy malo"}
+          {estrellas === 2 && "Malo"}
+          {estrellas === 3 && "Regular"}
+          {estrellas === 4 && "Bueno"}
+          {estrellas === 5 && "Excelente"}
+        </p>
+      </div>
+
+      {/* Botones de navegación */}
+      <div className="flex gap-3 pt-4">
+        <MainButton
+          type="button"
+          variant="secondary"
+          onClick={handleAtras}
+          className="flex-1"
+        >
+          Atrás
+        </MainButton>
+        <MainButton
+          type="button"
+          variant="primary"
+          onClick={handleContinuar}
+          className="flex-1"
+        >
+          Continuar
+        </MainButton>
+      </div>
+    </div>
+  );
+
+  const renderPasoComentario = () => (
+    <div className="space-y-4">
+      <div className="text-center">
+        <MainH3 className="text-center justify-center">
+          Cuéntanos más
+        </MainH3>
+        <p className="text-texto">Comparte tu experiencia con otros usuarios</p>
+      </div>
+
+      <Textarea
+        label="Tu comentario"
+        name="comentario"
+        value={comentario}
+        onChange={handleComentarioChange}
+        placeholder="Describe tu experiencia con el servicio de internet..."
+        rows={4}
+        required
+      />
+
+      {/* Botones de navegación */}
+      <div className="flex gap-3">
+        <MainButton
+          type="button"
+          variant="secondary"
+          onClick={handleAtras}
+          disabled={loading}
+          className="flex-1"
+        >
+          Atrás
+        </MainButton>
+        <MainButton
+          type="submit"
+          variant="primary"
+          disabled={loading || !comentario.trim()}
+          className="flex-1"
+        >
+          {loading ? "Publicando..." : "Publicar Reseña"}
+        </MainButton>
+      </div>
+    </div>
+  );
+
+  const renderContenido = () => {
+    switch (pasoActual) {
+      case 1:
+        return renderPasoUbicacion();
+      case 2:
+        return renderPasoProveedor();
+      case 3:
+        return renderPasoCalificacion();
+      case 4:
+        return renderPasoComentario();
+      default:
+        return renderPasoUbicacion();
     }
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
+  };
 
   if (!isOpen) return null;
 
   return (
-    <ModalContenedor onClose={onClose}>
+    <ModalContenedor onClose={handleCerrar}>
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar reseña</MainH2>
         <MainButton
-          onClick={onClose}
+          onClick={handleCerrar}
           type="button"
           variant="cross"
           title="Cerrar modal"
@@ -192,185 +405,21 @@ const ModalAgregarReseña = ({
         </MainButton>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Select
-          label={
-            <>
-              Proveedor <span className="text-red-600">*</span>
-            </>
-          }
-          value={proveedorSeleccionado}
-          onChange={(id) => {
-            setProveedorSeleccionado(id);
-            setErrorProveedor(false);
-          }}
-          options={[
-            { id: "__disabled__", nombre: "Todos los Proveedores" },
-            ...proveedores,
-          ]}
-          getOptionValue={(p) => p.id}
-          getOptionLabel={(p) => p.nombre}
-          loading={proveedores.length === 0}
-          isInvalid={errorProveedor}
-          renderOption={(p) => (
-            <option
-              key={p.id}
-              value={p.id}
-              disabled={p.id === "__disabled__"}
-              className="bg-fondo"
-            >
-              {p.nombre}
-            </option>
-          )}
-        />
-
-        {/* Ubicación */}
-        <div className="space-y-2">
-          <label className="block font-medium text-texto">
-            Ubicación <span className="text-red-600">*</span>
-          </label>
-          {coordenadasSeleccionadas ? (
-            <div className="bg-green-600/20 border border-green-700/50 rounded-lg p-3 mb-4">
-              <div className="flex items-center gap-2 text-green-700 font-bold mb-1">
-                <IconMapPin size={16} />
-                Ubicación seleccionada
-              </div>
-              <p className="text-texto break-words font-medium">
-                {ubicacionTexto ? (
-                  ubicacionTexto
-                ) : (
-                  <span className="flex items-center gap-2 text-texto">
-                    <IconLoader2 className="animate-spin" size={16} />
-                    Cargando dirección...
-                  </span>
-                )}
-              </p>
-              <p className="text-texto/60 text-xs mt-1">
-                Coordenadas: {coordenadasSeleccionadas.lat.toFixed(6)},{" "}
-                {coordenadasSeleccionadas.lng.toFixed(6)}
-              </p>
-            </div>
-          ) : (
+      {/* Indicador de progreso */}
+      <div className="flex justify-center mb-6">
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((paso) => (
             <div
-              className={`rounded-lg p-3 transition border mb-4 ${
-                errorUbicacion
-                  ? "bg-red-500/10 border-red-500/50"
-                  : "bg-texto/5 border-texto/15"
+              key={paso}
+              className={`w-3 h-3 rounded-full transition-colors ${
+                paso <= pasoActual ? "bg-acento" : "bg-texto/20"
               }`}
-            >
-              <p
-                className={`${
-                  errorUbicacion ? "text-red-400" : "text-texto/60"
-                } mb-2`}
-              >
-                No has seleccionado una ubicación
-              </p>
-            </div>
-          )}
-          <div className="flex flex-row gap-4">
-            <div className="flex-1">
-              <MainButton
-                type="button"
-                onClick={onSeleccionarUbicacion}
-                variant="primary"
-                className={`w-full ${
-                  errorUbicacion
-                    ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900"
-                    : ""
-                }`}
-                title="Seleccionar ubicación en el mapa"
-                icon={IconHandFinger}
-              >
-                {coordenadasSeleccionadas
-                  ? "Cambiar ubicación"
-                  : "Seleccionar en mapa"}
-              </MainButton>
-            </div>
-            <div className="flex-1">
-              <MainButton
-                type="button"
-                onClick={usarUbicacionActual}
-                loading={cargandoUbicacion}
-                variant="accent"
-                icon={IconMapPin}
-                className={`w-full ${
-                  errorUbicacion
-                    ? "ring-2 ring-red-500 ring-offset-2 ring-offset-gray-900"
-                    : ""
-                }`}
-              >
-                Usar mi ubicación actual
-              </MainButton>
-            </div>
-          </div>
+            />
+          ))}
         </div>
+      </div>
 
-        {/* Estrellas */}
-        <div>
-          <label className="block font-medium text-texto mb-2">
-            Calificación <span className="text-red-600">*</span>
-          </label>
-          <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                onClick={() => handleStarClick(star)}
-                className="text-2xl hover:scale-105 transition p-1"
-                disabled={loading}
-              >
-                {star <= estrellas ? (
-                  <IconCarambolaFilled size={24} />
-                ) : (
-                  <IconCarambola size={24} />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <Textarea
-          label={
-            <>
-              Comentario <span className="text-red-600">*</span>
-            </>
-          }
-          name="comentario"
-          value={comentario}
-          onChange={(e) => {
-            setComentario(e.target.value);
-            setErrorComentario(false);
-          }}
-          placeholder="Escribe tu opinión..."
-          isInvalid={errorComentario}
-        />
-
-        <div className="flex gap-3">
-          <MainButton
-            type="button"
-            variant="secondary"
-            onClick={onClose}
-            disabled={loading}
-            className="flex-1"
-          >
-            Cancelar
-          </MainButton>
-          <MainButton
-            type="submit"
-            variant="primary"
-            disabled={loading}
-            className="flex-1"
-          >
-            {loading ? "Publicando..." : "Publicar Reseña"}
-          </MainButton>
-        </div>
-        <div className="text-center mt-6">
-          <p className="text-sm text-texto/50 italic">
-            Los campos marcados con <span className="text-red-600">*</span> son
-            obligatorios.
-          </p>
-        </div>
-      </form>
+      <form onSubmit={handleSubmit}>{renderContenido()}</form>
     </ModalContenedor>
   );
 };

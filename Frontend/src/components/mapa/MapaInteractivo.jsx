@@ -1,5 +1,5 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { IconX } from "@tabler/icons-react";
 import { crearReseña } from "../../services/reseñas/reseñaCrud";
@@ -7,11 +7,14 @@ import { BOUNDS_CORRIENTES } from "../../constants/constantes";
 import { useMapaInteractivo } from "../../hooks/useMapaInteractivo";
 import { useUbicacionActual } from "../../hooks/useUbicacionActual";
 import { useSeleccionUbicacion } from "../../hooks/useSeleccionUbicacion";
+import { useValidacionUbicacion } from "../../hooks/useValidacionUbicacion";
 
 import ModalProveedor from "../modals/mapa/ModalProveedor";
 import ModalReseña from "../modals/mapa/ModalReseña";
 import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
 import ModalZonaMultiProveedor from "../modals/mapa/ModalZonaMultiProveedor";
+import IndicadorSeleccion from "./panel/IndicadorSeleccion";
+import MarcadorUbicacion from "./panel/MarcadorUbicacion";
 
 import MainButton from "../ui/MainButton";
 
@@ -20,16 +23,28 @@ import { useAlerta } from "../../context/AlertaContext";
 const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   const { mostrarError, mostrarExito } = useAlerta();
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
-  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
-    useState(false);
+  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] = useState(false);
   
   // Estado para modal de zona con múltiples proveedores
   const [modalZonaMultiAbierto, setModalZonaMultiAbierto] = useState(false);
   const [proveedoresZona, setProveedoresZona] = useState([]);
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
 
+  // Estado para la posición del marcador en pantalla
+  const [marcadorPosicion, setMarcadorPosicion] = useState(null);
+
   const boundsCorrientes = BOUNDS_CORRIENTES;
   const navigate = useNavigate();
+
+  // Hook para validación de ubicación
+  const {
+    ubicacionActual,
+    zonaActual,
+    proveedoresDisponibles,
+    ubicacionValida,
+    validarUbicacion,
+    limpiarUbicacion,
+  } = useValidacionUbicacion(boundsCorrientes);
 
   // Función para manejar click en zona con múltiples proveedores
   const handleZonaMultiProveedorClick = (proveedores, zona) => {
@@ -63,7 +78,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     desactivarSeleccion,
     limpiarSeleccion,
     setCoordenadasSeleccionadas,
-  } = useSeleccionUbicacion(mapRef, boundsCorrientes, setModalReseñaAbierto);
+  } = useSeleccionUbicacion(mapRef, boundsCorrientes);
 
   useEffect(() => {
     window.modoSeleccionActivo = modoSeleccion;
@@ -76,6 +91,49 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     boundsCorrientes,
     mapRef
   );
+
+  // Función para convertir coordenadas a posición en pantalla
+  const actualizarPosicionMarcador = useCallback(() => {
+    if (!mapRef.current || !ubicacionActual) {
+      setMarcadorPosicion(null);
+      return;
+    }
+
+    try {
+      const punto = mapRef.current.project([ubicacionActual.lng, ubicacionActual.lat]);
+      setMarcadorPosicion({
+        x: punto.x,
+        y: punto.y,
+      });
+    } catch (error) {
+      console.error("Error al proyectar coordenadas:", error);
+      setMarcadorPosicion(null);
+    }
+  }, [mapRef, ubicacionActual]);
+
+  // Actualizar posición del marcador cuando cambia la ubicación o el mapa
+  useEffect(() => {
+    actualizarPosicionMarcador();
+  }, [actualizarPosicionMarcador]);
+
+  // Actualizar posición cuando el mapa se mueve
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const handleMapMove = () => {
+      actualizarPosicionMarcador();
+    };
+
+    mapRef.current.on('move', handleMapMove);
+    mapRef.current.on('zoom', handleMapMove);
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.off('move', handleMapMove);
+        mapRef.current.off('zoom', handleMapMove);
+      }
+    };
+  }, [mapRef, actualizarPosicionMarcador]);
 
   const handleAbrirModalReseña = () => {
     limpiarSeleccion();
@@ -90,25 +148,22 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     activarSeleccion();
   };
 
-  // Nueva función para manejar ubicación actual sin activar modo selección
-  const handleUbicacionActualModal = (coords) => {
-    // Establecer las coordenadas directamente sin activar modo selección
-    setCoordenadasSeleccionadas(coords);
-    // Asegurar que el modal esté abierto
-    if (!modalReseñaAbierto) {
-      setModalReseñaAbierto(true);
-    }
-  };
-
+  // Validar coordenadas cuando se seleccionan desde el mapa
   useEffect(() => {
-    if (
-      coordenadasSeleccionadas &&
-      !modalReseñaAbierto &&
-      !modalReseñaCerradaManual
-    ) {
-      setModalReseñaAbierto(true);
+    if (coordenadasSeleccionadas && !modalReseñaAbierto && !modalReseñaCerradaManual) {
+      // Usar una función local para evitar dependencias circulares
+      const validarYAbrirModal = async () => {
+        const valida = await validarUbicacion(coordenadasSeleccionadas);
+        if (valida) {
+          setModalReseñaAbierto(true);
+        } else {
+          // Si la ubicación no es válida, limpiar la selección
+          limpiarSeleccion();
+        }
+      };
+      validarYAbrirModal();
     }
-  }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]);
+  }, [coordenadasSeleccionadas, modalReseñaAbierto, modalReseñaCerradaManual]); // Remover validarUbicacion y limpiarSeleccion
 
   useEffect(() => {
     const handleAbrirModal = () => {
@@ -126,6 +181,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       await crearReseña(reseñaData);
       setModalReseñaAbierto(false);
       limpiarSeleccion();
+      limpiarUbicacion();
       await cargarReseñasIniciales(filtros);
       mostrarExito("Reseña publicada con éxito.");
     } catch (error) {
@@ -138,6 +194,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     setModalReseñaAbierto(false);
     setModalReseñaCerradaManual(true);
     limpiarSeleccion();
+    limpiarUbicacion();
     if (modoSeleccion) {
       desactivarSeleccion();
     }
@@ -146,20 +203,25 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   return (
     <div className="h-full w-full relative">
       {modoSeleccion && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 bg-primario text-texto px-4 py-2 rounded-lg shadow-lg">
-          <div className="flex items-center gap-2">
-            <span className="font-medium">
-              Haz clic en el mapa para seleccionar ubicación
-            </span>
-            <MainButton
-              type="button"
-              onClick={desactivarSeleccion}
-              variant="cross"
-              className="px-0"
-            >
-              <IconX size={24} />
-            </MainButton>
-          </div>
+        <IndicadorSeleccion onCancelar={desactivarSeleccion} />
+      )}
+
+      {/* Marcador de ubicación */}
+      {marcadorPosicion && (
+        <div
+          style={{
+            position: 'absolute',
+            left: marcadorPosicion.x,
+            top: marcadorPosicion.y,
+            pointerEvents: 'none',
+            zIndex: 20,
+          }}
+        >
+          <MarcadorUbicacion
+            coordenadas={ubicacionActual}
+            zona={zonaActual}
+            esValida={ubicacionValida}
+          />
         </div>
       )}
 
@@ -191,7 +253,6 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
         boundsCorrientes={boundsCorrientes}
         coordenadasSeleccionadas={coordenadasSeleccionadas}
         onSeleccionarUbicacion={handleSeleccionarUbicacion}
-        onUbicacionActual={handleUbicacionActualModal}
       />
       <ModalZonaMultiProveedor
         isOpen={modalZonaMultiAbierto}

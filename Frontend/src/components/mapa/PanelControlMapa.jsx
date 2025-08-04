@@ -5,7 +5,7 @@ import FiltrosZona from "./filtros/FiltrosZona";
 import BotonAgregarReseña from "./panel/BotonAgregarReseña";
 import MainButton from "../ui/MainButton";
 import MainH3 from "../ui/MainH3";
-import { IconX, IconStar } from "@tabler/icons-react";
+import { IconX, IconStar, IconMapPin, IconCheck, IconAlertCircle } from "@tabler/icons-react";
 
 const PanelControlMapa = ({
   boundsCorrientes,
@@ -21,6 +21,11 @@ const PanelControlMapa = ({
   cargandoTecnologias,
   onFiltrar,
   onCerrarPanel,
+  // Nuevas props para el estado de ubicación
+  ubicacionActual,
+  zonaActual,
+  ubicacionValida,
+  cargandoUbicacion,
 }) => {
   const { usuario } = useAuth();
 
@@ -39,6 +44,36 @@ const PanelControlMapa = ({
           </MainButton>
         )}
       </div>
+
+      {/* Estado de ubicación */}
+      {ubicacionActual && (
+        <div className={`rounded-lg p-3 border ${
+          ubicacionValida 
+            ? "bg-green-600/20 border-green-700/50" 
+            : "bg-red-500/10 border-red-500/50"
+        }`}>
+          <div className="flex items-center gap-2 mb-2">
+            {ubicacionValida ? (
+              <IconCheck size={16} className="text-green-600" />
+            ) : (
+              <IconAlertCircle size={16} className="text-red-500" />
+            )}
+            <span className={`font-medium text-sm ${
+              ubicacionValida ? "text-green-700" : "text-red-500"
+            }`}>
+              {ubicacionValida ? "Ubicación válida" : "Ubicación fuera de cobertura"}
+            </span>
+          </div>
+          {zonaActual && (
+            <p className="text-texto text-sm">
+              Zona: <strong>{zonaActual.departamento}</strong>
+            </p>
+          )}
+          <p className="text-texto/60 text-xs mt-1">
+            Coordenadas: {ubicacionActual.lat.toFixed(6)}, {ubicacionActual.lng.toFixed(6)}
+          </p>
+        </div>
+      )}
 
       {/* Busqueda */}
       <BusquedaUbicacion boundsCorrientes={boundsCorrientes} mapRef={mapRef} />
@@ -64,6 +99,7 @@ const PanelControlMapa = ({
         usuario={usuario}
         onAbrirModalReseña={onAbrirModalReseña}
       />
+
       {/* Leyenda de reseñas */}
       <div className="bg-texto/5 border border-texto/15 rounded-lg px-3 py-2 text-xs">
         <div className="flex justify-between text-center gap-2 px-4">
