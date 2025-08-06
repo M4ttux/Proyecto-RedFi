@@ -1,6 +1,12 @@
 import React from "react";
 import classNames from "classnames";
-import { IconLoader2, IconPlus, IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
+import {
+  IconLoader2,
+  IconPlus,
+  IconEye,
+  IconEdit,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useTheme } from "../../context/ThemeContext";
 
 const Button = ({
@@ -15,6 +21,7 @@ const Button = ({
   iconSize = 24,
   className = "",
   as = "button",
+  iconAlwaysVisible = false,
   ...props
 }) => {
   const Tag = as;
@@ -37,9 +44,10 @@ const Button = ({
   const variants = {
     primary: "bg-primario text-white hover:bg-[#336ef0]",
     accent: "bg-acento text-white hover:bg-[#fca75f]",
-    secondary: currentTheme === "light" 
-  ? "bg-texto/5 text-texto hover:bg-[#d2e4ff]" 
-  : "bg-texto/5 text-texto hover:bg-[#2a3955]",
+    secondary:
+      currentTheme === "light"
+        ? "bg-texto/5 text-texto hover:bg-[#d2e4ff]"
+        : "bg-texto/5 text-texto hover:bg-[#2a3955]",
     danger: "bg-red-600 text-white hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     cross: "text-texto/60 hover:text-red-400",
@@ -50,8 +58,8 @@ const Button = ({
     toggle: active
       ? "bg-primario text-white hover:bg-[#336ef0]"
       : currentTheme === "light"
-        ? "bg-secundario text-texto hover:bg-[#d2e4ff]" 
-        : "bg-secundario text-texto hover:bg-[#2a3955]",
+      ? "bg-secundario text-texto hover:bg-[#d2e4ff]"
+      : "bg-secundario text-texto hover:bg-[#2a3955]",
   };
 
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";
@@ -84,10 +92,20 @@ const Button = ({
       {...props}
     >
       {loading ? (
-        <IconLoader2 size={iconSize} className="animate-spin" />
+        <IconLoader2
+          size={iconSize}
+          className={classNames("animate-spin", {
+            "sm:inline hidden": !iconAlwaysVisible,
+          })}
+        />
       ) : (
         (Icon || autoIcon) &&
-        React.createElement(Icon || autoIcon, { size: iconSize })
+        React.createElement(Icon || autoIcon, {
+          size: iconSize,
+          className: classNames({
+            "sm:inline hidden": !iconAlwaysVisible,
+          }),
+        })
       )}
       {children}
     </Tag>

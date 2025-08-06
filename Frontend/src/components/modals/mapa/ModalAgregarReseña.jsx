@@ -166,9 +166,7 @@ const ModalAgregarReseña = ({
           className="w-full"
           loading={cargandoUbicacion}
         >
-          {cargandoUbicacion
-            ? "Verificando ubicación..."
-            : "Seleccionar en el mapa"}
+          {cargandoUbicacion ? "Verificando..." : "Elegir en mapa"}
         </MainButton>
 
         <MainButton
@@ -179,9 +177,7 @@ const ModalAgregarReseña = ({
           icon={IconMapPin}
           className="w-full"
         >
-          {cargandoUbicacion
-            ? "Verificando ubicación..."
-            : "Usar mi ubicación actual"}
+          {cargandoUbicacion ? "Verificando..." : "Usar ubicación"}
         </MainButton>
       </div>
 

@@ -7,6 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   server: {
     host: true, // esto habilita acceso desde otros dispositivos
+    allowedHosts: ['.ngrok-free.app'],
   },
   plugins: [
     react(),

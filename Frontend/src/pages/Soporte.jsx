@@ -206,7 +206,7 @@ const Soporte = () => {
 
       {/* Botón flotante del chat */}
       {!chatAbierto && (
-        <div className="fixed bottom-6 right-6 z-40">
+        <div className="fixed bottom-24 lg:bottom-6 right-6 z-40">
           <MainButton
             onClick={() => setChatAbierto(true)}
             variant="primary"
@@ -220,7 +220,7 @@ const Soporte = () => {
 
       {/* Ventana del chat flotante */}
       {chatAbierto && (
-        <div className="fixed bottom-6 right-6 w-80 sm:w-120 z-50">
+        <div className="fixed bottom-24 lg:bottom-6 right-6 w-80 sm:w-120 z-50">
           <div className={`rounded-lg shadow-2xl overflow-hidden ${
             currentTheme === "light"
               ? "bg-secundario border border-secundario/50"
@@ -247,7 +247,7 @@ const Soporte = () => {
             </div>
 
             {/* Cuerpo del chat */}
-            <div className="h-140 flex flex-col">
+            <div className="h-80 lg:h-140 flex flex-col">
                 <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-3">
                   {mensajes.map((m, index) => (
                     <div

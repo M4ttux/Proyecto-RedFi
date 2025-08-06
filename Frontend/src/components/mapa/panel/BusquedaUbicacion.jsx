@@ -97,6 +97,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
           variant="primary"
           className="self-end py-2.25"
           icon={IconSearch}
+          iconAlwaysVisible={true}
         />
       </div>
     </div>

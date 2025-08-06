@@ -22,6 +22,7 @@ import CambiarContraseña from "../pages/perfil/CambiarContraseña";
 import Planes from "../pages/Planes";
 import Glosario from "../pages/Glosario";
 import Administrador from "../pages/Administrador";
+import DetectorProveedorv2 from "../pages/herramientas/DetectorProveedor";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Inicio /> },
       { path: "mapa", element: <Mapa /> },
       { path: "herramientas", element: <Herramientas /> },
+      { path: "detector-proveedor", element: <DetectorProveedorv2 /> },
       { 
         path: "cuenta", 
         element: (

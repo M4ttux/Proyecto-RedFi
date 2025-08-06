@@ -1,6 +1,13 @@
 import { estaEnCorrientes } from "./mapaBase";
 import maplibregl from "maplibre-gl";
 
+// Configuración de geolocalización optimizada según tipo de dispositivo
+const opcionesGeolocalizacion = (esMovil = false) => ({
+  enableHighAccuracy: esMovil, // Solo alta precisión en móvil
+  timeout: esMovil ? 20000 : 10000, // Más tiempo en móvil para obtener GPS
+  maximumAge: esMovil ? 30000 : 60000, // Cache más corto en móvil para datos frescos
+});
+
 const API_KEY = "195f05dc4c614f52ac0ac882ee570395";
 
 export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, map) => {
@@ -38,7 +45,7 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
   }
 };
 
-export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, map) => {
+export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, map, esMovil = false) => {
   return new Promise((resolve) => {
     // Verificar si la geolocalización está disponible
     if (!navigator.geolocation) {
@@ -111,11 +118,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
         mostrarAlerta(mensaje);
         resolve(null);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000, // Aumentado de 10s a 15s
-        maximumAge: 60000, // Acepta ubicaciones hasta 1 minuto de antigüedad
-      }
+      opcionesGeolocalizacion(esMovil)
     );
   });
 };
@@ -156,7 +159,7 @@ export const eliminarMarcadorUbicacion = (map) => {
 };
 
 
-export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = () => {}) => {
+export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = () => {}, esMovil = false) => {
   return new Promise((resolve) => {
     if (!navigator.geolocation) {
       mostrarAlerta("La geolocalización no está disponible en este dispositivo.");
@@ -197,11 +200,7 @@ export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = ()
         mostrarAlerta("No se pudo obtener tu ubicación.");
         resolve(null);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 60000,
-      }
+      opcionesGeolocalizacion(esMovil)
     );
   });
 };

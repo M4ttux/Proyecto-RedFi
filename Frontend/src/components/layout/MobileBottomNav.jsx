@@ -83,6 +83,7 @@ const MobileBottomNav = () => {
               }`}
               icon={IconDots}
               iconSize={22}
+              iconAlwaysVisible={true}
             >
               <span className="text-xs mt-1 font-medium">Más</span>
             </MainButton>
@@ -197,6 +198,7 @@ const MobileBottomNav = () => {
                 }`}
                 icon={notificaciones.length > 0 ? IconBellFilled : IconBell}
                 iconSize={22}
+                iconAlwaysVisible={true}
               >
                 <span className="text-xs mt-1 font-medium">Alertas</span>
                 {notificaciones.length > 0 && (
