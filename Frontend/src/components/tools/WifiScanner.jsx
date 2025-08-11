@@ -4,6 +4,7 @@ import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
 import Input from "../ui/Input";
 import { useAlerta } from "../../context/AlertaContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const WifiScanner = () => {
   const [nombreZona, setNombreZona] = useState("");
@@ -15,8 +16,10 @@ const WifiScanner = () => {
   const medidorRef = useRef(null);
   const testActivo = useRef(null);
   const { mostrarError, mostrarInfo } = useAlerta();
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
+    
     const script = document.createElement("script");
     script.src = "/speedtest/speedtest.js";
     script.async = true;
@@ -58,25 +61,25 @@ const WifiScanner = () => {
         setPasoActual(data.testState);
       }
 
- if (data.testState === 4 && !datosSeteados) {
-  setResultados((prev) => ({
-    ...prev,
-    [nombreZona]: {
-      ping: parseFloat(data.pingStatus) || 0,
-      jitter: parseFloat(data.jitterStatus) || 0,
-    },
-  }));
-  datosSeteados = true;
-  t.abort();
-  setEnProgreso(false);
-  setCompletado(true);
-  setNombreZona("");
-  
-  setTimeout(() => {
-    setCompletado(false);
-    setPasoActual(0);
-  }, 4000);
-}
+      if (data.testState === 4 && !datosSeteados) {
+        setResultados((prev) => ({
+          ...prev,
+          [nombreZona]: {
+            ping: parseFloat(data.pingStatus) || 0,
+            jitter: parseFloat(data.jitterStatus) || 0,
+          },
+        }));
+        datosSeteados = true;
+        t.abort();
+        setEnProgreso(false);
+        setCompletado(true);
+        setNombreZona("");
+
+        setTimeout(() => {
+          setCompletado(false);
+          setPasoActual(0);
+        }, 4000);
+      }
     };
 
     t.onerror = (err) => {
@@ -124,7 +127,13 @@ const WifiScanner = () => {
   };
 
   return (
-    <div className="p-6 rounded-lg mx-auto text-texto max-w-2xl relative">
+    <div
+      className={`p-8 rounded-lg mx-auto text-texto max-w-xl relative ${
+        currentTheme === "light"
+          ? "bg-secundario border border-secundario/50 shadow-lg"
+          : "bg-texto/5 border border-texto/15"
+      }`}
+    >
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-center">
         <div className="w-full md:w-1/2">
           <Input
@@ -144,6 +153,15 @@ const WifiScanner = () => {
           loading={enProgreso}
         >
           {enProgreso ? "Analizando..." : "Medir conexión"}
+        </MainButton>
+      </div>
+
+      <div className="w-full mt-6 flex flex-col md:flex-row items-center justify-center gap-4">
+        <MainButton onClick={reiniciarAnalisis} variant="danger">
+          Reiniciar análisis
+        </MainButton>
+        <MainButton onClick={recomendarUbicacion} variant="accent">
+          Recomendar ubicación
         </MainButton>
       </div>
 
@@ -169,7 +187,7 @@ const WifiScanner = () => {
           <div className="w-full bg-gray-700 h-3 rounded-full">
             <div
               className={`h-3 rounded-full transition-all duration-500 ${
-                completado ? "bg-green-500" : "bg-yellow-400"
+                completado ? "bg-green-500" : "bg-yellow-700"
               }`}
               style={{
                 width: `${completado ? 100 : (pasoActual / 4) * 100}%`,
@@ -178,6 +196,8 @@ const WifiScanner = () => {
           </div>
         </div>
       )}
+
+      
 
       {Object.keys(resultados).length > 0 && (
         <div className="mt-6 text-left">
@@ -205,14 +225,7 @@ const WifiScanner = () => {
         </div>
       )}
 
-      <div className="w-full mt-6 flex flex-row items-center justify-center gap-4">
-        <MainButton onClick={reiniciarAnalisis} variant="danger">
-          Reiniciar análisis
-        </MainButton>
-        <MainButton onClick={recomendarUbicacion} variant="accent">
-          Recomendar ubicación
-        </MainButton>
-      </div>
+      
     </div>
   );
 };

@@ -55,19 +55,18 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       <MainH2 className="text-center justify-center">{proveedor.nombre}</MainH2>
 
       {/* Estrellas */}
-      <div className="flex items-center justify-center gap-3 mb-4 w-full">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 w-full">
         <div className="flex gap-1 text-yellow-600 text-2xl bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
           {Array.from({ length: 5 }).map((_, i) =>
             i < Math.round(promedioEstrellas) ? (
               <IconCarambolaFilled key={i} size={22} />
             ) : (
-              <IconCarambola key={i} size={22} />
+              <IconCarambola key={i} size={22} className="text-texto/75"/>
             )
           )}
         </div>
-        <span className="text-sm text-texto font-medium">
-          {promedioEstrellas.toFixed(1)} – {cantidadResenas} reseña
-          {cantidadResenas !== 1 && "s"}
+        <span className="text-sm text-texto/75 ml-1">
+          ({promedioEstrellas.toFixed(1)})
         </span>
       </div>
 

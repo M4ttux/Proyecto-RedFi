@@ -29,7 +29,7 @@ const H3 = ({
       )}
       {...props}
     >
-      {Icon && <Icon size={28} className="inline-block mr-2 text-acento" />}
+      {Icon && <Icon size={28} className="hidden sm:inline-block mr-2 text-acento" />}
       {children}
     </h3>
   );

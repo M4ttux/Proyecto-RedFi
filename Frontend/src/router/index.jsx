@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layouts/Layout";
 import Inicio from "../pages/Inicio";
-import Herramientas from "../pages/Herramientas";
+import Herramientas from "../pages/Herramientasv2";
 import Soporte from "../pages/Soporte";
 import Cuenta from "../pages/Cuenta";
 import Register from "../pages/auth/Register";
@@ -23,6 +23,8 @@ import Planes from "../pages/Planes";
 import Glosario from "../pages/Glosario";
 import Administrador from "../pages/Administrador";
 import DetectorProveedorv2 from "../pages/herramientas/DetectorProveedor";
+import TestVelocidad from "../components/tools/TestVelocidad";
+import AnalisisConexion from "../pages/herramientas/AnalisisConexion";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +35,8 @@ export const router = createBrowserRouter([
       { path: "mapa", element: <Mapa /> },
       { path: "herramientas", element: <Herramientas /> },
       { path: "detector-proveedor", element: <DetectorProveedorv2 /> },
+      { path: "test-velocidad", element: <TestVelocidad /> },
+      { path: "analisis-conexion", element: <AnalisisConexion /> },
       { 
         path: "cuenta", 
         element: (

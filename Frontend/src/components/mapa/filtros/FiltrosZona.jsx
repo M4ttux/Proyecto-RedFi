@@ -122,7 +122,7 @@ const FiltrosZona = ({
                   <StarIcon
                     size={24}
                     className={`transition hover:scale-105 ${
-                      isActive ? "text-yellow-600" : "text-texto/30"
+                      isActive ? "text-yellow-600" : "text-texto/75"
                     }`}
                   />
                 </button>

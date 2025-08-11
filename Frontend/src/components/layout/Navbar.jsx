@@ -143,7 +143,7 @@ const Navbar = () => {
                 variant="accent"
                 className="px-3 py-1 hover:scale-105"
               >
-                Login
+                Iniciar sesión
               </MainLinkButton>
             ) : (
               <>

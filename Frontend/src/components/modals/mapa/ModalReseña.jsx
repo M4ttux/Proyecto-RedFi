@@ -80,7 +80,7 @@ const ModalReseña = ({ reseña, onClose }) => {
           i < estrellasLlenas ? (
             <IconCarambolaFilled key={i} size={24} />
           ) : (
-            <IconCarambola key={i} size={24} />
+            <IconCarambola key={i} size={24} className="text-texto/75"/>
           )
         )}
       </div>

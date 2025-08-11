@@ -36,17 +36,17 @@ const Herramientasv2 = () => {
             </MainLinkButton>
           </div>
           <div>
-            <MainLinkButton to="/mapa" variant="card">
+            <MainLinkButton to="/test-velocidad" variant="card">
               <MainH3 className="text-center justify-center">
                 Test de velocidad
               </MainH3>
               <p>
-                Medí la velocidad real de tu conexión a Internet en pocos segundos.
+                Medí la velocidad real de de conexión a Internet en pocos segundos.
               </p>
             </MainLinkButton>
           </div>
           <div>
-            <MainLinkButton to="/mapa" variant="card">
+            <MainLinkButton to="/analisis-conexion" variant="card">
               <MainH3 className="text-center justify-center">
                 Análisis de conexión por zonas
               </MainH3>

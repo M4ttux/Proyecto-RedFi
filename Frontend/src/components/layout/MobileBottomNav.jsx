@@ -176,7 +176,7 @@ const MobileBottomNav = () => {
                     }`}
                   >
                     <IconUser size={20} />
-                    <span>Login</span>
+                    <span>Iniciar sesión</span>
                   </MainLinkButton>
                 )}
               </div>

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { IconX, IconStar, IconStarFilled, IconArrowRight } from "@tabler/icons-react";
+import { IconX, IconArrowRight, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
@@ -20,9 +20,9 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
     
     for (let i = 1; i <= 5; i++) {
       if (i <= promedioRedondeado) {
-        stars.push(<IconStarFilled key={i} size={16} className="text-yellow-500" />);
+        stars.push(<IconCarambolaFilled key={i} size={16} className="text-yellow-600" />);
       } else {
-        stars.push(<IconStar key={i} size={16} className="text-gray-300" />);
+        stars.push(<IconCarambola key={i} size={16} className="text-texto/75" />);
       }
     }
     
@@ -31,7 +31,7 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
         <div className="flex">
           {stars}
         </div>
-        <span className="text-sm text-texto/70 ml-1">
+        <span className="text-sm text-texto/75 ml-1">
           ({promedio ? promedio.toFixed(1) : '0.0'})
         </span>
       </div>
@@ -61,10 +61,10 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
 
       {zonaInfo && (
         <div className="mb-4 p-3 bg-texto/5 rounded-lg border border-texto/15">
-          <p className="text-sm text-texto/70">
+          <p className="text-sm text-texto">
             <strong>Zona:</strong> {zonaInfo.departamento || 'Zona seleccionada'}
           </p>
-          <p className="text-sm text-texto/70 mt-1">
+          <p className="text-sm text-texto mt-1">
             Se encontraron <strong>{proveedores.length} proveedores</strong> en esta área
           </p>
         </div>
@@ -77,7 +77,7 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
           return (
             <div
               key={proveedor.id}
-              className="flex items-center gap-4 p-4 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10 transition-colors"
+              className="flex flex-nowrap sm:flex-row items-center gap-4 p-4 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10 transition-colors w-full"
             >
               {/* Logo del proveedor */}
               <div className="flex-shrink-0">
@@ -111,17 +111,17 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
                 {/* Tecnologías */}
                 {proveedor.ProveedorTecnologia && proveedor.ProveedorTecnologia.length > 0 && (
                   <div className="flex flex-wrap gap-1">
-                    {proveedor.ProveedorTecnologia.slice(0, 3).map((tech, index) => (
+                    {proveedor.ProveedorTecnologia.slice(0, 2).map((tech, index) => (
                       <span
                         key={index}
-                        className="text-xs px-2 py-1 bg-acento/20 text-acento rounded-full"
+                        className="text-xs px-2 py-1 bg-acento/10 text-acento rounded-full"
                       >
                         {tech.tecnologias?.tecnologia}
                       </span>
                     ))}
-                    {proveedor.ProveedorTecnologia.length > 3 && (
-                      <span className="text-xs px-2 py-1 bg-texto/10 text-texto/70 rounded-full">
-                        +{proveedor.ProveedorTecnologia.length - 3} más
+                    {proveedor.ProveedorTecnologia.length > 2 && (
+                      <span className="text-xs px-2 py-1 bg-texto/10 text-texto rounded-full">
+                        +{proveedor.ProveedorTecnologia.length - 2} más
                       </span>
                     )}
                   </div>

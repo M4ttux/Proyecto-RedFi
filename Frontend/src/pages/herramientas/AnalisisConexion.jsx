@@ -3,24 +3,24 @@ import MainLinkButton from "../../components/ui/MainLinkButton";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
 import MainH3 from "../../components/ui/MainH3";
-import { IconRadar2, IconArrowLeft } from "@tabler/icons-react";
-import DetectorProveedor from "../../components/tools/DetectorProveedorv2";
+import { IconAccessPoint, IconArrowLeft } from "@tabler/icons-react";
+import WifiScanner from "../../components/tools/WifiScanner";
 import { useTheme } from "../../context/ThemeContext";
 
-const DetectorProveedorv2 = () => {
+const AnalisisConexion = () => {
   const { currentTheme } = useTheme();
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
-          <MainH1 icon={IconRadar2}>Detector de proveedor</MainH1>
+          <MainH1 icon={IconAccessPoint}>Análisis de conexión por zonas</MainH1>
           <p className="text-lg">
             En esta herramienta podrás ver la información de tu red, al igual
             que tu ubicación.
           </p>
         </div>
         <div>
-          <DetectorProveedor />
+          <WifiScanner />
         </div>
         <div
           className={`w-full p-8 rounded-lg ${
@@ -29,12 +29,9 @@ const DetectorProveedorv2 = () => {
               : "bg-texto/5 border border-texto/15"
           }`}
         >
-          <MainH3>¿Que es el proveedor (ISP)?</MainH3>
+          <MainH3>¿Como funciona el análisis de conexión por zonas?</MainH3>
           <p>
-            El proveedor que aparece es quien te brinda el acceso a internet.
-            Este puede ser una empresa nacional, local o incluso un operador
-            móvil. Identificar correctamente tu ISP permite comparar velocidad,
-            estabilidad y calidad del servicio con otros usuarios en tu zona.
+            Su funcionalidad es "escanear" la calidad de su conexión Wi-Fi en diferentes zonas de su hogar. El objetivo es ayudarl a encontrar la ubicación óptima para su router.
           </p>
         </div>
         <div
@@ -44,13 +41,15 @@ const DetectorProveedorv2 = () => {
               : "bg-texto/5 border border-texto/15"
           }`}
         >
-          <MainH3>¿Que es la IP pública?</MainH3>
+          <MainH3>¿Como se usar el análisis de conexión por zonas?</MainH3>
           <p>
-            La dirección IP pública que ves es la que tu proveedor de internet
-            asignó a tu conexión. Esta IP permite que te identifiquen en
-            internet y cambia dependiendo de tu tipo de plan (hogar, móvil,
-            empresa) o si reiniciás el módem. También se usa para determinar tu
-            ubicación aproximada.
+            Para usar el analisis de conexión por zonas, simplemente debes
+            ingresar el nombre de la zona que deseas analizar y presionar el
+            botón "Analizar". El sistema te mostrará la información de la zona
+            que ingresaste.
+          </p>
+          <p>
+            Si realiza el analisis mas de 2 veces, se le habilitará el boton de "Recomendar ubicación". La funcionalidad del mismo es analizar los resultados y le dirá cuál de las zonas medidas tiene la mejor calidad de señal (menor ping y jitter combinados).
           </p>
         </div>
         {/* Botón volver a herramientas */}
@@ -65,4 +64,4 @@ const DetectorProveedorv2 = () => {
   );
 };
 
-export default DetectorProveedorv2;
+export default AnalisisConexion;
