@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
 import MainButton from "../../components/ui/MainButton";
@@ -7,7 +6,6 @@ import MainLinkButton from "../../components/ui/MainLinkButton";
 import { IconArrowLeft, IconRadar2, IconBrain } from "@tabler/icons-react";
 
 const Curso3 = () => {
-  const navigate = useNavigate();
   const [respuestas, setRespuestas] = useState({});
   const [resultado, setResultado] = useState(null);
   const [mostrarResultados, setMostrarResultados] = useState(false);

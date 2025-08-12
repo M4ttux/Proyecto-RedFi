@@ -13,7 +13,7 @@ const DetectorProveedorv2 = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
-          <MainH1 icon={IconRadar2}>Detector de proveedor</MainH1>
+          <MainH1 icon={IconRadar2}>Información de red</MainH1>
           <p className="text-lg">
             En esta herramienta podrás ver la información de tu red, al igual
             que tu ubicación.

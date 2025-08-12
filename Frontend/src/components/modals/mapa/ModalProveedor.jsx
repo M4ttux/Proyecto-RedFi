@@ -1,18 +1,20 @@
-import { IconX, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import {
+  IconX,
+  IconCarambolaFilled,
+  IconCarambola,
+  IconArrowRight,
+} from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainLinkButton from "../../ui/MainLinkButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
+import Badge from "../../ui/Badge";
 import Avatar from "../../ui/Avatar";
 
 const ModalProveedor = ({ proveedor, onClose }) => {
-  const navigate = useNavigate();
   if (!proveedor) return null;
 
   // Cálculo de reseñas (cantidad y promedio)
-  const reseñas = proveedor.reseñas || [];
-  const cantidadResenas = proveedor.reseñas?.length || 0;
   const promedioEstrellas = proveedor.reseñas?.length
     ? proveedor.reseñas.reduce((sum, r) => sum + r.estrellas, 0) /
       proveedor.reseñas.length
@@ -22,6 +24,33 @@ const ModalProveedor = ({ proveedor, onClose }) => {
   const tecnologias =
     proveedor.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
     [];
+
+  // renderStars
+  const renderStars = (promedio) => {
+    const stars = [];
+    const promedioRedondeado = Math.round(promedio || 0);
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= promedioRedondeado) {
+        stars.push(
+          <IconCarambolaFilled key={i} size={24} className="text-yellow-600" />
+        );
+      } else {
+        stars.push(
+          <IconCarambola key={i} size={24} className="text-texto/75" />
+        );
+      }
+    }
+
+    return (
+      <div className="flex items-center gap-1">
+        <div className="flex gap-1">{stars}</div>
+        <span className="text-sm text-texto/75 ml-1">
+          ({promedio ? promedio.toFixed(1) : "0.0"})
+        </span>
+      </div>
+    );
+  };
 
   return (
     <ModalContenedor onClose={onClose}>
@@ -55,36 +84,41 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       <MainH2 className="text-center justify-center">{proveedor.nombre}</MainH2>
 
       {/* Estrellas */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 w-full">
-        <div className="flex gap-1 text-yellow-600 text-2xl bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
-          {Array.from({ length: 5 }).map((_, i) =>
-            i < Math.round(promedioEstrellas) ? (
-              <IconCarambolaFilled key={i} size={22} />
-            ) : (
-              <IconCarambola key={i} size={22} className="text-texto/75"/>
-            )
-          )}
-        </div>
-        <span className="text-sm text-texto/75 ml-1">
-          ({promedioEstrellas.toFixed(1)})
-        </span>
+      <div className="mb-4 flex justify-center">
+        {renderStars(promedioEstrellas)}
       </div>
 
       {/* Tecnologías */}
       <div className="flex flex-wrap justify-center gap-2 mb-4">
         {tecnologias.length > 0 ? (
-          tecnologias.map((tec, index) => (
-            <span
-              key={index}
-              className="bg-texto/5 border border-texto/15 text-xs px-3 py-1 rounded-full"
-            >
-              {tec}
-            </span>
-          ))
+          <>
+            {tecnologias.slice(0, 2).map((tec, index) => (
+              <Badge
+                key={index}
+                variant="accent"
+                size="xs"
+                collapseOnMobile={index === 1} // oculta la 2da en mobile
+              >
+                {tec}
+              </Badge>
+            ))}
+
+            {/* "+N más" en mobile: cuenta desde 1 */}
+            {tecnologias.length > 1 && (
+              <Badge variant="muted" size="xs" onlyMobile>
+                +{tecnologias.length - 1} más
+              </Badge>
+            )}
+
+            {/* "+N más" en sm+: cuenta desde 2 */}
+            {tecnologias.length > 2 && (
+              <Badge variant="muted" size="xs" onlyDesktop>
+                +{tecnologias.length - 2} más
+              </Badge>
+            )}
+          </>
         ) : (
-          <span className="text-sm text-texto">
-            Sin tecnologías asociadas
-          </span>
+          <span className="text-sm text-texto">Sin tecnologías asociadas</span>
         )}
       </div>
 
@@ -95,11 +129,11 @@ const ModalProveedor = ({ proveedor, onClose }) => {
 
       {/* Botón "Más información" */}
       <MainLinkButton
-        onClick={() => {
-          onClose();
-          navigate(`/proveedores/${proveedor.id}`);
-        }}
+        to={`/proveedores/${proveedor.id}`}
         className="w-full px-4 py-2"
+        icon={IconArrowRight}
+        iconSize={16}
+        iconPosition="right"
       >
         Más información
       </MainLinkButton>

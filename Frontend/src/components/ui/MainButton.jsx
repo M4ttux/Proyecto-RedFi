@@ -60,6 +60,7 @@ const Button = ({
       : currentTheme === "light"
       ? "bg-secundario text-texto hover:bg-[#d2e4ff]"
       : "bg-secundario text-texto hover:bg-[#2a3955]",
+    navbar: "bg-transparent text-texto hover:bg-white/10",
   };
 
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";

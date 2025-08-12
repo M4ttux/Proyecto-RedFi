@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { IconUserEdit } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../services/proveedores/obtenerProveedor";
@@ -18,7 +17,6 @@ import { useAlerta } from "../../context/AlertaContext";
 
 const EditarPerfil = () => {
   const { usuario } = useAuth();
-  const navigate = useNavigate();
   const { mostrarError, mostrarExito } = useAlerta();
 
   const [form, setForm] = useState({

@@ -14,6 +14,7 @@ import {
   IconLogout,
   IconSun,
   IconMoon,
+  IconChevronDown,
 } from "@tabler/icons-react";
 import { useNotificaciones } from "./Navbar";
 import MainButton from "../ui/MainButton";
@@ -26,6 +27,7 @@ const MobileBottomNav = () => {
   const [mostrarMenu, setMostrarMenu] = useState(false);
   const { usuario } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
+  const [mostrarHerramientas, setMostrarHerramientas] = useState(false);
   const location = useLocation();
 
   const { currentTheme, changeTheme } = useTheme();
@@ -35,10 +37,15 @@ const MobileBottomNav = () => {
     changeTheme(nextTheme);
   };
 
+  const openOnly = (menu) => {
+    setMostrarHerramientas(menu === "tools");
+    setMostrarNotis(menu === "notis");
+    setMostrarMenu(menu === "menu");
+  };
+
   const mainNavigationItems = [
     { path: "/", label: "Inicio", icon: IconHome },
     { path: "/mapa", label: "Mapa", icon: IconMap },
-    { path: "/herramientas", label: "Herramientas", icon: IconTool },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -73,14 +80,203 @@ const MobileBottomNav = () => {
             </MainLinkButton>
           ))}
 
+          {/* Herramientas (Dropdown) */}
+          <div className="relative">
+            <MainButton
+              onClick={() => {
+                setMostrarHerramientas((v) => !v);
+                setMostrarMenu(false);
+                setMostrarNotis(false);
+                openOnly(mostrarHerramientas ? null : "tools");
+              }}
+              variant="secondary"
+              className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent
+              ${mostrarHerramientas ? "!text-acento !scale-110" : ""}`}
+              icon={IconTool}
+              iconSize={22}
+              iconAlwaysVisible
+              aria-expanded={mostrarHerramientas}
+            >
+              <span className="text-xs mt-1 font-medium flex items-center gap-1">
+                Herramientas
+                <IconChevronDown
+                  size={14}
+                  className={`transition-transform ${
+                    mostrarHerramientas ? "rotate-180" : "rotate-0"
+                  }`}
+                />
+              </span>
+            </MainButton>
+
+            {mostrarHerramientas && (
+              <div
+                className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
+                  currentTheme === "light"
+                    ? "bg-fondo border border-texto/15 text-texto"
+                    : "bg-fondo text-texto border border-texto/15"
+                }`}
+              >
+                <MainLinkButton
+                  to="/herramientas"
+                  onClick={() => setMostrarHerramientas(false)}
+                  variant="navbar"
+                  className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                    location.pathname === "/herramientas" ? "!text-acento" : ""
+                  }`}
+                >
+                  Todas las herramientas
+                </MainLinkButton>
+
+                {/* Grupo indentado */}
+                <div className="ml-2 pl-3 mt-1 space-y-1 border-l border-texto/15">
+                  <MainLinkButton
+                    to="/mapa"
+                    onClick={() => setMostrarHerramientas(false)}
+                    variant="navbar"
+                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      location.pathname === "/mapa" ? "!text-acento" : ""
+                    }`}
+                  >
+                    Mapa
+                  </MainLinkButton>
+
+                  <MainLinkButton
+                    to="/informacion-red"
+                    onClick={() => setMostrarHerramientas(false)}
+                    variant="navbar"
+                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      location.pathname === "/informacion-red"
+                        ? "!text-acento"
+                        : ""
+                    }`}
+                  >
+                    Información de red
+                  </MainLinkButton>
+
+                  <MainLinkButton
+                    to="/test-velocidad"
+                    onClick={() => setMostrarHerramientas(false)}
+                    variant="navbar"
+                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      location.pathname === "/test-velocidad"
+                        ? "!text-acento"
+                        : ""
+                    }`}
+                  >
+                    Test de velocidad
+                  </MainLinkButton>
+
+                  <MainLinkButton
+                    to="/analisis-conexion"
+                    onClick={() => setMostrarHerramientas(false)}
+                    variant="navbar"
+                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      location.pathname === "/analisis-conexion"
+                        ? "!text-acento"
+                        : ""
+                    }`}
+                  >
+                    Análisis de conexión
+                  </MainLinkButton>
+
+                  <MainLinkButton
+                    to="/soporte"
+                    onClick={() => setMostrarHerramientas(false)}
+                    variant="navbar"
+                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      location.pathname === "/soporte" ? "!text-acento" : ""
+                    }`}
+                  >
+                    Soporte
+                  </MainLinkButton>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Notifications Icon for Mobile usando MainButton */}
+          {usuario && (
+            <div className="relative">
+              <MainButton
+                onClick={() => {
+                  setMostrarNotis(!mostrarNotis);
+                  openOnly(mostrarNotis ? null : "notis");
+                }}
+                variant="secondary"
+                className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
+                  notificaciones.length > 0
+                    ? "!text-acento animate-bounce"
+                    : currentTheme === "light"
+                    ? "!text-texto"
+                    : "!text-texto"
+                }`}
+                icon={notificaciones.length > 0 ? IconBellFilled : IconBell}
+                iconSize={22}
+                iconAlwaysVisible={true}
+              >
+                <span className="text-xs mt-1 font-medium">Alertas</span>
+                {notificaciones.length > 0 && (
+                  <span className="absolute -top-0 -right-0 bg-red-500 text-texto text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
+                    {notificaciones.length}
+                  </span>
+                )}
+              </MainButton>
+
+              {/* Mobile Notifications Dropdown */}
+              {mostrarNotis && (
+                <div
+                  className={`absolute bottom-full right-0 mb-2 w-72 rounded-lg shadow-lg p-4 space-y-2 ${
+                    currentTheme === "light"
+                      ? "bg-fondo border border-texto/15 text-texto"
+                      : "bg-fondo text-texto border border-texto/15"
+                  }`}
+                >
+                  {notificaciones.length === 0 ? (
+                    <p className="italic text-center">Sin notificaciones</p>
+                  ) : (
+                    notificaciones.map((msg, i) => (
+                      <div
+                        key={i}
+                        className={`border-b pb-2 last:border-b-0 flex justify-between items-start gap-2 ${
+                          currentTheme === "light"
+                            ? "border-texto/15"
+                            : "border-texto/15"
+                        }`}
+                      >
+                        <span className="break-words">{msg}</span>
+                        <MainButton
+                          onClick={() =>
+                            setNotificaciones((prev) =>
+                              prev.filter((_, idx) => idx !== i)
+                            )
+                          }
+                          variant="cross"
+                          title="Cerrar"
+                          icon={IconX}
+                          iconSize={20}
+                          className="leading-none p-0"
+                        />
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* More Menu Button usando MainButton */}
           <div className="relative">
             <MainButton
-              onClick={() => setMostrarMenu(!mostrarMenu)}
+              onClick={() => {
+                setMostrarMenu(!mostrarMenu);
+                openOnly(mostrarMenu ? null : "menu");
+              }}
               variant="secondary"
               className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
-                currentTheme === "light" ? "!text-texto" : "!text-texto"
+                currentTheme === "light" ? "!text-texto" : "!text-texto",
+                mostrarMenu ? "!text-acento !scale-110" : ""
               }`}
+
               icon={IconDots}
               iconSize={22}
               iconAlwaysVisible={true}
@@ -91,25 +287,12 @@ const MobileBottomNav = () => {
             {/* More Menu Dropdown */}
             {mostrarMenu && (
               <div
-                className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 rounded-lg shadow-lg z-50 py-2 ${
+                className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 py-2 ${
                   currentTheme === "light"
                     ? "bg-fondo border border-texto/15 text-texto"
                     : "bg-fondo text-texto border border-texto/15"
                 }`}
               >
-                {/* Soporte usando MainLinkButton */}
-                <MainLinkButton
-                  to="/soporte"
-                  onClick={() => setMostrarMenu(false)}
-                  variant="navbar"
-                  className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                    isActive("/soporte") ? "!text-acento" : ""
-                  }`}
-                >
-                  <IconHeadset size={20} />
-                  <span>Soporte</span>
-                </MainLinkButton>
-
                 {/* Cambiar tema usando MainButton */}
                 <MainButton
                   onClick={() => {
@@ -182,73 +365,6 @@ const MobileBottomNav = () => {
               </div>
             )}
           </div>
-
-          {/* Notifications Icon for Mobile usando MainButton */}
-          {usuario && (
-            <div className="relative">
-              <MainButton
-                onClick={() => setMostrarNotis(!mostrarNotis)}
-                variant="secondary"
-                className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
-                  notificaciones.length > 0
-                    ? "!text-acento animate-bounce"
-                    : currentTheme === "light"
-                    ? "!text-texto"
-                    : "!text-texto"
-                }`}
-                icon={notificaciones.length > 0 ? IconBellFilled : IconBell}
-                iconSize={22}
-                iconAlwaysVisible={true}
-              >
-                <span className="text-xs mt-1 font-medium">Alertas</span>
-                {notificaciones.length > 0 && (
-                  <span className="absolute -top-0 -right-0 bg-red-500 text-texto text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
-                    {notificaciones.length}
-                  </span>
-                )}
-              </MainButton>
-
-              {/* Mobile Notifications Dropdown */}
-              {mostrarNotis && (
-                <div
-                  className={`absolute bottom-full right-0 mb-2 w-72 rounded-lg shadow-lg p-4 space-y-2 ${
-                    currentTheme === "light"
-                      ? "bg-fondo border border-texto/15 text-texto"
-                      : "bg-fondo text-texto border border-texto/15"
-                  }`}
-                >
-                  {notificaciones.length === 0 ? (
-                    <p className="italic text-center">Sin notificaciones</p>
-                  ) : (
-                    notificaciones.map((msg, i) => (
-                      <div
-                        key={i}
-                        className={`border-b pb-2 last:border-b-0 flex justify-between items-start gap-2 ${
-                          currentTheme === "light"
-                            ? "border-texto/15"
-                            : "border-texto/15"
-                        }`}
-                      >
-                        <span className="break-words">{msg}</span>
-                        <MainButton
-                          onClick={() =>
-                            setNotificaciones((prev) =>
-                              prev.filter((_, idx) => idx !== i)
-                            )
-                          }
-                          variant="cross"
-                          title="Cerrar"
-                          icon={IconX}
-                          iconSize={20}
-                          className="leading-none p-0"
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </nav>
 

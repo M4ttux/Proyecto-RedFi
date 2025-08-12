@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Inicio /> },
       { path: "mapa", element: <Mapa /> },
       { path: "herramientas", element: <Herramientas /> },
-      { path: "detector-proveedor", element: <DetectorProveedorv2 /> },
+      { path: "informacion-red", element: <DetectorProveedorv2 /> },
       { path: "test-velocidad", element: <TestVelocidad /> },
       { path: "analisis-conexion", element: <AnalisisConexion /> },
       { 

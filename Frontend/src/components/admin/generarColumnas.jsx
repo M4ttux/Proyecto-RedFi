@@ -1,6 +1,7 @@
 import { IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import MainButton from "../ui/MainButton";
 import Avatar from "../ui/Avatar";
+import Badge from "../ui/Badge";
 
 export const generarColumnas = (tabla, datos, acciones = {}) => {
   if (!datos.length) return [];
@@ -26,27 +27,41 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
       {
         id: "proveedor_preferido",
         label: "PROVEEDOR PREFERIDO",
-        renderCell: (row) => row.proveedor_preferido || "—",
+        renderCell: (row) =>
+          row.proveedor_preferido ? (
+            <Badge
+              size="xs"
+              variant="muted"
+              className="truncate max-w-[180px]"
+              title={row.proveedor_preferido}
+            >
+              {row.proveedor_preferido}
+            </Badge>
+          ) : (
+            "—"
+          ),
       },
       {
         id: "rol",
         label: "ROL",
         renderCell: (row) => {
           const rol = row.rol;
-          const colores = {
-            admin: "bg-acento text-texto",
-          };
+          if (!rol) return "—";
 
-          return rol ? (
-            <span
-              className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                colores[rol] || "bg-texto/5 text-texto"
-              }`}
+          // mismo color que usabas: bg-acento + texto
+          return rol === "admin" ? (
+            <Badge
+              size="xs"
+              bgClass="bg-acento"
+              textClass="text-texto"
+              className="font-bold"
             >
               {rol.toUpperCase()}
-            </span>
+            </Badge>
           ) : (
-            "—"
+            <Badge size="xs" variant="muted" className="font-bold">
+              {rol.toUpperCase()}
+            </Badge>
           );
         },
       },
@@ -55,20 +70,22 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "PLAN",
         renderCell: (row) => {
           const plan = row.plan;
-          const colores = {
-            premium: "bg-yellow-500 text-texto",
-          };
+          if (!plan) return "—";
 
-          return plan ? (
-            <span
-              className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                colores[plan] || "bg-texto/5 text-texto"
-              }`}
+          // premium amarillo como antes; si no, muted
+          return plan === "premium" ? (
+            <Badge
+              size="xs"
+              bgClass="bg-acento"
+              textClass="text-texto"
+              className="font-bold"
             >
               {plan.toUpperCase()}
-            </span>
+            </Badge>
           ) : (
-            "—"
+            <Badge size="xs" variant="muted" className="font-bold">
+              {plan.toUpperCase()}
+            </Badge>
           );
         },
       }
@@ -201,12 +218,9 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           Array.isArray(row.tecnologias) && row.tecnologias.length ? (
             <div className="flex flex-wrap gap-1 overflow-hidden">
               {row.tecnologias.map((tec, i) => (
-                <span
-                  key={i}
-                  className="bg-texto/5 text-texto text-sm px-2 py-0.5 rounded-lg"
-                >
+                <Badge key={i} size="xs" variant="muted" rounded="lg">
                   {tec}
-                </span>
+                </Badge>
               ))}
             </div>
           ) : (
@@ -231,12 +245,9 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           Array.isArray(row.zonas) && row.zonas.length ? (
             <div className="flex flex-wrap gap-1 overflow-hidden">
               {row.zonas.map((zona, i) => (
-                <span
-                  key={i}
-                  className="bg-texto/5 text-texto text-sm px-2 py-0.5 rounded-lg"
-                >
+                <Badge key={i} size="xs" variant="muted" rounded="lg">
                   {zona}
-                </span>
+                </Badge>
               ))}
             </div>
           ) : (
@@ -258,7 +269,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     });
   }
 
-  // Acciones (común para todas, pero sin "Ver" en algunas tablas)
+  // Acciones (común para todas)
   if (acciones.onVer || acciones.onEditar || acciones.onEliminar) {
     columnasBase.push({
       id: "acciones",

@@ -14,6 +14,7 @@ const LinkButton = ({
   disabled = false,
   iconSize = 24,
   isPremium = false,
+  iconPosition = "left",
   ...props
 }) => {
   const { plan } = useRole();
@@ -74,18 +75,35 @@ const LinkButton = ({
   return (
     <div className="relative">
       <Link to={to} className={finalClass} {...props}>
-        {loading ? (
-          <IconLoader2 size={iconSize} className="animate-spin" />
-        ) : (
-          Icon && <Icon size={iconSize} />
+        {/* Orden dinámico según iconPosition */}
+        {iconPosition === "left" && (
+          <>
+            {loading ? (
+              <IconLoader2 size={iconSize} className="animate-spin" />
+            ) : (
+              Icon && <Icon size={iconSize} />
+            )}
+            {children}
+          </>
         )}
-        {children}
+
+        {iconPosition === "right" && (
+          <>
+            {children}
+            {loading ? (
+              <IconLoader2 size={iconSize} className="animate-spin" />
+            ) : (
+              Icon && <Icon size={iconSize} />
+            )}
+          </>
+        )}
       </Link>
 
       {/* Overlay para premium bloqueado */}
       {bloquearAcceso && esCard && (
         <div className="absolute inset-0 backdrop-blur-sm bg-black/20 text-texto border border-texto/15 flex items-center justify-center px-4 text-center font-bold rounded-lg pointer-events-auto z-10">
-          Esta función es exclusiva para el plan <span className="text-acento ml-1">Premium</span>
+          Esta función es exclusiva para el plan{" "}
+          <span className="text-acento ml-1">Premium</span>
         </div>
       )}
     </div>

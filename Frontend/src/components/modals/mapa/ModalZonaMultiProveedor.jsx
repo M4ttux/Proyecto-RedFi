@@ -1,38 +1,45 @@
-import { useNavigate } from "react-router-dom";
-import { IconX, IconArrowRight, IconCarambolaFilled, IconCarambola } from "@tabler/icons-react";
+import {
+  IconX,
+  IconArrowRight,
+  IconCarambolaFilled,
+  IconCarambola,
+} from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
+import MainLinkButton from "../../ui/MainLinkButton";
 import MainH2 from "../../ui/MainH2";
+import MainH3 from "../../ui/MainH3";
+import Badge from "../../ui/Badge";
 import ModalContenedor from "../../ui/ModalContenedor";
 
-const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo = null }) => {
-  const navigate = useNavigate();
-
+const ModalZonaMultiProveedor = ({
+  isOpen,
+  onClose,
+  proveedores = [],
+  zonaInfo = null,
+}) => {
   if (!isOpen) return null;
-
-  const handleNavigateToProvider = (proveedorId) => {
-    onClose();
-    navigate(`/proveedores/${proveedorId}`);
-  };
 
   const renderStars = (promedio) => {
     const stars = [];
     const promedioRedondeado = Math.round(promedio || 0);
-    
+
     for (let i = 1; i <= 5; i++) {
       if (i <= promedioRedondeado) {
-        stars.push(<IconCarambolaFilled key={i} size={16} className="text-yellow-600" />);
+        stars.push(
+          <IconCarambolaFilled key={i} size={16} className="text-yellow-600" />
+        );
       } else {
-        stars.push(<IconCarambola key={i} size={16} className="text-texto/75" />);
+        stars.push(
+          <IconCarambola key={i} size={16} className="text-texto/75" />
+        );
       }
     }
-    
+
     return (
       <div className="flex items-center gap-1">
-        <div className="flex">
-          {stars}
-        </div>
+        <div className="flex">{stars}</div>
         <span className="text-sm text-texto/75 ml-1">
-          ({promedio ? promedio.toFixed(1) : '0.0'})
+          ({promedio ? promedio.toFixed(1) : "0.0"})
         </span>
       </div>
     );
@@ -47,7 +54,7 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
   return (
     <ModalContenedor onClose={onClose}>
       <div className="flex justify-between mb-6">
-        <MainH2 className="mb-0">Proveedores en esta zona</MainH2>
+        <MainH2 className="mb-0">Proveedores</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
@@ -62,22 +69,26 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
       {zonaInfo && (
         <div className="mb-4 p-3 bg-texto/5 rounded-lg border border-texto/15">
           <p className="text-sm text-texto">
-            <strong>Zona:</strong> {zonaInfo.departamento || 'Zona seleccionada'}
+            <strong>Zona:</strong>{" "}
+            {zonaInfo.departamento || "Zona seleccionada"}
           </p>
           <p className="text-sm text-texto mt-1">
-            Se encontraron <strong>{proveedores.length} proveedores</strong> en esta área
+            Se encontraron <strong>{proveedores.length} proveedores</strong> en
+            esta área
           </p>
         </div>
       )}
 
-      <div className="space-y-4 max-h-96 overflow-y-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-1 gap-4 max-h-96 overflow-y-auto">
         {proveedores.map((proveedor) => {
-          const promedioCalificacion = calcularPromedioCalificacion(proveedor.reseñas);
-          
+          const promedioCalificacion = calcularPromedioCalificacion(
+            proveedor.reseñas
+          );
+
           return (
             <div
               key={proveedor.id}
-              className="flex flex-nowrap sm:flex-row items-center gap-4 p-4 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10 transition-colors w-full"
+              className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10 transition-colors"
             >
               {/* Logo del proveedor */}
               <div className="flex-shrink-0">
@@ -85,59 +96,78 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
                   <img
                     src={proveedor.logotipo}
                     alt={`Logo de ${proveedor.nombre}`}
-                    className="w-12 h-12 object-contain rounded-lg bg-white p-1"
+                    className="w-16 h-16 object-contain rounded-full bg-white p-1"
                   />
                 ) : (
                   <div
-                    className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg"
-                    style={{ backgroundColor: proveedor.color || '#888888' }}
+                    className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg"
+                    style={{ backgroundColor: proveedor.color || "#888888" }}
                   >
-                    {proveedor.nombre?.charAt(0)?.toUpperCase() || 'P'}
+                    {proveedor.nombre?.charAt(0)?.toUpperCase() || "P"}
                   </div>
                 )}
               </div>
 
               {/* Información del proveedor */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-texto text-lg mb-1 truncate">
+                <MainH3
+                  className="mb-1 text-lg justify-center sm:justify-start line-clamp-1"
+                  title={proveedor.nombre}
+                >
                   {proveedor.nombre}
-                </h3>
-                
+                </MainH3>
+
                 {/* Calificación */}
-                <div className="mb-2">
+                <div className="mb-2 flex justify-center sm:justify-start">
                   {renderStars(promedioCalificacion)}
                 </div>
 
                 {/* Tecnologías */}
-                {proveedor.ProveedorTecnologia && proveedor.ProveedorTecnologia.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {proveedor.ProveedorTecnologia.slice(0, 2).map((tech, index) => (
-                      <span
-                        key={index}
-                        className="text-xs px-2 py-1 bg-acento/10 text-acento rounded-full"
-                      >
-                        {tech.tecnologias?.tecnologia}
-                      </span>
-                    ))}
-                    {proveedor.ProveedorTecnologia.length > 2 && (
-                      <span className="text-xs px-2 py-1 bg-texto/10 text-texto rounded-full">
-                        +{proveedor.ProveedorTecnologia.length - 2} más
-                      </span>
-                    )}
-                  </div>
-                )}
+                {proveedor.ProveedorTecnologia &&
+                  proveedor.ProveedorTecnologia.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1 justify-center sm:justify-start">
+                      {proveedor.ProveedorTecnologia.slice(0, 2).map(
+                        (tech, index) => (
+                          <Badge
+                            key={index}
+                            variant="accent"
+                            size="xs"
+                            collapseOnMobile={index === 1} // oculta la 2da en mobile
+                          >
+                            {tech.tecnologias?.tecnologia}
+                          </Badge>
+                        )
+                      )}
+
+                      {/* "+N más" en mobile: cuenta desde 1 */}
+                      {proveedor.ProveedorTecnologia.length > 1 && (
+                        <Badge variant="muted" size="xs" onlyMobile>
+                          +{proveedor.ProveedorTecnologia.length - 1} más
+                        </Badge>
+                      )}
+
+                      {/* "+N más" en sm+: cuenta desde 2 */}
+                      {proveedor.ProveedorTecnologia.length > 2 && (
+                        <Badge variant="muted" size="xs" onlyDesktop>
+                          +{proveedor.ProveedorTecnologia.length - 2} más
+                        </Badge>
+                      )}
+                    </div>
+                  )}
               </div>
 
               {/* Botón para ver más */}
               <div className="flex-shrink-0">
-                <MainButton
-                  onClick={() => handleNavigateToProvider(proveedor.id)}
+                <MainLinkButton
+                  to={`/proveedores/${proveedor.id}`}
                   variant="primary"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 px-4 py-2"
+                  icon={IconArrowRight}
+                  iconSize={16}
+                  iconPosition="right"
                 >
                   Ver más
-                  <IconArrowRight size={16} />
-                </MainButton>
+                </MainLinkButton>
               </div>
             </div>
           );
@@ -146,7 +176,8 @@ const ModalZonaMultiProveedor = ({ isOpen, onClose, proveedores = [], zonaInfo =
 
       <div className="mt-6 text-center">
         <p className="text-sm text-texto/50 italic">
-          Haz clic en "Ver más" para obtener información detallada de cada proveedor
+          Haz clic en "Ver más" para obtener información detallada de cada
+          proveedor
         </p>
       </div>
     </ModalContenedor>

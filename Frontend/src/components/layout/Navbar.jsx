@@ -9,6 +9,7 @@ import {
   IconBellFilled,
   IconSun,
   IconMoon,
+  IconChevronDown,
 } from "@tabler/icons-react";
 import { obtenerNotificacionesBoletas } from "../../services/boletas/notificaciones";
 import MainButton from "../ui/MainButton";
@@ -39,6 +40,7 @@ export const useNotificaciones = () => {
 const Navbar = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
   const [mostrarTemas, setMostrarTemas] = useState(false);
+  const [mostrarHerramientas, setMostrarHerramientas] = useState(false);
   const { usuario } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
   const { currentTheme, availableThemes, changeTheme, themeData } = useTheme();
@@ -51,6 +53,12 @@ const Navbar = () => {
       return "#1f2a40"; // Secundario del tema dark
     }
     return themeData?.texto || "#FFFFFF";
+  };
+
+  const openOnly = (menu) => {
+    setMostrarHerramientas(menu === "tools");
+    setMostrarTemas(menu === "themes");
+    setMostrarNotis(menu === "notis");
   };
 
   const getThemeIcon = () => {
@@ -81,30 +89,102 @@ const Navbar = () => {
             <MainLinkButton to="/" variant="navbar" className="!px-4 !py-2">
               Inicio
             </MainLinkButton>
-            <MainLinkButton to="/mapa" variant="navbar" className="!px-4 !py-2">
-              Mapa
-            </MainLinkButton>
-            <MainLinkButton
-              to="/herramientas"
-              variant="navbar"
-              className="!px-4 !py-2"
-            >
-              Herramientas
-            </MainLinkButton>
-            <MainLinkButton
-              to="/soporte"
-              variant="navbar"
-              className="!px-4 !py-2"
-            >
-              Soporte
-            </MainLinkButton>
+            {/* Herramientas (Dropdown) */}
+            <div className="relative">
+              <MainButton
+                onClick={() => {
+                  setMostrarHerramientas((v) => !v);
+                  setMostrarTemas(false);
+                  setMostrarNotis(false);
+                  openOnly(mostrarHerramientas ? null : "tools")
+                }}
+                variant="navbar"
+                title="Herramientas"
+                aria-expanded={mostrarHerramientas}
+              >
+                Herramientas
+                <IconChevronDown
+                  size={18}
+                  className={`transition-transform ${
+                    mostrarHerramientas ? "rotate-180" : "rotate-0"
+                  }`}
+                />
+              </MainButton>
+
+              {mostrarHerramientas && (
+                <div
+                  className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
+                    currentTheme === "light"
+                      ? "bg-fondo border border-texto/15 text-texto"
+                      : "bg-fondo text-texto border border-texto/15"
+                  }`}
+                >
+                  <MainLinkButton
+                    to="/herramientas"
+                    variant="navbar"
+                    className="!w-full !justify-start !px-3 !py-2"
+                    onClick={() => setMostrarHerramientas(false)}
+                  >
+                    Todas las herramientas
+                  </MainLinkButton>
+                  <div className="ml-1 pl-2 mt-1 space-y-1 border-l border-texto/15">
+                    <MainLinkButton
+                      to="/mapa"
+                      variant="navbar"
+                      className="!w-full !justify-start !px-3 !py-2"
+                      onClick={() => setMostrarHerramientas(false)}
+                    >
+                      Mapa
+                    </MainLinkButton>
+
+                    <MainLinkButton
+                      to="/informacion-red"
+                      variant="navbar"
+                      className="!w-full !justify-start !px-3 !py-2"
+                      onClick={() => setMostrarHerramientas(false)}
+                    >
+                      Información de red
+                    </MainLinkButton>
+
+                    <MainLinkButton
+                      to="/test-velocidad"
+                      variant="navbar"
+                      className="!w-full !justify-start !px-3 !py-2"
+                      onClick={() => setMostrarHerramientas(false)}
+                    >
+                      Test de velocidad
+                    </MainLinkButton>
+
+                    <MainLinkButton
+                      to="/analisis-conexion"
+                      variant="navbar"
+                      className="!w-full !justify-start !px-3 !py-2"
+                      onClick={() => setMostrarHerramientas(false)}
+                    >
+                      Análisis de conexión
+                    </MainLinkButton>
+
+                    <MainLinkButton
+                      to="/soporte"
+                      variant="navbar"
+                      className="!w-full !justify-start !px-3 !py-2"
+                      onClick={() => setMostrarHerramientas(false)}
+                    >
+                      Soporte
+                    </MainLinkButton>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Botón de tema - siempre visible */}
             <div className="relative">
               <MainButton
-                onClick={() => setMostrarTemas(!mostrarTemas)}
-                variant="secondary"
-                className="!bg-transparent hover:text-acento"
+                onClick={() => {
+                  setMostrarTemas(!mostrarTemas);
+                  openOnly(mostrarTemas ? null : "themes");
+                }}
+                variant="navbar"
                 icon={getThemeIcon()}
                 iconSize={26}
                 title="Cambiar tema"
@@ -147,18 +227,14 @@ const Navbar = () => {
               </MainLinkButton>
             ) : (
               <>
-                <MainLinkButton
-                  to="/cuenta"
-                  variant="navbar"
-                  className="!px-4 !py-2"
-                >
-                  Perfil
-                </MainLinkButton>
                 <div className="relative">
                   <MainButton
-                    onClick={() => setMostrarNotis(!mostrarNotis)}
-                    variant="secondary"
-                    className={`relative !bg-transparent hover:text-acento ${
+                    onClick={() => {
+                      setMostrarNotis(!mostrarNotis);
+                      openOnly(mostrarNotis ? null : "notis");
+                    }}
+                    variant="navbar"
+                    className={`relative${
                       notificaciones.length > 0 ? "animate-bounce" : ""
                     }`}
                     icon={
@@ -219,6 +295,14 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
+                <MainLinkButton
+                  to="/cuenta"
+                  variant="navbar"
+                  className="!px-4 !py-2"
+                >
+                  Perfil
+                </MainLinkButton>
+
                 <MainButton
                   onClick={async () => {
                     await logoutUser();

@@ -26,7 +26,7 @@ const Herramientasv2 = () => {
             </MainLinkButton>
           </div>
           <div>
-            <MainLinkButton to="/detector-proveedor" variant="card">
+            <MainLinkButton to="/informacion-red" variant="card">
               <MainH3 className="text-center justify-center">
                 Información de red
               </MainH3>
