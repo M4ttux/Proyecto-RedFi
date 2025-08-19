@@ -110,12 +110,20 @@ const ModalZonaMultiProveedor = ({
 
               {/* Información del proveedor */}
               <div className="flex-1 min-w-0">
-                <MainH3
-                  className="mb-1 text-lg justify-center sm:justify-start line-clamp-1"
-                  title={proveedor.nombre}
-                >
-                  {proveedor.nombre}
-                </MainH3>
+                <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                  <MainH3
+                    className="text-lg line-clamp-1 mb-0"
+                    title={proveedor.nombre}
+                  >
+                    {proveedor.nombre}
+                  </MainH3>
+                  {/* Círculo de color del proveedor */}
+                  <div
+                    className="w-4 h-4 rounded-full flex-shrink-0 border border-white/20"
+                    style={{ backgroundColor: proveedor.color || "#888888" }}
+                    title={`Color de ${proveedor.nombre}`}
+                  ></div>
+                </div>
 
                 {/* Calificación */}
                 <div className="mb-2 flex justify-center sm:justify-start">

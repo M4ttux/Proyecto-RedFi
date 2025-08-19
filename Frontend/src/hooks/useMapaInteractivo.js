@@ -104,23 +104,9 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
       return;
     }
 
-    const proveedorFeature = features.find((f) =>
-      f.layer.id.startsWith("fill-")
-    );
-    if (proveedorFeature) {
-      const proveedorIdCompuesto = proveedorFeature.layer.id.replace(
-        "fill-",
-        ""
-      );
-      const proveedorId = proveedorIdCompuesto.split("-")[0]; // Extrae solo el prov.id
-      const proveedor = proveedoresRef.current.find(
-        (p) => p.id.toString() === proveedorId
-      );
-
-      if (proveedor?.visible) {
-        setProveedorActivo(proveedor);
-      }
-    }
+    // Ya no manejamos clicks de proveedores aquí - eso lo hace proveedores.js
+    // El servicio de proveedores tiene su propio event listener que maneja correctamente
+    // tanto zonas individuales como múltiples proveedores
   }, []);
 
   const cargarReseñasIniciales = useCallback(async (filtrosParaUsar = null) => {

@@ -29,6 +29,7 @@ export const cargarProveedoresEnMapa = async (
 
   const zonasConProveedores = new Map();
 
+  // Primera pasada: agrupar proveedores por zona
   for (const prov of proveedoresConEstado) {
     if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) continue;
 
@@ -44,115 +45,144 @@ export const cargarProveedoresEnMapa = async (
         });
       }
       zonasConProveedores.get(zona.id).proveedores.push(prov);
+    }
+  }
 
-      const sourceId = `zona-${prov.id}-${zona.id}`;
-      const fillLayerId = `fill-${prov.id}-${zona.id}`;
-      const lineLayerId = `line-${prov.id}-${zona.id}`;
+  // Segunda pasada: renderizar cada zona con todos sus proveedores
+  for (const [zonaId, zonaInfo] of zonasConProveedores) {
+    const { zona, proveedores: proveedoresEnZona } = zonaInfo;
+    
+    // Filtrar solo proveedores visibles
+    const proveedoresVisibles = proveedoresEnZona.filter(p => p.visible);
+    if (proveedoresVisibles.length === 0) continue;
 
-      if (map.getSource(sourceId)) {
-        map.removeLayer(fillLayerId);
-        map.removeLayer(lineLayerId);
-        map.removeSource(sourceId);
+    const sourceId = `zona-${zonaId}`;
+    
+    // Limpiar capas existentes si ya existen
+    const existingLayers = map.getStyle().layers.filter(layer => 
+      layer.id.startsWith(`fill-${zonaId}`) || layer.id.startsWith(`line-border-${zonaId}`)
+    );
+    existingLayers.forEach(layer => {
+      if (map.getLayer(layer.id)) {
+        map.removeLayer(layer.id);
       }
+    });
+    
+    // Limpiar source si existe
+    if (map.getSource(sourceId)) {
+      map.removeSource(sourceId);
+    }
+    
+    // Agregar source
+    map.addSource(sourceId, {
+      type: "geojson",
+      data: { type: "Feature", geometry: zona.geom, properties: { zonaId } },
+    });
 
-      map.addSource(sourceId, {
-        type: "geojson",
-        data: { type: "Feature", geometry: zona.geom, properties: {} },
-      });
+    // Renderizar primer proveedor como relleno base
+    const primerProveedor = proveedoresVisibles[0];
+    const fillLayerId = `fill-${zonaId}`;
+    
+    map.addLayer({
+      id: fillLayerId,
+      type: "fill",
+      source: sourceId,
+      paint: {
+        "fill-color": primerProveedor.color || "#888888",
+        "fill-opacity": 0.4,
+      },
+      layout: {
+        visibility: "visible",
+      },
+    });
 
-      map.addLayer({
-        id: fillLayerId,
-        type: "fill",
-        source: sourceId,
-        paint: {
-          "fill-color": prov.color || "#888888",
-          "fill-opacity": 0.4,
-        },
-        layout: {
-          visibility: prov.visible ? "visible" : "none",
-        },
-      });
-
+    // Renderizar proveedores adicionales como bordes con grosor uniforme
+    for (let i = 1; i < proveedoresVisibles.length; i++) {
+      const proveedor = proveedoresVisibles[i];
+      const lineLayerId = `line-border-${zonaId}-${i}`;
+      
+      // Grosor uniforme de 4px para todos los bordes
+      const lineWidth = 2;
+      // Para crear el efecto "contraído", usamos offset negativo
+      const offsetDistance = -(i * 2); // -2px, -4px, -6px... hacia adentro
+      
       map.addLayer({
         id: lineLayerId,
         type: "line",
         source: sourceId,
         paint: {
-          "line-color": prov.color || "#000000",
-          "line-width": 2,
-          "line-opacity": 1,
+          "line-color": proveedor.color || "#888888",
+          "line-width": lineWidth,
+          "line-opacity": 0.9,
+          "line-offset": offsetDistance, // Offset hacia adentro para crear contracción
         },
         layout: {
-          visibility: prov.visible ? "visible" : "none",
+          visibility: "visible",
         },
       });
-
-      // Popup hover
-      let popup = new maplibregl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        offset: 10,
-      });
-      let popupTimeout = null;
-      let lastMouseMove = null;
-
-      map.on("mouseenter", fillLayerId, () => {
-        if (window.modoSeleccionActivo || !prov.visible) return;
-        map.getCanvas().style.cursor = "pointer";
-        map.setPaintProperty(fillLayerId, "fill-opacity", 0.6);
-      });
-
-      map.on("mousemove", fillLayerId, (e) => {
-        if (window.modoSeleccionActivo || !prov.visible) return;
-        lastMouseMove = Date.now();
-        clearTimeout(popupTimeout);
-
-        const zonaInfo = zonasConProveedores.get(zona.id);
-
-        popupTimeout = setTimeout(() => {
-          const quiet = Date.now() - lastMouseMove >= 350;
-          if (quiet && !window.modoSeleccionActivo) {
-            if (zonaInfo?.proveedores?.length > 1) {
-              const contenido = zonaInfo.proveedores
-                .map(
-                  (p) =>
-                    `<div><span style="color:${p.color}">⬤</span> ${p.nombre}</div>`
-                )
-                .join("");
-              popup
-                .setLngLat(e.lngLat)
-                .setHTML(`<strong>Proveedores:</strong><br>${contenido}`)
-                .addTo(map);
-            } else {
-              popup
-                .setLngLat(e.lngLat)
-                .setHTML(
-                  `<div class="text-sm font-semibold">${prov.nombre}</div>`
-                )
-                .addTo(map);
-            }
-          }
-        }, 350);
-
-        // Si ya está visible, seguirlo con el mouse
-        if (popup.isOpen()) {
-          popup.setLngLat(e.lngLat);
-        }
-      });
-
-      map.on("mouseleave", fillLayerId, () => {
-        if (window.modoSeleccionActivo || !prov.visible) return;
-        map.getCanvas().style.cursor = "";
-        map.setPaintProperty(fillLayerId, "fill-opacity", 0.4);
-        clearTimeout(popupTimeout);
-        popup.remove();
-      });
-
-      // Solo manejar hover, el click lo manejaremos después globalmente
     }
+
+    // Eventos de hover para la zona
+    let popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 10,
+    });
+    let popupTimeout = null;
+    let lastMouseMove = null;
+
+    map.on("mouseenter", fillLayerId, () => {
+      if (window.modoSeleccionActivo) return;
+      map.getCanvas().style.cursor = "pointer";
+      map.setPaintProperty(fillLayerId, "fill-opacity", 0.6);
+    });
+
+    map.on("mousemove", fillLayerId, (e) => {
+      if (window.modoSeleccionActivo) return;
+      lastMouseMove = Date.now();
+      clearTimeout(popupTimeout);
+
+      popupTimeout = setTimeout(() => {
+        const quiet = Date.now() - lastMouseMove >= 350;
+        if (quiet && !window.modoSeleccionActivo) {
+          if (proveedoresVisibles.length > 1) {
+            const contenido = proveedoresVisibles
+              .map(
+                (p) =>
+                  `<div><span style="color:${p.color}">⬤</span> ${p.nombre}</div>`
+              )
+              .join("");
+            popup
+              .setLngLat(e.lngLat)
+              .setHTML(`<strong>Proveedores:</strong><br>${contenido}`)
+              .addTo(map);
+          } else {
+            popup
+              .setLngLat(e.lngLat)
+              .setHTML(
+                `<div class="text-sm font-semibold">${primerProveedor.nombre}</div>`
+              )
+              .addTo(map);
+          }
+        }
+      }, 350);
+
+      // Si ya está visible, seguirlo con el mouse
+      if (popup.isOpen()) {
+        popup.setLngLat(e.lngLat);
+      }
+    });
+
+    map.on("mouseleave", fillLayerId, () => {
+      if (window.modoSeleccionActivo) return;
+      map.getCanvas().style.cursor = "";
+      map.setPaintProperty(fillLayerId, "fill-opacity", 0.4);
+      clearTimeout(popupTimeout);
+      popup.remove();
+    });
   }
 
-  // Handler global de click después de procesar todas las zonas
+  // Handler global de click
   const handleGlobalClick = (e) => {
     if (window.modoSeleccionActivo) return;
     
@@ -163,52 +193,39 @@ export const cargarProveedoresEnMapa = async (
     const reseñaFeature = features.find(f => f.layer.id === "reseñas-layer");
     if (reseñaFeature) return;
     
-    // Filtrar solo las features de proveedores visibles
-    const proveedorFeatures = features.filter(feature => {
+    // Filtrar solo las features de zonas de proveedores
+    const zonaFeatures = features.filter(feature => {
       const layerId = feature.layer.id;
       return layerId.startsWith('fill-') && feature.layer.layout?.visibility !== 'none';
     });
+
+    if (zonaFeatures.length === 0) return;
     
-    if (proveedorFeatures.length === 0) return;
+    // Obtener la zona clickeada
+    const zonaFeature = zonaFeatures[0];
+    const zonaId = zonaFeature.properties.zonaId;
+    const zonaInfo = zonasConProveedores.get(zonaId);
     
-    // Obtener información de las zonas clickeadas
-    const zonasClickeadas = new Set();
-    const proveedoresEnClick = [];
+    if (!zonaInfo) return;
     
-    proveedorFeatures.forEach(feature => {
-      const layerId = feature.layer.id;
-      const match = layerId.match(/^fill-(\d+)-(\d+)$/);
-      if (match) {
-        const [, proveedorId, zonaId] = match;
-        zonasClickeadas.add(parseInt(zonaId));
-        
-        // Buscar el proveedor correspondiente
-        const proveedor = proveedoresConEstado.find(p => p.id === parseInt(proveedorId));
-        if (proveedor && proveedor.visible) {
-          proveedoresEnClick.push({ proveedor, zonaId: parseInt(zonaId) });
-        }
-      }
-    });
+    const proveedoresVisibles = zonaInfo.proveedores.filter(p => p.visible);
     
-    // Si hay múltiples proveedores en la misma zona, abrir modal múltiple
-    for (const zonaId of zonasClickeadas) {
-      const zonaInfo = zonasConProveedores.get(zonaId);
+    // Si hay múltiples proveedores, usar el callback especial
+    if (proveedoresVisibles.length > 1 && onZonaMultiProveedorClick) {
+      if (window.zonaMultipleHandled) return;
       
-      if (zonaInfo?.proveedores?.length > 1 && onZonaMultiProveedorClick) {
-        // Marcar globalmente que se manejó como zona múltiple
-        window.zonaMultipleHandled = true;
-        setTimeout(() => {
-          window.zonaMultipleHandled = false;
-        }, 100);
-        
-        onZonaMultiProveedorClick(zonaInfo.proveedores, zonaInfo.zona);
-        return; // Salir temprano para evitar abrir modal individual
-      }
+      window.zonaMultipleHandled = true;
+      setTimeout(() => {
+        window.zonaMultipleHandled = false;
+      }, 100);
+      
+      onZonaMultiProveedorClick(proveedoresVisibles, zonaInfo.zona);
+      return;
     }
     
     // Si solo hay un proveedor, abrir modal individual
-    if (proveedoresEnClick.length === 1) {
-      setProveedorActivo(proveedoresEnClick[0].proveedor);
+    if (proveedoresVisibles.length === 1) {
+      setProveedorActivo(proveedoresVisibles[0]);
     }
   };
   
@@ -221,32 +238,90 @@ export const cargarProveedoresEnMapa = async (
 };
 
 export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
+  // Esta función actualiza la visibilidad de las capas existentes basado en los filtros
+  const zonasActualizadas = new Map();
+  
   proveedoresRef.current.forEach((prov) => {
+    const nuevoEstadoVisible = getVisible(prov, filtros);
+    
     if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) return;
 
     prov.ZonaProveedor.forEach((relacionZona) => {
       const zona = relacionZona.zonas;
       if (!zona) return;
 
-      const fillLayerId = `fill-${prov.id}-${zona.id}`;
-      const lineLayerId = `line-${prov.id}-${zona.id}`;
-
-      const visible = getVisiblePorZona(prov, zona.id, filtros);
-
-      if (map.getLayer(fillLayerId)) {
-        map.setLayoutProperty(
-          fillLayerId,
-          "visibility",
-          visible ? "visible" : "none"
-        );
-      }
-      if (map.getLayer(lineLayerId)) {
-        map.setLayoutProperty(
-          lineLayerId,
-          "visibility",
-          visible ? "visible" : "none"
-        );
+      // Verificar si necesitamos actualizar esta zona
+      const zonaId = zona.id;
+      if (!zonasActualizadas.has(zonaId)) {
+        zonasActualizadas.set(zonaId, true);
+        
+        // Actualizar visibilidad de las capas de la zona
+        const fillLayerId = `fill-${zonaId}`;
+        if (map.getLayer(fillLayerId)) {
+          // Verificar si algún proveedor en esta zona sigue visible
+          const proveedoresZona = proveedoresRef.current.filter(p => 
+            p.ZonaProveedor?.some(rz => rz.zonas?.id === zonaId)
+          );
+          const algunoVisible = proveedoresZona.some(p => getVisible(p, filtros));
+          
+          map.setLayoutProperty(fillLayerId, "visibility", algunoVisible ? "visible" : "none");
+          
+          // También actualizar las capas de borde
+          for (let i = 1; i <= 10; i++) { // Máximo 10 proveedores por zona
+            const lineLayerId = `line-border-${zonaId}-${i}`;
+            if (map.getLayer(lineLayerId)) {
+              map.setLayoutProperty(lineLayerId, "visibility", algunoVisible ? "visible" : "none");
+            }
+          }
+        }
       }
     });
+  });
+};
+
+export const obtenerProveedoresPorZona = (zona, proveedores, filtros) => {
+  if (!zona || !proveedores) return [];
+
+  const proveedoresEnZona = proveedores
+    .filter((prov) => {
+      if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) return false;
+
+      const tieneZona = prov.ZonaProveedor.some(
+        (relacionZona) => relacionZona.zonas?.id === zona.id
+      );
+
+      if (!tieneZona) return false;
+
+      const filtrosPorZonas = filtros?.zonas?.length > 0;
+      const zonasVisibles = getVisiblePorZona(filtros);
+
+      if (filtrosPorZonas) {
+        // Caso especial: estamos buscando zonas específicas y queremos mostrar solo los proveedores de esas zonas
+        return zonasVisibles.some((zv) => zv.zona.id === zona.id);
+      }
+
+      return true;
+    })
+    .filter((prov) => prov);
+
+  return proveedoresEnZona;
+};
+
+export const limpiarCapasProveedores = (map) => {
+  const layers = map.getStyle().layers;
+  layers.forEach((layer) => {
+    if (
+      layer.id.startsWith("fill-") ||
+      layer.id.startsWith("line-")
+    ) {
+      map.removeLayer(layer.id);
+    }
+  });
+
+  const sources = Object.keys(map.getStyle().sources);
+  sources.forEach((sourceId) => {
+    if (sourceId.startsWith("zona-")) {
+      map.removeSource(sourceId);
+    }
   });
 };
