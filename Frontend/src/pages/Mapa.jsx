@@ -29,8 +29,8 @@ const Mapa = () => {
   const [cargandoTecnologias, setCargandoTecnologias] = useState(true);
 
   const [filtrosAplicados, setFiltrosAplicados] = useState({
-    zona: "",
-    proveedor: "",
+    zona: { id: "", nombre: "Todas las zonas" },
+    proveedor: { id: "", nombre: "Todos los proveedores" },
     tecnologia: "",
     valoracionMin: 0,
   });

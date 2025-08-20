@@ -25,13 +25,13 @@ export const getVisible = (prov, filtros) => {
   if (!filtros) return true;
 
   // Filtro por proveedor
-  if (filtros.proveedor && String(prov.id) !== String(filtros.proveedor)) return false;
+  if (filtros.proveedor && filtros.proveedor.id && String(prov.id) !== String(filtros.proveedor.id)) return false;
 
   // Filtro por zona
   const tieneZona =
-    !filtros.zona ||
+    !filtros.zona || !filtros.zona.id ||
     prov.ZonaProveedor?.some(
-      (rel) => String(rel.zonas?.id) === String(filtros.zona)
+      (rel) => String(rel.zonas?.id) === String(filtros.zona.id)
     );
   if (!tieneZona) return false;
 
@@ -50,10 +50,10 @@ export const getVisiblePorZona = (prov, zonaId, filtros) => {
   if (!filtros) return true;
 
   // Filtro por proveedor
-  if (filtros.proveedor && String(prov.id) !== String(filtros.proveedor)) return false;
+  if (filtros.proveedor && filtros.proveedor.id && String(prov.id) !== String(filtros.proveedor.id)) return false;
 
   // Filtro por zona (debe coincidir con esta zona en particular)
-  if (filtros.zona && String(zonaId) !== String(filtros.zona)) return false;
+  if (filtros.zona && filtros.zona.id && String(zonaId) !== String(filtros.zona.id)) return false;
 
   // Filtro por tecnología
   const tieneTecnologia =

@@ -10,12 +10,18 @@ export const cargarReseñasEnMapa = async (
   try {
     const reseñas = await obtenerReseñas();
 
-    const features = reseñas
-      .map((r) => {
-        const coords = r.ubicacion ? [r.ubicacion.lng, r.ubicacion.lat] : null;
-        if (!coords || isNaN(coords[0]) || isNaN(coords[1])) return null;
+    const features = [];
+    
+    reseñas.forEach((r) => {
+      const coords = r.ubicacion ? [r.ubicacion.lng, r.ubicacion.lat] : null;
+      if (!coords || isNaN(coords[0]) || isNaN(coords[1])) return;
 
-        return {
+      // Obtener todas las zonas del proveedor
+      const zonasProveedor = r.proveedores?.ZonaProveedor?.map(zp => zp.zonas?.id).filter(Boolean) || [];
+      
+      // Crear una feature por cada zona donde opera el proveedor
+      zonasProveedor.forEach((zonaId) => {
+        features.push({
           type: "Feature",
           geometry: { type: "Point", coordinates: coords },
           properties: {
@@ -25,7 +31,7 @@ export const cargarReseñasEnMapa = async (
             usuario_id: r.usuario_id,
             estrellas: r.estrellas,
             comentario: r.comentario,
-            zona_id: r.proveedores?.zona_id || "",
+            zona_id: zonaId, // Zona específica para esta feature
             tecnologia: r.proveedores?.tecnologia || "",
 
             // 🔧 AGREGAR datos de relaciones completos
@@ -38,9 +44,32 @@ export const cargarReseñasEnMapa = async (
             nombre_proveedor:
               r.proveedores?.nombre || `Proveedor ID: ${r.proveedor_id}`,
           },
-        };
-      })
-      .filter(Boolean);
+        });
+      });
+      
+      // Si no hay zonas, crear una feature sin zona específica
+      if (zonasProveedor.length === 0) {
+        features.push({
+          type: "Feature",
+          geometry: { type: "Point", coordinates: coords },
+          properties: {
+            id: r.id,
+            proveedor_id: r.proveedor_id,
+            usuario_id: r.usuario_id,
+            estrellas: r.estrellas,
+            comentario: r.comentario,
+            zona_id: null,
+            tecnologia: r.proveedores?.tecnologia || "",
+            user_profiles: r.user_profiles || null,
+            proveedores: r.proveedores || null,
+            nombre_usuario:
+              r.user_profiles?.nombre || `Usuario ${r.usuario_id}`,
+            nombre_proveedor:
+              r.proveedores?.nombre || `Proveedor ID: ${r.proveedor_id}`,
+          },
+        });
+      }
+    });
 
     const geojson = { type: "FeatureCollection", features };
 
@@ -109,11 +138,21 @@ export const actualizarVisibilidadReseñas = (
   if (!map.getLayer(layerId)) return;
 
   const filter = ["all"];
-  if (filtros.proveedor)
-    filter.push(["==", ["get", "proveedor_id"], filtros.proveedor]);
-  if (filtros.zona) filter.push(["==", ["get", "zona_id"], filtros.zona]);
+  
+  // Filtro por proveedor
+  if (filtros.proveedor && filtros.proveedor.id)
+    filter.push(["==", ["get", "proveedor_id"], Number(filtros.proveedor.id)]);
+    
+  // Filtro por zona - ahora usando zona_id directo
+  if (filtros.zona && filtros.zona.id) {
+    filter.push(["==", ["get", "zona_id"], Number(filtros.zona.id)]);
+  }
+  
+  // Filtro por tecnología
   if (filtros.tecnologia)
     filter.push(["==", ["get", "tecnologia"], filtros.tecnologia]);
+    
+  // Filtro por valoración
   if (filtros.valoracionMin && !isNaN(filtros.valoracionMin))
     filter.push(["==", ["get", "estrellas"], filtros.valoracionMin]);
 

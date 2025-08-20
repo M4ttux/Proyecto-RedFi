@@ -22,10 +22,8 @@ export const cargarProveedoresEnMapa = async (
   onZonaMultiProveedorClick = null
 ) => {
   const proveedores = await obtenerProveedores();
-  const proveedoresConEstado = proveedores.map((p) => ({
-    ...p,
-    visible: getVisible(p, filtros),
-  }));
+  // Removemos la lógica de asignar visible globalmente ya que ahora lo evaluamos por zona
+  const proveedoresConEstado = proveedores;
 
   const zonasConProveedores = new Map();
 
@@ -52,8 +50,10 @@ export const cargarProveedoresEnMapa = async (
   for (const [zonaId, zonaInfo] of zonasConProveedores) {
     const { zona, proveedores: proveedoresEnZona } = zonaInfo;
     
-    // Filtrar solo proveedores visibles
-    const proveedoresVisibles = proveedoresEnZona.filter(p => p.visible);
+    // Filtrar proveedores visibles específicamente para esta zona
+    const proveedoresVisibles = proveedoresEnZona.filter(p => 
+      getVisiblePorZona(p, zonaId, filtros)
+    );
     if (proveedoresVisibles.length === 0) continue;
 
     const sourceId = `zona-${zonaId}`;
@@ -208,7 +208,9 @@ export const cargarProveedoresEnMapa = async (
     
     if (!zonaInfo) return;
     
-    const proveedoresVisibles = zonaInfo.proveedores.filter(p => p.visible);
+    const proveedoresVisibles = zonaInfo.proveedores.filter(p => 
+      getVisiblePorZona(p, zonaId, filtros)
+    );
     
     // Si hay múltiples proveedores, usar el callback especial
     if (proveedoresVisibles.length > 1 && onZonaMultiProveedorClick) {
@@ -242,8 +244,6 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
   const zonasActualizadas = new Map();
   
   proveedoresRef.current.forEach((prov) => {
-    const nuevoEstadoVisible = getVisible(prov, filtros);
-    
     if (!prov.ZonaProveedor || prov.ZonaProveedor.length === 0) return;
 
     prov.ZonaProveedor.forEach((relacionZona) => {
@@ -258,11 +258,11 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
         // Actualizar visibilidad de las capas de la zona
         const fillLayerId = `fill-${zonaId}`;
         if (map.getLayer(fillLayerId)) {
-          // Verificar si algún proveedor en esta zona sigue visible
+          // Verificar si algún proveedor en esta zona sigue visible usando filtros específicos de zona
           const proveedoresZona = proveedoresRef.current.filter(p => 
             p.ZonaProveedor?.some(rz => rz.zonas?.id === zonaId)
           );
-          const algunoVisible = proveedoresZona.some(p => getVisible(p, filtros));
+          const algunoVisible = proveedoresZona.some(p => getVisiblePorZona(p, zonaId, filtros));
           
           map.setLayoutProperty(fillLayerId, "visibility", algunoVisible ? "visible" : "none");
           

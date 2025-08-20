@@ -55,6 +55,15 @@ const Navbar = () => {
     return themeData?.texto || "#FFFFFF";
   };
 
+  // Función para traducir nombres de temas
+  const traducirTema = (theme) => {
+    const traducciones = {
+      light: "Claro",
+      dark: "Oscuro"
+    };
+    return traducciones[theme] || theme;
+  };
+
   const openOnly = (menu) => {
     setMostrarHerramientas(menu === "tools");
     setMostrarTemas(menu === "themes");
@@ -210,7 +219,7 @@ const Navbar = () => {
                         currentTheme === theme ? "!bg-primario !text-white" : ""
                       }`}
                     >
-                      <span className="capitalize font-bold">{theme}</span>
+                      <span className="capitalize font-bold">{traducirTema(theme)}</span>
                     </MainButton>
                   ))}
                 </div>

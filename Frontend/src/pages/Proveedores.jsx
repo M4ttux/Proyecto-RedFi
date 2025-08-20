@@ -5,11 +5,19 @@ import {
   IconCarambola,
   IconCarambolaFilled,
   IconExternalLink,
+  IconArrowLeft,
 } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
+import MainLinkButton from "../components/ui/MainLinkButton";
+import Avatar from "../components/ui/Avatar";
+import Badge from "../components/ui/Badge";
 
 const Proveedores = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Proveedor";
+  }, []);
+
   const { id } = useParams();
   const [proveedor, setProveedor] = useState(null);
 
@@ -20,6 +28,13 @@ const Proveedores = () => {
     };
     fetchProveedor();
   }, [id]);
+
+  // Actualizar el título cuando se carga el proveedor
+  useEffect(() => {
+    if (proveedor?.nombre) {
+      document.title = `Red-Fi | ${proveedor.nombre}`;
+    }
+  }, [proveedor]);
 
   if (!proveedor) {
     return (
@@ -35,14 +50,17 @@ const Proveedores = () => {
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
-      <div className="max-w-7xl mx-auto space-y-12">
+      <div className="max-w-7xl mx-auto space-y-12 mb-8">
         {/* Info principal del proveedor */}
         <div className="bg-texto/5 border border-texto/15 rounded-2xl p-6 mb-10 shadow-lg text-center">
-          {/* Avatar / ícono */}
+          {/* Avatar del proveedor */}
           <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 rounded-full bg-texto/5 text-3xl flex items-center justify-center">
-              🏢
-            </div>
+            <Avatar
+              fotoUrl={proveedor.logotipo}
+              nombre={proveedor.nombre}
+              size={20}
+              className="rounded-full"
+            />
           </div>
 
           {/* Nombre */}
@@ -53,12 +71,13 @@ const Proveedores = () => {
             {tecnologias.length > 0 ? (
               <div className="flex flex-wrap justify-center gap-2">
                 {tecnologias.map((tec, index) => (
-                  <span
+                  <Badge
                     key={index}
-                    className="bg-texto/5 border border-texto/15 text-xs px-3 py-1 rounded-full"
+                    variant="accent"
+                    size="sm"
                   >
                     {tec}
-                  </span>
+                  </Badge>
                 ))}
               </div>
             ) : (
@@ -97,12 +116,6 @@ const Proveedores = () => {
               {proveedor.reseñas.map((r) => {
                 const nombre = r.user?.nombre || "Usuario";
                 const fotoUrl = r.user?.foto_url || null;
-                const iniciales = nombre
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .slice(0, 2)
-                  .toUpperCase();
 
                 const fecha = r.created_at
                   ? new Date(r.created_at).toLocaleDateString("es-AR", {
@@ -120,17 +133,12 @@ const Proveedores = () => {
                     {/* Usuario + estrellas */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        {fotoUrl ? (
-                          <img
-                            src={fotoUrl}
-                            alt={`Avatar de ${nombre}`}
-                            className="w-10 h-10 rounded-full object-cover border border-acento"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-texto/5 text-texto font-bold flex items-center justify-center text-sm border border-acento">
-                            {iniciales}
-                          </div>
-                        )}
+                        <Avatar
+                          fotoUrl={fotoUrl}
+                          nombre={nombre}
+                          size={10}
+                          className="rounded-full border border-acento"
+                        />
                         <div>
                           <p className="font-medium text-texto">{nombre}</p>
                           <p className="text-xs text-texto">{fecha}</p>
@@ -162,6 +170,13 @@ const Proveedores = () => {
             </p>
           )}
         </div>
+      </div>
+      {/* Botón volver al mapa */}
+      <div className="text-center">
+        <MainLinkButton to="/mapa" variant="secondary">
+          <IconArrowLeft />
+          Volver al mapa
+        </MainLinkButton>
       </div>
     </section>
   );

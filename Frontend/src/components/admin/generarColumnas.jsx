@@ -108,7 +108,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
-            className="truncate text-ellipsis overflow-hidden"
+            className="truncate text-ellipsis overflow-hidden max-w-[200px]"
             title={row.descripcion}
           >
             {row.descripcion || "—"}

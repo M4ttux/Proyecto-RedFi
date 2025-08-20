@@ -9,6 +9,7 @@ import MainLinkButton from "../../ui/MainLinkButton";
 import MainH2 from "../../ui/MainH2";
 import MainH3 from "../../ui/MainH3";
 import Badge from "../../ui/Badge";
+import Avatar from "../../ui/Avatar";
 import ModalContenedor from "../../ui/ModalContenedor";
 
 const ModalZonaMultiProveedor = ({
@@ -92,20 +93,12 @@ const ModalZonaMultiProveedor = ({
             >
               {/* Logo del proveedor */}
               <div className="flex-shrink-0">
-                {proveedor.logotipo ? (
-                  <img
-                    src={proveedor.logotipo}
-                    alt={`Logo de ${proveedor.nombre}`}
-                    className="w-16 h-16 object-contain rounded-full bg-white p-1"
-                  />
-                ) : (
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                    style={{ backgroundColor: proveedor.color || "#888888" }}
-                  >
-                    {proveedor.nombre?.charAt(0)?.toUpperCase() || "P"}
-                  </div>
-                )}
+                <Avatar
+                  fotoUrl={proveedor.logotipo}
+                  nombre={proveedor.nombre}
+                  size={16}
+                  className="rounded-full"
+                />
               </div>
 
               {/* Información del proveedor */}

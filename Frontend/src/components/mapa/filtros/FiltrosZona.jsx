@@ -1,6 +1,7 @@
 import { IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import Select from "../../ui/Select";
 import MainButton from "../../ui/MainButton";
+import { useFiltrosDinamicos } from "../../../hooks/useFiltrosDinamicos";
 
 const FiltrosZona = ({
   filtros,
@@ -13,10 +14,16 @@ const FiltrosZona = ({
   cargandoProveedores,
   cargandoTecnologias,
 }) => {
+  // Hook para filtros dinámicos
+  const {
+    zonasDisponibles,
+    proveedoresDisponibles,
+    tecnologiasDisponibles,
+  } = useFiltrosDinamicos(zonas, proveedores, tecnologiasUnicas, filtros);
   const aplicarFiltros = () => {
     onFiltrar({
-      zona: filtros.zona.id || "",
-      proveedor: filtros.proveedor.id || "",
+      zona: filtros.zona || { id: "", nombre: "Todas las zonas" },
+      proveedor: filtros.proveedor || { id: "", nombre: "Todos los proveedores" },
       tecnologia: filtros.tecnologia || "",
       valoracionMin: filtros.valoracionMin || 0,
     });
@@ -30,12 +37,7 @@ const FiltrosZona = ({
       valoracionMin: 0,
     };
     setFiltros(filtrosReseteados);
-    onFiltrar({
-      zona: "",
-      proveedor: "",
-      tecnologia: "",
-      valoracionMin: 0,
-    });
+    onFiltrar(filtrosReseteados);
   };
 
   return (
@@ -46,13 +48,13 @@ const FiltrosZona = ({
           label="Zona"
           value={filtros.zona?.id || ""}
           onChange={(id) => {
-            const zona = zonas.find((z) => String(z.id) === String(id)) || {
+            const zona = zonasDisponibles.find((z) => String(z.id) === String(id)) || {
               id: "",
               nombre: "Todas las zonas",
             };
             setFiltros((prev) => ({ ...prev, zona }));
           }}
-          options={zonas}
+          options={zonasDisponibles}
           getOptionValue={(z) => z.id}
           getOptionLabel={(z) => z.departamento || z.nombre}
           loading={cargandoZonas}
@@ -63,7 +65,7 @@ const FiltrosZona = ({
           label="Proveedor"
           value={filtros.proveedor?.id || ""}
           onChange={(id) => {
-            const proveedor = proveedores.find(
+            const proveedor = proveedoresDisponibles.find(
               (p) => String(p.id) === String(id)
             ) || {
               id: "",
@@ -71,7 +73,7 @@ const FiltrosZona = ({
             };
             setFiltros((prev) => ({ ...prev, proveedor }));
           }}
-          options={proveedores}
+          options={proveedoresDisponibles}
           getOptionValue={(p) => p.id}
           getOptionLabel={(p) => p.nombre}
           loading={cargandoProveedores}
@@ -82,7 +84,7 @@ const FiltrosZona = ({
           label="Tecnología"
           value={filtros.tecnologia || ""}
           onChange={(t) => setFiltros((prev) => ({ ...prev, tecnologia: t }))}
-          options={tecnologiasUnicas}
+          options={tecnologiasDisponibles}
           getOptionValue={(t) => t}
           getOptionLabel={(t) => t || "Todas las tecnologías"}
           loading={cargandoTecnologias}

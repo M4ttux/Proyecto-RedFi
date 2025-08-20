@@ -52,8 +52,8 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
 
   const filtrosNormalizados = useMemo(
     () => ({
-      zona: filtros?.zona || "",
-      proveedor: filtros?.proveedor || "",
+      zona: filtros?.zona || { id: "", nombre: "Todas las zonas" },
+      proveedor: filtros?.proveedor || { id: "", nombre: "Todos los proveedores" },
       tecnologia: filtros?.tecnologia || "",
       valoracionMin: filtros?.valoracionMin || 0,
     }),
