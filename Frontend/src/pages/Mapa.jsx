@@ -6,7 +6,7 @@ import { IconFilter } from "@tabler/icons-react";
 import { getZonas } from "../services/zonaService";
 import { obtenerProveedores } from "../services/proveedores/obtenerProveedor";
 import { DURACION_ALERTA, BOUNDS_CORRIENTES } from "../constants/constantes";
-import CargandoMapa from "../components/mapa/cargador/CargandoMapa";
+import MainLoader from "../components/ui/MainLoader";
 import { useTheme } from "../context/ThemeContext";
 import { useValidacionUbicacion } from "../hooks/useValidacionUbicacion";
 
@@ -107,9 +107,12 @@ const Mapa = () => {
   return (
     <div className="h-[calc(100vh-75px)] w-full relative">
       {cargandoMapa && (
-        <div className="absolute inset-0 z-45">
-          <CargandoMapa cargandoMapa={cargandoMapa} />
-        </div>
+        <MainLoader 
+          texto="Cargando mapa..." 
+          variant="overlay" 
+          size="large" 
+          visible={cargandoMapa} 
+        />
       )}
 
       <div

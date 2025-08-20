@@ -53,9 +53,9 @@ import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
 import MainButton from "../components/ui/MainButton";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import MainLoader from "../components/ui/MainLoader";
 
 import TablaSelector from "../components/admin/TablaSelector";
-import LoaderAdmin from "../components/admin/LoaderAdmin";
 import { generarColumnas } from "../components/admin/generarColumnas";
 
 import { useAlerta } from "../context/AlertaContext";
@@ -269,7 +269,6 @@ const Administrador = () => {
   }, [navigate]);
 
   if (!perfil || perfil.rol !== "admin") return;
-  if (loading) return <LoaderAdmin />;
 
   const datosActuales = todosLosDatos[tablaActual] || [];
   const columnas = generarColumnas(tablaActual, datosActuales, acciones);
@@ -284,14 +283,17 @@ const Administrador = () => {
           </p>
         </div>
 
-        <TablaSelector
-          tablas={tablasDisponibles}
-          tablaActual={tablaActual}
-          setTablaActual={setTablaActual}
-        />
+        {loading ? (
+          <MainLoader texto="Cargando datos del sistema..." size="large" />
+        ) : (
+          <>
+            <TablaSelector
+              tablas={tablasDisponibles}
+              tablaActual={tablaActual}
+              setTablaActual={setTablaActual}
+            />
 
-        <div className="flex justify-center mb-4">
-          {tablaActual === "proveedores" && (
+            <div className="flex justify-center mb-4">{tablaActual === "proveedores" && (
             <MainButton onClick={() => setProveedorNuevo(true)} variant="add">
               Agregar Proveedor
             </MainButton>
@@ -317,15 +319,18 @@ const Administrador = () => {
 
         </div>
 
-        <Table columns={columnas} data={datosActuales} />
+            <Table columns={columnas} data={datosActuales} />
 
-        {/* Botón volver al perfil */}
-      <div className="text-center">
-        <MainLinkButton to="/cuenta" variant="secondary">
-          <IconArrowLeft />
-          Volver al perfil
-        </MainLinkButton>
-      </div>
+            <div className="text-center mt-6">
+              <MainLinkButton to="/" variant="secondary">
+                <IconArrowLeft />
+                Volver al inicio
+              </MainLinkButton>
+            </div>
+          </>
+        )}
+
+        {/* === MODALES === */}
 
         {/* Perfiles */}
         {/* Ver */}

@@ -12,6 +12,7 @@ import MainH2 from "../components/ui/MainH2";
 import MainLinkButton from "../components/ui/MainLinkButton";
 import Avatar from "../components/ui/Avatar";
 import Badge from "../components/ui/Badge";
+import MainLoader from "../components/ui/MainLoader";
 
 const Proveedores = () => {
   useEffect(() => {
@@ -39,7 +40,7 @@ const Proveedores = () => {
   if (!proveedor) {
     return (
       <div className="text-center text-texto mt-20">
-        <p className="text-lg animate-pulse">Cargando proveedor...</p>
+        <MainLoader texto="Cargando proveedor..." size="large" />
       </div>
     );
   }

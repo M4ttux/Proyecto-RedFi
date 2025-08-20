@@ -10,6 +10,7 @@ import {
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import Avatar from "../components/ui/Avatar";
+import MainLoader from "../components/ui/MainLoader";
 
 const Usuarios = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const Usuarios = () => {
   if (!perfil) {
     return (
       <div className="text-center text-texto mt-20">
-        <p className="text-lg animate-pulse">Cargando perfil...</p>
+        <MainLoader texto="Cargando perfil..." size="large" />
       </div>
     );
   }

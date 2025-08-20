@@ -7,6 +7,7 @@ import ModalEliminar from "../modals/ModalEliminar";
 import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
+import MainLoader from "../ui/MainLoader";
 import Table from "../ui/Table";
 import { useAlerta } from "../../context/AlertaContext";
 
@@ -146,12 +147,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   return (
     <div className="max-w-7xl mx-auto relative">
       {cargando ? (
-        <div className="flex flex-row items-center justify-center gap-3 text-texto">
-          <IconLoader2 size={42} className="animate-spin text-texto" />
-          <p className="text-lg sm:text-xl font-bold tracking-wide">
-            Cargando boletas...
-          </p>
-        </div>
+        <MainLoader texto="Cargando boletas..." size="large" />
       ) : boletas.length === 0 ? (
         <div className="text-center py-16">
           <MainH3 className="text-center justify-center">

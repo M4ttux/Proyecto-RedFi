@@ -8,6 +8,7 @@ import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import MainLoader from "../components/ui/MainLoader";
 import { IconUser, IconLoader2 } from "@tabler/icons-react";
 
 const Cuenta = () => {
@@ -51,14 +52,7 @@ const Cuenta = () => {
   }
 
   if (loading || loadingRole) {
-    return (
-      <div className="flex flex-col items-center gap-3 text-texto">
-        <IconLoader2 size={42} className="animate-spin text-texto" />
-        <p className="text-lg sm:text-xl font-semibold tracking-wide">
-          Cargando perfil...
-        </p>
-      </div>
-    );
+    return <MainLoader texto="Cargando perfil..." size="large" />;
   }
 
   const nombre = perfil?.nombre || "Usuario";

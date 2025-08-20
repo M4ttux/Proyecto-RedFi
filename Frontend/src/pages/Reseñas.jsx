@@ -21,6 +21,7 @@ import MainH1 from "../components/ui/MainH1";
 import MainH3 from "../components/ui/MainH3";
 import MainButton from "../components/ui/MainButton";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import MainLoader from "../components/ui/MainLoader";
 import Table from "../components/ui/Table";
 
 import { useAlerta } from "../context/AlertaContext";
@@ -212,10 +213,7 @@ const Reseñas = () => {
     return (
       <div className="w-full bg-fondo px-4 sm:px-6 pb-12">
         <div className="max-w-7xl mx-auto pt-16 text-center">
-          <div className="flex justify-center items-center text-texto/60 gap-2 mt-10">
-            <IconLoader2 className="animate-spin" size={24} />
-            Cargando reseñas...
-          </div>
+          <MainLoader texto="Cargando reseñas..." size="large" />
         </div>
       </div>
     );
