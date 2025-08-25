@@ -46,7 +46,10 @@ export const cargarProveedoresEnMapa = async (
     }
   }
 
-  // Segunda pasada: renderizar cada zona con todos sus proveedores
+  
+  // Colección de marcadores "+N" para zonas con múltiples proveedores
+  const multiMarkers = [];
+// Segunda pasada: renderizar cada zona con todos sus proveedores
   for (const [zonaId, zonaInfo] of zonasConProveedores) {
     const { zona, proveedores: proveedoresEnZona } = zonaInfo;
     
@@ -55,6 +58,22 @@ export const cargarProveedoresEnMapa = async (
       getVisiblePorZona(p, zonaId, filtros)
     );
     if (proveedoresVisibles.length === 0) continue;
+
+// Agregar marcador "+N" si hay más de un proveedor visible
+if (proveedoresVisibles.length > 1) {
+  const centro = calcularCentroide(zona.geom);
+  if (centro) {
+    multiMarkers.push({
+      type: "Feature",
+      geometry: { type: "Point", coordinates: centro },
+      properties: {
+        zonaId: zonaId,
+        count: proveedoresVisibles.length
+      }
+    });
+  }
+}
+
 
     const sourceId = `zona-${zonaId}`;
     
@@ -183,7 +202,73 @@ export const cargarProveedoresEnMapa = async (
   }
 
   // Handler global de click
-  const handleGlobalClick = (e) => {
+  
+  // === Marcadores de "multi proveedor" (+N) ===
+  const multiSourceId = "multi-zona-markers";
+  const multiData = {
+    type: "FeatureCollection",
+    features: multiMarkers
+  };
+
+  if (map.getSource(multiSourceId)) {
+    map.getSource(multiSourceId).setData(multiData);
+  } else if (multiMarkers.length > 0) {
+    map.addSource(multiSourceId, {
+      type: "geojson",
+      data: multiData
+    });
+
+    // Círculo de fondo
+    map.addLayer({
+      id: "multi-markers-bg",
+      type: "circle",
+      source: multiSourceId,
+      paint: {
+        "circle-radius": 14,
+        "circle-color": "rgba(0,0,0,0.75)",
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 2
+      }
+    });
+
+    // Texto "+N"
+    map.addLayer({
+      id: "multi-markers-text",
+      type: "symbol",
+      source: multiSourceId,
+      layout: {
+        "text-field": "+{count}",
+        "text-size": 12,
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-allow-overlap": true
+      },
+      paint: {
+        "text-color": "#ffffff"
+      }
+    });
+
+    const markerClick = (e) => {
+      const features = map.queryRenderedFeatures(e.point, { layers: ["multi-markers-bg", "multi-markers-text"] });
+      const f = features && features[0];
+      if (!f) return;
+      const zonaId = f.properties.zonaId;
+      const zonaInfo = zonasConProveedores.get(zonaId);
+      if (!zonaInfo) return;
+
+      const proveedoresVisibles = zonaInfo.proveedores.filter(p => 
+        getVisiblePorZona(p, zonaId, filtros)
+      );
+      if (proveedoresVisibles.length > 1 && onZonaMultiProveedorClick) {
+        onZonaMultiProveedorClick(proveedoresVisibles, zonaInfo.zona);
+      } else if (proveedoresVisibles.length === 1) {
+        setProveedorActivo(proveedoresVisibles[0]);
+      }
+    };
+
+    map.on("click", "multi-markers-bg", markerClick);
+    map.on("click", "multi-markers-text", markerClick);
+  }
+const handleGlobalClick = (e) => {
     if (window.modoSeleccionActivo) return;
     
     // Buscar todas las features en el punto clickeado
@@ -276,7 +361,79 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
         }
       }
     });
-  });
+  
+  // Actualizar/crear la capa de marcadores "+N"
+  try {
+    const zonasConProveedores = new Map();
+    // Agrupar por zona
+    proveedoresRef.current.forEach((prov) => {
+      if (!prov.ZonaProveedor) return;
+      prov.ZonaProveedor.forEach((rel) => {
+        const zona = rel.zonas;
+        if (!zona || !zona.geom) return;
+        if (!zonasConProveedores.has(zona.id)) {
+          zonasConProveedores.set(zona.id, { zona, proveedores: [] });
+        }
+        zonasConProveedores.get(zona.id).proveedores.push(prov);
+      });
+    });
+
+    const features = [];
+    for (const [zonaId, zonaInfo] of zonasConProveedores) {
+      const proveedoresVisibles = zonaInfo.proveedores.filter(p => 
+        getVisiblePorZona(p, zonaId, filtros)
+      );
+      if (proveedoresVisibles.length > 1) {
+        const centro = calcularCentroide(zonaInfo.zona.geom);
+        if (centro) {
+          features.push({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: centro },
+            properties: { zonaId, count: proveedoresVisibles.length }
+          });
+        }
+      }
+    }
+
+    const multiSourceId = "multi-zona-markers";
+    const data = { type: "FeatureCollection", features };
+
+    if (map.getSource(multiSourceId)) {
+      map.getSource(multiSourceId).setData(data);
+    } else if (features.length > 0) {
+      map.addSource(multiSourceId, { type: "geojson", data });
+
+      map.addLayer({
+        id: "multi-markers-bg",
+        type: "circle",
+        source: multiSourceId,
+        paint: {
+          "circle-radius": 14,
+          "circle-color": "rgba(0,0,0,0.75)",
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 2
+        }
+      });
+
+      map.addLayer({
+        id: "multi-markers-text",
+        type: "symbol",
+        source: multiSourceId,
+        layout: {
+          "text-field": "+{count}",
+          "text-size": 12,
+          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+          "text-allow-overlap": true
+        },
+        paint: {
+          "text-color": "#ffffff"
+        }
+      });
+    }
+  } catch(e) {
+    // Ignorar errores menores si el mapa aún no terminó de cargar las capas
+  }
+});
 };
 
 export const obtenerProveedoresPorZona = (zona, proveedores, filtros) => {
@@ -312,7 +469,7 @@ export const limpiarCapasProveedores = (map) => {
   layers.forEach((layer) => {
     if (
       layer.id.startsWith("fill-") ||
-      layer.id.startsWith("line-")
+      layer.id.startsWith("line-") || layer.id.startsWith("multi-markers")
     ) {
       map.removeLayer(layer.id);
     }
@@ -320,7 +477,7 @@ export const limpiarCapasProveedores = (map) => {
 
   const sources = Object.keys(map.getStyle().sources);
   sources.forEach((sourceId) => {
-    if (sourceId.startsWith("zona-")) {
+    if (sourceId.startsWith("zona-") || sourceId === "multi-zona-markers") {
       map.removeSource(sourceId);
     }
   });

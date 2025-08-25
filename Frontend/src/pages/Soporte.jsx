@@ -220,7 +220,7 @@ const Soporte = () => {
 
       {/* Ventana del chat flotante */}
       {chatAbierto && (
-        <div className="fixed bottom-24 lg:bottom-6 right-6 w-80 sm:w-120 z-50">
+        <div className="fixed bottom-24 lg:bottom-6 right-4 left-4 sm:right-6 sm:left-auto sm:w-96 lg:w-120 z-50">
           <div className={`rounded-lg shadow-2xl overflow-hidden ${
             currentTheme === "light"
               ? "bg-secundario border border-secundario/50"
@@ -247,7 +247,7 @@ const Soporte = () => {
             </div>
 
             {/* Cuerpo del chat */}
-            <div className="h-80 lg:h-140 flex flex-col">
+            <div className="h-100 lg:h-140 flex flex-col">
                 <div ref={chatRef} className="flex-1 overflow-y-auto space-y-3 p-3">
                   {mensajes.map((m, index) => (
                     <div

@@ -122,6 +122,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
             onClick={() => setBoletaParaVer(b)}
             title="Ver boleta"
             variant="see"
+            iconAlwaysVisible={true}
           >
             Ver
           </MainButton>
@@ -129,6 +130,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
             onClick={() => setBoletaSeleccionada(b)}
             title="Editar boleta"
             variant="edit"
+            iconAlwaysVisible={true}
           >
             Editar
           </MainButton>
@@ -136,6 +138,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
             onClick={() => setBoletaAEliminar(b)}
             title="Eliminar boleta"
             variant="delete"
+            iconAlwaysVisible={true}
           >
             Eliminar
           </MainButton>
@@ -179,18 +182,21 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
                       variant="see"
                       title="Ver boleta"
                       iconSize={16}
+                      iconAlwaysVisible={true}
                     />
                     <MainButton
                       onClick={() => setBoletaSeleccionada(b)}
                       variant="edit"
                       title="Editar boleta"
                       iconSize={16}
+                      iconAlwaysVisible={true}
                     />
                     <MainButton
                       onClick={() => setBoletaAEliminar(b)}
                       variant="delete"
                       title="Eliminar boleta"
                       iconSize={16}
+                      iconAlwaysVisible={true}
                     />
                   </div>
                 </div>

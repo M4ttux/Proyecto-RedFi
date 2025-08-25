@@ -87,7 +87,7 @@ const Cuenta = () => {
             </div>
           )}
           <MainH2 className="text-center justify-center">{nombre}</MainH2>
-          <div className="flex justify-center gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mb-4">
             <p className="bg-texto/5 px-3 py-1 rounded-full border border-texto/15">
               {usuario.email}
             </p>

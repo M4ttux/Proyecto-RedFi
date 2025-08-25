@@ -81,7 +81,7 @@ const LinkButton = ({
             {loading ? (
               <IconLoader2 size={iconSize} className="animate-spin" />
             ) : (
-              Icon && <Icon size={iconSize} />
+              Icon && <Icon size={iconSize} className="hidden sm:inline-block" />
             )}
             {children}
           </>
@@ -93,7 +93,7 @@ const LinkButton = ({
             {loading ? (
               <IconLoader2 size={iconSize} className="animate-spin" />
             ) : (
-              Icon && <Icon size={iconSize} />
+              Icon && <Icon size={iconSize} className="hidden sm:inline-block"/>
             )}
           </>
         )}

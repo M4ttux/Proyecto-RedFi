@@ -285,6 +285,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 onClick={() => acciones.onVer(row)}
                 title="Ver"
                 variant="see"
+                iconAlwaysVisible={true}
               >
                 Ver
               </MainButton>
@@ -294,6 +295,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 onClick={() => acciones.onEditar(row)}
                 title="Editar"
                 variant="edit"
+                iconAlwaysVisible={true}
               >
                 Editar
               </MainButton>
@@ -303,6 +305,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 onClick={() => acciones.onEliminar(row)}
                 title="Eliminar"
                 variant="delete"
+                iconAlwaysVisible={true}
               >
                 Eliminar
               </MainButton>

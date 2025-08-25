@@ -177,6 +177,7 @@ const Reseñas = () => {
             onClick={() => setReseñaParaVer(r)}
             variant="see"
             title="Ver reseña"
+            iconAlwaysVisible={true}
           >
             Ver
           </MainButton>
@@ -184,6 +185,7 @@ const Reseñas = () => {
             onClick={() => handleEditarReseña(r)}
             variant="edit"
             title="Editar reseña"
+            iconAlwaysVisible={true}
           >
             Editar
           </MainButton>
@@ -191,6 +193,7 @@ const Reseñas = () => {
             onClick={() => handleEliminarReseña(r)}
             variant="delete"
             title="Eliminar reseña"
+            iconAlwaysVisible={true}
           >
             Eliminar
           </MainButton>
@@ -256,8 +259,7 @@ const Reseñas = () => {
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <MainH3 className="text-center justify-center">
-                        {reseña.proveedores?.nombre ||
-                          "Proveedor no disponible"}
+                        {reseña.proveedores?.nombre || "Proveedor no disponible"}
                       </MainH3>
                       {reseña.proveedores?.tecnologia && (
                         <p className="text-sm text-texto">
@@ -271,18 +273,21 @@ const Reseñas = () => {
                         variant="see"
                         title="Ver reseña"
                         iconSize={16}
+                        iconAlwaysVisible={true}
                       />
                       <MainButton
                         onClick={() => handleEditarReseña(reseña)}
                         variant="edit"
                         title="Editar reseña"
                         iconSize={16}
+                        iconAlwaysVisible={true}
                       />
                       <MainButton
                         onClick={() => handleEliminarReseña(reseña)}
                         variant="delete"
                         title="Eliminar reseña"
                         iconSize={16}
+                        iconAlwaysVisible={true}
                       />
                     </div>
                   </div>
@@ -291,13 +296,11 @@ const Reseñas = () => {
                     {renderEstrellas(reseña.estrellas)}
                   </div>
 
-                  <p className="text-texto mb-3 line-clamp-3">
-                    {reseña.comentario}
+                  <p className="text-texto mb-3 line-clamp-3"> Comentario: {reseña.comentario}
                   </p>
 
-                  <div className="flex items-center">
+                  <div className="flex items-center"> Fecha: {formatearFecha(reseña.created_at)}
                     <IconCalendar size={14} className="mr-1" />
-                    {formatearFecha(reseña.created_at)}
                   </div>
                 </div>
               ))}

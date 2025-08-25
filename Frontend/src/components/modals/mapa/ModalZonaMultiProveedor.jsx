@@ -39,7 +39,7 @@ const ModalZonaMultiProveedor = ({
     return (
       <div className="flex items-center gap-1">
         <div className="flex">{stars}</div>
-        <span className="text-sm text-texto/75 ml-1">
+        <span className="text-sm text-texto/75 ml-1 hidden sm:inline-block">
           ({promedio ? promedio.toFixed(1) : "0.0"})
         </span>
       </div>
@@ -68,19 +68,19 @@ const ModalZonaMultiProveedor = ({
       </div>
 
       {zonaInfo && (
-        <div className="mb-4 p-3 bg-texto/5 rounded-lg border border-texto/15">
+        <div className="mb-4 p-2 bg-texto/5 rounded-lg border border-texto/15">
           <p className="text-sm text-texto">
             <strong>Zona:</strong>{" "}
             {zonaInfo.departamento || "Zona seleccionada"}
           </p>
-          <p className="text-sm text-texto mt-1">
+          <p className="hidden sm:block text-sm text-texto mt-1">
             Se encontraron <strong>{proveedores.length} proveedores</strong> en
             esta área
           </p>
         </div>
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-1 gap-4 max-h-96 overflow-y-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 max-h-96 overflow-y-auto p-1">
         {proveedores.map((proveedor) => {
           const promedioCalificacion = calcularPromedioCalificacion(
             proveedor.reseñas
@@ -89,7 +89,7 @@ const ModalZonaMultiProveedor = ({
           return (
             <div
               key={proveedor.id}
-              className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10 transition-colors"
+              className="flex flex-col sm:flex-row items-center gap-2 p-2 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10"
             >
               {/* Logo del proveedor */}
               <div className="flex-shrink-0">
@@ -126,7 +126,7 @@ const ModalZonaMultiProveedor = ({
                 {/* Tecnologías */}
                 {proveedor.ProveedorTecnologia &&
                   proveedor.ProveedorTecnologia.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1 justify-center sm:justify-start">
+                    <div className="hidden sm:flex flex-wrap items-center gap-1 justify-center sm:justify-start">
                       {proveedor.ProveedorTecnologia.slice(0, 2).map(
                         (tech, index) => (
                           <Badge
@@ -177,8 +177,8 @@ const ModalZonaMultiProveedor = ({
 
       <div className="mt-6 text-center">
         <p className="text-sm text-texto/50 italic">
-          Haz clic en "Ver más" para obtener información detallada de cada
-          proveedor
+          Haz clic en "Ver más" para ver más información de cada
+          proveedor.
         </p>
       </div>
     </ModalContenedor>

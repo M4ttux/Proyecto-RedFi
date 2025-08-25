@@ -45,7 +45,6 @@ const MobileBottomNav = () => {
 
   const mainNavigationItems = [
     { path: "/", label: "Inicio", icon: IconHome },
-    { path: "/mapa", label: "Mapa", icon: IconMap },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -222,11 +221,17 @@ const MobileBottomNav = () => {
                 )}
               </MainButton>
 
-              {/* Mobile Notifications Dropdown */}
-              {mostrarNotis && (
-                <div
-                  className={`absolute bottom-full right-0 mb-2 w-72 rounded-lg shadow-lg p-4 space-y-2 ${
-                    currentTheme === "light"
+             {mostrarNotis && (
+                <>
+                  {/* Overlay para cerrar el dropdown en móvil */}
+                  <div 
+                    className="fixed inset-0 z-40 sm:hidden" 
+                    onClick={() => setMostrarNotis(false)}
+                  />
+                  <div
+                    className={`fixed bottom-24 left-4 right-4 z-50 rounded-lg shadow-lg p-4 space-y-2 
+                      sm:absolute sm:bottom-full sm:right-0 sm:left-auto sm:w-72 mb-2 ${
+                      currentTheme === "light"
                       ? "bg-fondo border border-texto/15 text-texto"
                       : "bg-fondo text-texto border border-texto/15"
                   }`}
@@ -237,7 +242,7 @@ const MobileBottomNav = () => {
                     notificaciones.map((msg, i) => (
                       <div
                         key={i}
-                        className={`border-b pb-2 last:border-b-0 flex justify-between items-start gap-2 ${
+                        className={`border-b last:border-b-0 flex justify-between items-center gap-2 ${
                           currentTheme === "light"
                             ? "border-texto/15"
                             : "border-texto/15"
@@ -255,13 +260,16 @@ const MobileBottomNav = () => {
                           icon={IconX}
                           iconSize={20}
                           className="leading-none p-0"
+                          iconAlwaysVisible={true}
                         />
                       </div>
                     ))
                   )}
                 </div>
+                </>
               )}
             </div>
+            
           )}
 
           {/* More Menu Button usando MainButton */}

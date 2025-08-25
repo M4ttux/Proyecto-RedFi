@@ -54,7 +54,7 @@ const Caracteristicas = () => {
       <div className="max-w-7xl mx-auto text-center space-y-12">
         <div className="space-y-5">
           <MainH2 className="text-center justify-center">
-            ¿Por qué elegir <span className="text-acento">Red-Fi</span>?
+            ¿Por qué elegir Red-Fi?
           </MainH2>
           <p className="max-w-2xl mx-auto text-texto leading-relaxed">
             Red-Fi te permite tomar decisiones informadas al momento de elegir
