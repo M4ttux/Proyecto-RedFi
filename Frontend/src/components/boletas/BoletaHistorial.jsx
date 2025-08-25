@@ -61,70 +61,66 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   const columnas = [
     {
-      id: "numero",
-      label: "#",
-      renderCell: (_, index) => (
-        <span className="text-center">{index + 1}</span>
+      id: "proveedor",
+      label: "PROVEEDOR",
+      renderCell: (b) => (
+        <div className="font-bold text-texto">
+          {b.proveedor || "—"}
+        </div>
       ),
     },
     {
-      id: "proveedor",
-      label: "Proveedor",
-    },
-    {
-      id: "mes",
-      label: "Mes",
+      id: "periodo",
+      label: "PERÍODO",
+      renderCell: (b) => (
+        <div className="space-y-1">
+          <span className="font-bold">{b.mes || "—"} {b.anio || "—"}</span>
+        </div>
+      ),
     },
     {
       id: "monto",
-      label: "Monto",
-      renderCell: (b) => `$${parseFloat(b.monto).toFixed(2)}`,
-    },
-    {
-      id: "fecha_carga",
-      label: "Carga",
+      label: "MONTO",
       renderCell: (b) => (
-        <div className="text-green-700">
-          {formatearFechaConTooltip(b.fecha_carga)}
+        <div className="font-bold text-acento">
+          ${parseFloat(b.monto || 0).toFixed(2)}
         </div>
       ),
     },
-
     {
-      id: "vencimiento",
-      label: "Vencimiento",
+      id: "fechas",
+      label: "FECHAS IMPORTANTES",
       renderCell: (b) => (
-        <div className="text-red-600">
-          {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
-        </div>
-      ),
-    },
-
-    {
-      id: "promo_hasta",
-      label: "Promoción hasta",
-      renderCell: (b) =>
-        b.promo_hasta ? (
-          <div className="text-yellow-600">
-            {formatearFechaConTooltip(b.promo_hasta)}
+        <div className="space-y-1 text-xs">
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-green-700">Carga:</span>
+            {formatearFechaConTooltip(b.fecha_carga)}
           </div>
-        ) : (
-          <span className="text-texto">—</span>
-        ),
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-red-600">Vence:</span>
+            {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
+          </div>
+          {b.promo_hasta && (
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-yellow-600">Promo:</span>
+              {formatearFechaConTooltip(b.promo_hasta + "T12:00:00")}
+            </div>
+          )}
+        </div>
+      ),
     },
-
     {
       id: "acciones",
-      label: "Acciones",
+      label: "ACCIONES",
       renderCell: (b) => (
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div className="flex flex-wrap gap-2 lg:gap-2">
           <MainButton
             onClick={() => setBoletaParaVer(b)}
             title="Ver boleta"
             variant="see"
             iconAlwaysVisible={true}
           >
-            Ver
+            <span className="hidden sm:inline">Ver</span>
           </MainButton>
           <MainButton
             onClick={() => setBoletaSeleccionada(b)}
@@ -132,7 +128,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
             variant="edit"
             iconAlwaysVisible={true}
           >
-            Editar
+            <span className="hidden sm:inline">Editar</span>
           </MainButton>
           <MainButton
             onClick={() => setBoletaAEliminar(b)}
@@ -140,7 +136,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
             variant="delete"
             iconAlwaysVisible={true}
           >
-            Eliminar
+            <span className="hidden sm:inline">Eliminar</span>
           </MainButton>
         </div>
       ),
@@ -161,73 +157,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           </p>
         </div>
       ) : (
-        <>
-          {/* Tabla en escritorio */}
-          <div className="hidden md:block">
-            <Table columns={columnas} data={boletasOrdenadas} />
-          </div>
-
-          {/* Tarjetas en mobile */}
-          <div className="md:hidden space-y-4 mt-6">
-            {boletasOrdenadas.map((b) => (
-              <div
-                key={b.id}
-                className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <MainH3>{b.proveedor}</MainH3>
-                  <div className="flex gap-2">
-                    <MainButton
-                      onClick={() => setBoletaParaVer(b)}
-                      variant="see"
-                      title="Ver boleta"
-                      iconSize={16}
-                      iconAlwaysVisible={true}
-                    />
-                    <MainButton
-                      onClick={() => setBoletaSeleccionada(b)}
-                      variant="edit"
-                      title="Editar boleta"
-                      iconSize={16}
-                      iconAlwaysVisible={true}
-                    />
-                    <MainButton
-                      onClick={() => setBoletaAEliminar(b)}
-                      variant="delete"
-                      title="Eliminar boleta"
-                      iconSize={16}
-                      iconAlwaysVisible={true}
-                    />
-                  </div>
-                </div>
-                <p className="text-texto mb-1">
-                  <strong>Mes:</strong> {b.mes}
-                </p>
-                <p className="text-texto mb-1">
-                  <strong>Monto:</strong> ${parseFloat(b.monto).toFixed(2)}
-                </p>
-                <p className="mb-1 flex items-center gap-2 text-texto">
-                  <strong className="text-texto">Carga:</strong>
-                  <span className="text-green-700 font-semibold">
-                    {formatearFechaConTooltip(b.fecha_carga)}
-                  </span>
-                </p>
-                <p className="mb-1 flex items-center gap-2 text-texto">
-                  <strong className="text-texto">Vencimiento:</strong>
-                  <span className="text-red-600 font-semibold">
-                    {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
-                  </span>
-                </p>
-                <p className="mb-1 flex items-center gap-2 text-texto">
-                  <strong className="text-texto">Promo hasta:</strong>
-                  <span className="text-yellow-600 font-semibold">
-                    {formatearFechaConTooltip(b.promo_hasta + "T12:00:00")}
-                  </span>
-                </p>
-              </div>
-            ))}
-          </div>
-        </>
+        <Table columns={columnas} data={boletasOrdenadas} />
       )}
 
       {/* MODALES */}

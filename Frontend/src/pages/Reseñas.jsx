@@ -104,14 +104,6 @@ const Reseñas = () => {
     }
   };
 
-  const formatearFecha = (fecha) => {
-    return new Date(fecha).toLocaleDateString("es-AR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   const renderEstrellas = (estrellas) => {
     const estrellasLlenas = Math.round(estrellas);
     return (
@@ -130,56 +122,48 @@ const Reseñas = () => {
   const columnas = [
     {
       id: "proveedor",
-      label: "Proveedor",
+      label: "PROVEEDOR",
       renderCell: (r) => (
-        <div>
-          <div className="text-sm font-medium text-texto">
+        <div className="space-y-1">
+          <div className="font-bold text-texto">
             {r.proveedores?.nombre || "Proveedor no disponible"}
           </div>
-          {r.proveedores?.tecnologia && (
-            <div className="text-sm text-texto/60">
-              {r.proveedores.tecnologia}
-            </div>
-          )}
         </div>
       ),
     },
     {
-      id: "calificacion",
-      label: "Calificación",
-      renderCell: (r) => renderEstrellas(r.estrellas),
+      id: "evaluacion",
+      label: "EVALUACIÓN",
+      renderCell: (r) => (
+        <div className="space-y-2">
+          {renderEstrellas(r.estrellas)}
+        </div>
+      ),
     },
     {
       id: "comentario",
-      label: "Comentario",
+      label: "COMENTARIO",
       renderCell: (r) => (
-        <div className="text-sm text-texto max-w-xs truncate">
-          {r.comentario}
-        </div>
-      ),
-    },
-    {
-      id: "fecha",
-      label: "Fecha",
-      renderCell: (r) => (
-        <div className="flex items-center text-sm text-texto/60">
-          <IconCalendar size={16} className="mr-2" />
-          {formatearFecha(r.created_at)}
+        <div 
+          className="text-sm text-texto max-w-[250px] lg:max-w-none line-clamp-3 leading-relaxed"
+          title={r.comentario}
+        >
+          {r.comentario || "—"}
         </div>
       ),
     },
     {
       id: "acciones",
-      label: "Acciones",
+      label: "ACCIONES",
       renderCell: (r) => (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 lg:gap-2">
           <MainButton
             onClick={() => setReseñaParaVer(r)}
             variant="see"
             title="Ver reseña"
             iconAlwaysVisible={true}
           >
-            Ver
+            <span className="hidden sm:inline">Ver</span>
           </MainButton>
           <MainButton
             onClick={() => handleEditarReseña(r)}
@@ -187,7 +171,7 @@ const Reseñas = () => {
             title="Editar reseña"
             iconAlwaysVisible={true}
           >
-            Editar
+            <span className="hidden sm:inline">Editar</span>
           </MainButton>
           <MainButton
             onClick={() => handleEliminarReseña(r)}
@@ -195,7 +179,7 @@ const Reseñas = () => {
             title="Eliminar reseña"
             iconAlwaysVisible={true}
           >
-            Eliminar
+            <span className="hidden sm:inline">Eliminar</span>
           </MainButton>
         </div>
       ),
@@ -246,65 +230,7 @@ const Reseñas = () => {
           </div>
         ) : (
           <>
-            <div className="hidden lg:block">
-              <Table columns={columnas} data={reseñas} />
-            </div>
-
-            <div className="lg:hidden space-y-4">
-              {reseñas.map((reseña) => (
-                <div
-                  key={reseña.id}
-                  className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <MainH3 className="text-center justify-center">
-                        {reseña.proveedores?.nombre || "Proveedor no disponible"}
-                      </MainH3>
-                      {reseña.proveedores?.tecnologia && (
-                        <p className="text-sm text-texto">
-                          {reseña.proveedores.tecnologia}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <MainButton
-                        onClick={() => setReseñaParaVer(reseña)}
-                        variant="see"
-                        title="Ver reseña"
-                        iconSize={16}
-                        iconAlwaysVisible={true}
-                      />
-                      <MainButton
-                        onClick={() => handleEditarReseña(reseña)}
-                        variant="edit"
-                        title="Editar reseña"
-                        iconSize={16}
-                        iconAlwaysVisible={true}
-                      />
-                      <MainButton
-                        onClick={() => handleEliminarReseña(reseña)}
-                        variant="delete"
-                        title="Eliminar reseña"
-                        iconSize={16}
-                        iconAlwaysVisible={true}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    {renderEstrellas(reseña.estrellas)}
-                  </div>
-
-                  <p className="text-texto mb-3 line-clamp-3"> Comentario: {reseña.comentario}
-                  </p>
-
-                  <div className="flex items-center"> Fecha: {formatearFecha(reseña.created_at)}
-                    <IconCalendar size={14} className="mr-1" />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Table columns={columnas} data={reseñas} />
 
             {/* Estadísticas */}
             <div className="mt-8 text-center">

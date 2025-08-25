@@ -204,7 +204,7 @@ const MobileBottomNav = () => {
                 variant="secondary"
                 className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
                   notificaciones.length > 0
-                    ? "!text-acento animate-bounce"
+                    ? "!text-acento"
                     : currentTheme === "light"
                     ? "!text-texto"
                     : "!text-texto"
