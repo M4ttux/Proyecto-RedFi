@@ -42,50 +42,53 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           ),
       },
       {
-        id: "rol",
-        label: "ROL",
+        id: "rol_y_plan",
+        label: "ROL Y PLAN",
         renderCell: (row) => {
           const rol = row.rol;
-          if (!rol) return "—";
-
-          // mismo color que usabas: bg-acento + texto
-          return rol === "admin" ? (
-            <Badge
-              size="xs"
-              bgClass="bg-acento"
-              textClass="text-texto"
-              className="font-bold"
-            >
-              {rol.toUpperCase()}
-            </Badge>
-          ) : (
-            <Badge size="xs" variant="muted" className="font-bold">
-              {rol.toUpperCase()}
-            </Badge>
-          );
-        },
-      },
-      {
-        id: "plan",
-        label: "PLAN",
-        renderCell: (row) => {
           const plan = row.plan;
-          if (!plan) return "—";
-
-          // premium amarillo como antes; si no, muted
-          return plan === "premium" ? (
-            <Badge
-              size="xs"
-              bgClass="bg-acento"
-              textClass="text-texto"
-              className="font-bold"
-            >
-              {plan.toUpperCase()}
-            </Badge>
-          ) : (
-            <Badge size="xs" variant="muted" className="font-bold">
-              {plan.toUpperCase()}
-            </Badge>
+          
+          return (
+            <div className="flex flex-wrap gap-1 items-center">
+              {/* Badge de Rol */}
+              {rol ? (
+                rol === "admin" ? (
+                  <Badge
+                    size="xs"
+                    bgClass="bg-acento"
+                    textClass="text-texto"
+                    className="font-bold"
+                  >
+                    {rol.toUpperCase()}
+                  </Badge>
+                ) : (
+                  <Badge size="xs" variant="muted" className="font-bold">
+                    {rol.toUpperCase()}
+                  </Badge>
+                )
+              ) : null}
+              
+              {/* Badge de Plan */}
+              {plan ? (
+                plan === "premium" ? (
+                  <Badge
+                    size="xs"
+                    bgClass="bg-acento"
+                    textClass="text-texto"
+                    className="font-bold"
+                  >
+                    {plan.toUpperCase()}
+                  </Badge>
+                ) : (
+                  <Badge size="xs" variant="muted" className="font-bold">
+                    {plan.toUpperCase()}
+                  </Badge>
+                )
+              ) : null}
+              
+              {/* Fallback si no hay rol ni plan */}
+              {!rol && !plan && "—"}
+            </div>
           );
         },
       }
@@ -108,7 +111,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
-            className="truncate text-ellipsis overflow-hidden max-w-[200px]"
+            className="truncate text-ellipsis overflow-hidden max-w-[200px] lg:max-w-none"
             title={row.descripcion}
           >
             {row.descripcion || "—"}
@@ -120,10 +123,21 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "SITIO WEB",
         renderCell: (row) => (
           <div
-            className="truncate text-ellipsis overflow-hidden"
+            className="truncate text-ellipsis overflow-hidden max-w-[150px] lg:max-w-none"
             title={row.sitio_web}
           >
-            {row.sitio_web || "—"}
+            {row.sitio_web ? (
+              <a 
+                href={row.sitio_web} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primario hover:underline"
+              >
+                {row.sitio_web.replace(/^https?:\/\//, '')}
+              </a>
+            ) : (
+              "—"
+            )}
           </div>
         ),
       },
@@ -177,7 +191,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "COMENTARIO",
         renderCell: (row) => (
           <div
-            className="truncate text-ellipsis overflow-hidden"
+            className="line-clamp-2 text-ellipsis overflow-hidden max-w-[250px] lg:max-w-none leading-relaxed"
             title={row.comentario}
           >
             {row.comentario || "—"}
@@ -279,7 +293,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           tabla === "ProveedorTecnologia" || tabla === "ZonaProveedor";
 
         return (
-          <div className="flex flex-wrap gap-2 max-w-[350px] overflow-auto">
+          <div className="flex flex-wrap gap-2 lg:gap-2">
             {!ocultarVer && acciones.onVer && (
               <MainButton
                 onClick={() => acciones.onVer(row)}
@@ -287,7 +301,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 variant="see"
                 iconAlwaysVisible={true}
               >
-                Ver
+                <span className="hidden sm:inline">Ver</span>
               </MainButton>
             )}
             {acciones.onEditar && (
@@ -297,7 +311,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 variant="edit"
                 iconAlwaysVisible={true}
               >
-                Editar
+                <span className="hidden sm:inline">Editar</span>
               </MainButton>
             )}
             {acciones.onEliminar && (
@@ -307,7 +321,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 variant="delete"
                 iconAlwaysVisible={true}
               >
-                Eliminar
+                <span className="hidden sm:inline">Eliminar</span>
               </MainButton>
             )}
           </div>
