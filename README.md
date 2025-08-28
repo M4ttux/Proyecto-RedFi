@@ -126,10 +126,6 @@
 
 *Proyecto desarrollado como parte del 4º cuatrimestre en la Escuela DaVinci*
 
-## 🤝 Contribuciones
-
-Red-Fi es un proyecto educativo desarrollado como parte del 4º cuatrimestre en la Escuela DaVinci. 
-
 ---
 
 **Red-Fi** - *Tu conexión perfecta te está esperando* 🌐✨
