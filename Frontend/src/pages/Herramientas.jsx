@@ -1,80 +1,70 @@
-import { useEffect } from "react";
-import DetectorProveedor from "../components/tools/DetectorProveedor";
-import SpeedTest from "../components/tools/SpeedTest";
-import WifiScanner from "../components/tools/WifiScanner";
-import { IconTool } from "@tabler/icons-react";
+import React from "react";
+import MainLinkButton from "../components/ui/MainLinkButton";
 import MainH1 from "../components/ui/MainH1";
-import MainH2 from "../components/ui/MainH2";
-import { useTheme } from "../context/ThemeContext";
+import MainH3 from "../components/ui/MainH3";
+import { IconTool } from "@tabler/icons-react";
 
 const Herramientas = () => {
-  useEffect(() => {
-    document.title = "Red-Fi | Herramientas";
-  }, []);
-
-  const { currentTheme } = useTheme();
-
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
           <MainH1 icon={IconTool}>Herramientas Red-Fi</MainH1>
           <p className="text-lg">
-            Ejecute pruebas clave y obtenga información útil sobre su red
-            actual.
+            Descubrí nuestras herramientas de Red-Fi diseñadas para mejorar tu experiencia de conexión: desde mapas colaborativos con reseñas, hasta tests de velocidad y análisis de cobertura en tu hogar. ¡Probá cada una y optimizá tu red!
           </p>
         </div>
-
-        {/* Contenedor flex o grid */}
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Detector de proveedor */}
-          <div
-            className={`w-full p-8 rounded-lg self-start ${
-              currentTheme === "light"
-                ? "bg-secundario border border-secundario/50 shadow-lg"
-                : "bg-texto/5 border border-texto/15"
-            }`}
-          >
-            <MainH2 className="text-center justify-center">Información de tu red</MainH2>
-            <DetectorProveedor />
-          </div>
-          {/* Test de velocidad */}
-          <div
-            className={`w-full p-8 rounded-lg ${
-              currentTheme === "light"
-                ? "bg-secundario border border-secundario/50 shadow-lg"
-                : "bg-texto/5 border border-texto/15"
-            }`}
-          >
-            <MainH2 className="text-center justify-center">Test de velocidad</MainH2>
-            <SpeedTest />
-          </div>
-        </div>
-
-        {/* WifiScanner – análisis por zona */}
-        <div
-          className={`mx-auto max-w-7xl p-8 rounded-lg ${
-            currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
-              : "bg-texto/5 border border-texto/15"
-          }`}
-        >
-          <div className="w-full text-center">
-            <MainH2 className="text-center justify-center">Análisis de conexión por zonas de tu casa</MainH2>
-            <div className=" text-texto p-4 rounded leading-relaxed">
+          <div>
+            <MainLinkButton to="/mapa" variant="card">
+              <MainH3 className="text-center justify-center">
+                Mapa de Red-Fi
+              </MainH3>
               <p>
-                Medí la calidad de tu Wi-Fi en distintas zonas de tu casa
-                ingresando un nombre (ej: <strong>Living</strong>,{" "}
-                <strong>Pieza</strong>, <strong>Balcón</strong>) y ejecutando el
-                test.
+                Explorá qué proveedores ofrecen servicio en tu zona, leé reseñas de otros usuarios y dejá tu propia opinión sobre tu experiencia.
               </p>
-              <p className="mt-2">
-                Ideal para encontrar el mejor lugar para ubicar el módem o
-                comparar el rendimiento por sector.
-              </p>
-            </div>
+            </MainLinkButton>
           </div>
-          <WifiScanner />
+          <div>
+            <MainLinkButton to="/informacion-red" variant="card">
+              <MainH3 className="text-center justify-center">
+                Información de red
+              </MainH3>
+              <p>
+                Conocé tu IP pública, ubicación aproximada y detalles técnicos de tu conexión actual.
+              </p>
+            </MainLinkButton>
+          </div>
+          <div>
+            <MainLinkButton to="/test-velocidad" variant="card">
+              <MainH3 className="text-center justify-center">
+                Test de velocidad
+              </MainH3>
+              <p>
+                Medí la velocidad real de de conexión a Internet en pocos segundos.
+              </p>
+            </MainLinkButton>
+          </div>
+          <div>
+            <MainLinkButton to="/analisis-conexion" variant="card">
+              <MainH3 className="text-center justify-center">
+                Análisis de conexión por zonas
+              </MainH3>
+              <p>
+                Simulá un análisis Wi-Fi en tu hogar para identificar las zonas con mejor o peor señal.
+              </p>
+            </MainLinkButton>
+          </div>
+          <div className="lg:col-span-2">
+            <MainLinkButton to="/soporte" variant="card">
+              <MainH3 className="text-center justify-center">
+                Soporte
+              </MainH3>
+              <p>
+                Simulá un análisis Wi-Fi en tu hogar para identificar las zonas con mejor o peor señal.
+              </p>
+            </MainLinkButton>
+          </div>
         </div>
       </div>
     </section>

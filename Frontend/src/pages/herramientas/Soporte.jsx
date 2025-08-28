@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { IconMessageChatbot, IconX } from "@tabler/icons-react";
-import MainH1 from "../components/ui/MainH1";
-import MainH2 from "../components/ui/MainH2";
-import MainH3 from "../components/ui/MainH3";
-import MainButton from "../components/ui/MainButton";
-import { useTheme } from "../context/ThemeContext";
+import { IconMessageChatbot, IconX, IconArrowLeft } from "@tabler/icons-react";
+import MainH1 from "../../components/ui/MainH1";
+import MainH2 from "../../components/ui/MainH2";
+import MainH3 from "../../components/ui/MainH3";
+import MainButton from "../../components/ui/MainButton";
+import MainLinkButton from "../../components/ui/MainLinkButton";
+import { useTheme } from "../../context/ThemeContext";
 
 const flujoConversacion = {
   inicio: {
@@ -200,6 +201,13 @@ const Soporte = () => {
             >
               Abrir Chat de Soporte
             </MainButton>
+          </div>
+          {/* Botón para volver a herramientas */}
+          <div className="text-center">
+            <MainLinkButton to="/herramientas" variant="secondary">
+              <IconArrowLeft />
+              Volver a herramientas
+            </MainLinkButton>
           </div>
         </div>
       </section>

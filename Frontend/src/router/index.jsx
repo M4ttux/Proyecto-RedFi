@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layouts/Layout";
 import Inicio from "../pages/Inicio";
-import Herramientas from "../pages/Herramientasv2";
-import Soporte from "../pages/Soporte";
+import Herramientas from "../pages/Herramientas";
+import Soporte from "../pages/herramientas/Soporte";
 import Cuenta from "../pages/Cuenta";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
@@ -22,7 +22,7 @@ import CambiarContraseña from "../pages/perfil/CambiarContraseña";
 import Planes from "../pages/Planes";
 import Glosario from "../pages/Glosario";
 import Administrador from "../pages/Administrador";
-import DetectorProveedorv2 from "../pages/herramientas/DetectorProveedor";
+import DetectorProveedor from "../pages/herramientas/InformacionRed";
 import TestVelocidad from "../components/tools/TestVelocidad";
 import AnalisisConexion from "../pages/herramientas/AnalisisConexion";
 
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Inicio /> },
       { path: "mapa", element: <Mapa /> },
       { path: "herramientas", element: <Herramientas /> },
-      { path: "informacion-red", element: <DetectorProveedorv2 /> },
+      { path: "informacion-red", element: <DetectorProveedor /> },
       { path: "test-velocidad", element: <TestVelocidad /> },
       { path: "analisis-conexion", element: <AnalisisConexion /> },
       { 

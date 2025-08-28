@@ -19,29 +19,11 @@ const TestVelocidad = () => {
   const [resultados, setResultados] = useState(null);
   // Estado para el progreso visual de cada métrica
   const [progreso, setProgreso] = useState({ descarga: 0, subida: 0, latencia: 0 });
-  // IP pública y ubicación, obtenidas al inicio del test
-  const [infoUsuario, setInfoUsuario] = useState({ ip: null, location: null });
 
   const iniciarTest = async () => {
     setLoading(true);
     setResultados(null);
     setProgreso({ descarga: 0, subida: 0, latencia: 0 });
-    setInfoUsuario({ ip: null, location: null });
-
-    // Obtener IP y ubicación de inmediato
-    (async () => {
-      try {
-        const response = await fetch("https://ipwho.is/");
-        const data = await response.json();
-        const loc =
-          data.city && data.region && data.country
-            ? `${data.city}, ${data.region}, ${data.country}`
-            : data.city || data.region || data.country || null;
-        setInfoUsuario({ ip: data.ip || null, location: loc });
-      } catch {
-        setInfoUsuario({ ip: null, location: null });
-      }
-    })();
 
     try {
       const data = await ejecutarSpeedtest();
@@ -88,12 +70,21 @@ const TestVelocidad = () => {
 
   // Componente para dibujar el medidor circular
   const RadialGauge = ({ label, value, unit, progress }) => {
-    const mostrarValor =
-      resultados && !loading ? `${formatNumber(value)} ${unit}` : `${Math.round(progress)}%`;
+    const mostrarValor = (() => {
+      if (resultados && !loading) {
+        return `${formatNumber(value)} ${unit}`;
+      } else if (loading) {
+        return `${Math.round(progress)}%`;
+      } else {
+        return "0.00 " + unit;
+      }
+    })();
+    
     const backgroundRing =
       currentTheme === "light" ? "var(--color-secundario)" : "rgba(255,255,255,0.1)";
-      const ringColor =
-  resultados && !loading ? "var(--color-acento)" : "var(--color-primario)";
+    const ringColor =
+      resultados && !loading ? "var(--color-acento)" : "var(--color-primario)";
+    
     return (
       <div className="flex flex-col items-center">
         <div className="relative h-32 w-32 sm:h-40 sm:w-40">
@@ -140,48 +131,27 @@ const TestVelocidad = () => {
           </MainButton>
         </div>
 
-        {/* IP pública y ubicación (mostradas en cuanto se obtienen) */}
-        {(infoUsuario.ip || infoUsuario.location) && (
-          <div className="pt-4 text-center space-y-1">
-            {infoUsuario.ip && (
-              <p className="font-semibold">
-                Tu IP pública: <span className="font-normal">{infoUsuario.ip}</span>
-              </p>
-            )}
-            {infoUsuario.location && (
-              <p className="font-semibold">
-                Ubicación:{" "}
-                <span className="font-normal">
-                  {infoUsuario.location}
-                </span>
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Medidores radiales */}
-        {(loading || resultados) && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 justify-items-center">
-            <RadialGauge
-              label="Descarga"
-              value={resultados?.downloadSpeed}
-              unit="Mbps"
-              progress={progreso.descarga}
-            />
-            <RadialGauge
-              label="Subida"
-              value={resultados?.uploadSpeed}
-              unit="Mbps"
-              progress={progreso.subida}
-            />
-            <RadialGauge
-              label="Latencia"
-              value={resultados?.latency}
-              unit="ms"
-              progress={progreso.latencia}
-            />
-          </div>
-        )}
+        {/* Medidores radiales - siempre visibles */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 justify-items-center">
+          <RadialGauge
+            label="Descarga"
+            value={resultados?.downloadSpeed}
+            unit="Mbps"
+            progress={progreso.descarga}
+          />
+          <RadialGauge
+            label="Subida"
+            value={resultados?.uploadSpeed}
+            unit="Mbps"
+            progress={progreso.subida}
+          />
+          <RadialGauge
+            label="Latencia"
+            value={resultados?.latency}
+            unit="ms"
+            progress={progreso.latencia}
+          />
+        </div>
 
         
 

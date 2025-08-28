@@ -10,10 +10,10 @@ import MainButton from "./MainButton";
 import { DURACION_ALERTA } from "../../constants/constantes";
 
 const estilos = {
-  error: "text-red-400 border-red-500/30",
-  exito: "text-green-700 border-green-500/30",
-  info: "text-blue-400 border-blue-500/30",
-  advertencia: "text-yellow-600 border-yellow-700/30",
+  error: "text-red-700 border-red-700/50",
+  exito: "text-green-700 border-green-700/50",
+  info: "text-blue-700 border-blue-700/50",
+  advertencia: "text-yellow-700 border-yellow-700/50",
 };
 
 const iconos = {
@@ -71,12 +71,12 @@ const Alerta = ({
           ? "fixed bottom-6 right-6 z-50 w-[calc(100%-3rem)] max-w-md"
           : "relative"
       }
-      bg-gray-800 px-4 py-3 pr-12 rounded-lg border transition-all duration-300 transform
+      bg-fondo px-4 py-3 pr-12 rounded-lg border-3 transition-all duration-300 transform
       ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}
       ${estilos[tipo] || estilos.error}
     `}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <Icono size={20} />
         <span className="flex-1 font-bold">{mensaje}</span>
       </div>
@@ -86,7 +86,7 @@ const Alerta = ({
         onClick={cerrarAlerta}
         type="button"
         variant="cross"
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 z-10 text-white"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 z-10"
       >
         <IconX size={18} />
       </MainButton>

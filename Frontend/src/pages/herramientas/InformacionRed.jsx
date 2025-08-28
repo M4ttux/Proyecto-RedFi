@@ -1,13 +1,11 @@
-import React from "react";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import MainH1 from "../../components/ui/MainH1";
-import MainH2 from "../../components/ui/MainH2";
 import MainH3 from "../../components/ui/MainH3";
 import { IconRadar2, IconArrowLeft } from "@tabler/icons-react";
-import DetectorProveedor from "../../components/tools/DetectorProveedorv2";
+import DetectorProveedor from "../../components/tools/DetectorProveedor";
 import { useTheme } from "../../context/ThemeContext";
 
-const DetectorProveedorv2 = () => {
+const InformacionRed = () => {
   const { currentTheme } = useTheme();
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -65,4 +63,4 @@ const DetectorProveedorv2 = () => {
   );
 };
 
-export default DetectorProveedorv2;
+export default InformacionRed;
