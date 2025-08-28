@@ -2,7 +2,7 @@
 
 **Red-Fi** es una plataforma integral para comparar y evaluar proveedores de internet, optimizada específicamente para la provincia de Corrientes, Argentina. La aplicación permite a los usuarios tomar decisiones informadas sobre su servicio de internet a través de un mapa interactivo, herramientas de diagnóstico, gestión de facturas y recursos educativos.
 
-![Red-Fi Logo](public/redfi-512.png)
+![Red-Fi Logo](Frontend/public/redfi-512.png)
 
 ## 🚀 Características Principales
 
