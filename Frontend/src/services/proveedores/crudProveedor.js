@@ -47,23 +47,10 @@ export const actualizarProveedor = async (
 // Eliminar proveedor
 export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
   try {
-    // 1. Obtener el nombre del proveedor antes de eliminarlo
-    const { data: proveedor, error: errorFetch } = await supabase
-      .from("proveedores")
-      .select("nombre")
-      .eq("id", id)
-      .single();
+    // 1. Eliminar todos los logos del bucket usando el ID
+    await eliminarLogoProveedor(id);
 
-    if (errorFetch) {
-      console.error("❌ Error al obtener proveedor antes de eliminar:", errorFetch);
-      mostrarAlerta("Error al eliminar el proveedor.");
-      throw errorFetch;
-    }
-
-    // 2. Eliminar el logo del bucket
-    await eliminarLogoProveedor(proveedor.nombre);
-
-    // 3. Eliminar el proveedor de la base de datos
+    // 2. Eliminar el proveedor de la base de datos
     const { error } = await supabase.from("proveedores").delete().eq("id", id);
 
     if (error) {
@@ -71,6 +58,8 @@ export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
       mostrarAlerta("Error al eliminar el proveedor.");
       throw error;
     }
+
+    console.log("✅ Proveedor eliminado correctamente:", id);
 
   } catch (err) {
     console.error("❌ Error general en eliminación:", err);

@@ -14,7 +14,6 @@ const FiltrosZona = ({
   cargandoProveedores,
   cargandoTecnologias,
 }) => {
-  const { mostrarError } = useAlerta();
 
   // Hook para filtros dinámicos que actualizan opciones según selección
   const {

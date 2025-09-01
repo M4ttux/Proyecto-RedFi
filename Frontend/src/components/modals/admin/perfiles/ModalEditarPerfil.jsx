@@ -8,6 +8,7 @@ import Select from "../../../ui/Select";
 import { actualizarPerfilPorId } from "../../../../services/perfil/adminPerfil";
 import { useAlerta } from "../../../../context/AlertaContext";
 
+// Opciones estáticas para los selectores
 const opcionesRol = [
   { value: "user", label: "Usuario" },
   { value: "admin", label: "Administrador" },
@@ -19,6 +20,7 @@ const opcionesPlan = [
 ];
 
 const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
+  // Estado del formulario con valores por defecto
   const [formData, setFormData] = useState({
     nombre: "",
     proveedor_preferido: "",
@@ -32,6 +34,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
   const [loading, setLoading] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
 
+  // Cargar datos del perfil al abrir el modal
   useEffect(() => {
     if (perfil) {
       setFormData((prev) => ({
@@ -47,6 +50,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
     }
   }, [perfil]);
 
+  // Handlers para cambios en inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -76,6 +80,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
     }));
   };
 
+  // Enviar formulario y actualizar perfil
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -95,7 +100,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Encabezado */}
+      {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Editar Perfil</MainH2>
         <MainButton
@@ -109,7 +114,9 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
         </MainButton>
       </div>
 
+      {/* Formulario de edición */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Campos de información personal */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
@@ -135,6 +142,8 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             />
           </div>
         </div>
+        
+        {/* Campos de configuración de cuenta */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Select
@@ -162,7 +171,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
           </div>
         </div>
 
-        {/* Botones */}
+        {/* Botones de acción del formulario */}
         <div className="flex gap-3 pt-4">
           <MainButton
             type="button"

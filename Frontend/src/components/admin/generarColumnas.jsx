@@ -58,37 +58,33 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           
           return (
             <div className="flex flex-wrap gap-1 items-center">
-              {/* Badge de Rol - Admin destacado en color acento */}
+              {/* Badge de Rol - Admin destacado con variante especial */}
               {rol ? (
                 rol === "admin" ? (
                   <Badge
                     size="xs"
-                    bgClass="bg-acento"
-                    textClass="text-texto"
-                    className="font-bold"
+                    variant="admin"
                   >
                     {rol.toUpperCase()}
                   </Badge>
                 ) : (
-                  <Badge size="xs" variant="muted" className="font-bold">
+                  <Badge size="xs" variant="muted">
                     {rol.toUpperCase()}
                   </Badge>
                 )
               ) : null}
               
-              {/* Badge de Plan - Premium destacado en color acento */}
+              {/* Badge de Plan - Premium destacado con variante especial */}
               {plan ? (
                 plan === "premium" ? (
                   <Badge
                     size="xs"
-                    bgClass="bg-acento"
-                    textClass="text-texto"
-                    className="font-bold"
+                    variant="premium"
                   >
                     {plan.toUpperCase()}
                   </Badge>
                 ) : (
-                  <Badge size="xs" variant="muted" className="font-bold">
+                  <Badge size="xs" variant="muted">
                     {plan.toUpperCase()}
                   </Badge>
                 )
@@ -126,7 +122,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
-            className="truncate text-ellipsis overflow-hidden max-w-[200px] lg:max-w-none"
+            className="truncate text-ellipsis overflow-hidden max-w-[200px]"
             title={row.descripcion}
           >
             {row.descripcion || "—"}
@@ -147,7 +143,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 href={row.sitio_web} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-primario hover:underline"
+                className="text-texto/75 hover:underline"
               >
                 {/* Remueve https:// o http:// para mostrar URL más limpia */}
                 {row.sitio_web.replace(/^https?:\/\//, '')}

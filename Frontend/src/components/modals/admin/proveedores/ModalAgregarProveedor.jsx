@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import MainButton from "../../../ui/MainButton";
 import MainH2 from "../../../ui/MainH2";
 import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
-import CheckboxDropdown from "../../../ui/CheckboxDropdown";
 import FileInput from "../../../ui/FileInput";
 import { IconX } from "@tabler/icons-react";
-import { obtenerTecnologiasDisponibles, obtenerZonasDisponibles } from "../../../../services/proveedores/relacionesProveedor";
-import { crearProveedor } from "../../../../services/proveedores/crudProveedor";
+import { crearProveedor, actualizarProveedor } from "../../../../services/proveedores/crudProveedor";
 import { subirLogoProveedor } from "../../../../services/proveedores/logoProveedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import ModalContenedor from "../../../ui/ModalContenedor";
 
 const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
+  // Estado del formulario con datos del proveedor
   const [form, setForm] = useState({
     nombre: "",
     sitio_web: "",
@@ -20,6 +19,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
     color: "#000000",
   });
 
+  // Estados para manejo de logotipo
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
@@ -27,6 +27,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
 
   const { mostrarError, mostrarExito } = useAlerta();
 
+  // Handlers para cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -36,25 +37,33 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
     setForm((prev) => ({ ...prev, [campo]: valores }));
   };
 
+  // Crear nuevo proveedor con subida de logotipo
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.nombre.trim()) return mostrarError("El nombre es obligatorio");
     setLoading(true);
 
     try {
-      let logoUrl = null;
-
-      if (logoFile) {
-        console.log("🧪 Subiendo logo...");
-        logoUrl = await subirLogoProveedor(form.nombre, logoFile);
-        console.log("✅ Logo subido con URL:", logoUrl);
-      }
-
+      // 1. Crear proveedor primero sin logotipo
       const nuevoProveedor = await crearProveedor({
         ...form,
-        logotipo: logoUrl,
+        logotipo: null, // Inicialmente sin logotipo
       });
 
+      let logoUrl = null;
+
+      // 2. Subir logotipo usando el ID del proveedor recién creado
+      if (logoFile) {
+        console.log("Subiendo logo para proveedor ID:", nuevoProveedor.id);
+        logoUrl = await subirLogoProveedor(nuevoProveedor.id, logoFile);
+        console.log("Logo subido con URL:", logoUrl);
+
+        // 3. Actualizar el proveedor con la URL del logotipo
+        await actualizarProveedor(nuevoProveedor.id, {
+          ...form,
+          logotipo: logoUrl,
+        });
+      }
 
       mostrarExito("Proveedor creado exitosamente");
       onActualizar?.();
@@ -72,6 +81,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar proveedor</MainH2>
         <MainButton
@@ -85,7 +95,9 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         </MainButton>
       </div>
 
+      {/* Formulario de creación de proveedor */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Campos básicos: nombre y sitio web */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
@@ -113,6 +125,8 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
             />
           </div>
         </div>
+        
+        {/* Descripción y logotipo */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Textarea
@@ -138,6 +152,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           </div>
         </div>
 
+        {/* Selector de color con múltiples interfaces */}
         <div>
           <label className="block text-texto mb-1">Color <span className="text-red-600">*</span></label>
           <div className="flex items-center gap-4">
@@ -176,6 +191,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           </div>
         </div>
 
+        {/* Botones de acción del formulario */}
         <div className="flex gap-3 pt-4">
           <MainButton
             type="button"

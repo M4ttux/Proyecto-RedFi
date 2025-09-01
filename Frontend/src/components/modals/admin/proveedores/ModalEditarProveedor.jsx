@@ -4,22 +4,30 @@ import MainH2 from "../../../ui/MainH2";
 import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
 import FileInput from "../../../ui/FileInput";
-import CheckboxDropdown from "../../../ui/CheckboxDropdown";
 import { IconX } from "@tabler/icons-react";
-import { obtenerTecnologiasDisponibles, obtenerZonasDisponibles } from "../../../../services/proveedores/relacionesProveedor";
 import { actualizarProveedor } from "../../../../services/proveedores/crudProveedor";
-import { subirLogoProveedor, eliminarLogoProveedor } from "../../../../services/proveedores/logoProveedor";
+import { subirLogoProveedor, eliminarLogoProveedor, eliminarLogoPorURL } from "../../../../services/proveedores/logoProveedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import ModalContenedor from "../../../ui/ModalContenedor";
 
+/**
+ * Modal para editar información de un proveedor existente desde el panel administrativo
+ */
 const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
+  // Estados del formulario con información actual del proveedor
   const [form, setForm] = useState({ ...proveedor });
   const [loading, setLoading] = useState(false);
+  
+  // Estados para manejo del logo
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const { mostrarError, mostrarExito } = useAlerta();
 
+  /**
+   * Convierte una URL de logo existente en un objeto File para mantener consistencia
+   * en el manejo de archivos del componente
+   */
   useEffect(() => {
     const prepararPreviewDesdeURL = async (url) => {
       try {
@@ -52,39 +60,76 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
     }
   }, [proveedor]);
 
+  /**
+   * Maneja los cambios en los campos del formulario
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  /**
+   * Maneja cambios en campos de selección múltiple
+   */
   const handleSelectChange = (campo, valores) => {
     setForm((prev) => ({ ...prev, [campo]: valores }));
   };
 
+  /**
+   * Procesa el envío del formulario y actualiza el proveedor
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       let logoUrl = form.logotipo || null;
+      const logoAntiguo = proveedor.logotipo;
 
+      // Caso 1: Eliminar logo actual
       if (form.eliminarLogo) {
         logoUrl = null;
-        await eliminarLogoProveedor(form.nombre);
-      } else if (logoFile) {
-        logoUrl = await subirLogoProveedor(form.nombre, logoFile);
+        // Eliminar logo del bucket si existe
+        if (logoAntiguo) {
+          await eliminarLogoPorURL(logoAntiguo);
+        }
+      } 
+      // Caso 2: Subir nueva imagen
+      else if (logoFile && logoFile !== null) {
+        // Verificar si realmente hay un archivo nuevo
+        const esArchivoNuevo = logoFile.name !== "logo.png" || 
+                              previewUrl?.startsWith('data:');
+        
+        if (esArchivoNuevo) {
+          // 1. Subir nueva imagen PRIMERO (usando ID del proveedor)
+          logoUrl = await subirLogoProveedor(proveedor.id, logoFile);
+          
+          // 2. Eliminar imagen antigua DESPUÉS del éxito
+          if (logoAntiguo && logoAntiguo !== logoUrl) {
+            try {
+              await eliminarLogoPorURL(logoAntiguo);
+            } catch (deleteError) {
+              console.warn("⚠️ No se pudo eliminar logo anterior:", deleteError);
+              // No fallar el proceso si no se puede eliminar el anterior
+            }
+          }
+        }
       }
 
+      // 3. Actualizar el proveedor en la base de datos
       const { eliminarLogo, ...restoForm } = form;
       await actualizarProveedor(proveedor.id, {
         ...restoForm,
         logotipo: logoUrl,
       });
+      
       mostrarExito("Proveedor actualizado correctamente");
       onActualizar?.();
       onClose();
     } catch (error) {
       mostrarError("Error al actualizar proveedor: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -153,14 +198,15 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
                 setLogoFile(file);
 
                 if (file) {
+                  // Genera preview local del archivo seleccionado
                   const reader = new FileReader();
                   reader.onloadend = () => setPreviewUrl(reader.result);
                   reader.readAsDataURL(file);
 
-                  // Si hay imagen, cancelar la eliminación
+                  // Cancela la eliminación si hay nueva imagen
                   setForm((prev) => ({ ...prev, eliminarLogo: false }));
                 } else {
-                  // Si se quitó la imagen
+                  // Marca para eliminar si se quitó la imagen
                   setPreviewUrl(null);
                   setForm((prev) => ({ ...prev, eliminarLogo: true }));
                 }
@@ -172,10 +218,12 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             />
           </div>
         </div>
+        
+        {/* Selector de color con preview */}
         <div>
           <label className="block text-texto mb-1">Color <span className="text-red-600">*</span></label>
           <div className="flex items-center gap-4">
-            {/* Color picker visual */}
+            {/* Picker visual de color */}
             <Input
               type="color"
               name="color"
@@ -186,6 +234,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
               title="Selecciona un color"
             />
 
+            {/* Input manual de código hexadecimal */}
             <div className="flex-1">
               <Input
                 type="text"
@@ -193,6 +242,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
                 value={form.color || ""}
                 onChange={(e) => {
                   const hex = e.target.value;
+                  // Valida formato hexadecimal mientras se escribe
                   const isValid = /^#[0-9A-Fa-f]{0,6}$/.test(hex) || hex === "";
 
                   if (isValid) {
@@ -206,6 +256,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
               />
             </div>
 
+            {/* Preview del color seleccionado */}
             <div
               className="w-10 h-10 rounded border border-texto/15"
               style={{
@@ -218,6 +269,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           </div>
         </div>
 
+        {/* Botones de acción */}
         <div className="flex gap-3 pt-4">
           <MainButton
             type="button"
@@ -238,6 +290,8 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             {loading ? "Guardando..." : "Guardar cambios"}
           </MainButton>
         </div>
+        
+        {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
             Los campos marcados con <span className="text-red-600">*</span> son

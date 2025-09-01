@@ -21,7 +21,6 @@ const PanelControlMapa = ({
   cargandoTecnologias,
   onFiltrar,
   onCerrarPanel,
-  // Nuevas props para el estado de ubicación
   ubicacionActual,
   zonaActual,
   ubicacionValida,
@@ -31,6 +30,7 @@ const PanelControlMapa = ({
 
   return (
     <div className="space-y-6">
+      {/* Encabezado del panel con botón de cierre móvil */}
       <div className="flex justify-between items-center mb-4">
         <MainH3 className="mb-0">Panel de control</MainH3>
         {onCerrarPanel && (
@@ -45,7 +45,7 @@ const PanelControlMapa = ({
         )}
       </div>
 
-      {/* Estado de ubicación */}
+      {/* Indicador visual del estado de ubicación validada */}
       {ubicacionActual && (
         <div className={`rounded-lg p-3 border ${
           ubicacionValida 
@@ -75,13 +75,13 @@ const PanelControlMapa = ({
         </div>
       )}
 
-      {/* Busqueda */}
+      {/* Herramientas de navegación y búsqueda */}
       <BusquedaUbicacion boundsCorrientes={boundsCorrientes} mapRef={mapRef} />
 
       {/* Botón de ubicación */}
       <UbicacionActual mapRef={mapRef} boundsCorrientes={boundsCorrientes} />
 
-      {/* Filtros */}
+      {/* Sistema de filtros dinámicos */}
       <FiltrosZona
         filtros={filtros}
         setFiltros={setFiltros}
@@ -94,13 +94,13 @@ const PanelControlMapa = ({
         cargandoTecnologias={cargandoTecnologias}
       />
 
-      {/* Botón de reseña */}
+      {/* Botón para agregar nueva reseña */}
       <BotonAgregarReseña
         usuario={usuario}
         onAbrirModalReseña={onAbrirModalReseña}
       />
 
-      {/* Leyenda de reseñas */}
+      {/* Leyenda de colores para valoraciones en el mapa */}
       <div className="bg-texto/5 border border-texto/15 rounded-lg px-3 py-2 text-xs">
         <div className="flex justify-between text-center gap-2 px-4">
           <div className="flex flex-col items-center">

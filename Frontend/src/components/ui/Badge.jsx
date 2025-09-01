@@ -12,6 +12,8 @@ const VARIANT_MAP = {
   success: "bg-green-500/10 text-green-600",
   danger: "bg-red-500/10 text-red-600",
   info: "bg-blue-500/10 text-blue-600",
+  admin: "bg-acento text-texto font-bold",
+  premium: "bg-acento text-texto font-bold",
 };
 
 const Badge = ({
