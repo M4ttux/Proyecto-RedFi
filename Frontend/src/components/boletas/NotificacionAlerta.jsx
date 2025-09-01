@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { IconX } from "@tabler/icons-react";
 import MainButton from "../ui/MainButton";
 
 const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
@@ -15,7 +14,7 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
     const timer = setTimeout(() => {
       setVisible(false);
       if (onClose) onClose();
-    }, 10000); // 6 segundos
+    }, 10000); // 10 segundos
 
     return () => clearTimeout(timer);
   }, [onClose]);

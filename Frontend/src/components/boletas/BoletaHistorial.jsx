@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { eliminarBoletaConImagen } from "../../services/boletas/crud";
-import { IconLoader2, IconCalendar } from "@tabler/icons-react";
 import ModalEditarBoleta from "../modals/boletas/ModalEditarBoleta";
 import ModalVerBoleta from "../modals/boletas/ModalVerBoleta";
 import ModalEliminar from "../modals/ModalEliminar";
-import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
 import MainLoader from "../ui/MainLoader";
@@ -12,6 +10,7 @@ import Table from "../ui/Table";
 import { useAlerta } from "../../context/AlertaContext";
 
 const BoletaHistorial = ({ boletas, recargarBoletas }) => {
+  // Estados para control de UI y modales
   const [cargando, setCargando] = useState(true);
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
   const [boletaParaVer, setBoletaParaVer] = useState(null);
@@ -19,11 +18,13 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   const [eliminando, setEliminando] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
 
+  // Simular tiempo de carga para mejor UX
   useEffect(() => {
     const timer = setTimeout(() => setCargando(false), 300);
     return () => clearTimeout(timer);
   }, [boletas]);
 
+  // Función para eliminar boleta con confirmación
   const confirmarEliminacion = async () => {
     if (!boletaAEliminar) return;
     try {
@@ -41,6 +42,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
     }
   };
 
+  // Formatear fecha con tooltip informativo
   const formatearFechaConTooltip = (fechaISO) => {
     if (!fechaISO) return <span className="text-xs text-texto/40">—</span>;
 
@@ -55,10 +57,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
     return <span title={formatoLargo}>{formatoCorto}</span>;
   };
 
+  // Ordenar boletas por fecha de carga (más recientes primero)
   const boletasOrdenadas = [...boletas].sort(
     (a, b) => new Date(b.fecha_carga) - new Date(a.fecha_carga)
   );
 
+  // Configuración de columnas para la tabla
   const columnas = [
     {
       id: "proveedor",
@@ -145,6 +149,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   return (
     <div className="max-w-7xl mx-auto relative">
+      {/* Renderizado condicional según estado de datos */}
       {cargando ? (
         <MainLoader texto="Cargando boletas..." size="large" />
       ) : boletas.length === 0 ? (
@@ -160,7 +165,8 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
         <Table columns={columnas} data={boletasOrdenadas} />
       )}
 
-      {/* MODALES */}
+      {/* MODALES*/}
+      {/* Modal para ver boleta con navegación */}
       {boletaParaVer &&
         (() => {
           const indexActual = boletasOrdenadas.findIndex(
@@ -176,6 +182,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           );
         })()}
 
+      {/* Modal para editar boleta */}
       {boletaSeleccionada && (
         <ModalEditarBoleta
           boleta={boletaSeleccionada}
@@ -184,6 +191,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
         />
       )}
 
+      {/* Modal de confirmación para eliminar */}
       {boletaAEliminar && (
         <ModalEliminar
           titulo="Eliminar boleta"

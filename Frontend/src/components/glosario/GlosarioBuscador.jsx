@@ -7,12 +7,14 @@ import MainButton from "../ui/MainButton";
 import { IconX, IconWorldSearch, IconVolume, IconPlayerStopFilled } from "@tabler/icons-react";
 
 const GlosarioBuscador = () => {
+  // Estados para búsqueda y resultados
   const [busqueda, setBusqueda] = useState("");
   const [resultado, setResultado] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
   const [leyendo, setLeyendo] = useState(false);
 
+  // Limpiar síntesis de voz al desmontar componente
   useEffect(() => {
     const handleEnd = () => setLeyendo(false);
     window.speechSynthesis.addEventListener("end", handleEnd);
@@ -21,6 +23,7 @@ const GlosarioBuscador = () => {
     };
   }, []);
 
+  // Buscar término en Wikipedia usando mapeo de conceptos válidos
   const manejarBusqueda = async (termino) => {
     const tituloWiki = conceptosRed[termino] || termino;
     setBusqueda(termino);
@@ -51,12 +54,14 @@ const GlosarioBuscador = () => {
     }
   };
 
+  // Filtrar conceptos válidos como sugerencias
   const sugerencias = Object.keys(conceptosRed).filter((concepto) =>
     concepto.toLowerCase().includes(busqueda.toLowerCase())
   );
 
   return (
     <>
+      {/* Instrucciones de uso */}
       <div className="mt-2">
         <strong className="text-texto">¿Cómo utilizar el buscador?</strong>{" "}
         Escribí palabras como <strong className="text-texto">"DNS"</strong>,{" "}
@@ -65,6 +70,7 @@ const GlosarioBuscador = () => {
         significado.
       </div>
 
+      {/* Botones de conceptos populares */}
       <div className="mt-4 flex flex-wrap gap-2 justify-center">
         {[
           "IP",
@@ -88,6 +94,7 @@ const GlosarioBuscador = () => {
         ))}
       </div>
 
+      {/* Botón de concepto aleatorio */}
       <div className="mt-12 text-center">
         <MainButton
           variant="primary"
@@ -101,6 +108,7 @@ const GlosarioBuscador = () => {
         </MainButton>
       </div>
 
+      {/* Campo de búsqueda principal */}
       <div className="relative w-full">
         <Input
           name="busqueda"
@@ -123,6 +131,7 @@ const GlosarioBuscador = () => {
         />
       </div>
 
+      {/* Lista de sugerencias basada en conceptos válidos */}
       {busqueda && sugerencias.length > 0 && (
         <ul className="mt-2 bg-secundario rounded-lg shadow--g text-left max-h-64 overflow-y-auto">
           {sugerencias.map((sugerencia, idx) => (
@@ -137,15 +146,18 @@ const GlosarioBuscador = () => {
         </ul>
       )}
 
+      {/* Mensaje cuando no hay sugerencias */}
       {busqueda && sugerencias.length === 0 && (
         <p className="mt-2">No hay sugerencias.</p>
       )}
 
+      {/* Estados de carga y error */}
       {cargando && (
         <p className="mt-4 text-blue-400 font-bold">Buscando en Wikipedia...</p>
       )}
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
+      {/* Resultado de Wikipedia con opciones de interacción */}
       {resultado && (
         <div className="mt-6 bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4 text-left">
           <MainH3>{resultado.title}</MainH3>
@@ -159,6 +171,7 @@ const GlosarioBuscador = () => {
             />
           )}
 
+          {/* Botones de síntesis de voz y enlace a Wikipedia */}
           {resultado.extract && (
             <div className="mt-8 flex flex-col sm:flex-row items-start justify-center sm:items-center gap-3">
               <MainButton
@@ -198,6 +211,7 @@ const GlosarioBuscador = () => {
         </div>
       )}
 
+      {/* Sección de conceptos destacados */}
       <div className="mt-12">
         <MainH2 className="text-center justify-center">Conceptos destacados</MainH2>
         <div className="grid md:grid-cols-3 gap-4">

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { IconMap2 } from "@tabler/icons-react";
 import MainH1 from "../ui/MainH1";
 import MainLinkButton from "../ui/MainLinkButton";

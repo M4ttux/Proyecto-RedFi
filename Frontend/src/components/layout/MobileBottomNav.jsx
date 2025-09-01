@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
   IconX,
   IconBell,
   IconBellFilled,
   IconHome,
-  IconMap,
   IconTool,
-  IconHeadset,
   IconUser,
   IconDots,
   IconLogout,

@@ -1,8 +1,4 @@
-import { IconBrandFacebook } from '@tabler/icons-react';
-import { IconBrandInstagram } from '@tabler/icons-react';
-import { IconBrandX } from '@tabler/icons-react';
-import { IconBrandLinkedin } from '@tabler/icons-react';
-
+import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandLinkedin } from '@tabler/icons-react';
 
 const Footer = () => {
   const year = new Date().getFullYear();

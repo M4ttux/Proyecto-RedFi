@@ -4,14 +4,19 @@ import Avatar from "../ui/Avatar";
 import Badge from "../ui/Badge";
 
 export const generarColumnas = (tabla, datos, acciones = {}) => {
+  // Validación: si no hay datos, retorna array vacío
   if (!datos.length) return [];
 
+  // Obtiene el primer elemento para analizar la estructura de datos
   const ejemplo = datos[0];
   const columnasBase = [];
 
-  // 1. Perfiles
+  // === CONFIGURACIÓN DE COLUMNAS POR TIPO DE TABLA ===
+
+  // 1. TABLA DE PERFILES DE USUARIO
   if (tabla === "user_profiles") {
     columnasBase.push(
+      // Columna de avatar del usuario
       {
         id: "avatar",
         label: "AVATAR",
@@ -19,11 +24,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           <Avatar fotoUrl={row.foto_url} nombre={row.nombre} size={8} />
         ),
       },
+      // Columna de nombre del usuario
       {
         id: "nombre",
         label: "NOMBRE",
         renderCell: (row) => row.nombre,
       },
+      // Columna de proveedor preferido (opcional)
       {
         id: "proveedor_preferido",
         label: "PROVEEDOR PREFERIDO",
@@ -41,6 +48,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
             "—"
           ),
       },
+      // Columna combinada de rol y plan del usuario
       {
         id: "rol_y_plan",
         label: "ROL Y PLAN",
@@ -50,7 +58,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           
           return (
             <div className="flex flex-wrap gap-1 items-center">
-              {/* Badge de Rol */}
+              {/* Badge de Rol - Admin destacado en color acento */}
               {rol ? (
                 rol === "admin" ? (
                   <Badge
@@ -68,7 +76,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 )
               ) : null}
               
-              {/* Badge de Plan */}
+              {/* Badge de Plan - Premium destacado en color acento */}
               {plan ? (
                 plan === "premium" ? (
                   <Badge
@@ -86,7 +94,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 )
               ) : null}
               
-              {/* Fallback si no hay rol ni plan */}
+              {/* Texto de fallback si no tiene rol ni plan */}
               {!rol && !plan && "—"}
             </div>
           );
@@ -95,9 +103,10 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 2. Proveedores
+  // 2. TABLA DE PROVEEDORES DE INTERNET
   else if (tabla === "proveedores") {
     columnasBase.push(
+      // Columna de logotipo del proveedor
       {
         id: "avatar",
         label: "AVATAR",
@@ -105,7 +114,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           <Avatar fotoUrl={row.logotipo} nombre={row.nombre} size={8} />
         ),
       },
-      { id: "nombre", label: "NOMBRE", renderCell: (row) => row.nombre },
+      // Columna de nombre del proveedor
+      { 
+        id: "nombre", 
+        label: "NOMBRE", 
+        renderCell: (row) => row.nombre 
+      },
+      // Columna de descripción del proveedor (truncada para evitar overflow)
       {
         id: "descripcion",
         label: "DESCRIPCIÓN",
@@ -118,6 +133,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           </div>
         ),
       },
+      // Columna de sitio web del proveedor (como link clickeable)
       {
         id: "sitio_web",
         label: "SITIO WEB",
@@ -133,6 +149,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 rel="noopener noreferrer"
                 className="text-primario hover:underline"
               >
+                {/* Remueve https:// o http:// para mostrar URL más limpia */}
                 {row.sitio_web.replace(/^https?:\/\//, '')}
               </a>
             ) : (
@@ -141,6 +158,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           </div>
         ),
       },
+      // Columna de color representativo del proveedor (muestra como círculo de color)
       {
         id: "color",
         label: "COLOR",
@@ -154,24 +172,28 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 3. Reseñas
+  // 3. TABLA DE RESEÑAS DE USUARIOS SOBRE PROVEEDORES
   else if (tabla === "reseñas") {
     columnasBase.push(
+      // Columna de usuario que escribió la reseña
       {
         id: "user_profiles",
         label: "USUARIOS",
         renderCell: (row) => row.user_profiles?.nombre || "—",
       },
+      // Columna de proveedor reseñado
       {
         id: "proveedores",
         label: "PROVEEDORES",
         renderCell: (row) => row.proveedores?.nombre || "—",
       },
+      // Columna de calificación con estrellas (1-5)
       {
         id: "estrellas",
         label: "ESTRELLAS",
         renderCell: (row) => (
           <div className="inline-flex items-center gap-1 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
+            {/* Genera array de 5 estrellas, llenas o vacías según la calificación */}
             {Array.from({ length: 5 }, (_, i) =>
               i < row.estrellas ? (
                 <IconCarambolaFilled
@@ -186,6 +208,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           </div>
         ),
       },
+      // Columna de comentario de la reseña (limitado en líneas)
       {
         id: "comentario",
         label: "COMENTARIO",
@@ -201,14 +224,16 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 4. Tecnologías
+  // 4. TABLA DE TECNOLOGÍAS DE CONEXIÓN (Fibra, ADSL, Cable, etc.)
   else if (tabla === "tecnologias") {
     columnasBase.push(
+      // Columna de nombre de la tecnología
       {
         id: "tecnologia",
         label: "TECNOLOGÍA",
         renderCell: (row) => row.tecnologia,
       },
+      // Columna de descripción de la tecnología
       {
         id: "descripcion",
         label: "DESCRIPCIÓN",
@@ -217,14 +242,16 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 5. Proveedor y Tecnología
+  // 5. TABLA RELACIONAL: PROVEEDOR-TECNOLOGÍA (muchos a muchos)
   else if (tabla === "ProveedorTecnologia") {
     columnasBase.push(
+      // Columna de nombre del proveedor
       {
         id: "proveedor_id",
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
+      // Columna de tecnologías que soporta el proveedor (múltiples badges)
       {
         id: "tecnologias",
         label: "TECNOLOGÍAS",
@@ -244,14 +271,16 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 6. Proveedor y Zona
+  // 6. TABLA RELACIONAL: ZONA-PROVEEDOR (muchos a muchos)
   else if (tabla === "ZonaProveedor") {
     columnasBase.push(
+      // Columna de nombre del proveedor
       {
         id: "proveedor_id",
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
+      // Columna de zonas donde opera el proveedor (múltiples badges)
       {
         id: "zonas",
         label: "ZONAS",
@@ -271,8 +300,9 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 7. Fallback para tablas desconocidas
+  // 7. FALLBACK: TABLA DESCONOCIDA - Generación automática de columnas
   else {
+    // Obtiene todas las claves del objeto ejemplo para crear columnas genéricas
     const keys = Object.keys(ejemplo);
     keys.forEach((key) => {
       columnasBase.push({
@@ -283,17 +313,19 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     });
   }
 
-  // Acciones (común para todas)
+  // === COLUMNA DE ACCIONES (común para todas las tablas) ===
   if (acciones.onVer || acciones.onEditar || acciones.onEliminar) {
     columnasBase.push({
       id: "acciones",
       label: "ACCIONES",
       renderCell: (row) => {
+        // Oculta el botón "Ver" para tablas relacionales que no necesitan vista de detalle
         const ocultarVer =
           tabla === "ProveedorTecnologia" || tabla === "ZonaProveedor";
 
         return (
           <div className="flex flex-wrap gap-2 lg:gap-2">
+            {/* Botón Ver - Solo si existe callback y no está en lista de exclusión */}
             {!ocultarVer && acciones.onVer && (
               <MainButton
                 onClick={() => acciones.onVer(row)}
@@ -304,6 +336,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 <span className="hidden sm:inline">Ver</span>
               </MainButton>
             )}
+            {/* Botón Editar - Si existe callback */}
             {acciones.onEditar && (
               <MainButton
                 onClick={() => acciones.onEditar(row)}
@@ -314,6 +347,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 <span className="hidden sm:inline">Editar</span>
               </MainButton>
             )}
+            {/* Botón Eliminar - Si existe callback */}
             {acciones.onEliminar && (
               <MainButton
                 onClick={() => acciones.onEliminar(row)}
@@ -330,5 +364,6 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     });
   }
 
+  // Retorna el array completo de configuraciones de columna
   return columnasBase;
 };

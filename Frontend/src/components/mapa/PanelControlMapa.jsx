@@ -5,7 +5,7 @@ import FiltrosZona from "./filtros/FiltrosZona";
 import BotonAgregarReseña from "./panel/BotonAgregarReseña";
 import MainButton from "../ui/MainButton";
 import MainH3 from "../ui/MainH3";
-import { IconX, IconStar, IconMapPin, IconCheck, IconAlertCircle } from "@tabler/icons-react";
+import { IconX, IconCheck, IconAlertCircle } from "@tabler/icons-react";
 
 const PanelControlMapa = ({
   boundsCorrientes,

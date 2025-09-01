@@ -17,12 +17,14 @@ const FiltrosMobile = ({
 }) => {
   const { mostrarError } = useAlerta();
 
+  // Aplicar filtros y cerrar panel móvil
   const handleAplicarFiltros = (filtrosFinales) => {
     setFiltrosAplicados(filtrosFinales);
     setMostrarFiltros(false);
   };
 
   return (
+    // Panel móvil que ocupa toda la pantalla desde abajo
     <div className="absolute bottom-0 left-0 w-full bg-fondo rounded-t-lg z-40 overflow-y-auto max-h-[90vh] p-4">
       <PanelControlMapa
         boundsCorrientes={boundsCorrientes}

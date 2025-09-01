@@ -1,7 +1,6 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconX } from "@tabler/icons-react";
 import { crearReseña } from "../../services/reseñas/reseñaCrud";
 import { BOUNDS_CORRIENTES } from "../../constants/constantes";
 import { useMapaInteractivo } from "../../hooks/useMapaInteractivo";
@@ -15,8 +14,6 @@ import ModalAgregarReseña from "../modals/mapa/ModalAgregarReseña";
 import ModalZonaMultiProveedor from "../modals/mapa/ModalZonaMultiProveedor";
 import IndicadorSeleccion from "./panel/IndicadorSeleccion";
 import MarcadorUbicacion from "./panel/MarcadorUbicacion";
-
-import MainButton from "../ui/MainButton";
 
 import { useAlerta } from "../../context/AlertaContext";
 

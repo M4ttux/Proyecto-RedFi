@@ -14,12 +14,16 @@ const FiltrosZona = ({
   cargandoProveedores,
   cargandoTecnologias,
 }) => {
-  // Hook para filtros dinámicos
+  const { mostrarError } = useAlerta();
+
+  // Hook para filtros dinámicos que actualizan opciones según selección
   const {
     zonasDisponibles,
     proveedoresDisponibles,
     tecnologiasDisponibles,
   } = useFiltrosDinamicos(zonas, proveedores, tecnologiasUnicas, filtros);
+  
+  // Aplicar filtros seleccionados al mapa
   const aplicarFiltros = () => {
     onFiltrar({
       zona: filtros.zona || { id: "", nombre: "Todas las zonas" },
@@ -29,6 +33,7 @@ const FiltrosZona = ({
     });
   };
 
+  // Resetear todos los filtros a valores por defecto
   const limpiarFiltros = () => {
     const filtrosReseteados = {
       zona: { id: "", nombre: "Todas las zonas" },
@@ -42,6 +47,7 @@ const FiltrosZona = ({
 
   return (
     <div className="space-y-6">
+      {/* Selectores de filtros principales */}
       <div className="flex flex-col gap-4">
         {/* Zona */}
         <Select
@@ -91,7 +97,7 @@ const FiltrosZona = ({
         />
       </div>
 
-      {/* Valoración exacta */}
+      {/* Filtro de valoración por estrellas */}
       <div>
         <p className="block mb-1">Valoración exacta</p>
         <div className="flex items-center gap-3 flex-wrap">
@@ -106,6 +112,7 @@ const FiltrosZona = ({
             Todas
           </MainButton>
 
+          {/* Sistema de estrellas interactivo */}
           <div className="flex gap-1 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
             {[1, 2, 3, 4, 5].map((v) => {
               const isActive = filtros.valoracionMin >= v;
@@ -134,7 +141,7 @@ const FiltrosZona = ({
         </div>
       </div>
 
-      {/* Botones */}
+      {/* Botones de acción para aplicar o limpiar filtros */}
       <div className="w-full flex flex-col sm:flex-row gap-3">
         <MainButton
           onClick={limpiarFiltros}
