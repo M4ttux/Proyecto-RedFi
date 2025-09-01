@@ -59,8 +59,6 @@ export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
       throw error;
     }
 
-    console.log("✅ Proveedor eliminado correctamente:", id);
-
   } catch (err) {
     console.error("❌ Error general en eliminación:", err);
     throw err;

@@ -6,7 +6,7 @@ import Textarea from "../../../ui/Textarea";
 import FileInput from "../../../ui/FileInput";
 import { IconX } from "@tabler/icons-react";
 import { actualizarProveedor } from "../../../../services/proveedores/crudProveedor";
-import { subirLogoProveedor, eliminarLogoProveedor, eliminarLogoPorURL } from "../../../../services/proveedores/logoProveedor";
+import { subirLogoProveedor, eliminarLogoPorURL } from "../../../../services/proveedores/logoProveedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import ModalContenedor from "../../../ui/ModalContenedor";
 
@@ -21,6 +21,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   // Estados para manejo del logo
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [logoOriginal, setLogoOriginal] = useState(null); // Para trackear el logo original
 
   const { mostrarError, mostrarExito } = useAlerta();
 
@@ -53,6 +54,8 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         eliminarLogo: false,
       });
 
+      // Guardar referencia del logo original
+      setLogoOriginal(proveedor.logotipo);
 
       if (proveedor.logotipo) {
         prepararPreviewDesdeURL(proveedor.logotipo);
@@ -86,34 +89,53 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
       let logoUrl = form.logotipo || null;
       const logoAntiguo = proveedor.logotipo;
 
+      console.log("🔄 Iniciando actualización de proveedor");
+      console.log("📷 Logo actual:", logoAntiguo);
+      console.log("📁 Archivo seleccionado:", logoFile);
+      console.log("🖼️ Preview URL:", previewUrl);
+      console.log("🗑️ Eliminar logo marcado:", form.eliminarLogo);
+
       // Caso 1: Eliminar logo actual
       if (form.eliminarLogo) {
+        console.log("🗑️ Eliminando logo actual");
         logoUrl = null;
         // Eliminar logo del bucket si existe
-        if (logoAntiguo) {
-          await eliminarLogoPorURL(logoAntiguo);
+        if (logoOriginal) {
+          await eliminarLogoPorURL(logoOriginal);
+          console.log("✅ Logo eliminado del bucket");
         }
       } 
       // Caso 2: Subir nueva imagen
       else if (logoFile && logoFile !== null) {
-        // Verificar si realmente hay un archivo nuevo
-        const esArchivoNuevo = logoFile.name !== "logo.png" || 
-                              previewUrl?.startsWith('data:');
+        // Verificar si realmente es un archivo nuevo seleccionado por el usuario
+        const esArchivoNuevoSeleccionado = previewUrl?.startsWith('data:');
         
-        if (esArchivoNuevo) {
+        console.log("📋 Es archivo nuevo:", esArchivoNuevoSeleccionado);
+        
+        if (esArchivoNuevoSeleccionado) {
+          console.log("📤 Subiendo nueva imagen para proveedor ID:", proveedor.id);
           // 1. Subir nueva imagen PRIMERO (usando ID del proveedor)
           logoUrl = await subirLogoProveedor(proveedor.id, logoFile);
+          console.log("✅ Nueva imagen subida:", logoUrl);
           
           // 2. Eliminar imagen antigua DESPUÉS del éxito
-          if (logoAntiguo && logoAntiguo !== logoUrl) {
+          if (logoOriginal && logoOriginal !== logoUrl) {
             try {
-              await eliminarLogoPorURL(logoAntiguo);
+              console.log("🗑️ Eliminando logo anterior:", logoOriginal);
+              await eliminarLogoPorURL(logoOriginal);
+              console.log("✅ Logo anterior eliminado");
             } catch (deleteError) {
               console.warn("⚠️ No se pudo eliminar logo anterior:", deleteError);
               // No fallar el proceso si no se puede eliminar el anterior
             }
           }
+        } else {
+          // Mantener logo actual si no hay cambios
+          logoUrl = logoOriginal;
         }
+      } else {
+        // Si no hay archivo y no se marcó para eliminar, mantener actual
+        logoUrl = logoOriginal;
       }
 
       // 3. Actualizar el proveedor en la base de datos
@@ -206,7 +228,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
                   // Cancela la eliminación si hay nueva imagen
                   setForm((prev) => ({ ...prev, eliminarLogo: false }));
                 } else {
-                  // Marca para eliminar si se quitó la imagen
+                  // Cuando se quita el archivo, marcar para eliminar el logo
                   setPreviewUrl(null);
                   setForm((prev) => ({ ...prev, eliminarLogo: true }));
                 }

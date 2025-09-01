@@ -63,7 +63,10 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
-      "id, nombre, color, descripcion, sitio_web, logotipo, ProveedorTecnologia(tecnologias(id, tecnologia)), ZonaProveedor(zonas(id, departamento))"
+      `id, nombre, color, descripcion, sitio_web, logotipo, 
+       ProveedorTecnologia(tecnologias(id, tecnologia)), 
+       ZonaProveedor(zonas(id, departamento)),
+       reseñas(id, estrellas)`
     )
     .order("nombre", { ascending: true });
 

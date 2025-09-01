@@ -1,10 +1,10 @@
 import { supabase } from "../../supabase/client";
 
-// subirLogoProveedor - Usa ID del proveedor para evitar problemas con cambios de nombre
+// subirLogoProveedor - Ahora usa ID del proveedor
 export const subirLogoProveedor = async (proveedorId, file) => {
-  // Usar directamente el ID sin transformaciones
+  // Usar directamente el ID del proveedor como carpeta
   const timestamp = Date.now();
-  const path = `proveedor-${proveedorId}/logo-${timestamp}.png`;
+  const path = `${proveedorId}/logo-${timestamp}.png`;
 
   console.log("📤 Subiendo logo en ruta:", path);
   console.log("📄 Archivo recibido:", file);
@@ -26,14 +26,12 @@ export const subirLogoProveedor = async (proveedorId, file) => {
   return data.publicUrl;
 };
 
-// Eliminar logo de proveedor desde el bucket usando ID
+// Eliminar logo de proveedor desde el bucket (por ID)
 export const eliminarLogoProveedor = async (proveedorId) => {
-  const folderPath = `proveedor-${proveedorId}`;
-
   // Listar todos los archivos en la carpeta del proveedor
   const { data: files, error: listError } = await supabase.storage
     .from("proveedores")
-    .list(folderPath);
+    .list(proveedorId.toString());
 
   if (listError) {
     console.error("❌ Error al listar archivos:", listError);
@@ -41,19 +39,19 @@ export const eliminarLogoProveedor = async (proveedorId) => {
   }
 
   if (files && files.length > 0) {
-    // Crear paths completos para eliminar todos los logos
-    const filePaths = files.map(file => `${folderPath}/${file.name}`);
+    // Eliminar todos los logos en la carpeta del proveedor
+    const filesToDelete = files.map(file => `${proveedorId}/${file.name}`);
     
     const { error } = await supabase.storage
       .from("proveedores")
-      .remove(filePaths);
+      .remove(filesToDelete);
       
     if (error) {
       console.error("❌ Error al eliminar logos:", error);
       throw error;
     }
     
-    console.log("✅ Logos eliminados:", filePaths);
+    console.log("✅ Logos eliminados:", filesToDelete);
   }
 };
 

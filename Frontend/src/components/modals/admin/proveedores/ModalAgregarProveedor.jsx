@@ -44,23 +44,22 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
     setLoading(true);
 
     try {
-      // 1. Crear proveedor primero sin logotipo
+      // 1. Crear proveedor primero (sin logo)
       const nuevoProveedor = await crearProveedor({
         ...form,
-        logotipo: null, // Inicialmente sin logotipo
+        logotipo: null, // Inicialmente sin logo
       });
 
       let logoUrl = null;
-
-      // 2. Subir logotipo usando el ID del proveedor recién creado
+      
+      // 2. Subir logotipo solo si se seleccionó uno
       if (logoFile) {
         console.log("Subiendo logo para proveedor ID:", nuevoProveedor.id);
         logoUrl = await subirLogoProveedor(nuevoProveedor.id, logoFile);
         console.log("Logo subido con URL:", logoUrl);
-
-        // 3. Actualizar el proveedor con la URL del logotipo
+        
+        // 3. Actualizar proveedor con la URL del logo
         await actualizarProveedor(nuevoProveedor.id, {
-          ...form,
           logotipo: logoUrl,
         });
       }
