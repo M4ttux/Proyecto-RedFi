@@ -9,14 +9,19 @@ import { agregarTecnologia } from "../../../../services/tecnologiaService";
 import { useAlerta } from "../../../../context/AlertaContext";
 
 const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
+  // Estado del formulario con datos de la tecnología
   const [formData, setFormData] = useState({
     tecnologia: "",
     descripcion: "",
   });
 
+  // Estado de carga para operaciones asíncronas
   const [loading, setLoading] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
 
+  /**
+   * Maneja los cambios en los campos del formulario
+   */
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -24,10 +29,14 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
     }));
   };
 
+  /**
+   * Procesa la creación de la nueva tecnología
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Crea la nueva tecnología en la base de datos
       await agregarTecnologia(formData, mostrarError);
       mostrarExito("Tecnología agregada correctamente");
       onActualizar?.();
@@ -41,6 +50,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar tecnología</MainH2>
         <MainButton
@@ -54,7 +64,9 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
         </MainButton>
       </div>
 
+      {/* Formulario de creación de tecnología */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Campo nombre de tecnología (obligatorio) */}
         <Input
           name="tecnologia"
           label={
@@ -69,6 +81,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
           disabled={loading}
         />
 
+        {/* Campo descripción (opcional) */}
         <Textarea
           name="descripcion"
           label="Descripción"
@@ -79,6 +92,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
           disabled={loading}
         />
 
+        {/* Botones de acción */}
         <div className="flex gap-3 pt-4">
           <MainButton
             type="button"
@@ -98,6 +112,8 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
             {loading ? "Creando..." : "Crear tecnología"}
           </MainButton>
         </div>
+        
+        {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
             Los campos marcados con <span className="text-red-600">*</span> son

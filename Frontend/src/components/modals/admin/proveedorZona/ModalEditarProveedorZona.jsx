@@ -1,4 +1,3 @@
-// src/components/modals/admin/relaciones/ModalEditarProveedorZona.jsx
 import { useEffect, useState } from "react";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import MainButton from "../../../ui/MainButton";
@@ -10,25 +9,32 @@ import {
   obtenerZonasPorProveedor,
   actualizarZonasProveedor,
 } from "../../../../services/relaciones/proveedorZonaService";
-import { getZonas } from "../../../../services/zonaService"; // asumimos que existe este archivo
+import { getZonas } from "../../../../services/zonaService";
 
 const ModalEditarProveedorZona = ({
   proveedor,
   onClose,
   onActualizar,
 }) => {
+  // Estados para las opciones y selecciones
   const [todasLasZonas, setTodasLasZonas] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState([]);
+  
+  // Estado de carga para operaciones asíncronas
   const [cargando, setCargando] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
 
+  /**
+   * Carga todas las zonas disponibles y las actualmente asignadas al proveedor
+   */
   useEffect(() => {
     const cargarDatos = async () => {
       try {
+        // Cargar todas las zonas y las actuales del proveedor
         const zonas = await getZonas();
         setTodasLasZonas(zonas);
         const actuales = await obtenerZonasPorProveedor(proveedor.id);
-        setSeleccionadas(actuales); // Se espera array de IDs
+        setSeleccionadas(actuales); // Array de IDs de zonas
       } catch (e) {
         mostrarError("Error al cargar zonas: " + e.message);
       }
@@ -36,9 +42,13 @@ const ModalEditarProveedorZona = ({
     cargarDatos();
   }, [proveedor]);
 
+  /**
+   * Actualiza las zonas asignadas al proveedor
+   */
   const handleSubmit = async () => {
     setCargando(true);
     try {
+      // Actualiza las relaciones proveedor-zona
       await actualizarZonasProveedor(proveedor.id, seleccionadas);
       mostrarExito("Zonas actualizadas correctamente");
       onActualizar();
@@ -52,7 +62,7 @@ const ModalEditarProveedorZona = ({
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Header */}
+      {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Editar zonas</MainH2>
         <MainButton
@@ -76,7 +86,7 @@ const ModalEditarProveedorZona = ({
         </div>
       </div>
 
-      {/* Selector de zonas */}
+      {/* Selector de zonas con estado actual */}
       <div className="mb-6">
         <CheckboxDropdown
           label="Zonas asignadas"

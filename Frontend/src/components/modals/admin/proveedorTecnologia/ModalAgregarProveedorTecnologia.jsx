@@ -1,4 +1,3 @@
-// src/components/modals/admin/relaciones/ModalAgregarProveedorTecnologia.jsx
 import { useEffect, useState } from "react";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import MainButton from "../../../ui/MainButton";
@@ -11,14 +10,21 @@ import { obtenerTecnologias } from "../../../../services/tecnologiaService";
 import { obtenerProveedoresSinTecnologias, actualizarTecnologiasProveedor } from "../../../../services/relaciones/proveedorTecnologiaService";
 
 const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
+  // Estados para las opciones de selección
   const [proveedores, setProveedores] = useState([]);
   const [tecnologias, setTecnologias] = useState([]);
+  
+  // Estados para las selecciones del usuario
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [tecnologiasSeleccionadas, setTecnologiasSeleccionadas] = useState([]);
 
+  // Estado de carga para operaciones asíncronas
   const [loading, setLoading] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
 
+  /**
+   * Carga inicial de proveedores sin tecnologías y todas las tecnologías disponibles
+   */
   useEffect(() => {
     const cargarDatos = async () => {
       try {
@@ -35,6 +41,9 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
     cargarDatos();
   }, []);
 
+  /**
+   * Procesa la asignación de tecnologías al proveedor seleccionado
+   */
   const handleSubmit = async () => {
     if (!proveedorSeleccionado) {
       mostrarError("Debes seleccionar un proveedor.");
@@ -42,6 +51,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
     }
     setLoading(true);
     try {
+      // Asigna las tecnologías seleccionadas al proveedor
       await actualizarTecnologiasProveedor(
         parseInt(proveedorSeleccionado),
         tecnologiasSeleccionadas
@@ -58,6 +68,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Asignar tecnologías a proveedor</MainH2>
         <MainButton
@@ -71,7 +82,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
         </MainButton>
       </div>
 
-      {/* Selector proveedor */}
+      {/* Selector de proveedor */}
       <div className="mb-6">
         <Select
           label="Proveedor"
@@ -87,7 +98,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
         />
       </div>
 
-      {/* Selector tecnologías */}
+      {/* Selector de tecnologías múltiples */}
       <div className="mb-6">
         <CheckboxDropdown
           label="Tecnologías a asignar"
@@ -105,6 +116,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
 
       <hr className="border-texto/15 mb-6" />
 
+      {/* Botones de acción */}
       <div className="flex flex-col sm:flex-row gap-3">
         <MainButton
           type="button"

@@ -10,9 +10,6 @@ import { subirLogoProveedor, eliminarLogoPorURL } from "../../../../services/pro
 import { useAlerta } from "../../../../context/AlertaContext";
 import ModalContenedor from "../../../ui/ModalContenedor";
 
-/**
- * Modal para editar información de un proveedor existente desde el panel administrativo
- */
 const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   // Estados del formulario con información actual del proveedor
   const [form, setForm] = useState({ ...proveedor });

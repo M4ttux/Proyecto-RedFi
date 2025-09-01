@@ -1,4 +1,3 @@
-// src/components/modals/admin/relaciones/ModalAgregarProveedorZona.jsx
 import { useEffect, useState } from "react";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import MainButton from "../../../ui/MainButton";
@@ -11,14 +10,21 @@ import { obtenerProveedoresSinZonas, actualizarZonasProveedor } from "../../../.
 import { getZonas } from "../../../../services/zonaService";
 
 const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
+  // Estados para las opciones de selección
   const [proveedores, setProveedores] = useState([]);
   const [zonas, setZonas] = useState([]);
+  
+  // Estados para las selecciones del usuario
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [zonasSeleccionadas, setZonasSeleccionadas] = useState([]);
 
+  // Estado de carga para operaciones asíncronas
   const [loading, setLoading] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
 
+  /**
+   * Carga inicial de proveedores sin zonas asignadas y todas las zonas disponibles
+   */
   useEffect(() => {
     const cargarDatos = async () => {
       try {
@@ -35,6 +41,9 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
     cargarDatos();
   }, []);
 
+  /**
+   * Procesa la asignación de zonas al proveedor seleccionado
+   */
   const handleSubmit = async () => {
     if (!proveedorSeleccionado) {
       mostrarError("Debes seleccionar un proveedor.");
@@ -42,6 +51,7 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
     }
     setLoading(true);
     try {
+      // Asigna las zonas seleccionadas al proveedor
       await actualizarZonasProveedor(
         parseInt(proveedorSeleccionado),
         zonasSeleccionadas
@@ -58,6 +68,7 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Asignar zonas a proveedor</MainH2>
         <MainButton
@@ -71,7 +82,7 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
         </MainButton>
       </div>
 
-      {/* Selector proveedor */}
+      {/* Selector de proveedor */}
       <div className="mb-6">
         <Select
           label="Proveedor"
@@ -84,7 +95,7 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
         />
       </div>
 
-      {/* Selector zonas */}
+      {/* Selector de zonas múltiples */}
       <div className="mb-6">
         <CheckboxDropdown
           label="Zonas a asignar"
@@ -100,8 +111,10 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
         />
       </div>
 
+      {/* Divider */}
       <hr className="border-texto/15 mb-6" />
 
+      {/* Botones de acción */}
       <div className="flex flex-col sm:flex-row gap-3">
         <MainButton
           type="button"

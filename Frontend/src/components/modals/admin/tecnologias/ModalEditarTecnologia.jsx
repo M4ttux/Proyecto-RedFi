@@ -9,14 +9,17 @@ import { editarTecnologia } from "../../../../services/tecnologiaService";
 import { useAlerta } from "../../../../context/AlertaContext";
 
 const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
+  // Estado del formulario con datos de la tecnología a editar
   const [formData, setFormData] = useState({
     tecnologia: "",
     descripcion: "",
   });
 
+  // Estado de carga para operaciones asíncronas
   const [loading, setLoading] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
 
+  // Inicializa el formulario con los datos de la tecnología recibida
   useEffect(() => {
     if (tecnologia) {
       setFormData({
@@ -26,6 +29,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
     }
   }, [tecnologia]);
 
+  // Maneja los cambios en los campos del formulario
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -33,6 +37,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
     }));
   };
 
+  // Procesa la actualización de la tecnología existente
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -52,7 +57,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-        {/* Encabezado */}
+        {/* Encabezado del modal */}
         <div className="flex justify-between mb-6">
           <MainH2 className="mb-0">Editar tecnología</MainH2>
           <MainButton
@@ -66,7 +71,9 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
           </MainButton>
         </div>
 
+        {/* Formulario de edición de tecnología */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Campo nombre de tecnología (obligatorio) */}
           <Input
             name="tecnologia"
             label={
@@ -81,6 +88,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
             disabled={loading}
           />
 
+          {/* Campo descripción (opcional) */}
           <Textarea
             name="descripcion"
             label="Descripción"
@@ -91,6 +99,7 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
             disabled={loading}
           />
 
+          {/* Botones de acción */}
           <div className="flex gap-3 pt-4">
             <MainButton
               type="button"
@@ -110,6 +119,8 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
               {loading ? "Guardando..." : "Guardar cambios"}
             </MainButton>
           </div>
+          
+          {/* Nota informativa sobre campos obligatorios */}
           <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
             Los campos marcados con <span className="text-red-600">*</span> son

@@ -17,6 +17,7 @@ import { guardarBoleta } from "../../../services/boletas/crud";
 import { useAlerta } from "../../../context/AlertaContext";
 
 const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificaciones }) => {
+  // Estado del formulario con datos de la boleta
   const [form, setForm] = useState({
     mes: "",
     anio: "",
@@ -27,11 +28,13 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     proveedorOtro: "",
   });
 
+  // Estados para la gestión del archivo y carga
   const [loading, setLoading] = useState(false);
   const [archivo, setArchivo] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const { mostrarExito, mostrarError } = useAlerta();
 
+  // Opciones disponibles para el selector de mes
   const meses = [
     { label: "Seleccionar mes", value: "" },
     { label: "Enero", value: "Enero" },
@@ -48,6 +51,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     { label: "Diciembre", value: "Diciembre" },
   ];
 
+  // Opciones disponibles para el selector de proveedor
   const proveedores = [
     { label: "Seleccionar proveedor", value: "" },
     { label: "Fibertel", value: "Fibertel" },
@@ -57,14 +61,17 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     { label: "Otro", value: "Otro" },
   ];
 
+  // Maneja los cambios en los campos de texto del formulario
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Maneja los cambios en los campos de selección
   const handleSelectChange = (campo) => (valor) => {
     setForm((prev) => ({ ...prev, [campo]: valor }));
   };
 
+  // Procesa el envío del formulario y guarda la boleta
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -147,6 +154,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
 
   return (
     <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar Nueva Boleta</MainH2>
         <MainButton
@@ -159,9 +167,11 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
         </MainButton>
       </div>
       
+      {/* Formulario de creación de boleta */}
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Campos principales del formulario */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Select de mes */}
+          {/* Selector de mes (obligatorio) */}
           <Select
             label={
               <>
@@ -177,6 +187,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             required
           />
 
+          {/* Campo año (obligatorio) */}
           <Input
             label={
               <>
@@ -194,6 +205,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             required
           />
 
+          {/* Campo monto (obligatorio) */}
           <Input
             label={
               <>
@@ -211,7 +223,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             icon={IconCurrencyDollar}
           />
 
-          {/* Select de proveedor */}
+          {/* Selector de proveedor (obligatorio) */}
           <Select
             label={
               <>
@@ -228,7 +240,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             icon={IconWifi}
           />
 
-          {/* Solo se muestra si elige "Otro" */}
+          {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
           {form.proveedor === "Otro" && (
             <Input
               label={
@@ -244,6 +256,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             />
           )}
 
+          {/* Campo fecha de vencimiento (obligatorio) */}
           <Input
             label={
               <>
@@ -258,6 +271,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             icon={IconCalendar}
           />
 
+          {/* Campo fin de promoción (opcional) */}
           <Input
             label="Fin de promoción"
             name="promoHasta"
@@ -268,6 +282,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           />
         </div>
         
+        {/* Campo de carga de archivo */}
         <div className="flex justify-center text-center">
           <FileInput
             id="archivo"
@@ -280,6 +295,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           />
         </div>
 
+        {/* Botones de acción */}
         <div className="flex justify-center gap-4">
           <MainButton
             type="button"
@@ -298,6 +314,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           </MainButton>
         </div>
         
+        {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
             Los campos marcados con <span className="text-red-600">*</span> son

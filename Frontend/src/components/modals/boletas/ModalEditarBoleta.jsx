@@ -10,12 +10,12 @@ import {
   IconCalendar,
   IconCurrencyDollar,
   IconWifi,
-  IconFileTypePdf,
 } from "@tabler/icons-react";
 import { actualizarBoletaConImagen } from "../../../services/boletas/crud";
 import { useAlerta } from "../../../context/AlertaContext";
 
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
+  // Verifica si el proveedor está en la lista predefinida
   const esProveedorValido = [
     "Fibertel",
     "Telecentro",
@@ -23,12 +23,14 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     "Movistar",
   ].includes(boleta.proveedor);
 
+  // Convierte fecha ISO a formato YYYY-MM-DD para inputs de tipo date
   const formatFecha = (fecha) => {
     if (!fecha) return "";
     const d = new Date(fecha);
     return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
   };
 
+  // Estado del formulario inicializado con datos de la boleta existente
   const [form, setForm] = useState({
     ...boleta,
     proveedor: esProveedorValido ? boleta.proveedor : "Otro",
@@ -37,6 +39,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     promoHasta: formatFecha(boleta.promo_hasta), // <-- este nombre depende del campo original
   });
 
+  // Estados para la gestión de archivos e imagen
   const [archivoNuevo, setArchivoNuevo] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -44,6 +47,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
   const { mostrarExito, mostrarError } = useAlerta();
 
+  // Opciones disponibles para el selector de mes
   const meses = [
     "Enero",
     "Febrero",
@@ -59,28 +63,34 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     "Diciembre",
   ];
 
+  // Opciones disponibles para el selector de proveedor
   const proveedores = ["Fibertel", "Telecentro", "Claro", "Movistar", "Otro"];
 
+  // Inicializa la vista previa con la imagen existente de la boleta
   useEffect(() => {
     if (boleta.url_imagen) {
       setPreview(boleta.url_imagen);
     }
   }, [boleta.url_imagen]);
 
+  // Maneja los cambios en los campos de texto del formulario
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Maneja los cambios en los campos de selección
   const handleSelectChange = (campo) => (valor) => {
     setForm((prev) => ({ ...prev, [campo]: valor }));
   };
 
+  // Elimina la imagen actual y resetea el archivo nuevo
   const handleClearImagen = () => {
     setArchivoNuevo(null);
     setPreview(null);
     setImagenEliminada(true);
   };
 
+  // Procesa la actualización de la boleta con los cambios realizados
   const handleGuardarCambios = async () => {
     setLoading(true);
     try {
@@ -116,7 +126,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Encabezado */}
+      {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Modificar boleta</MainH2>
         <MainButton
@@ -130,8 +140,9 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
         </MainButton>
       </div>
 
-      {/* Formulario */}
+      {/* Formulario de edición de boleta */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Selector de mes */}
         <Select
           name="mes"
           value={form.mes}
@@ -139,6 +150,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           options={meses}
           label="Mes"
         />
+        
+        {/* Campo año */}
         <Input
           name="anio"
           value={form.anio}
@@ -146,6 +159,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           placeholder="Año"
           label="Año"
         />
+        
+        {/* Campo monto */}
         <Input
           name="monto"
           type="number"
@@ -155,6 +170,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           label="Monto"
           icon={IconCurrencyDollar}
         />
+        
+        {/* Selector de proveedor */}
         <Select
           name="proveedor"
           value={form.proveedor}
@@ -164,6 +181,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           icon={IconWifi}
         />
 
+        {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
         {form.proveedor === "Otro" && (
           <Input
             label="Nombre del proveedor"
@@ -175,6 +193,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           />
         )}
 
+        {/* Campo fecha de vencimiento */}
         <Input
           name="vencimiento"
           type="date"
@@ -185,6 +204,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           icon={IconCalendar}
         />
 
+        {/* Campo fin de promoción */}
         <Input
           name="promoHasta"
           type="date"
@@ -195,7 +215,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           icon={IconCalendar}
         />
 
-        {/* Imagen */}
+        {/* Campo de carga/edición de archivo */}
         <div className="md:col-span-2 text-center">
           <FileInput
             id="archivoNuevo"
@@ -216,7 +236,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
         </div>
       </div>
 
-      {/* Acciones */}
+      {/* Botones de acción */}
       <div className="flex justify-center gap-4 pt-4">
         <MainButton
           type="button"

@@ -1,4 +1,3 @@
-// src/components/modals/admin/relaciones/ModalEditarProveedorTecnologia.jsx
 import { useEffect, useState } from "react";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import MainButton from "../../../ui/MainButton";
@@ -17,18 +16,25 @@ const ModalEditarProveedorTecnologia = ({
   onClose,
   onActualizar,
 }) => {
+  // Estados para las opciones y selecciones
   const [todasLasTecnologias, setTodasLasTecnologias] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState([]);
+  
+  // Estado de carga para operaciones asíncronas
   const [cargando, setCargando] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
 
+  /**
+   * Carga todas las tecnologías disponibles y las actualmente asignadas al proveedor
+   */
   useEffect(() => {
     const cargarDatos = async () => {
       try {
+        // Cargar todas las tecnologías y las actuales del proveedor
         const tecs = await obtenerTecnologias();
         setTodasLasTecnologias(tecs);
         const actuales = await obtenerTecnologiasPorProveedor(proveedor.id);
-        setSeleccionadas(actuales); // Se espera array de IDs
+        setSeleccionadas(actuales); // Array de IDs de tecnologías
       } catch (e) {
         mostrarError("Error al cargar tecnologías: " + e.message);
       }
@@ -36,9 +42,13 @@ const ModalEditarProveedorTecnologia = ({
     cargarDatos();
   }, [proveedor]);
 
+  /**
+   * Actualiza las tecnologías asignadas al proveedor
+   */
   const handleSubmit = async () => {
     setCargando(true);
     try {
+      // Actualiza las relaciones proveedor-tecnología
       await actualizarTecnologiasProveedor(proveedor.id, seleccionadas);
       mostrarExito("Tecnologías actualizadas correctamente");
       onActualizar();
@@ -52,7 +62,7 @@ const ModalEditarProveedorTecnologia = ({
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Header */}
+      {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Editar tecnologías</MainH2>
         <MainButton
@@ -76,7 +86,7 @@ const ModalEditarProveedorTecnologia = ({
         </div>
       </div>
 
-      {/* Selector de tecnologías */}
+      {/* Selector de tecnologías con estado actual */}
       <div className="mb-6">
         <CheckboxDropdown
           label="Tecnologías asignadas"
