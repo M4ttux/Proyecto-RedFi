@@ -7,25 +7,26 @@ import { useTheme } from "../../context/ThemeContext";
 import { useAlerta } from "../../context/AlertaContext";
 import { ejecutarSpeedtest } from "../../services/speedtestService";
 
-/**
- * Página de Test de Velocidad
- *
- * Permite medir la velocidad de conexión mostrando medidores circulares en tiempo real.
- */
 const TestVelocidad = () => {
   const { currentTheme } = useTheme();
   const { mostrarError, mostrarExito } = useAlerta();
+  
+  // Estados para el control del test y resultados
   const [loading, setLoading] = useState(false);
   const [resultados, setResultados] = useState(null);
-  // Estado para el progreso visual de cada métrica
+  
+  // Estado para el progreso visual animado de cada métrica durante el test
   const [progreso, setProgreso] = useState({ descarga: 0, subida: 0, latencia: 0 });
 
+  // Inicia la ejecución del test de velocidad
   const iniciarTest = async () => {
     setLoading(true);
+    // Reinicia estados para nuevo test
     setResultados(null);
     setProgreso({ descarga: 0, subida: 0, latencia: 0 });
 
     try {
+      // Ejecuta el test mediante el servicio de speedtest
       const data = await ejecutarSpeedtest();
       setResultados(data);
       mostrarExito("Test de velocidad completado");
@@ -36,17 +37,19 @@ const TestVelocidad = () => {
     }
   };
 
+  // Formatea números para mostrar con precisión decimal
   const formatNumber = (value) => {
     if (value == null || isNaN(value)) return "?";
     return Number(value).toFixed(2);
   };
 
-  // Animación de los medidores: incrementos pequeños y frecuentes hasta 99 %
+  // Simula progreso visual durante la carga del test
   useEffect(() => {
     let interval;
     if (loading) {
       interval = setInterval(() => {
         setProgreso((prev) => {
+          // Función para incrementar progreso con desaceleración exponencial
           const incrementar = (valor) => {
             if (valor >= 99) return valor;
             const remaining = 99 - valor;
@@ -59,27 +62,34 @@ const TestVelocidad = () => {
             latencia: incrementar(prev.latencia),
           };
         });
-      }, 100);
+      }, 100); // Actualización cada 100ms para animación fluida
     } else {
+      // Completa la animación al 100% cuando el test termina
       setProgreso({ descarga: 100, subida: 100, latencia: 100 });
     }
     return () => {
+      // Limpia el intervalo para evitar memory leaks
       if (interval) clearInterval(interval);
     };
   }, [loading]);
 
-  // Componente para dibujar el medidor circular
+  // Componente para dibujar el medidor circular radial
   const RadialGauge = ({ label, value, unit, progress }) => {
+    // Determina qué valor mostrar según el estado del test
     const mostrarValor = (() => {
       if (resultados && !loading) {
+        // Muestra resultado final del test
         return `${formatNumber(value)} ${unit}`;
       } else if (loading) {
+        // Muestra progreso animado durante el test
         return `${Math.round(progress)}%`;
       } else {
+        // Estado inicial antes del test
         return "0.00 " + unit;
       }
     })();
     
+    // Colores del medidor según el tema actual
     const backgroundRing =
       currentTheme === "light" ? "var(--color-secundario)" : "rgba(255,255,255,0.1)";
     const ringColor =
@@ -87,14 +97,17 @@ const TestVelocidad = () => {
     
     return (
       <div className="flex flex-col items-center">
+        {/* Contenedor del medidor circular */}
         <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+          {/* Anillo de progreso con gradiente cónico */}
           <div
             className="absolute inset-0 rounded-full"
             style={{
               background: `conic-gradient(${ringColor} ${progress}%, ${backgroundRing} 0)`,
-              transform: "rotate(-90deg)",
+              transform: "rotate(-90deg)", // Inicia desde arriba
             }}
           ></div>
+          {/* Centro del medidor con valor y estilo según tema */}
           <div
             className="absolute inset-4 rounded-full flex flex-col items-center justify-center text-center"
             style={{
@@ -105,6 +118,7 @@ const TestVelocidad = () => {
             <span className="text-xl font-bold sm:text-2xl">{mostrarValor}</span>
           </div>
         </div>
+        {/* Etiqueta descriptiva del medidor */}
         <p className="mt-2 font-medium">{label}</p>
       </div>
     );
@@ -113,13 +127,13 @@ const TestVelocidad = () => {
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
-        {/* Título y descripción */}
+        {/* Encabezado de la herramienta */}
         <div className="text-center mb-8">
           <MainH1 icon={IconGauge}>Test de velocidad</MainH1>
           <p className="text-lg">Medí la velocidad de tu conexión a internet en tiempo real.</p>
         </div>
 
-        {/* Botón para iniciar el test */}
+        {/* Botón para iniciar o mostrar estado del test */}
         <div className="flex justify-center">
           <MainButton
             onClick={iniciarTest}
@@ -131,20 +145,23 @@ const TestVelocidad = () => {
           </MainButton>
         </div>
 
-        {/* Medidores radiales - siempre visibles */}
+        {/* Grid de medidores radiales - siempre visibles */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 justify-items-center">
+          {/* Medidor de velocidad de descarga */}
           <RadialGauge
             label="Descarga"
             value={resultados?.downloadSpeed}
             unit="Mbps"
             progress={progreso.descarga}
           />
+          {/* Medidor de velocidad de subida */}
           <RadialGauge
             label="Subida"
             value={resultados?.uploadSpeed}
             unit="Mbps"
             progress={progreso.subida}
           />
+          {/* Medidor de latencia de conexión */}
           <RadialGauge
             label="Latencia"
             value={resultados?.latency}
@@ -153,9 +170,7 @@ const TestVelocidad = () => {
           />
         </div>
 
-        
-
-        {/* Botón para volver a herramientas */}
+        {/* Navegación de regreso */}
         <div className="text-center">
           <MainLinkButton to="/herramientas" variant="secondary">
             <IconArrowLeft />

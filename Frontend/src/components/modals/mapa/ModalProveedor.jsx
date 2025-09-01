@@ -12,20 +12,21 @@ import Badge from "../../ui/Badge";
 import Avatar from "../../ui/Avatar";
 
 const ModalProveedor = ({ proveedor, onClose }) => {
+  // Verifica que existe el proveedor antes de renderizar
   if (!proveedor) return null;
 
-  // Cálculo de reseñas (cantidad y promedio)
+  // Calcula el promedio de estrellas basado en las reseñas del proveedor
   const promedioEstrellas = proveedor.reseñas?.length
     ? proveedor.reseñas.reduce((sum, r) => sum + r.estrellas, 0) /
       proveedor.reseñas.length
     : 0;
 
-  // Obtener tecnologías desde relación
+  // Obtiene las tecnologías disponibles desde la relación ProveedorTecnologia
   const tecnologias =
     proveedor.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
     [];
 
-  // renderStars
+  // Renderiza el sistema de estrellas con promedio de calificaciones
   const renderStars = (promedio) => {
     const stars = [];
     const promedioRedondeado = Math.round(promedio || 0);
@@ -54,7 +55,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Botón cerrar */}
+      {/* Botón de cierre del modal */}
       <MainButton
         onClick={onClose}
         variant="cross"
@@ -64,7 +65,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
         <IconX size={24} />
       </MainButton>
 
-      {/* Logotipo o ícono del proveedor */}
+      {/* Logotipo o ícono representativo del proveedor */}
       <div className="flex justify-center mb-4">
         {proveedor.logotipo ? (
           <Avatar
@@ -80,18 +81,19 @@ const ModalProveedor = ({ proveedor, onClose }) => {
         )}
       </div>
 
-      {/* Nombre */}
+      {/* Nombre del proveedor */}
       <MainH2 className="text-center justify-center">{proveedor.nombre}</MainH2>
 
-      {/* Estrellas */}
+      {/* Sistema de calificación con promedio de estrellas */}
       <div className="mb-4 flex justify-center">
         {renderStars(promedioEstrellas)}
       </div>
 
-      {/* Tecnologías */}
+      {/* Tecnologías disponibles con badges responsivos */}
       <div className="flex flex-wrap justify-center gap-2 mb-4">
         {tecnologias.length > 0 ? (
           <>
+            {/* Primeras tecnologías visibles */}
             {tecnologias.slice(0, 2).map((tec, index) => (
               <Badge
                 key={index}
@@ -103,14 +105,14 @@ const ModalProveedor = ({ proveedor, onClose }) => {
               </Badge>
             ))}
 
-            {/* "+N más" en mobile: cuenta desde 1 */}
+            {/* Contador de tecnologías adicionales en mobile */}
             {tecnologias.length > 1 && (
               <Badge variant="muted" size="xs" onlyMobile>
                 +{tecnologias.length - 1} más
               </Badge>
             )}
 
-            {/* "+N más" en sm+: cuenta desde 2 */}
+            {/* Contador de tecnologías adicionales en desktop */}
             {tecnologias.length > 2 && (
               <Badge variant="muted" size="xs" onlyDesktop>
                 +{tecnologias.length - 2} más
@@ -122,12 +124,12 @@ const ModalProveedor = ({ proveedor, onClose }) => {
         )}
       </div>
 
-      {/* Descripción */}
+      {/* Descripción del proveedor */}
       <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-center leading-relaxed mb-6">
         {proveedor.descripcion || "Este proveedor aún no tiene descripción."}
       </p>
 
-      {/* Botón "Más información" */}
+      {/* Botón para ver más información del proveedor */}
       <MainLinkButton
         to={`/proveedores/${proveedor.id}`}
         className="w-full px-4 py-2"

@@ -1,11 +1,13 @@
 import classNames from "classnames";
 
+// Configuración de tamaños disponibles para el badge
 const SIZE_MAP = {
   xs: "text-[11px] px-2 py-0.5",
   sm: "text-xs px-2 py-1",
   md: "text-sm px-3 py-1.5",
 };
 
+// Configuración de variantes de color y estilo
 const VARIANT_MAP = {
   accent: "bg-acento/10 text-acento",
   muted: "bg-texto/10 text-texto",
@@ -32,27 +34,29 @@ const Badge = ({
   iconSize = 14,
   ...props
 }) => {
+  // Determina el elemento HTML a renderizar (span por defecto)
   const Tag = as;
 
+  // Configura las clases CSS según las props
   const roundedCls = rounded === "full" ? "rounded-full" : "rounded-lg";
   const sizeCls = SIZE_MAP[size] || SIZE_MAP.sm;
   const variantCls =
     bgClass || textClass
-      ? classNames(bgClass, textClass)
-      : VARIANT_MAP[variant] || VARIANT_MAP.accent;
+      ? classNames(bgClass, textClass) // Usa clases personalizadas si se proporcionan
+      : VARIANT_MAP[variant] || VARIANT_MAP.accent; // Usa variante predefinida
 
-  // 🛠️ Display sin conflictos:
+  // Maneja la visibilidad responsiva del badge
   const displayCls = onlyMobile
-    ? "inline-flex sm:hidden"
+    ? "inline-flex sm:hidden" // Solo visible en móvil
     : (onlyDesktop || collapseOnMobile)
-    ? "hidden sm:inline-flex"
-    : "inline-flex";
+    ? "hidden sm:inline-flex" // Solo visible en desktop
+    : "inline-flex"; // Siempre visible
 
   return (
     <Tag
       className={classNames(
-        displayCls,                 // <- decide el display aquí
-        "items-center gap-1",       // (sin inline-flex en la base)
+        displayCls,                 // Controla la visibilidad responsiva
+        "items-center gap-1",       // Layout flexbox para icono y texto
         roundedCls,
         sizeCls,
         variantCls,
@@ -60,7 +64,9 @@ const Badge = ({
       )}
       {...props}
     >
+      {/* Renderiza icono opcional si se proporciona */}
       {Icon && <Icon size={iconSize} />}
+      {/* Contenido del badge */}
       {children}
     </Tag>
   );

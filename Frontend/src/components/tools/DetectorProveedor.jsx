@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IconMapPin, IconWorld } from "@tabler/icons-react";
 import MainH3 from "../ui/MainH3";
-import MainLoader from "../ui/MainLoader"; // si tenés uno
+import MainLoader from "../ui/MainLoader";
 import { useTheme } from "../../context/ThemeContext";
 
 const DetectorProveedor = () => {

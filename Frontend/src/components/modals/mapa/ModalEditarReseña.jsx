@@ -7,15 +7,18 @@ import MainH2 from "../../ui/MainH2";
 import TextArea from "../../ui/Textarea";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
+  // Estado del formulario con datos de la reseña a editar
   const [formData, setFormData] = useState({
     comentario: "",
     estrellas: 0,
     proveedor_id: "",
   });
 
+  // Estados para la gestión de carga y datos de proveedores
   const [loading, setLoading] = useState(false);
   const [proveedores, setProveedores] = useState([]);
 
+  // Carga la lista de proveedores cuando se abre el modal
   useEffect(() => {
     const cargarProveedores = async () => {
       if (isOpen) {
@@ -31,6 +34,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
     cargarProveedores();
   }, [isOpen]);
 
+  // Inicializa el formulario con los datos de la reseña existente
   useEffect(() => {
     if (reseña) {
       setFormData({
@@ -41,6 +45,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
     }
   }, [reseña]);
 
+  // Maneja los cambios en los campos de texto del formulario
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -48,6 +53,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
     });
   };
 
+  // Maneja la selección de estrellas para la calificación
   const handleStarClick = (rating) => {
     setFormData({
       ...formData,
@@ -55,6 +61,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
     });
   };
 
+  // Procesa el envío del formulario y guarda los cambios
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -68,6 +75,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
     }
   };
 
+  // No renderiza nada si el modal está cerrado
   if (!isOpen) return null;
 
   return (
@@ -86,8 +94,10 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
         </MainButton>
       </div>
 
+      {/* Formulario de edición de reseña */}
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
+          {/* Información del proveedor (solo lectura) */}
           <div>
             <label className="block font-medium text-texto mb-2">
               Proveedor
@@ -105,7 +115,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             </div>
           </div>
 
-          {/* Estrellas */}
+          {/* Sistema de calificación con estrellas */}
           <div>
             <label className="block font-medium text-texto mb-2">
               Calificación
@@ -129,6 +139,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             </div>
           </div>
 
+          {/* Campo de comentario (obligatorio) */}
           <div>
             <TextArea
               label={
@@ -147,6 +158,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           </div>
         </div>
 
+        {/* Botones de acción */}
         <div className="flex gap-3 mt-6">
           <MainButton
             type="button"
@@ -166,6 +178,8 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             {loading ? "Guardando..." : "Guardar"}
           </MainButton>
         </div>
+        
+        {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/50 italic">
             Los campos marcados con <span className="text-red-600">*</span> son

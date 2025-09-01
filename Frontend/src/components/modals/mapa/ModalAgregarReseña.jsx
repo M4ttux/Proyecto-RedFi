@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
   IconX,
   IconMapPin,
-  IconLoader2,
   IconCarambola,
   IconCarambolaFilled,
   IconHandFinger,
@@ -27,12 +26,16 @@ const ModalAgregarReseña = ({
   coordenadasSeleccionadas,
   onSeleccionarUbicacion,
 }) => {
+  // Estado del formulario de reseña
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [comentario, setComentario] = useState("");
   const [estrellas, setEstrellas] = useState(5);
   const [loading, setLoading] = useState(false);
-  const [pasoActual, setPasoActual] = useState(1); // 1: Ubicación, 2: Proveedor, 3: Calificación, 4: Comentario
+  
+  // Control del flujo de pasos del formulario (1: Ubicación, 2: Proveedor, 3: Calificación, 4: Comentario)
+  const [pasoActual, setPasoActual] = useState(1);
 
+  // Hook personalizado para validación de ubicación y obtención de proveedores
   const {
     ubicacionActual,
     zonaActual,
@@ -45,7 +48,7 @@ const ModalAgregarReseña = ({
     limpiarUbicacion,
   } = useValidacionUbicacion(boundsCorrientes);
 
-  // Resetear estado cuando se abre el modal
+  // Resetea el estado del formulario cuando se abre el modal
   useEffect(() => {
     if (isOpen) {
       setPasoActual(1);
@@ -56,7 +59,7 @@ const ModalAgregarReseña = ({
     }
   }, [isOpen, limpiarUbicacion]);
 
-  // Validar coordenadas seleccionadas desde el mapa
+  // Valida coordenadas seleccionadas desde el mapa y avanza automáticamente
   useEffect(() => {
     if (coordenadasSeleccionadas && isOpen) {
       const validarYAvanzar = async () => {
@@ -69,6 +72,7 @@ const ModalAgregarReseña = ({
     }
   }, [coordenadasSeleccionadas, isOpen, validarUbicacion]); // Remover validarUbicacion de las dependencias
 
+  // Maneja la obtención de ubicación actual del dispositivo
   const handleUbicacionActual = async () => {
     const success = await usarUbicacionActual();
     if (success) {
@@ -76,23 +80,28 @@ const ModalAgregarReseña = ({
     }
   };
 
+  // Cierra el modal y activa el modo de selección en el mapa
   const handleSeleccionarEnMapa = () => {
     onClose();
     onSeleccionarUbicacion();
   };
 
+  // Maneja la selección del proveedor de internet
   const handleProveedorChange = (proveedorId) => {
     setProveedorSeleccionado(proveedorId);
   };
 
+  // Maneja la selección de estrellas para la calificación
   const handleStarClick = (rating) => {
     setEstrellas(rating);
   };
 
+  // Maneja los cambios en el campo de comentario
   const handleComentarioChange = (e) => {
     setComentario(e.target.value);
   };
 
+  // Avanza al siguiente paso del formulario con validaciones
   const handleContinuar = () => {
     if (pasoActual === 1) {
       // En el paso 1, validar que se haya seleccionado una ubicación
@@ -110,12 +119,14 @@ const ModalAgregarReseña = ({
     }
   };
 
+  // Retrocede al paso anterior del formulario
   const handleAtras = () => {
     if (pasoActual > 1) {
       setPasoActual(pasoActual - 1);
     }
   };
 
+  // Procesa el envío final de la reseña con validaciones completas
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -140,13 +151,16 @@ const ModalAgregarReseña = ({
     }
   };
 
+  // Cierra el modal y limpia los datos de ubicación
   const handleCerrar = () => {
     onClose();
     limpiarUbicacion();
   };
 
+  // Renderiza el paso 1: Selección de ubicación
   const renderPasoUbicacion = () => (
     <div className="space-y-4">
+      {/* Instrucciones para selección de ubicación */}
       <div className="text-center">
         <IconMapPin size={48} className="mx-auto mb-4 text-acento" />
         <MainH3 className="text-center justify-center">
@@ -157,6 +171,7 @@ const ModalAgregarReseña = ({
         </p>
       </div>
 
+      {/* Opciones para seleccionar ubicación */}
       <div className="flex flex-row gap-3">
         <MainButton
           type="button"
@@ -181,7 +196,7 @@ const ModalAgregarReseña = ({
         </MainButton>
       </div>
 
-      {/* Botones de navegación */}
+      {/* Botones de navegación del paso 1 */}
       <div className="flex gap-3 pt-4">
         <MainButton
           type="button"
@@ -204,8 +219,10 @@ const ModalAgregarReseña = ({
     </div>
   );
 
+  // Renderiza el paso 2: Selección de proveedor
   const renderPasoProveedor = () => (
     <div className="space-y-4">
+      {/* Confirmación de ubicación válida */}
       <div className="text-center">
         <IconCheck size={48} className="mx-auto mb-4 text-green-700" />
         <MainH3 className="text-center justify-center">Ubicación válida</MainH3>
@@ -214,6 +231,7 @@ const ModalAgregarReseña = ({
         </p>
       </div>
 
+      {/* Selector de proveedor disponible en la zona */}
       <Select
         label="Selecciona tu proveedor de internet"
         value={proveedorSeleccionado}
@@ -228,6 +246,7 @@ const ModalAgregarReseña = ({
         placeholder="Seleccionar proveedores disponibles"
       />
 
+      {/* Mensaje cuando no hay proveedores disponibles */}
       {proveedoresDisponibles.length === 0 && !cargandoProveedores && (
         <div className="text-center text-texto">
           <IconAlertCircle size={24} className="mx-auto mb-2" />
@@ -235,7 +254,7 @@ const ModalAgregarReseña = ({
         </div>
       )}
 
-      {/* Botones de navegación */}
+      {/* Botones de navegación del paso 2 */}
       <div className="flex gap-3 pt-4">
         <MainButton
           type="button"
@@ -258,8 +277,10 @@ const ModalAgregarReseña = ({
     </div>
   );
 
+  // Renderiza el paso 3: Sistema de calificación con estrellas
   const renderPasoCalificacion = () => (
     <div className="space-y-4">
+      {/* Instrucciones para calificación */}
       <div className="text-center">
         <MainH3 className="text-center justify-center">
           Califica tu experiencia
@@ -277,6 +298,7 @@ const ModalAgregarReseña = ({
         </p>
       </div>
 
+      {/* Sistema interactivo de estrellas */}
       <div className="flex justify-center gap-1 text-yellow-600 bg-texto/5 font-bold px-6 py-4 rounded-full border border-texto/15">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
@@ -295,6 +317,7 @@ const ModalAgregarReseña = ({
         ))}
       </div>
 
+      {/* Descripción textual de la calificación */}
       <div className="text-center">
         <p className="text-sm text-texto/75">
           {estrellas === 1 && "Muy malo"}
@@ -305,7 +328,7 @@ const ModalAgregarReseña = ({
         </p>
       </div>
 
-      {/* Botones de navegación */}
+      {/* Botones de navegación del paso 3 */}
       <div className="flex gap-3 pt-4">
         <MainButton
           type="button"
@@ -327,8 +350,10 @@ const ModalAgregarReseña = ({
     </div>
   );
 
+  // Renderiza el paso 4: Campo de comentario y envío final
   const renderPasoComentario = () => (
     <div className="space-y-4">
+      {/* Instrucciones para el comentario */}
       <div className="text-center">
         <MainH3 className="text-center justify-center">
           Cuéntanos más
@@ -336,6 +361,7 @@ const ModalAgregarReseña = ({
         <p className="text-texto">Comparte tu experiencia con otros usuarios</p>
       </div>
 
+      {/* Campo de texto para el comentario */}
       <Textarea
         label="Tu comentario"
         name="comentario"
@@ -346,7 +372,7 @@ const ModalAgregarReseña = ({
         required
       />
 
-      {/* Botones de navegación */}
+      {/* Botones de navegación del paso final */}
       <div className="flex gap-3">
         <MainButton
           type="button"
@@ -369,6 +395,7 @@ const ModalAgregarReseña = ({
     </div>
   );
 
+  // Determina qué paso renderizar según el estado actual
   const renderContenido = () => {
     switch (pasoActual) {
       case 1:
@@ -384,10 +411,12 @@ const ModalAgregarReseña = ({
     }
   };
 
+  // No renderiza nada si el modal está cerrado
   if (!isOpen) return null;
 
   return (
     <ModalContenedor onClose={handleCerrar}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Agregar reseña</MainH2>
         <MainButton
@@ -401,7 +430,7 @@ const ModalAgregarReseña = ({
         </MainButton>
       </div>
 
-      {/* Indicador de progreso */}
+      {/* Indicador visual de progreso de pasos */}
       <div className="flex justify-center mb-6">
         <div className="flex gap-2">
           {[1, 2, 3, 4].map((paso) => (
@@ -415,6 +444,7 @@ const ModalAgregarReseña = ({
         </div>
       </div>
 
+      {/* Formulario con contenido dinámico según el paso actual */}
       <form onSubmit={handleSubmit}>{renderContenido()}</form>
     </ModalContenedor>
   );

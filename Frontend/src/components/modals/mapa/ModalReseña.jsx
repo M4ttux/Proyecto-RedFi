@@ -12,13 +12,17 @@ import MainLinkButton from "../../ui/MainLinkButton";
 import Badge from "../../ui/Badge";
 
 const ModalReseña = ({ reseña, onClose }) => {
+  // Obtiene el ID del usuario para navegación al perfil
   const userId = reseña?.usuario_id;
+  
+  // Verifica que existe la reseña antes de renderizar
   if (!reseña) return null;
 
-  // Nombre (misma lógica tuya)
+  // Procesa el nombre del usuario desde diferentes estructuras de datos posibles
   let nombreBruto =
     reseña?.user_profiles?.nombre || reseña?.user_profiles?.user?.nombre;
 
+  // Parsea nombres que pueden estar en formato JSON o texto plano
   let nombre;
   try {
     if (nombreBruto?.includes("{")) {
@@ -32,18 +36,20 @@ const ModalReseña = ({ reseña, onClose }) => {
     nombre = nombreBruto;
   }
 
+  // Obtiene el nombre del proveedor desde diferentes fuentes posibles
   const proveedor =
     reseña.nombre_proveedor ||
     reseña.proveedores?.nombre ||
     reseña.proveedor?.nombre ||
     `Proveedor ID: ${reseña.proveedor_id}`;
 
+  // Obtiene la URL de la foto de perfil del usuario
   const fotoUrl =
     reseña?.user_profiles?.foto_url ||
     reseña?.user_profiles?.user?.foto_perfil ||
     null;
 
-  // === Mismo diseño de estrellas que en ModalZonaMultiProveedor ===
+  // Renderiza el sistema de estrellas con calificación específica de la reseña
   const renderStars = (promedio) => {
     const stars = [];
     const promedioRedondeado = Math.round(promedio || 0);
@@ -70,7 +76,7 @@ const ModalReseña = ({ reseña, onClose }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Botón cerrar */}
+      {/* Botón de cierre del modal */}
       <MainButton
         onClick={onClose}
         variant="cross"
@@ -80,20 +86,20 @@ const ModalReseña = ({ reseña, onClose }) => {
         <IconX size={24} />
       </MainButton>
 
-      {/* Avatar */}
+      {/* Avatar del usuario que escribió la reseña */}
       <div className="flex justify-center mb-4">
         <Avatar fotoUrl={fotoUrl} nombre={nombre} size={20} />
       </div>
 
-      {/* Nombre */}
+      {/* Nombre del usuario */}
       <MainH2 className="text-center justify-center">{nombre}</MainH2>
 
-      {/* Estrellas */}
+      {/* Calificación con estrellas de la reseña */}
       <div className="mb-4 flex justify-center">
         {renderStars(reseña.estrellas)}
       </div>
 
-      {/* Proveedor */}
+      {/* Badge con información del proveedor evaluado */}
       <div className="mb-4 flex justify-center">
         <Badge
           size="md"
@@ -106,12 +112,12 @@ const ModalReseña = ({ reseña, onClose }) => {
         </Badge>
       </div>
 
-      {/* Comentario */}
+      {/* Comentario completo de la reseña */}
       <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-center leading-relaxed mb-6">
         {reseña.comentario}
       </p>
 
-      {/* Botón "Ver perfil" */}
+      {/* Botón para navegar al perfil del usuario */}
       <MainLinkButton
         to={`/usuarios/${userId}`}
         className="w-full px-4 py-2"

@@ -1,13 +1,12 @@
-// components/ui/Table.jsx
 import classNames from "classnames";
 import { useTheme } from "../../context/ThemeContext";
 
 const Table = ({ columns = [], data = [], className = "" }) => {
   const { currentTheme } = useTheme();
-  
+
   return (
     <>
-      {/* Vista de escritorio - Tabla tradicional */}
+      {/* Vista de escritorio - Tabla tradicional con diseño responsivo para pantallas grandes */}
       <div
         className={classNames(
           "hidden lg:block backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg overflow-hidden",
@@ -15,6 +14,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
         )}
       >
         <table className="w-full">
+          {/* Encabezado de la tabla con estilos diferenciados */}
           <thead className="bg-texto/5">
             <tr>
               {columns.map((col) => (
@@ -27,7 +27,9 @@ const Table = ({ columns = [], data = [], className = "" }) => {
               ))}
             </tr>
           </thead>
+          {/* Cuerpo de la tabla con separadores entre filas */}
           <tbody className="divide-y divide-texto/10">
+            {/* Manejo del estado vacío */}
             {data.length === 0 ? (
               <tr>
                 <td
@@ -38,6 +40,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
                 </td>
               </tr>
             ) : (
+              /* Renderizado de datos con soporte para celdas personalizadas */
               data.map((row, rowIndex) => (
                 <tr key={row.id || rowIndex}>
                   {columns.map((col) => (
@@ -47,6 +50,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
                         "px-6 py-4 text-texto text-sm font-semibold"
                       )}
                     >
+                      {/* Permite renderizado personalizado de celdas o valor directo */}
                       {typeof col.renderCell === "function"
                         ? col.renderCell(row, rowIndex)
                         : row[col.id]}
@@ -59,8 +63,9 @@ const Table = ({ columns = [], data = [], className = "" }) => {
         </table>
       </div>
 
-      {/* Vista móvil - Cards responsivas */}
+      {/* Vista móvil - Cards responsivas que reemplazan la tabla en pantallas pequeñas */}
       <div className="lg:hidden space-y-4">
+        {/* Estado vacío para vista móvil */}
         {data.length === 0 ? (
           <div
             className={classNames(
@@ -71,6 +76,7 @@ const Table = ({ columns = [], data = [], className = "" }) => {
             No hay datos para mostrar.
           </div>
         ) : (
+          /* Convierte cada fila en una card individual */
           data.map((row, rowIndex) => (
             <div
               key={row.id || rowIndex}
@@ -80,14 +86,17 @@ const Table = ({ columns = [], data = [], className = "" }) => {
               )}
             >
               {columns.map((col) => {
-                // Saltar la columna de acciones, la renderizaremos al final
-                if (col.id === 'acciones') return null;
-                
-                const cellContent = typeof col.renderCell === "function"
-                  ? col.renderCell(row, rowIndex)
-                  : row[col.id];
+                // Manejo especial: excluye la columna de acciones del flujo normal
+                if (col.id === "acciones") return null;
+
+                // Obtiene el contenido de la celda (personalizado o directo)
+                const cellContent =
+                  typeof col.renderCell === "function"
+                    ? col.renderCell(row, rowIndex)
+                    : row[col.id];
 
                 return (
+                  /* Estructura de campo en formato vertical para móvil */
                   <div key={col.id} className="flex flex-col space-y-1">
                     <div className="text-xs font-bold text-texto/75 uppercase tracking-wider">
                       {col.label}
@@ -98,15 +107,18 @@ const Table = ({ columns = [], data = [], className = "" }) => {
                   </div>
                 );
               })}
-              
-              {/* Renderizar acciones al final si existen */}
-              {columns.find(col => col.id === 'acciones') && (
+
+              {/* Sección especial para acciones al final de cada card */}
+              {columns.find((col) => col.id === "acciones") && (
                 <div className="flex flex-col space-y-1 pt-2 border-t border-texto/10">
                   <div className="text-xs font-bold text-texto/75 uppercase tracking-wider">
                     Acciones
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {columns.find(col => col.id === 'acciones').renderCell(row, rowIndex)}
+                    {/* Renderiza botones de acción con layout flexible */}
+                    {columns
+                      .find((col) => col.id === "acciones")
+                      .renderCell(row, rowIndex)}
                   </div>
                 </div>
               )}

@@ -25,14 +25,17 @@ const Button = ({
   ...props
 }) => {
   const Tag = as;
-  // Detectar si se pasó padding personalizado
+
+  // Detecta si se pasaron clases de padding personalizadas para evitar duplicados
   const hasPx = /\bpx-\d+\b/.test(className);
   const hasPy = /\bpy-\d+\b/.test(className);
   const hasP = /\bp-\d+\b/.test(className);
 
+  // Aplica padding por defecto solo si no se especificó uno personalizado
   const defaultPx = !hasPx && !hasP ? "px-4" : "";
   const defaultPy = !hasPy && !hasP ? "py-2" : "";
 
+  // Estilos base comunes a todas las variantes
   const baseStyles = classNames(
     "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none duration-300",
     defaultPx,
@@ -41,6 +44,7 @@ const Button = ({
 
   const { currentTheme } = useTheme();
 
+  // Configuración de estilos para cada variante del botón
   const variants = {
     primary: "bg-primario text-white hover:bg-[#336ef0]",
     accent: "bg-acento text-white hover:bg-[#fca75f]",
@@ -63,9 +67,10 @@ const Button = ({
     navbar: "bg-transparent text-texto hover:bg-white/10",
   };
 
+  // Estilos específicos para estado de carga
   const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";
 
-  // Icono automático si no se pasó uno
+  // Mapeo de iconos automáticos según la variante del botón
   const autoIcon =
     !Icon &&
     {
@@ -75,6 +80,7 @@ const Button = ({
       delete: IconTrash,
     }[variant];
 
+  // Combina todos los estilos según el estado del botón
   const finalClass = classNames(
     baseStyles,
     loading ? loadingStyles : variants[variant],
@@ -92,22 +98,26 @@ const Button = ({
       disabled={Tag === "button" ? disabled || loading : undefined}
       {...props}
     >
+      {/* Renderizado condicional del icono según el estado */}
       {loading ? (
+        /* Spinner de carga animado */
         <IconLoader2
           size={iconSize}
           className={classNames("animate-spin", {
-            "sm:inline hidden": !iconAlwaysVisible,
+            "sm:inline hidden": !iconAlwaysVisible, // Oculta en móvil si no es siempre visible
           })}
         />
       ) : (
+        /* Icono personalizado o automático según variante */
         (Icon || autoIcon) &&
         React.createElement(Icon || autoIcon, {
           size: iconSize,
           className: classNames({
-            "sm:inline hidden": !iconAlwaysVisible,
+            "sm:inline hidden": !iconAlwaysVisible, // Comportamiento responsivo del icono
           }),
         })
       )}
+      {/* Contenido del botón (texto, elementos hijos) */}
       {children}
     </Tag>
   );

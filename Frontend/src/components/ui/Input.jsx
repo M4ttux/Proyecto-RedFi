@@ -1,4 +1,3 @@
-// src/components/ui/Input.jsx
 import classNames from "classnames";
 import { IconLoader2 } from "@tabler/icons-react";
 
@@ -24,6 +23,7 @@ const Input = ({
 }) => {
   return (
     <div className="space-y-1 relative">
+      {/* Label opcional del input */}
       {label && (
         <label htmlFor={name} className="block text-texto mb-1">
           {label}
@@ -31,12 +31,14 @@ const Input = ({
       )}
 
       <div className="relative">
+        {/* Icono izquierdo opcional */}
         {Icon && (
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Icon size={20} className="text-texto/40" />
           </div>
         )}
 
+        {/* Renderizado específico para input de color */}
         {type === "color" ? (
           <input
             id={name}
@@ -54,12 +56,14 @@ const Input = ({
             )}
           />
         ) : (
+          /* Input estándar para todos los demás tipos */
           <input
             id={name}
             name={name}
             type={type}
             value={loading ? "" : value ?? ""}
             onChange={(e) => {
+              // Validación de longitud para inputs numéricos
               if (type === "number" && maxLength && e.target.value.length > maxLength) {
                 e.target.value = e.target.value.slice(0, maxLength);
               }
@@ -67,6 +71,7 @@ const Input = ({
             }}
             onKeyDown={(e) => {
               if (onKeyDown) onKeyDown(e);
+              // Previene caracteres no válidos en inputs numéricos
               if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
                 e.preventDefault();
               }
@@ -79,8 +84,8 @@ const Input = ({
             className={classNames(
               "w-full bg-texto/5 text-texto rounded-lg border transition",
               "focus:outline-none focus:ring-1",
-              Icon ? "pl-10" : "pl-3",
-              loading || isInvalid || endIconAction ? "pr-10" : "pr-3",
+              Icon ? "pl-10" : "pl-3", // Padding izquierdo según icono
+              loading || isInvalid || endIconAction ? "pr-10" : "pr-3", // Padding derecho según estado
               "py-2",
               (disabled || loading) && "cursor-not-allowed opacity-70",
               isInvalid
@@ -91,11 +96,13 @@ const Input = ({
           />
         )}
 
-        {/* Ícono derecho */}
+        {/* Área de iconos/acciones del lado derecho */}
         <div className="absolute inset-y-0 right-3 flex items-center">
           {loading ? (
+            /* Spinner de carga */
             <IconLoader2 size={20} className="animate-spin text-texto/60" />
           ) : isInvalid ? null : endIconAction ? (
+            /* Botón de acción personalizable */
             <button
               type="button"
               onClick={endIconAction.onClick}

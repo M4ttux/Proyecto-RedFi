@@ -18,8 +18,10 @@ const ModalZonaMultiProveedor = ({
   proveedores = [],
   zonaInfo = null,
 }) => {
+  // No renderiza nada si el modal está cerrado
   if (!isOpen) return null;
 
+  // Renderiza el sistema de estrellas para calificaciones de proveedores
   const renderStars = (promedio) => {
     const stars = [];
     const promedioRedondeado = Math.round(promedio || 0);
@@ -46,6 +48,7 @@ const ModalZonaMultiProveedor = ({
     );
   };
 
+  // Calcula el promedio de calificación basado en las reseñas del proveedor
   const calcularPromedioCalificacion = (reseñas) => {
     if (!reseñas || reseñas.length === 0) return 0;
     const suma = reseñas.reduce((acc, reseña) => acc + reseña.estrellas, 0);
@@ -54,6 +57,7 @@ const ModalZonaMultiProveedor = ({
 
   return (
     <ModalContenedor onClose={onClose}>
+      {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
         <MainH2 className="mb-0">Proveedores</MainH2>
         <MainButton
@@ -67,6 +71,7 @@ const ModalZonaMultiProveedor = ({
         </MainButton>
       </div>
 
+      {/* Información de la zona seleccionada */}
       {zonaInfo && (
         <div className="mb-4 p-2 bg-texto/5 rounded-lg border border-texto/15">
           <p className="text-sm text-texto">
@@ -80,6 +85,7 @@ const ModalZonaMultiProveedor = ({
         </div>
       )}
 
+      {/* Lista scrolleable de proveedores disponibles */}
       <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 max-h-96 overflow-y-auto p-1">
         {proveedores.map((proveedor) => {
           const promedioCalificacion = calcularPromedioCalificacion(
@@ -87,6 +93,7 @@ const ModalZonaMultiProveedor = ({
           );
 
           return (
+            /* Tarjeta individual de proveedor */
             <div
               key={proveedor.id}
               className="flex flex-col sm:flex-row items-center gap-2 p-2 bg-texto/5 rounded-lg border border-texto/15 hover:bg-texto/10"
@@ -101,8 +108,9 @@ const ModalZonaMultiProveedor = ({
                 />
               </div>
 
-              {/* Información del proveedor */}
+              {/* Información detallada del proveedor */}
               <div className="flex-1 min-w-0">
+                {/* Nombre y círculo de color identificativo */}
                 <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
                   <MainH3
                     className="text-lg line-clamp-1 mb-0"
@@ -110,7 +118,6 @@ const ModalZonaMultiProveedor = ({
                   >
                     {proveedor.nombre}
                   </MainH3>
-                  {/* Círculo de color del proveedor */}
                   <div
                     className="w-4 h-4 rounded-full flex-shrink-0 border border-white/20"
                     style={{ backgroundColor: proveedor.color || "#888888" }}
@@ -118,15 +125,16 @@ const ModalZonaMultiProveedor = ({
                   ></div>
                 </div>
 
-                {/* Calificación */}
+                {/* Calificación promedio con estrellas */}
                 <div className="mb-2 flex justify-center sm:justify-start">
                   {renderStars(promedioCalificacion)}
                 </div>
 
-                {/* Tecnologías */}
+                {/* Tecnologías disponibles con badges responsivos */}
                 {proveedor.ProveedorTecnologia &&
                   proveedor.ProveedorTecnologia.length > 0 && (
                     <div className="hidden sm:flex flex-wrap items-center gap-1 justify-center sm:justify-start">
+                      {/* Primeras tecnologías visibles */}
                       {proveedor.ProveedorTecnologia.slice(0, 2).map(
                         (tech, index) => (
                           <Badge
@@ -140,14 +148,14 @@ const ModalZonaMultiProveedor = ({
                         )
                       )}
 
-                      {/* "+N más" en mobile: cuenta desde 1 */}
+                      {/* Contador de tecnologías adicionales en mobile */}
                       {proveedor.ProveedorTecnologia.length > 1 && (
                         <Badge variant="muted" size="xs" onlyMobile>
                           +{proveedor.ProveedorTecnologia.length - 1} más
                         </Badge>
                       )}
 
-                      {/* "+N más" en sm+: cuenta desde 2 */}
+                      {/* Contador de tecnologías adicionales en desktop */}
                       {proveedor.ProveedorTecnologia.length > 2 && (
                         <Badge variant="muted" size="xs" onlyDesktop>
                           +{proveedor.ProveedorTecnologia.length - 2} más
@@ -157,7 +165,7 @@ const ModalZonaMultiProveedor = ({
                   )}
               </div>
 
-              {/* Botón para ver más */}
+              {/* Botón de navegación a información detallada */}
               <div className="flex-shrink-0">
                 <MainLinkButton
                   to={`/proveedores/${proveedor.id}`}
@@ -175,6 +183,7 @@ const ModalZonaMultiProveedor = ({
         })}
       </div>
 
+      {/* Instrucciones de uso para el usuario */}
       <div className="mt-6 text-center">
         <p className="text-sm text-texto/50 italic">
           Haz clic en "Ver más" para ver más información de cada
