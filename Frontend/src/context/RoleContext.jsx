@@ -2,21 +2,37 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { getPerfil } from "../services/perfil/getPerfil";
 
-// Creamos el contexto
+// Contexto principal para el sistema de roles y planes
 const RoleContext = createContext();
 
-// Hook para consumir fácilmente el contexto
+/**
+ * Hook personalizado para acceder al contexto de roles
+ * Simplifica el acceso a roles, planes y funciones de verificación de permisos
+ */
 export const useRole = () => useContext(RoleContext);
 
-// Proveedor del contexto
+/**
+ * Proveedor del contexto de roles y planes
+ * Carga los datos del perfil del usuario y proporciona funciones de verificación de acceso
+ */
 export const RoleProvider = ({ children }) => {
-  const [rol, setRol] = useState(null); // admin / user
-  const [plan, setPlan] = useState(null); // basico / premium
+  // Estado del rol del usuario (admin/user)
+  const [rol, setRol] = useState(null);
+  // Estado del plan de suscripción (basico/premium)
+  const [plan, setPlan] = useState(null);
+  // Estado de carga específico para datos de roles
   const [loadingRole, setLoadingRole] = useState(true);
+  // Obtiene el usuario y estado de carga del contexto de autenticación
   const { usuario, loading } = useAuth();
 
+  // Efecto para cargar datos del perfil cuando cambia el usuario
   useEffect(() => {
+    /**
+     * Función para cargar los datos de rol y plan del usuario autenticado
+     * Se ejecuta cuando hay cambios en el estado de autenticación
+     */
     const cargarDatosPerfil = async () => {
+      // Si no hay usuario, limpia los estados y termina la carga
       if (!usuario) {
         setRol(null);
         setPlan(null);
@@ -26,11 +42,14 @@ export const RoleProvider = ({ children }) => {
 
       try {
         setLoadingRole(true);
+        // Obtiene el perfil completo del usuario desde la base de datos
         const perfil = await getPerfil();
+        // Actualiza los estados con los datos del perfil o null si no existen
         setRol(perfil?.rol || null);
         setPlan(perfil?.plan || null);
       } catch (error) {
         console.error("Error al obtener el perfil del usuario:", error.message);
+        // En caso de error, limpia los estados
         setRol(null);
         setPlan(null);
       } finally {
@@ -38,12 +57,13 @@ export const RoleProvider = ({ children }) => {
       }
     };
 
+    // Solo carga el perfil si la autenticación ya terminó de cargar
     if (!loading) {
       cargarDatosPerfil();
     }
-  }, [usuario, loading]);
+  }, [usuario, loading]); // Se re-ejecuta cuando cambia el usuario o el estado de carga
 
-  // Funciones auxiliares
+  // Funciones auxiliares para verificar roles específicos
   const esAdmin = () => rol === "admin";
   const esUser = () => rol === "user";
   const esPremium = () => plan === "premium";
@@ -53,22 +73,25 @@ export const RoleProvider = ({ children }) => {
    * Verifica si el usuario tiene acceso según el plan requerido
    * @param {"basico" | "premium"} requierePlan
    * @returns {boolean}
+   * Implementa lógica de jerarquía: premium incluye acceso a funciones básicas
    */
   const tieneAcceso = (requierePlan) => {
-    if (!requierePlan) return true;
-    if (requierePlan === "basico") return esBasico() || esPremium();
-    if (requierePlan === "premium") return esPremium();
+    if (!requierePlan) return true; // Sin restricción de plan
+    if (requierePlan === "basico") return esBasico() || esPremium(); // Básico o superior
+    if (requierePlan === "premium") return esPremium(); // Solo premium
     return false;
   };
 
   /**
-   * Refresca los datos del rol y plan del usuario
+   * Función para refrescar manualmente los datos del rol y plan
+   * Útil después de actualizaciones de perfil o cambios de suscripción
    */
   const refrescarRol = async () => {
     if (!usuario) return;
     
     try {
       setLoadingRole(true);
+      // Re-obtiene los datos del perfil desde la base de datos
       const perfil = await getPerfil();
       setRol(perfil?.rol || null);
       setPlan(perfil?.plan || null);
@@ -79,19 +102,20 @@ export const RoleProvider = ({ children }) => {
     }
   };
 
+  // Proporciona todos los valores y funciones relacionados con roles y planes
   return (
     <RoleContext.Provider
       value={{
-        rol,
-        plan,
-        setPlan,
-        loadingRole,
-        esAdmin,
-        esUser,
-        esPremium,
-        esBasico,
-        tieneAcceso,
-        refrescarRol,
+        rol,                // Rol actual del usuario (admin/user)
+        plan,               // Plan actual del usuario (basico/premium)
+        setPlan,            // Función para actualizar el plan directamente
+        loadingRole,        // Estado de carga de los datos de rol
+        esAdmin,            // Función para verificar si es admin
+        esUser,             // Función para verificar si es user
+        esPremium,          // Función para verificar si tiene plan premium
+        esBasico,           // Función para verificar si tiene plan básico
+        tieneAcceso,        // Función para verificar acceso por plan
+        refrescarRol,       // Función para refrescar datos del perfil
       }}
     >
       {children}

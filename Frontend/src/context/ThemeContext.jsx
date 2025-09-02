@@ -1,8 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { THEMES } from '../constants/themes'
 
+// Contexto principal para el sistema de temas
 const ThemeContext = createContext()
 
+/**
+ * Hook personalizado para acceder al contexto de temas
+ * Valida que el hook se use dentro del proveedor correspondiente
+ */
 export const useTheme = () => {
   const context = useContext(ThemeContext)
   if (!context) {
@@ -11,15 +16,23 @@ export const useTheme = () => {
   return context
 }
 
+/**
+ * Proveedor del contexto de temas
+ * Maneja la aplicación de temas, persistencia y cambios dinámicos
+ */
 export const ThemeProvider = ({ children }) => {
+  // Estado del tema actual (por defecto 'dark')
   const [currentTheme, setCurrentTheme] = useState('dark')
 
-  // Aplicar tema al documento
+  /**
+   * Función para aplicar un tema específico al documento
+   * Actualiza las variables CSS personalizadas para TailwindCSS v4
+   */
   const applyTheme = (themeName) => {
     const theme = THEMES[themeName]
     if (!theme) return
 
-    // Para TailwindCSS v4 @theme, necesitamos actualizar las variables CSS
+    // Actualiza variables CSS en el elemento root para TailwindCSS v4 @theme
     const root = document.documentElement
     Object.entries(theme).forEach(([key, value]) => {
       if (key !== 'nombre') {
@@ -27,7 +40,7 @@ export const ThemeProvider = ({ children }) => {
       }
     })
 
-    // También establecemos las variables en el body para compatibilidad
+    // Establecimiento adicional en body para compatibilidad con versiones anteriores
     document.body.style.setProperty('--color-texto', theme.texto)
     document.body.style.setProperty('--color-fondo', theme.fondo) 
     document.body.style.setProperty('--color-primario', theme.primario)
@@ -35,28 +48,37 @@ export const ThemeProvider = ({ children }) => {
     document.body.style.setProperty('--color-acento', theme.acento)
   }
 
-  // Cargar tema desde localStorage al iniciar
+  // Efecto para cargar el tema guardado al inicializar la aplicación
   useEffect(() => {
+    // Intenta cargar tema desde localStorage
     const savedTheme = localStorage.getItem('redfi-theme')
     if (savedTheme && THEMES[savedTheme]) {
+      // Aplica el tema guardado si existe y es válido
       setCurrentTheme(savedTheme)
       applyTheme(savedTheme)
     } else {
-      // Aplicar tema por defecto
+      // Aplica tema por defecto si no hay tema guardado
       applyTheme('dark')
     }
-  }, [])
+  }, []) // Solo se ejecuta una vez al montar el componente
 
-  // Cambiar tema
+  /**
+   * Función para cambiar a un tema específico
+   * Actualiza el estado, aplica los estilos y persiste en localStorage
+   */
   const changeTheme = (themeName) => {
     if (!THEMES[themeName]) return
 
     setCurrentTheme(themeName)
     applyTheme(themeName)
+    // Persiste la selección del usuario en localStorage
     localStorage.setItem('redfi-theme', themeName)
   }
 
-  // Obtener siguiente tema (para botón toggle)
+  /**
+   * Obtiene el siguiente tema en la secuencia (para funcionalidad toggle)
+   * Utiliza módulo para crear un ciclo infinito entre temas disponibles
+   */
   const getNextTheme = () => {
     const themeNames = Object.keys(THEMES)
     const currentIndex = themeNames.indexOf(currentTheme)
@@ -64,21 +86,26 @@ export const ThemeProvider = ({ children }) => {
     return themeNames[nextIndex]
   }
 
-  // Toggle entre temas
+  /**
+   * Alterna entre temas disponibles
+   * Función de conveniencia para botones de cambio rápido de tema
+   */
   const toggleTheme = () => {
     const nextTheme = getNextTheme()
     changeTheme(nextTheme)
   }
 
+  // Valor del contexto con todos los datos y funciones relacionadas con temas
   const value = {
-    currentTheme,
-    availableThemes: Object.keys(THEMES),
-    themeData: THEMES[currentTheme],
-    changeTheme,
-    toggleTheme,
-    getNextTheme
+    currentTheme,                    // Tema actualmente seleccionado
+    availableThemes: Object.keys(THEMES), // Lista de temas disponibles
+    themeData: THEMES[currentTheme], // Datos completos del tema actual
+    changeTheme,                     // Función para cambiar a un tema específico
+    toggleTheme,                     // Función para alternar entre temas
+    getNextTheme                     // Función para obtener el siguiente tema
   }
 
+  // Proporciona el contexto de temas a toda la aplicación
   return (
     <ThemeContext.Provider value={value}>
       {children}
