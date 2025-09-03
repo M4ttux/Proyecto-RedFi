@@ -1,6 +1,6 @@
 import { supabase } from "../../supabase/client";
 
-// Obtener todos los perfiles (admin)
+// Obtiene todos los perfiles ordenados alfabéticamente (uso admin)
 export const obtenerPerfilesAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("user_profiles")
@@ -14,7 +14,7 @@ export const obtenerPerfilesAdmin = async (mostrarAlerta = () => {}) => {
   return data;
 };
 
-// Eliminar perfil por ID (admin)
+// Elimina un perfil por su ID (uso admin)
 export const eliminarPerfilPorId = async (id, mostrarAlerta = () => {}) => {
   const { error } = await supabase
     .from("user_profiles")
@@ -27,6 +27,7 @@ export const eliminarPerfilPorId = async (id, mostrarAlerta = () => {}) => {
   }
 };
 
+// Actualiza solo plan (y opcionalmente rol) de un usuario
 export const actualizarPlanUsuario = async (usuarioId, nuevoPlan, nuevoRol = null) => {
   const actualizacion = { plan: nuevoPlan };
   if (nuevoRol) actualizacion.rol = nuevoRol;
@@ -41,7 +42,7 @@ export const actualizarPlanUsuario = async (usuarioId, nuevoPlan, nuevoRol = nul
   }
 };
 
-// Actualizar perfil por ID (admin)
+// Actualiza un perfil completo por ID, incluyendo validaciones y manejo de imagen en Storage (uso admin)
 export const actualizarPerfilPorId = async (
   id,
   {
@@ -55,12 +56,11 @@ export const actualizarPerfilPorId = async (
   },
   mostrarAlerta = () => {}
 ) => {
-  // Validaciones básicas
+  // Valida el campo nombre antes de continuar
   if (!nombre || nombre.trim().length < 2) {
     mostrarAlerta("El nombre debe tener al menos 2 caracteres.");
     throw new Error("El nombre debe tener al menos 2 caracteres.");
   }
-
   const emojiRegex = /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu;
   const caracteresInvalidos = /[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-']/;
   if (emojiRegex.test(nombre) || caracteresInvalidos.test(nombre)) {
@@ -70,7 +70,7 @@ export const actualizarPerfilPorId = async (
 
   let nuevaUrl = preview;
 
-  // Obtener perfil actual del usuario a editar
+  // Obtiene datos actuales del perfil para decidir si eliminar o reemplazar imagen previa
   const { data: perfilActual, error: errorPerfil } = await supabase
     .from("user_profiles")
     .select("foto_url")
@@ -85,14 +85,14 @@ export const actualizarPerfilPorId = async (
   const urlAntigua = perfilActual?.foto_url;
   const bucketUrl = supabase.storage.from("perfiles").getPublicUrl("").data.publicUrl;
 
-  // Eliminar imagen anterior si se solicitó
+  // Elimina imagen previa del bucket si se solicitó
   if (eliminarFoto && urlAntigua && urlAntigua.startsWith(bucketUrl)) {
     const rutaAntigua = urlAntigua.replace(bucketUrl, "").replace(/^\/+/, "");
     await supabase.storage.from("perfiles").remove([rutaAntigua]);
     nuevaUrl = null;
   }
 
-  // Subir nueva imagen si se proporcionó
+  // Sube una nueva imagen validando tipo, tamaño y resolución
   if (foto) {
     const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
     if (!tiposPermitidos.includes(foto.type)) {
@@ -106,6 +106,7 @@ export const actualizarPerfilPorId = async (
       throw new Error("La imagen supera los 300 KB permitidos.");
     }
 
+    // Verifica dimensiones máximas 500x500 antes de subir
     const imagenValida = await new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
@@ -118,10 +119,11 @@ export const actualizarPerfilPorId = async (
           resolve(true);
         }
       };
-      img.onerror = () => reject(
-        mostrarAlerta("No se pudo procesar la imagen."),
-        new Error("No se pudo procesar la imagen.")
-      );
+      img.onerror = () =>
+        reject(
+          mostrarAlerta("No se pudo procesar la imagen."),
+          new Error("No se pudo procesar la imagen.")
+        );
       img.src = URL.createObjectURL(foto);
     });
 
@@ -129,13 +131,13 @@ export const actualizarPerfilPorId = async (
       throw new Error("La imagen no es válida.");
     }
 
-    // Eliminar anterior si existía
+    // Elimina la imagen anterior del bucket si existía
     if (urlAntigua && urlAntigua.startsWith(bucketUrl)) {
       const rutaAntigua = urlAntigua.replace(bucketUrl, "").replace(/^\/+/, "");
       await supabase.storage.from("perfiles").remove([rutaAntigua]);
     }
 
-    // Subir nueva imagen
+    // Sube la nueva imagen al bucket y obtiene su URL pública
     const carpetaUsuario = `${id}`;
     const nombreArchivo = `perfil-${Date.now()}`;
     const rutaCompleta = `${carpetaUsuario}/${nombreArchivo}`;
@@ -156,7 +158,7 @@ export const actualizarPerfilPorId = async (
     nuevaUrl = data.publicUrl;
   }
 
-  // Actualizar tabla user_profiles
+  // Actualiza la fila del usuario con los nuevos datos y URL de imagen (si corresponde)
   const { error: updateError } = await supabase
     .from("user_profiles")
     .update({

@@ -1,9 +1,12 @@
 import { supabase } from "../../supabase/client";
 
+// Obtiene todas las reseñas con datos de usuario y proveedor (vista admin)
 export const obtenerReseñasAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("reseñas")
-    .select("id, estrellas, comentario, usuario_id, user_profiles(nombre, foto_url), proveedor_id, proveedores(nombre)")
+    .select(
+      "id, estrellas, comentario, usuario_id, user_profiles(nombre, foto_url), proveedor_id, proveedores(nombre)"
+    )
     .order("user_profiles(nombre)", { ascending: true });
 
   if (error) {
@@ -13,6 +16,7 @@ export const obtenerReseñasAdmin = async (mostrarAlerta = () => {}) => {
   return data;
 };
 
+// Actualiza una reseña existente por ID (vista admin)
 export const actualizarReseñaAdmin = async (id, datos, mostrarAlerta = () => {}) => {
   const { error } = await supabase
     .from("reseñas")
@@ -29,6 +33,7 @@ export const actualizarReseñaAdmin = async (id, datos, mostrarAlerta = () => {}
   }
 };
 
+// Elimina una reseña por ID (vista admin)
 export const eliminarReseñaAdmin = async (id, mostrarAlerta = () => {}) => {
   const { error } = await supabase
     .from("reseñas")

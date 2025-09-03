@@ -1,6 +1,6 @@
 import { supabase } from "../../supabase/client";
 
-// Obtener reseñas del usuario autenticado
+// Obtiene todas las reseñas del usuario autenticado con datos de proveedor y perfil
 export const obtenerReseñasUsuario = async (mostrarAlerta = () => {}) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -28,6 +28,7 @@ export const obtenerReseñasUsuario = async (mostrarAlerta = () => {}) => {
   }
 };
 
+// Actualiza una reseña del usuario autenticado por su ID
 export const actualizarReseña = async (id, reseñaData, mostrarAlerta = () => {}) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -60,6 +61,7 @@ export const actualizarReseña = async (id, reseñaData, mostrarAlerta = () => {
   }
 };
 
+// Elimina una reseña del usuario autenticado por su ID
 export const eliminarReseña = async (id, mostrarAlerta = () => {}) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();

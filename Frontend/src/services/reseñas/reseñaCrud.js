@@ -1,5 +1,6 @@
 import { supabase } from "../../supabase/client";
 
+// Obtiene todas las reseñas con información del usuario y proveedor relacionado
 export const obtenerReseñas = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase.from("reseñas").select(`
     *,
@@ -18,6 +19,7 @@ export const obtenerReseñas = async (mostrarAlerta = () => {}) => {
   return data;
 };
 
+// Crea una nueva reseña asociada al usuario autenticado
 export const crearReseña = async (reseñaData, mostrarAlerta = () => {}) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();

@@ -3,15 +3,16 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vite.dev/config/
+// Configuración principal de Vite
 export default defineConfig({
   server: {
-    host: true, // esto habilita acceso desde otros dispositivos
-    allowedHosts: ['.ngrok-free.app'],
+    host: true, // permite acceso desde otros dispositivos en la red
+    allowedHosts: ['.ngrok-free.app'], // habilita dominios externos (ngrok)
   },
   plugins: [
     react(),
     tailwindcss(),
+    // Configuración de Progressive Web App
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
@@ -43,7 +44,9 @@ export default defineConfig({
       }
     })
   ],
-  resolve: { 
-    alias: { '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs', }, 
-  }, 
+  resolve: {
+    alias: {
+      '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
+    },
+  },
 })

@@ -1,6 +1,6 @@
 import { supabase } from "../../supabase/client";
 
-// Obtener todos los proveedores con tecnologías y zonas
+// Obtiene todos los proveedores con sus tecnologías, zonas y reseñas básicas
 export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
@@ -28,7 +28,7 @@ export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
   return data;
 };
 
-// Obtener un proveedor por ID con sus reseñas y tecnologías
+// Obtiene un proveedor por ID con tecnologías y reseñas (incluye datos del autor)
 export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
@@ -59,6 +59,7 @@ export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
   return data;
 };
 
+// Obtiene proveedores para vista admin y normaliza arrays de tecnologías y zonas
 export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("proveedores")
