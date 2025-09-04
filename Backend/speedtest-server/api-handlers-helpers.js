@@ -1,11 +1,14 @@
 const { exec } = require('child_process');
 
 class os_func{
-    execCommand( cmd, timeout = 30000 ) // 30 segundos de timeout
+    execCommand( cmd, timeout = 90000 ) // 90 segundos de timeout (más tiempo para speedtest)
     {
         return new Promise( ( resolve, reject ) => {
             console.log('🔧 Executing command:', cmd);
-            const process = exec( cmd, { timeout }, ( err, stdout, stderr ) => {   
+            const process = exec( cmd, { 
+                timeout,
+                env: { ...process.env, CI: 'true', NODE_ENV: 'production' } // Variables para evitar prompts interactivos
+            }, ( err, stdout, stderr ) => {   
                 
                 if ( err ) 
                 {
@@ -14,7 +17,7 @@ class os_func{
                     return
                 }
 
-                if ( stderr ) 
+                if ( stderr && !stderr.includes('warning') ) // Ignorar warnings comunes
                 {
                     console.error('❌ Command stderr:', stderr);
                     reject( new Error(stderr) )
@@ -26,10 +29,16 @@ class os_func{
             });
 
             // Manejo manual del timeout
-            setTimeout(() => {
-                process.kill();
-                reject(new Error('Command timeout after 30 seconds'));
+            const timeoutId = setTimeout(() => {
+                console.log('⏰ Command timeout, killing process...');
+                process.kill('SIGTERM');
+                reject(new Error(`Command timeout after ${timeout/1000} seconds`));
             }, timeout);
+
+            // Limpiar timeout si el comando termina antes
+            process.on('exit', () => {
+                clearTimeout(timeoutId);
+            });
         })
     }
 }

@@ -35,6 +35,24 @@ app.get("/test", (req, res) => {
     });
 });
 
+// Mock speedtest endpoint para testing
+app.get("/mock", (req, res) => {
+    console.log('🎭 Mock speedtest called');
+    
+    // Simular tiempo de procesamiento
+    setTimeout(() => {
+        res.status(200).json({
+            downloadSpeed: Math.floor(Math.random() * 100) + 50, // 50-150 Mbps
+            uploadSpeed: Math.floor(Math.random() * 50) + 10,    // 10-60 Mbps  
+            latency: Math.floor(Math.random() * 30) + 10,       // 10-40 ms
+            server: require('os').hostname(),
+            os: process.platform,
+            timestamp: new Date().toISOString(),
+            isMock: true
+        });
+    }, 2000); // 2 segundos de delay
+});
+
 // Speedtest endpoint
 app.get("/", async ( req, res ) => { 
     console.log('🚀 Speedtest request received from:', req.get('origin') || 'unknown origin');

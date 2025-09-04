@@ -17,8 +17,9 @@
     "nodemon": "^2.0.19"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "npm install -g fast-cli && node index.js",
+    "dev": "nodemon index.js",
+    "postinstall": "npm install -g fast-cli"
   },
   "keywords": ["speedtest", "redfi", "api"],
   "author": "Red-Fi Team",
