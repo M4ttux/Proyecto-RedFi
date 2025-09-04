@@ -28,7 +28,10 @@ export async function ejecutarSpeedtest() {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('❌ Response not OK:', errorText);
-      throw new Error(`Error HTTP: ${response.status} - ${errorText}`);
+      console.error('❌ Response status:', response.status);
+      console.error('❌ Response statusText:', response.statusText);
+      
+      throw new Error(`Error HTTP: ${response.status} - ${response.statusText || errorText}`);
     }
 
     const data = await response.json();

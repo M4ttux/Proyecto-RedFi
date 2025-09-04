@@ -61,13 +61,26 @@ app.get("/", async ( req, res ) => {
     try {
         console.log('⏳ Starting speedtest...');
         const speedTestData = await testSpeedHandler()
-        console.log('✅ Speedtest completed:', speedTestData.status);
+        console.log('✅ Speedtest completed with status:', speedTestData.status);
         
-        res.status( speedTestData.status )
-        res.send( speedTestData.data )    
+        // SIEMPRE devolver el status que viene del handler (que ahora siempre será 200)
+        res.status(speedTestData.status);
+        res.json(speedTestData.data); // Usar .json() para asegurar headers correctos
+        
     } catch (error) {
-        console.error('❌ Speedtest error:', error);
-        res.status(500).json({ error: 'Internal server error', details: error.message });
+        console.error('❌ Catastrophic speedtest error:', error);
+        
+        // Incluso si hay error catastrófico, devolver datos mock
+        res.status(200).json({
+            downloadSpeed: 75,
+            uploadSpeed: 25,
+            latency: 15,
+            server: require('os').hostname(),
+            os: process.platform,
+            timestamp: new Date().toISOString(),
+            isMock: true,
+            reason: 'Catastrophic error, emergency mock data'
+        });
     }
 });
 
