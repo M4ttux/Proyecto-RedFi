@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 
 class os_func{
-    execCommand( cmd, timeout = 90000 ) // 90 segundos de timeout (más tiempo para speedtest)
+    execCommand( cmd, timeout = 180000 ) // 3 minutos para speedtest real
     {
         return new Promise( ( resolve, reject ) => {
             console.log('🔧 Executing command:', cmd);

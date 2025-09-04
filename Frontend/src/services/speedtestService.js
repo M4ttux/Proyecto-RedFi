@@ -18,8 +18,8 @@ export async function ejecutarSpeedtest() {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      // Agregar timeout más largo para speedtest
-      signal: AbortSignal.timeout(120000) // 2 minutos (120 segundos)
+      // Agregar timeout más largo para speedtest real
+      signal: AbortSignal.timeout(200000) // 3.3 minutos (200 segundos)
     });
 
     console.log('📊 Response status:', response.status);
@@ -43,7 +43,7 @@ export async function ejecutarSpeedtest() {
     console.error('💥 Error al obtener la prueba de velocidad:', error);
     
     if (error.name === 'TimeoutError') {
-      throw new Error('El test de velocidad tardó demasiado tiempo (más de 2 minutos)');
+      throw new Error('El test de velocidad tardó demasiado tiempo (más de 3 minutos)');
     }
     
     throw new Error(`No se pudo ejecutar el test de velocidad: ${error.message}`);

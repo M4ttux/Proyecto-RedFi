@@ -5,8 +5,8 @@ exports.testSpeedHandler = async() => {
     console.log('🔄 Starting speedtest with fast-cli...');
     
     try {
-        // Usar comando más específico y no-interactivo
-        const testCommandOutput = await getExecOutput( 'npx fast-cli --upload --json --no-interaction' )
+        // Usar comando más rápido con menos precision pero más velocidad
+        const testCommandOutput = await getExecOutput( 'npx fast-cli --single-line --json' )
         console.log('📊 Fast-cli raw output:', testCommandOutput);
 
         //Handle no internet error
