@@ -5,9 +5,15 @@ class os_func{
     {
         return new Promise( ( resolve, reject ) => {
             console.log('🔧 Executing command:', cmd);
-            const process = exec( cmd, { 
+            const childProcess = exec( cmd, { 
                 timeout,
-                env: { ...process.env, CI: 'true', NODE_ENV: 'production' } // Variables para evitar prompts interactivos
+                env: { 
+                    ...process.env, 
+                    CI: 'true', 
+                    NODE_ENV: 'production',
+                    PATH: process.env.PATH 
+                },
+                shell: true // Forzar uso de shell para evitar problemas de process
             }, ( err, stdout, stderr ) => {   
                 
                 if ( err ) 
@@ -31,12 +37,12 @@ class os_func{
             // Manejo manual del timeout
             const timeoutId = setTimeout(() => {
                 console.log('⏰ Command timeout, killing process...');
-                process.kill('SIGTERM');
+                childProcess.kill('SIGTERM');
                 reject(new Error(`Command timeout after ${timeout/1000} seconds`));
             }, timeout);
 
             // Limpiar timeout si el comando termina antes
-            process.on('exit', () => {
+            childProcess.on('exit', () => {
                 clearTimeout(timeoutId);
             });
         })
