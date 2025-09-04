@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "red-fi",
   "build": {
     "env": {
       "NODE_VERSION": "18"
@@ -11,11 +10,10 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html",
-      "statusCode": 404
+      "destination": "/index.html"
     }
   ],
   "headers": [
