@@ -1,0 +1,15 @@
+# Railway deployment configuration
+# This file tells Railway which directory contains our server
+
+[build]
+  builder = "nixpacks"
+
+[deploy]
+  startCommand = "npm start"
+
+[[services]]
+  serviceName = "redfi-speedtest"
+  source = "."
+  
+  [services.variables]
+    NODE_ENV = "production"
