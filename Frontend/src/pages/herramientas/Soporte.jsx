@@ -6,68 +6,7 @@ import MainH3 from "../../components/ui/MainH3";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import { useTheme } from "../../context/ThemeContext";
-
-const flujoConversacion = {
-  inicio: {
-    mensaje: "Hola 👋, soy el asistente de Red-Fi. ¿Cómo estás?",
-    opciones: [
-      { texto: "Tengo dudas", siguiente: "dudas" },
-      { texto: "Tengo problemas", siguiente: "problemas" },
-    ],
-  },
-  dudas: {
-    mensaje: "Claro, ¿sobre qué quieres saber más?",
-    opciones: [
-      {
-        texto: "¿Qué es Red-Fi?",
-        respuesta:
-          "Red-Fi es una plataforma que te ayuda a conocer la cobertura y calidad de proveedores de Internet en tu zona. Te permite comparar servicios y mejorar tu conexión.",
-      },
-      {
-        texto: "¿Qué herramientas tiene Red-Fi?",
-        respuesta:
-          "Red-Fi ofrece un mapa interactivo, test de velocidad, reseñas de usuarios y buscador de proveedores.",
-      },
-      {
-        texto: "¿Cómo puedo registrarme?",
-        respuesta:
-          "Registrarte es fácil: solo necesitas tu correo electrónico y una contraseña. ¡Es gratis!",
-      },
-      { texto: "Volver al inicio", siguiente: "inicio" },
-    ],
-  },
-  problemas: {
-    mensaje: "Entiendo, ¿qué problema estás teniendo?",
-    opciones: [
-      {
-        texto: "Internet lento",
-        respuesta:
-          "Si tu internet está lento, reinicia el router, desconecta dispositivos innecesarios y prueba usar un cable de red si es posible.",
-      },
-      {
-        texto: "Sin conexión",
-        respuesta:
-          "Verifica cables, luces del router y prueba reiniciarlo. Si sigue sin funcionar, contacta a tu proveedor.",
-      },
-      {
-        texto: "Problemas con el WiFi",
-        respuesta:
-          "Intenta reiniciar el router. Si el problema persiste, acércate al router, prueba cambiar la banda (2.4GHz/5GHz) o revisa interferencias.",
-      },
-      {
-        texto: "Mejorar señal WiFi",
-        respuesta:
-          "Ubica el router en un lugar alto y central. Evita paredes gruesas o electrodomésticos cerca. Considera un repetidor o un sistema Mesh.",
-      },
-      {
-        texto: "Corte de servicio",
-        respuesta:
-          "Consulta la página de tu proveedor o llama al soporte. También puedes preguntar a vecinos si están sin servicio.",
-      },
-      { texto: "Volver al inicio", siguiente: "inicio" },
-    ],
-  },
-};
+import { flujoCompleto } from "../../data/chatSoporte";
 
 const Soporte = () => {
   useEffect(() => {
@@ -78,9 +17,9 @@ const Soporte = () => {
   const [chatAbierto, setChatAbierto] = useState(false);
 
   const [mensajes, setMensajes] = useState([
-    { autor: "bot", texto: flujoConversacion.inicio.mensaje },
+    { autor: "bot", texto: flujoCompleto.inicio.mensaje },
   ]);
-  const [opciones, setOpciones] = useState(flujoConversacion.inicio.opciones);
+  const [opciones, setOpciones] = useState(flujoCompleto.inicio.opciones);
   const [escribiendo, setEscribiendo] = useState(false);
   const chatRef = useRef(null);
 
@@ -91,7 +30,7 @@ const Soporte = () => {
 
     setTimeout(() => {
       if (opcion.siguiente) {
-        const siguientePaso = flujoConversacion[opcion.siguiente];
+        const siguientePaso = flujoCompleto[opcion.siguiente];
         setMensajes((prev) => [
           ...prev,
           { autor: "bot", texto: siguientePaso.mensaje },
@@ -102,10 +41,12 @@ const Soporte = () => {
           ...prev,
           { autor: "bot", texto: opcion.respuesta },
         ]);
+        // Opciones contextuales más útiles
         setOpciones([
-          { texto: "Volver al inicio", siguiente: "inicio" },
-          { texto: "Tengo otra duda", siguiente: "dudas" },
-          { texto: "Tengo otro problema", siguiente: "problemas" },
+          { texto: "Volver al menú principal", siguiente: "inicio" },
+          { texto: "Información sobre Red-Fi", siguiente: "informacion" },
+          { texto: "Problemas de conexión", siguiente: "problemas_conexion" },
+          { texto: "Ayuda técnica", siguiente: "ayuda_tecnica" },
         ]);
       }
       setEscribiendo(false);
@@ -138,24 +79,30 @@ const Soporte = () => {
                 ? "bg-secundario border-2 border-texto/15 shadow-lg"
                 : "bg-texto/5 border border-texto/15"
             }`}>
-              <MainH2 className="mb-4">Ayuda Rápida</MainH2>
+              <MainH2 className="mb-4">Información Rápida</MainH2>
               <div className="space-y-3">
                 <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">¿Qué es Red-Fi?</MainH3>
                   <p className="text-sm text-texto">
-                    Una plataforma para conocer la cobertura y calidad de proveedores de Internet.
+                    Una plataforma comunitaria que te ayuda a elegir el mejor proveedor de Internet basándose en reseñas reales de usuarios.
                   </p>
                 </div>
                 <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Herramientas disponibles</MainH3>
+                  <MainH3 className="mb-1">Herramientas principales</MainH3>
                   <p className="text-sm text-texto">
-                    Mapa interactivo, test de velocidad, reseñas y buscador de proveedores.
+                    Mapa de cobertura con reseñas por zona, test de velocidad y comparador de proveedores basado en experiencias reales.
                   </p>
                 </div>
                 <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">¿Cómo registrarse?</MainH3>
+                  <MainH3 className="mb-1">¿Cómo funciona?</MainH3>
                   <p className="text-sm text-texto">
-                    Solo necesitas tu correo electrónico. ¡Es gratis y rápido!
+                    Los usuarios escriben reseñas honestas sobre sus proveedores, clasificadas por zonas geográficas para ayudarte a decidir.
+                  </p>
+                </div>
+                <div className="p-3 rounded-lg border border-texto/15">
+                  <MainH3 className="mb-1">Completamente gratuito</MainH3>
+                  <p className="text-sm text-texto">
+                    Consulta reseñas, usa el mapa de cobertura y realiza tests de velocidad sin costo alguno.
                   </p>
                 </div>
               </div>
@@ -167,24 +114,30 @@ const Soporte = () => {
                 ? "bg-secundario border-2 border-texto/15 shadow-lg"
                 : "bg-texto/5 border border-texto/15"
             }`}>
-              <MainH2 className="mb-4">Problemas Comunes</MainH2>
+              <MainH2 className="mb-4">Soluciones Técnicas Comunes</MainH2>
               <div className="space-y-3">
                 <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Internet lento</MainH3>
+                  <MainH3 className="mb-1">Internet muy lento</MainH3>
                   <p className="text-sm text-texto">
-                    Reinicia el router y desconecta dispositivos innecesarios.
+                    Realiza un test de velocidad, reinicia el router, usa cable ethernet y verifica si otros usuarios reportan problemas similares en tu zona.
                   </p>
                 </div>
                 <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Sin conexión</MainH3>
+                  <MainH3 className="mb-1">Problemas de WiFi</MainH3>
                   <p className="text-sm text-texto">
-                    Verifica cables y luces del router. Contacta a tu proveedor si persiste.
+                    Ubica el router en lugar central y alto, cambia a banda 5GHz si está disponible y evita interferencias de electrodomésticos.
                   </p>
                 </div>
                 <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Problemas WiFi</MainH3>
+                  <MainH3 className="mb-1">Elegir nuevo proveedor</MainH3>
                   <p className="text-sm text-texto">
-                    Ubica el router en lugar central y alto. Evita interferencias.
+                    Consulta nuestro mapa, lee reseñas de tu zona específica y compara velocidades reales reportadas por otros usuarios.
+                  </p>
+                </div>
+                <div className="p-3 rounded-lg border border-texto/15">
+                  <MainH3 className="mb-1">Problemas gaming/streaming</MainH3>
+                  <p className="text-sm text-texto">
+                    Usa conexión por cable, cierra aplicaciones innecesarias y verifica que tu ping sea menor a 50ms en nuestro test.
                   </p>
                 </div>
               </div>

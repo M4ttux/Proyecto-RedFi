@@ -78,7 +78,7 @@ const Alerta = ({
       className={`
       ${
         flotante
-          ? "fixed bottom-6 right-6 z-50 w-[calc(100%-3rem)] max-w-md"
+          ? "fixed bottom-6 right-6 z-[10001] w-[calc(100%-3rem)] max-w-md"
           : "relative"
       }
       bg-fondo px-4 py-3 pr-12 rounded-lg border-3 transition-all duration-300 transform
