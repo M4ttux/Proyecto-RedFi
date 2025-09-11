@@ -4,7 +4,7 @@
 
 ![Red-Fi Logo](Frontend/public/redfi-512.png)
 
-## 🚀 Características Principalesa
+## 🚀 Características Principales
 
 ### 🗺️ **Mapa Interactivo Geolocalizado**
 - **Cobertura por zonas**: Visualización de proveedores disponibles por ubicación específica en Corrientes
