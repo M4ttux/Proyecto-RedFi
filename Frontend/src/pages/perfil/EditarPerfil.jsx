@@ -155,6 +155,8 @@ const EditarPerfil = () => {
               placeholder="Tu nombre completo"
               required
               disabled={loading}
+              maxLength={25}
+              showCounter={true}
             />
 
             <Select

@@ -130,6 +130,8 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
               onChange={handleChange}
               required
               disabled={loading}
+              maxLength={25}
+              showCounter={true}
             />
           </div>
           <div className="flex-1">
@@ -139,6 +141,8 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
               value={formData.proveedor_preferido}
               onChange={handleChange}
               disabled={loading}
+              maxLength={30}
+              showCounter={true}
             />
           </div>
         </div>

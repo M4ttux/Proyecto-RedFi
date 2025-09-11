@@ -190,6 +190,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onChange={handleChange}
             placeholder="Ej. Red Fibra Z"
             required
+            maxLength={50}
+            showCounter={true}
           />
         )}
 

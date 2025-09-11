@@ -19,7 +19,7 @@ const Input = ({
   maxLength = null,
   min,
   max,
-
+  showCounter = false,
 }) => {
   return (
     <div className="space-y-1 relative">
@@ -78,6 +78,7 @@ const Input = ({
             }}
             min={min}
             max={max}
+            maxLength={maxLength}
             placeholder={loading ? "Cargando..." : placeholder}
             required={required}
             disabled={disabled || loading}
@@ -116,6 +117,22 @@ const Input = ({
           ) : null}
         </div>
       </div>
+
+      {/* Contador de caracteres opcional */}
+      {showCounter && maxLength && type !== "color" && type !== "number" && (
+        <div className="flex justify-between items-center mt-1">
+          <div></div> {/* Espaciador para alinear el contador a la derecha */}
+          <p className={`text-sm ${
+            (value?.length || 0) > maxLength * 0.9 
+              ? (value?.length || 0) >= maxLength 
+                ? "text-red-600 font-medium" 
+                : "text-yellow-600 font-medium"
+              : "text-texto/60"
+          }`}>
+            {value?.length || 0}/{maxLength}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

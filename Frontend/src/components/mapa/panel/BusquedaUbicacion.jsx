@@ -58,6 +58,8 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
             }}
             placeholder="Buscar en Corrientes..."
             isInvalid={inputInvalido}
+            maxLength={50}
+            showCounter={true}
             endIconAction={
               input
                 ? {

@@ -154,6 +154,8 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
               rows={4}
               placeholder="Escribe tu experiencia con este proveedor..."
               disabled={loading}
+              maxLength={200}
+              showCounter={true}
             />
           </div>
         </div>

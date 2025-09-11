@@ -111,6 +111,8 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
               required
               disabled={loading}
               placeholder="Nombre del proveedor"
+              maxLength={30}
+              showCounter={true}
             />
           </div>
           <div className="flex-1">
@@ -121,6 +123,8 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
               onChange={handleChange}
               disabled={loading}
               placeholder="https://www.ejemplo.com"
+              maxLength={50}
+              showCounter={true}
             />
           </div>
         </div>
@@ -136,6 +140,8 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
               rows={8}
               disabled={loading}
               placeholder="Descripción del proveedor"
+              maxLength={200}
+              showCounter={true}
             />
           </div>
           <div className="flex-1">

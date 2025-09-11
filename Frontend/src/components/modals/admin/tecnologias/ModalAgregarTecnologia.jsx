@@ -79,6 +79,8 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
           placeholder="Ej. Fibra óptica"
           required
           disabled={loading}
+          maxLength={20}
+          showCounter={true}
         />
 
         {/* Campo descripción (opcional) */}
@@ -90,6 +92,8 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
           rows={4}
           placeholder="Descripción de la tecnología"
           disabled={loading}
+          maxLength={200}
+          showCounter={true}
         />
 
         {/* Botones de acción */}

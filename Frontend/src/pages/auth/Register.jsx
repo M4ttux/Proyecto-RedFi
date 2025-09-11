@@ -151,6 +151,8 @@ const Register = () => {
               value={form.nombre}
               onChange={handleChange}
               required
+              maxLength={25}
+              showCounter={true}
             />
             <Select
               label="Proveedor actual"

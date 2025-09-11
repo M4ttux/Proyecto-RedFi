@@ -86,20 +86,22 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
             placeholder="Ej. Fibra óptica"
             required
             disabled={loading}
+            maxLength={20}
+            showCounter={true}
           />
 
-          {/* Campo descripción (opcional) */}
-          <Textarea
-            name="descripcion"
-            label="Descripción"
-            value={formData.descripcion}
-            onChange={handleChange}
-            rows={4}
-            placeholder="Descripción de la tecnología"
-            disabled={loading}
-          />
-
-          {/* Botones de acción */}
+        {/* Campo descripción (opcional) */}
+        <Textarea
+          name="descripcion"
+          label="Descripción"
+          value={formData.descripcion}
+          onChange={handleChange}
+          rows={4}
+          placeholder="Descripción de la tecnología"
+          disabled={loading}
+          maxLength={200}
+          showCounter={true}
+        />          {/* Botones de acción */}
           <div className="flex gap-3 pt-4">
             <MainButton
               type="button"

@@ -117,6 +117,8 @@ const GlosarioBuscador = () => {
           placeholder="Buscar un concepto (ej: IP pública)"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
+          maxLength={30}
+          showCounter={true}
           endIconAction={
             busqueda
               ? {

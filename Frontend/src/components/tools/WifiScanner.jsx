@@ -172,6 +172,8 @@ const WifiScanner = () => {
             }}
             placeholder="Escribí el nombre de la zona (ej: Comedor)"
             required
+            maxLength={20}
+            showCounter={true}
           />
         </div>
 

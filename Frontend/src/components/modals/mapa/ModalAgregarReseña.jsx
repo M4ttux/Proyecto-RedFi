@@ -370,6 +370,8 @@ const ModalAgregarReseña = ({
         placeholder="Describe tu experiencia con el servicio de internet..."
         rows={4}
         required
+        maxLength={200}
+        showCounter={true}
       />
 
       {/* Botones de navegación del paso final */}
