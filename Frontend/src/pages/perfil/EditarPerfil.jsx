@@ -182,7 +182,7 @@ const EditarPerfil = () => {
                   to="/cuenta"
                   disabled={loading}
                   variant="secondary"
-                  className="w-full"
+                  className="w-full border border-texto/15"
                 >
                   Volver
                 </MainLinkButton>

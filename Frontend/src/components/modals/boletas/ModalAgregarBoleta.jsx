@@ -240,24 +240,6 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             icon={IconWifi}
           />
 
-          {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
-          {form.proveedor === "Otro" && (
-            <Input
-              label={
-                <>
-                  Nombre del proveedor <span className="text-red-600">*</span>
-                </>
-              }
-              name="proveedorOtro"
-              value={form.proveedorOtro}
-              onChange={handleChange}
-              placeholder="Ej. Red Fibra Z"
-              required
-              maxLength={50}
-              showCounter={true}
-            />
-          )}
-
           {/* Campo fecha de vencimiento (obligatorio) */}
           <Input
             label={
@@ -283,19 +265,35 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             icon={IconCalendar}
           />
         </div>
+
+        {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
+        {form.proveedor === "Otro" && (
+          <Input
+            label={
+              <>
+                Nombre del proveedor <span className="text-red-600">*</span>
+              </>
+            }
+            name="proveedorOtro"
+            value={form.proveedorOtro}
+            onChange={handleChange}
+            placeholder="Ej. Red Fibra Z"
+            required
+            maxLength={50}
+            showCounter={true}
+          />
+        )}
         
         {/* Campo de carga de archivo */}
-        <div className="flex justify-center text-center">
-          <FileInput
-            id="archivo"
-            label="Archivo de la boleta"
-            value={archivo}
-            onChange={setArchivo}
-            previewUrl={previewUrl}
-            setPreviewUrl={setPreviewUrl}
-            accept="image/*, application/pdf"
-          />
-        </div>
+        <FileInput
+          id="archivo"
+          label="Archivo de la boleta"
+          value={archivo}
+          onChange={setArchivo}
+          previewUrl={previewUrl}
+          setPreviewUrl={setPreviewUrl}
+          accept="image/*, application/pdf"
+        />
 
         {/* Botones de acción */}
         <div className="flex justify-center gap-4">

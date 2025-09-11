@@ -141,45 +141,67 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
       </div>
 
       {/* Formulario de edición de boleta */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Selector de mes */}
-        <Select
-          name="mes"
-          value={form.mes}
-          onChange={handleSelectChange("mes")}
-          options={meses}
-          label="Mes"
-        />
-        
-        {/* Campo año */}
-        <Input
-          name="anio"
-          value={form.anio}
-          onChange={handleChange}
-          placeholder="Año"
-          label="Año"
-        />
-        
-        {/* Campo monto */}
-        <Input
-          name="monto"
-          type="number"
-          value={form.monto}
-          onChange={handleChange}
-          placeholder="Monto"
-          label="Monto"
-          icon={IconCurrencyDollar}
-        />
-        
-        {/* Selector de proveedor */}
-        <Select
-          name="proveedor"
-          value={form.proveedor}
-          onChange={handleSelectChange("proveedor")}
-          options={proveedores}
-          label="Proveedor"
-          icon={IconWifi}
-        />
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Selector de mes */}
+          <Select
+            name="mes"
+            value={form.mes}
+            onChange={handleSelectChange("mes")}
+            options={meses}
+            label="Mes"
+          />
+          
+          {/* Campo año */}
+          <Input
+            name="anio"
+            value={form.anio}
+            onChange={handleChange}
+            placeholder="Año"
+            label="Año"
+          />
+          
+          {/* Campo monto */}
+          <Input
+            name="monto"
+            type="number"
+            value={form.monto}
+            onChange={handleChange}
+            placeholder="Monto"
+            label="Monto"
+            icon={IconCurrencyDollar}
+          />
+          
+          {/* Selector de proveedor */}
+          <Select
+            name="proveedor"
+            value={form.proveedor}
+            onChange={handleSelectChange("proveedor")}
+            options={proveedores}
+            label="Proveedor"
+            icon={IconWifi}
+          />
+
+          {/* Campo fecha de vencimiento */}
+          <Input
+            name="vencimiento"
+            type="date"
+            value={form.vencimiento}
+            onChange={handleChange}
+            label="Fecha de vencimiento"
+            icon={IconCalendar}
+          />
+
+          {/* Campo fin de promoción */}
+          <Input
+            name="promoHasta"
+            type="date"
+            value={form.promoHasta}
+            onChange={handleChange}
+            label="Fin de promoción"
+            icon={IconCalendar}
+          />
+        </div>
 
         {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
         {form.proveedor === "Otro" && (
@@ -195,47 +217,23 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           />
         )}
 
-        {/* Campo fecha de vencimiento */}
-        <Input
-          name="vencimiento"
-          type="date"
-          value={form.vencimiento}
-          onChange={handleChange}
-          label="Fecha de vencimiento"
-          className="md:col-span-2"
-          icon={IconCalendar}
-        />
-
-        {/* Campo fin de promoción */}
-        <Input
-          name="promoHasta"
-          type="date"
-          value={form.promoHasta}
-          onChange={handleChange}
-          label="Fin de promoción"
-          className="md:col-span-2"
-          icon={IconCalendar}
-        />
-
         {/* Campo de carga/edición de archivo */}
-        <div className="md:col-span-2 text-center">
-          <FileInput
-            id="archivoNuevo"
-            label="Nuevo archivo"
-            accept="image/*, application/pdf"
-            value={archivoNuevo}
-            onChange={(file) => {
-              setArchivoNuevo(file);
-              setImagenEliminada(false); // si elige una nueva, ya no es una eliminación
-            }}
-            previewUrl={preview}
-            setPreviewUrl={setPreview}
-            existingImage={
-              boleta.url_imagen && !imagenEliminada ? boleta.url_imagen : null
-            }
-            onClear={handleClearImagen}
-          />
-        </div>
+        <FileInput
+          id="archivoNuevo"
+          label="Archivo de la boleta"
+          accept="image/*, application/pdf"
+          value={archivoNuevo}
+          onChange={(file) => {
+            setArchivoNuevo(file);
+            setImagenEliminada(false); // si elige una nueva, ya no es una eliminación
+          }}
+          previewUrl={preview}
+          setPreviewUrl={setPreview}
+          existingImage={
+            boleta.url_imagen && !imagenEliminada ? boleta.url_imagen : null
+          }
+          onClear={handleClearImagen}
+        />
       </div>
 
       {/* Botones de acción */}
