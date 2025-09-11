@@ -19,6 +19,30 @@ const FileInput = ({
   const inputRef = useRef(null);
   const [internalPreview, setInternalPreview] = useState(null);
 
+  // Determina qué tipos de archivo acepta el input
+  const getAcceptedTypes = () => {
+    const acceptLower = accept.toLowerCase();
+    const acceptsImages = acceptLower.includes("image");
+    const acceptsPDF = acceptLower.includes("pdf") || acceptLower.includes("application/pdf");
+    
+    return { acceptsImages, acceptsPDF };
+  };
+
+  // Genera mensaje informativo sobre límites de archivos
+  const getLimitMessage = () => {
+    const { acceptsImages, acceptsPDF } = getAcceptedTypes();
+    
+    if (acceptsImages && acceptsPDF) {
+      return "Imágenes: máx. 300KB y 500x500px • PDFs: máx. 50MB";
+    } else if (acceptsImages) {
+      return "Máx. 300KB y resolución 500x500px";
+    } else if (acceptsPDF) {
+      return "Máx. 50MB";
+    }
+    
+    return null;
+  };
+
   // Detecta si el archivo actual es un PDF
   const esPDF = (url) => {
     if (!url) return false;
@@ -112,12 +136,19 @@ const FileInput = ({
   const mostrarBotonQuitar = value || hayPreview;
 
   return (
-    <div className="space-y-2 text-center text-texto">
+    <div className="space-y-3 text-texto">
       {/* Label opcional del input */}
       {label && (
-        <label htmlFor={id} className="block font-medium">
-          {label}
-        </label>
+        <div>
+          <label htmlFor={id} className="block text-texto mb-1">
+            {label}
+          </label>
+          {getLimitMessage() && (
+            <p className="text-xs text-texto/60 mb-2">
+              {getLimitMessage()}
+            </p>
+          )}
+        </div>
       )}
 
       {/* Input de archivo oculto */}
@@ -131,63 +162,109 @@ const FileInput = ({
         disabled={disabled || loading}
       />
 
-      {/* Área de preview del archivo seleccionado */}
+      {/* Área de preview compacta */}
       {mostrarPreview && (
-        <div className="mt-2 flex flex-col items-center gap-2">
+        <div className="bg-texto/5 border border-texto/15 rounded-lg p-3">
           {esPDF(internalPreview) ? (
-            // Preview para archivos PDF
-            <div
-              className="flex flex-col items-center gap-2 p-4 border border-texto/15 rounded-lg max-h-25 cursor-pointer hover:bg-texto/5 transition-colors"
-              onClick={abrirArchivo}
-              title="Click para abrir en nueva pestaña"
-            >
-              <IconFileTypePdf size={60} className="text-red-500" />
-              <p className="text-xs text-center font-medium break-all max-w-xs">
-                {obtenerNombreArchivo(internalPreview)}
-              </p>
+            // Preview compacto para archivos PDF
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <IconFileTypePdf size={24} className="text-red-500 flex-shrink-0" />
+                <span className="text-sm font-medium truncate" title={obtenerNombreArchivo(internalPreview)}>
+                  {obtenerNombreArchivo(internalPreview)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <MainButton
+                  type="button"
+                  onClick={abrirArchivo}
+                  variant="see"
+                  disabled={disabled || loading}
+                  className="text-xs px-2 py-1 h-auto"
+                  title="Abrir archivo"
+                />
+                <label htmlFor={id}>
+                  <MainButton
+                    as="span"
+                    variant="edit"
+                    disabled={disabled || loading}
+                    className="cursor-pointer text-xs px-2 py-1 h-auto"
+                    title="Cambiar archivo"
+                  />
+                </label>
+                {mostrarBotonQuitar && (
+                  <MainButton
+                    type="button"
+                    variant="delete"
+                    onClick={handleClear}
+                    disabled={disabled || loading}
+                    className="text-xs px-2 py-1 h-auto"
+                    title="Quitar archivo"
+                  />
+                )}
+              </div>
             </div>
           ) : (
-            // Preview para imágenes
-            <img
-              src={internalPreview}
-              alt="Imagen seleccionada"
-              className="max-h-25 border border-texto/15 rounded-lg object-contain cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={abrirArchivo}
-              title="Click para abrir en nueva pestaña"
-            />
+            // Preview compacto para imágenes
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <img
+                  src={internalPreview}
+                  alt="Preview"
+                  className="w-8 h-8 object-cover rounded border border-texto/15 flex-shrink-0"
+                />
+                <span className="text-sm font-medium truncate">Imagen seleccionada</span>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <MainButton
+                  type="button"
+                  onClick={abrirArchivo}
+                  variant="see"
+                  disabled={disabled || loading}
+                  className="text-xs px-2 py-1 h-auto"
+                  title="Ver imagen"
+                />
+                <label htmlFor={id}>
+                  <MainButton
+                    as="span"
+                    variant="edit"
+                    disabled={disabled || loading}
+                    className="cursor-pointer text-xs px-2 py-1 h-auto"
+                    title="Cambiar imagen"
+                  />
+                </label>
+                {mostrarBotonQuitar && (
+                  <MainButton
+                    type="button"
+                    variant="delete"
+                    onClick={handleClear}
+                    disabled={disabled || loading}
+                    className="text-xs px-2 py-1 h-auto"
+                    title="Quitar imagen"
+                  />
+                )}
+              </div>
+            </div>
           )}
         </div>
       )}
 
-      {/* Controles principales: botón quitar y seleccionar */}
-      <div className="flex flex-col sm:flex-row gap-2 justify-center">
-        {/* Botón para quitar archivo actual */}
-        {mostrarBotonQuitar && (
-          <div>
+      {/* Controles en línea - solo cuando no hay preview */}
+      {!mostrarPreview && (
+        <div className="flex gap-2">
+          <label htmlFor={id} className="flex-1">
             <MainButton
-              type="button"
-              variant="danger"
-              onClick={handleClear}
-              className="flex-1"
-              disabled={disabled || loading}
+              as="span"
+              variant="accent"
+              loading={loading}
+              disabled={disabled}
+              className="cursor-pointer w-full text-sm"
             >
-              <IconX size={18} /> Quitar archivo
+              Seleccionar archivo
             </MainButton>
-          </div>
-        )}
-        {/* Label que activa el input de archivo */}
-        <label htmlFor={id}>
-          <MainButton
-            as="span"
-            variant="accent"
-            loading={loading}
-            disabled={disabled}
-            className="cursor-pointer flex-1"
-          >
-            {value || hayPreview ? "Cambiar archivo" : "Seleccionar archivo"}
-          </MainButton>
-        </label>
-      </div>
+          </label>
+        </div>
+      )}
     </div>
   );
 };

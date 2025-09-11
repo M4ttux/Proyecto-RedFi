@@ -129,33 +129,27 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           </div>
         </div>
         
-        {/* Descripción y logotipo */}
-        <div className="flex flex-row gap-4">
-          <div className="flex-1">
-            <Textarea
-              label="Descripción"
-              name="descripcion"
-              value={form.descripcion}
-              onChange={handleChange}
-              rows={8}
-              disabled={loading}
-              placeholder="Descripción del proveedor"
-              maxLength={200}
-              showCounter={true}
-            />
-          </div>
-          <div className="flex-1">
-            <FileInput
-              label="Logotipo"
-              value={logoFile}
-              onChange={setLogoFile}
-              previewUrl={previewUrl}
-              setPreviewUrl={setPreviewUrl}
-              accept="image/*"
-              disabled={loading}
-            />
-          </div>
-        </div>
+        <Textarea
+          label="Descripción"
+          name="descripcion"
+          value={form.descripcion}
+          onChange={handleChange}
+          rows={4}
+          disabled={loading}
+          placeholder="Descripción del proveedor"
+          maxLength={200}
+          showCounter={true}
+        />
+        
+        <FileInput
+          label="Logotipo"
+          value={logoFile}
+          onChange={setLogoFile}
+          previewUrl={previewUrl}
+          setPreviewUrl={setPreviewUrl}
+          accept="image/*"
+          disabled={loading}
+        />
 
         {/* Selector de color con múltiples interfaces */}
         <div>

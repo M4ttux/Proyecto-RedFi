@@ -4,7 +4,7 @@ import { obtenerProveedores } from "../../../services/proveedores/obtenerProveed
 import ModalContenedor from "../../ui/ModalContenedor";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
-import TextArea from "../../ui/Textarea";
+import Textarea from "../../ui/Textarea";
 
 const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
   // Estado del formulario con datos de la reseña a editar
@@ -141,7 +141,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
 
           {/* Campo de comentario (obligatorio) */}
           <div>
-            <TextArea
+            <Textarea
               label={
               <>
                 Comentario <span className="text-red-600">*</span>

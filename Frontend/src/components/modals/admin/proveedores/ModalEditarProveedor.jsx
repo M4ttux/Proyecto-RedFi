@@ -200,49 +200,45 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             />
           </div>
         </div>
-        <div className="flex flex-row gap-4">
-          <div className="flex-1">
-            <Textarea
-              label="Descripción"
-              name="descripcion"
-              value={form.descripcion || ""}
-              onChange={handleChange}
-              rows={8}
-              disabled={loading}
-              placeholder="Descripción del proveedor"
-              maxLength={200}
-              showCounter={true}
-            />
-          </div>
-          <div className="flex-1">
-            <FileInput
-              label="Logotipo"
-              id="logo"
-              value={logoFile}
-              onChange={(file) => {
-                setLogoFile(file);
+        
+        <Textarea
+          label="Descripción"
+          name="descripcion"
+          value={form.descripcion || ""}
+          onChange={handleChange}
+          rows={4}
+          disabled={loading}
+          placeholder="Descripción del proveedor"
+          maxLength={200}
+          showCounter={true}
+        />
+        
+        <FileInput
+          label="Logotipo"
+          id="logo"
+          value={logoFile}
+          onChange={(file) => {
+            setLogoFile(file);
 
-                if (file) {
-                  // Genera preview local del archivo seleccionado
-                  const reader = new FileReader();
-                  reader.onloadend = () => setPreviewUrl(reader.result);
-                  reader.readAsDataURL(file);
+            if (file) {
+              // Genera preview local del archivo seleccionado
+              const reader = new FileReader();
+              reader.onloadend = () => setPreviewUrl(reader.result);
+              reader.readAsDataURL(file);
 
-                  // Cancela la eliminación si hay nueva imagen
-                  setForm((prev) => ({ ...prev, eliminarLogo: false }));
-                } else {
-                  // Cuando se quita el archivo, marcar para eliminar el logo
-                  setPreviewUrl(null);
-                  setForm((prev) => ({ ...prev, eliminarLogo: true }));
-                }
-              }}
-              previewUrl={previewUrl}
-              setPreviewUrl={setPreviewUrl}
-              accept="image/*"
-              disabled={loading}
-            />
-          </div>
-        </div>
+              // Cancela la eliminación si hay nueva imagen
+              setForm((prev) => ({ ...prev, eliminarLogo: false }));
+            } else {
+              // Cuando se quita el archivo, marcar para eliminar el logo
+              setPreviewUrl(null);
+              setForm((prev) => ({ ...prev, eliminarLogo: true }));
+            }
+          }}
+          previewUrl={previewUrl}
+          setPreviewUrl={setPreviewUrl}
+          accept="image/*"
+          disabled={loading}
+        />
         
         {/* Selector de color con preview */}
         <div>
