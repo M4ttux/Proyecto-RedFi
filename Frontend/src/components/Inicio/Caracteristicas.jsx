@@ -70,7 +70,7 @@ const Caracteristicas = () => {
               key={i}
               className={`w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0 p-6 rounded-lg transition-transform transform hover:scale-105 backdrop-blur-md ${
                 currentTheme === "light"
-                  ? "bg-secundario border border-secundario/50 shadow-lg"
+                  ? "bg-secundario border-2 border-texto/15 shadow-lg"
                   : "bg-texto/5 border border-texto/15"
               }`}
             >

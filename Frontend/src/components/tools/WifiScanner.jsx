@@ -157,7 +157,7 @@ const WifiScanner = () => {
     <div
       className={`p-8 rounded-lg mx-auto text-texto max-w-xl relative ${
         currentTheme === "light"
-          ? "bg-secundario border border-secundario/50 shadow-lg"
+          ? "bg-secundario border-2 border-texto/15 shadow-lg"
           : "bg-texto/5 border border-texto/15"
       }`}
     >

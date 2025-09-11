@@ -312,7 +312,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         
         {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
-          <p className="text-sm text-texto/50 italic">
+          <p className="text-sm text-texto/75 italic">
             Los campos marcados con <span className="text-red-600">*</span> son
             obligatorios.
           </p>

@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import { IconArrowLeft, IconRadar2, IconBrain } from "@tabler/icons-react";
+import { useTheme } from "../../context/ThemeContext";
 
 const Curso3 = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Curso: Cómo elegir un proveedor de internet";
+  }, []);
+  const { currentTheme } = useTheme();
   const [respuestas, setRespuestas] = useState({});
   const [resultado, setResultado] = useState(null);
   const [mostrarResultados, setMostrarResultados] = useState(false);

@@ -107,6 +107,7 @@ const FiltrosZona = ({
             }
             variant="toggle"
             active={filtros.valoracionMin === 0}
+            className="border-2"
           >
             Todas
           </MainButton>
@@ -141,7 +142,7 @@ const FiltrosZona = ({
       </div>
 
       {/* Botones de acción para aplicar o limpiar filtros */}
-      <div className="w-full flex flex-col sm:flex-row gap-3">
+      <div className="w-full flex flex-col sm:flex-row items-center gap-3">
         <MainButton
           onClick={limpiarFiltros}
           variant="secondary"

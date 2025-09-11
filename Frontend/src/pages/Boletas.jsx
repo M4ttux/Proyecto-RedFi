@@ -8,11 +8,13 @@ import MainLinkButton from "../components/ui/MainLinkButton";
 import MainH1 from "../components/ui/MainH1";
 import { useAlerta } from "../context/AlertaContext";
 import { IconArrowLeft, IconReceipt2 } from "@tabler/icons-react";
+import { useTheme } from "../context/ThemeContext";
 
 const Boletas = () => {
   useEffect(() => {
     document.title = "Red-Fi | Boletas";
   }, []);
+  const { currentTheme } = useTheme();
 
   const [boletas, setBoletas] = useState([]);
   const [modalAgregarAbierto, setModalAgregarAbierto] = useState(false);

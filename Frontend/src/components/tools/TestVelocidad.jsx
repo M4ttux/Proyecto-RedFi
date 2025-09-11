@@ -8,6 +8,10 @@ import { useAlerta } from "../../context/AlertaContext";
 import { ejecutarSpeedtest } from "../../services/speedtestService";
 
 const TestVelocidad = () => {
+  useEffect(() => {
+      document.title = "Red-Fi | Test de velocidad";
+    }, []);
+  // Contextos para tema y alertas
   const { currentTheme } = useTheme();
   const { mostrarError, mostrarExito } = useAlerta();
   

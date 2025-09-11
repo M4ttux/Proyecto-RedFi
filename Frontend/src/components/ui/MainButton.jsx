@@ -50,8 +50,8 @@ const Button = ({
     accent: "bg-acento text-white hover:bg-[#fca75f]",
     secondary:
       currentTheme === "light"
-        ? "bg-texto/5 text-texto hover:bg-[#d2e4ff]"
-        : "bg-texto/5 text-texto hover:bg-[#2a3955]",
+        ? "bg-texto/5 text-texto hover:bg-[#d2e4ff] border-2 border-texto/15"
+        : "bg-texto/5 text-texto hover:bg-[#2a3955] border-1 border-texto/15",
     danger: "bg-red-600 text-white hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     cross: "text-texto/60 hover:text-red-400",
@@ -60,10 +60,10 @@ const Button = ({
     edit: "bg-yellow-600 text-white hover:bg-yellow-400",
     delete: "bg-red-600 text-white hover:bg-red-400",
     toggle: active
-      ? "bg-primario text-white hover:bg-[#336ef0]"
+      ? "bg-primario border-secundario/50 text-white hover:bg-[#336ef0]"
       : currentTheme === "light"
-      ? "bg-secundario text-texto hover:bg-[#d2e4ff]"
-      : "bg-secundario text-texto hover:bg-[#2a3955]",
+      ? "bg-secundario border-texto/15 text-texto hover:bg-[#d2e4ff]"
+      : "bg-secundario border-texto/10 text-texto hover:bg-[#2a3955]",
     navbar: "bg-transparent text-texto hover:bg-white/10",
   };
 

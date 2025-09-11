@@ -27,7 +27,7 @@ const DetectorProveedor = () => {
     <div
           className={`max-w-xl mx-auto p-8 rounded-lg text-center ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >

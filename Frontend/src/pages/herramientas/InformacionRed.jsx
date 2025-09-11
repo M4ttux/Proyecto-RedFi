@@ -4,8 +4,12 @@ import MainH3 from "../../components/ui/MainH3";
 import { IconRadar2, IconArrowLeft } from "@tabler/icons-react";
 import DetectorProveedor from "../../components/tools/DetectorProveedor";
 import { useTheme } from "../../context/ThemeContext";
+import { useEffect } from "react";
 
 const InformacionRed = () => {
+  useEffect(() => {
+      document.title = "Red-Fi | Información de red";
+    }, []);
   const { currentTheme } = useTheme();
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -23,7 +27,7 @@ const InformacionRed = () => {
         <div
           className={`w-full p-8 rounded-lg ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >
@@ -38,7 +42,7 @@ const InformacionRed = () => {
         <div
           className={`w-full p-8 rounded-lg ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >
@@ -53,7 +57,10 @@ const InformacionRed = () => {
         </div>
         {/* Botón volver a herramientas */}
         <div className="text-center">
-          <MainLinkButton to="/herramientas" variant="secondary">
+          <MainLinkButton 
+            to="/herramientas" 
+            variant="secondary" 
+          >
             <IconArrowLeft />
             Volver a herramientas
           </MainLinkButton>

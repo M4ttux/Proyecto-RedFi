@@ -1,10 +1,13 @@
-import React from "react";
+import { useEffect } from "react";
 import MainLinkButton from "../components/ui/MainLinkButton";
 import MainH1 from "../components/ui/MainH1";
 import MainH3 from "../components/ui/MainH3";
 import { IconTool } from "@tabler/icons-react";
 
 const Herramientas = () => {
+  useEffect(() => {
+      document.title = "Red-Fi | Herramientas";
+    }, []);
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">

@@ -185,7 +185,7 @@ const ModalZonaMultiProveedor = ({
 
       {/* Instrucciones de uso para el usuario */}
       <div className="mt-6 text-center">
-        <p className="text-sm text-texto/50 italic">
+        <p className="text-sm text-texto/75 italic">
           Haz clic en "Ver más" para ver más información de cada
           proveedor.
         </p>

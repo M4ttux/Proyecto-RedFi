@@ -2,18 +2,18 @@ import classNames from "classnames";
 
 // Configuración de tamaños disponibles para el badge
 const SIZE_MAP = {
-  xs: "text-[11px] px-2 py-0.5",
+  xs: "text-xs px-2 py-1",
   sm: "text-xs px-2 py-1",
   md: "text-sm px-3 py-1.5",
 };
 
 // Configuración de variantes de color y estilo
 const VARIANT_MAP = {
-  accent: "bg-acento/10 text-acento",
-  muted: "bg-texto/10 text-texto",
-  success: "bg-green-500/10 text-green-600",
-  danger: "bg-red-500/10 text-red-600",
-  info: "bg-blue-500/10 text-blue-600",
+  accent: "bg-acento/50 text-texto font-bold",
+  muted: "bg-texto/15 text-texto font-bold",
+  success: "bg-green-500/15 text-green-600",
+  danger: "bg-red-500/15 text-red-600",
+  info: "bg-blue-500/15 text-blue-600",
   admin: "bg-acento text-texto font-bold",
   premium: "bg-acento text-texto font-bold",
 };

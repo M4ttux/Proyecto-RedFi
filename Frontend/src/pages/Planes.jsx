@@ -1,5 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { useRole } from "../context/RoleContext";
+import { useTheme } from "../context/ThemeContext";
 import { useEffect, useState } from "react";
 import { IconCheck, IconReceiptDollar, IconArrowLeft } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
@@ -31,6 +32,7 @@ const beneficiosPremium = [
 const Planes = () => {
   const { usuario } = useAuth();
   const { plan } = useRole();
+  const { currentTheme } = useTheme();
   const planActual = plan || "basico";
 
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -75,7 +77,11 @@ const Planes = () => {
 
         <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Plan Básico */}
-          <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 flex flex-col justify-between">
+          <div className={`shadow-lg rounded-lg p-6 flex flex-col justify-between ${
+            currentTheme === "light"
+              ? "bg-secundario border-2 border-texto/15"
+              : "bg-secundario border border-secundario/50"
+          }`}>
             <div>
               <MainH2 className="text-center justify-center">Plan Básico</MainH2>
               <p className="text-texto mb-4">
@@ -99,7 +105,11 @@ const Planes = () => {
           </div>
 
           {/* Plan Premium */}
-          <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 flex flex-col justify-between">
+          <div className={`shadow-lg rounded-lg p-6 flex flex-col justify-between ${
+            currentTheme === "light"
+              ? "bg-secundario border-2 border-texto/15"
+              : "bg-secundario border border-secundario/50"
+          }`}>
             <div>
               <MainH2 className="text-acento text-center justify-center">Plan Premium</MainH2>
               <p className="text-texto mb-4">
@@ -126,7 +136,10 @@ const Planes = () => {
 
       {/* Botón volver al perfil */}
       <div className="text-center">
-        <MainLinkButton to="/cuenta" variant="secondary">
+        <MainLinkButton 
+          to="/cuenta" 
+          variant="secondary"
+        >
           <IconArrowLeft />
           Volver al perfil
         </MainLinkButton>

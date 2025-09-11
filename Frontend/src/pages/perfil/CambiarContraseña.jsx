@@ -9,8 +9,10 @@ import MainLinkButton from "../../components/ui/MainLinkButton";
 import Input from "../../components/ui/Input";
 
 import { useAlerta } from "../../context/AlertaContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const CambiarContraseña = () => {
+  const { currentTheme } = useTheme();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ nueva: "", repetir: "" });
@@ -59,7 +61,11 @@ const CambiarContraseña = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 max-w-md mx-auto">
+        <div className={`shadow-lg rounded-lg p-6 max-w-md mx-auto ${
+          currentTheme === "light"
+            ? "bg-secundario border-2 border-texto/15"
+            : "bg-secundario border border-secundario/50"
+        }`}>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label={
@@ -105,7 +111,7 @@ const CambiarContraseña = () => {
               {loading ? "Guardando..." : "Guardar nueva contraseña"}
             </MainButton>
             <div className="text-center mt-6">
-              <p className="text-sm text-texto/50 italic">
+              <p className="text-sm text-texto/75 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.
               </p>

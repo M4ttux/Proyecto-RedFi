@@ -44,7 +44,7 @@ const ReseñasDestacadas = () => {
               key={i}
               className={`flex flex-col items-center backdrop-blur-md p-6 rounded-lg text-center transition-transform transform hover:scale-105 ${
                 currentTheme === "light"
-                  ? "bg-secundario border border-secundario/50 shadow-lg"
+                  ? "bg-secundario border-2 border-texto/15 shadow-lg"
                   : "bg-texto/5 border border-texto/15"
               }`}
             >

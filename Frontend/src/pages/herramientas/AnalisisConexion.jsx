@@ -1,13 +1,15 @@
-import React from "react";
+import { useEffect } from "react";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import MainH1 from "../../components/ui/MainH1";
-import MainH2 from "../../components/ui/MainH2";
 import MainH3 from "../../components/ui/MainH3";
 import { IconAccessPoint, IconArrowLeft } from "@tabler/icons-react";
 import WifiScanner from "../../components/tools/WifiScanner";
 import { useTheme } from "../../context/ThemeContext";
 
 const AnalisisConexion = () => {
+  useEffect(() => {
+      document.title = "Red-Fi | Análisis de conexión por zonas";
+  })
   const { currentTheme } = useTheme();
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -25,7 +27,7 @@ const AnalisisConexion = () => {
         <div
           className={`w-full p-8 rounded-lg ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >
@@ -37,7 +39,7 @@ const AnalisisConexion = () => {
         <div
           className={`w-full p-8 rounded-lg ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >

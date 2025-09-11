@@ -40,7 +40,7 @@ const PreguntasFrecuentes = () => {
   return (
     <section
       className={`py-16 px-4 sm:px-6 text-texto ${
-        currentTheme === "light" ? "bg-secundario" : "bg-texto/5"
+        currentTheme === "light" ? "bg-secundario border-2 border-texto/15" : "bg-texto/5"
       }`}
     >
       <div className="max-w-7xl mx-auto">

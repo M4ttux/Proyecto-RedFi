@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { conceptosRed } from "../../data/conceptosValidos";
+import { useTheme } from "../../context/ThemeContext";
 import Input from "../ui/Input";
 import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
@@ -7,6 +8,7 @@ import MainButton from "../ui/MainButton";
 import { IconX, IconWorldSearch, IconVolume, IconPlayerStopFilled } from "@tabler/icons-react";
 
 const GlosarioBuscador = () => {
+  const { currentTheme } = useTheme();
   // Estados para búsqueda y resultados
   const [busqueda, setBusqueda] = useState("");
   const [resultado, setResultado] = useState(null);
@@ -133,11 +135,15 @@ const GlosarioBuscador = () => {
 
       {/* Lista de sugerencias basada en conceptos válidos */}
       {busqueda && sugerencias.length > 0 && (
-        <ul className="mt-2 bg-secundario rounded-lg shadow--g text-left max-h-64 overflow-y-auto">
+        <ul className={`mt-2 rounded-lg shadow--g text-left max-h-64 overflow-y-auto ${
+          currentTheme === "light"
+            ? "bg-secundario border-2 border-texto/15"
+            : "bg-secundario border border-secundario/50"
+        }`}>
           {sugerencias.map((sugerencia, idx) => (
             <li
               key={idx}
-              className="p-3 hover:bg-secundario cursor-pointer border-b border-gray-600 last:border-0"
+              className="p-3 hover:bg-secundario cursor-pointer border-b border-texto/10 last:border-0"
               onClick={() => manejarBusqueda(sugerencia)}
             >
               {sugerencia}
@@ -159,7 +165,11 @@ const GlosarioBuscador = () => {
 
       {/* Resultado de Wikipedia con opciones de interacción */}
       {resultado && (
-        <div className="mt-6 bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4 text-left">
+        <div className={`mt-6 shadow-lg rounded-lg p-4 text-left ${
+          currentTheme === "light"
+            ? "bg-secundario border-2 border-texto/15"
+            : "bg-secundario border border-secundario/50"
+        }`}>
           <MainH3>{resultado.title}</MainH3>
           <p className="mt-3">{resultado.extract}</p>
 
@@ -234,7 +244,11 @@ const GlosarioBuscador = () => {
           ].map((item, i) => (
             <div
               key={i}
-              className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4 text-left"
+              className={`shadow-lg rounded-lg p-4 text-left ${
+                currentTheme === "light"
+                  ? "bg-secundario border-2 border-texto/15"
+                  : "bg-secundario border border-secundario/50"
+              }`}
             >
               <MainH3 className="text-lg">{item.termino}</MainH3>
               <p>{item.descripcion}</p>

@@ -135,7 +135,7 @@ const Soporte = () => {
             {/* Sección de ayuda rápida */}
             <div className={`p-6 rounded-lg ${
               currentTheme === "light"
-                ? "bg-secundario border border-secundario/50 shadow-lg"
+                ? "bg-secundario border-2 border-texto/15 shadow-lg"
                 : "bg-texto/5 border border-texto/15"
             }`}>
               <MainH2 className="mb-4">Ayuda Rápida</MainH2>
@@ -164,7 +164,7 @@ const Soporte = () => {
             {/* Sección de problemas comunes */}
             <div className={`p-6 rounded-lg ${
               currentTheme === "light"
-                ? "bg-secundario border border-secundario/50 shadow-lg"
+                ? "bg-secundario border-2 border-texto/15 shadow-lg"
                 : "bg-texto/5 border border-texto/15"
             }`}>
               <MainH2 className="mb-4">Problemas Comunes</MainH2>
@@ -231,7 +231,7 @@ const Soporte = () => {
         <div className="fixed bottom-24 lg:bottom-6 right-4 left-4 sm:right-6 sm:left-auto sm:w-96 lg:w-120 z-50">
           <div className={`rounded-lg shadow-2xl overflow-hidden ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50"
+              ? "bg-secundario border-2 border-texto/15"
               : "bg-fondo border border-texto/15"
           }`}>
             {/* Header del chat */}
@@ -268,10 +268,10 @@ const Soporte = () => {
                         className={`p-2 rounded-lg max-w-[85%] text-sm ${
                           m.autor === "bot"
                             ? currentTheme === "light"
-                              ? "bg-texto/5 text-texto text-left"
+                              ? "bg-texto/5 text-texto text-left border-2 border-texto/15"
                               : "bg-texto/5 text-texto text-left"
                             : currentTheme === "light"
-                            ? "bg-primario text-white text-right"
+                            ? "bg-primario text-white text-right border-2 border-texto/15"
                             : "bg-primario text-texto text-right"
                         }`}
                       >
@@ -284,7 +284,7 @@ const Soporte = () => {
                     <div className="flex justify-start">
                       <div className={`p-2 rounded-lg text-sm animate-pulse ${
                         currentTheme === "light"
-                          ? "bg-texto/5 text-texto"
+                          ? "bg-texto/5 text-texto border-2 border-texto/15"
                           : "bg-texto/5 text-texto"
                       }`}>
                         Escribiendo...

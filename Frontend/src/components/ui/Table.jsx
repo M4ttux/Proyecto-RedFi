@@ -9,7 +9,11 @@ const Table = ({ columns = [], data = [], className = "" }) => {
       {/* Vista de escritorio - Tabla tradicional con diseño responsivo para pantallas grandes */}
       <div
         className={classNames(
-          "hidden lg:block backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg overflow-hidden",
+          `hidden lg:block backdrop-blur-md bg-secundario shadow-lg rounded-lg overflow-hidden ${
+            currentTheme === "light"
+              ? "border-2 border-texto/15"
+              : "border border-secundario/50"
+          }`,
           className
         )}
       >
@@ -69,7 +73,11 @@ const Table = ({ columns = [], data = [], className = "" }) => {
         {data.length === 0 ? (
           <div
             className={classNames(
-              "backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 text-center text-texto",
+              `backdrop-blur-md bg-secundario shadow-lg rounded-lg p-6 text-center text-texto ${
+                currentTheme === "light"
+                  ? "border-2 border-secundario/50"
+                  : "border border-secundario/50"
+              }`,
               className
             )}
           >
@@ -81,7 +89,11 @@ const Table = ({ columns = [], data = [], className = "" }) => {
             <div
               key={row.id || rowIndex}
               className={classNames(
-                "backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-4 space-y-3",
+                `backdrop-blur-md bg-secundario shadow-lg rounded-lg p-4 space-y-3 ${
+                  currentTheme === "light"
+                    ? "border-2 border-secundario/50"
+                    : "border border-secundario/50"
+                }`,
                 className
               )}
             >

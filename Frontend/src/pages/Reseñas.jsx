@@ -145,7 +145,7 @@ const Reseñas = () => {
       label: "COMENTARIO",
       renderCell: (r) => (
         <div 
-          className="text-sm text-texto max-w-[250px] lg:max-w-none line-clamp-3 leading-relaxed"
+          className="text-sm text-texto truncate text-ellipsis overflow-hidden max-w-[200px] line-clamp-3 leading-relaxed"
           title={r.comentario}
         >
           {r.comentario || "—"}
@@ -237,7 +237,7 @@ const Reseñas = () => {
               <div
                 className={`backdrop-blur-md rounded-lg p-6 ${
                   currentTheme === "light"
-                    ? "bg-secundario border border-secundario/50 shadow-lg"
+                    ? "bg-secundario border-2 border-texto/15 shadow-lg"
                     : "bg-texto/5 border border-texto/15"
                 }`}
               >

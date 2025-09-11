@@ -57,10 +57,11 @@ const Login = () => {
         </div>
 
         {/* Formulario */}
-        <div className={`rounded-lg p-6
+        <div
+          className={`rounded-lg p-6
         ${
           currentTheme === "light"
-            ? "bg-secundario border border-secundario/50 shadow-lg"
+            ? "bg-secundario border-2 border-texto/15 shadow-lg"
             : "bg-texto/5 border border-texto/15"
         } `}
         >
@@ -102,9 +103,7 @@ const Login = () => {
             <div className="w-full border-t border-texto/15"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-texto">
-              ¿No tienes cuenta?
-            </span>
+            <span className="px-2 bg-fondo text-texto">¿No tienes cuenta?</span>
           </div>
         </div>
 

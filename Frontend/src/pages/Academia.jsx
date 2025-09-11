@@ -5,11 +5,13 @@ import MainH2 from "../components/ui/MainH2";
 import MainH3 from "../components/ui/MainH3";
 import MainLinkButton from "../components/ui/MainLinkButton";
 import ReseñasDestacadas from "../components/academia/reseñasDestacadas";
+import { useTheme } from "../context/ThemeContext";
 
 const AcademyHome = () => {
   useEffect(() => {
     document.title = "Red-Fi | Academia";
   }, []);
+  const { currentTheme } = useTheme();
   const cursos = [
     {
       id: 1,

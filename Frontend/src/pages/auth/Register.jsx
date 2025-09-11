@@ -106,7 +106,7 @@ const Register = () => {
         <div
           className={`rounded-lg p-6 ${
             currentTheme === "light"
-              ? "bg-secundario border border-secundario/50 shadow-lg"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >
@@ -174,7 +174,7 @@ const Register = () => {
               {loading ? "Creando cuenta..." : "Crear Cuenta"}
             </MainButton>
             <div className="text-center mt-6">
-              <p className="text-sm text-texto/50 italic">
+              <p className="text-sm text-texto/75 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.
               </p>

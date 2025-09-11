@@ -14,10 +14,12 @@ import Select from "../../components/ui/Select";
 import Avatar from "../../components/ui/Avatar";
 
 import { useAlerta } from "../../context/AlertaContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const EditarPerfil = () => {
   const { usuario } = useAuth();
   const { mostrarError, mostrarExito } = useAlerta();
+  const { currentTheme } = useTheme();
 
   const [form, setForm] = useState({
     nombre: "",
@@ -106,7 +108,11 @@ const EditarPerfil = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-secundario border border-secundario/50 shadow-lg rounded-lg p-6 max-w-lg mx-auto">
+        <div className={`shadow-lg rounded-lg p-6 max-w-lg mx-auto ${
+          currentTheme === "light"
+            ? "bg-secundario border-2 border-texto/15"
+            : "bg-secundario border border-secundario/50"
+        }`}>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Avatar */}
             <div className="flex flex-col items-center gap-3">
@@ -191,7 +197,7 @@ const EditarPerfil = () => {
             </div>
 
             <div className="text-center mt-6">
-              <p className="text-sm text-texto/50 italic">
+              <p className="text-sm text-texto/75 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.
               </p>

@@ -41,12 +41,12 @@ const LinkButton = ({
   
   if (currentTheme === "light") {
     return isPremium
-      ? "bg-secundario border border-secundario hover:bg-[#2a3955]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center"
-      : "bg-secundario border border-secundario hover:bg-[#2a3955]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center";
+      ? "bg-secundario border-2 border-texto/15 hover:bg-[#2a3955]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center" // Light theme - Premium
+      : "bg-secundario border-2 border-texto/15 hover:bg-[#2a3955]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center"; // Light theme - No premium
   } else {
     return isPremium
-      ? "bg-primario/20 backdrop-blur-md border border-white/10 hover:bg-[#336ef0]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center"
-      : "bg-primario/20 backdrop-blur-md border border-white/10 hover:bg-[#336ef0]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center";
+      ? "bg-primario/20 backdrop-blur-md border border-white/10 hover:bg-[#336ef0]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center" // Dark theme - Premium
+      : "bg-primario/20 backdrop-blur-md border border-white/10 hover:bg-[#336ef0]/30 shadow-lg text-texto min-h-[130px] flex flex-col justify-center"; // Dark theme - No premium
   }
 };
 
@@ -55,7 +55,7 @@ const LinkButton = ({
     primary: "bg-primario text-white hover:bg-[#336ef0]",
     accent: "bg-acento text-white hover:bg-[#fca75f]",
     secondary: currentTheme === "light" 
-  ? "bg-secundario text-texto hover:bg-[#d2e4ff]"  // Light
+  ? "bg-secundario text-texto hover:bg-[#d2e4ff] border-2 border-texto/15"  // Light
   : "bg-secundario text-texto hover:bg-[#2a3955]", // Dark
     danger: "bg-red-600 text-texto hover:bg-red-700",
     navbar: "bg-transparent text-texto hover:bg-white/10",
@@ -63,9 +63,11 @@ const LinkButton = ({
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     card: getCardVariant(), // Estilos dinámicos para tarjetas
     cardAdmin: currentTheme === "light"
-    ? "bg-acento/20 backdrop-blur-md border border-acento hover:bg-[#fca75f]/60 text-texto min-h-[130px] flex flex-col justify-center shadow-lg"
-    : "bg-acento/20 backdrop-blur-md border border-white/10 hover:bg-[#fca75f]/30 text-texto min-h-[130px] flex flex-col justify-center shadow-lg",
-    curso: "flex flex-col bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full",
+    ? "bg-acento/20 backdrop-blur-md border-2 border-acento hover:bg-[#fca75f]/60 text-texto min-h-[130px] flex flex-col justify-center shadow-lg" // Light theme
+    : "bg-acento/20 backdrop-blur-md border border-white/10 hover:bg-[#fca75f]/30 text-texto min-h-[130px] flex flex-col justify-center shadow-lg", // Dark theme
+    curso: currentTheme === "light"
+    ? "flex flex-col bg-secundario border-2 border-texto/15 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full" // Light theme
+    : "flex flex-col bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full", // Dark theme
   };
 
   // Estilos específicos para estado de carga

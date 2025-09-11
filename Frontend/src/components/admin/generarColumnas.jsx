@@ -210,7 +210,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "COMENTARIO",
         renderCell: (row) => (
           <div
-            className="line-clamp-2 text-ellipsis overflow-hidden max-w-[250px] lg:max-w-none leading-relaxed"
+            className="truncate text-ellipsis overflow-hidden max-w-[200px]"
             title={row.comentario}
           >
             {row.comentario || "—"}
@@ -233,7 +233,14 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
       {
         id: "descripcion",
         label: "DESCRIPCIÓN",
-        renderCell: (row) => row.descripcion || "—",
+        renderCell: (row) => (
+          <div
+          className="truncate text-ellipsis overflow-hidden max-w-[200px]"
+          title={row.descripcion}
+          >
+            {row.descripcion || "—"}
+          </div>
+        ),
       }
     );
   }
