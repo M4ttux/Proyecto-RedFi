@@ -86,8 +86,8 @@ const MobileBottomNav = () => {
                 setMostrarNotis(false);
                 openOnly(mostrarHerramientas ? null : "tools");
               }}
-              variant="secondary"
-              className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent
+              variant="navbar"
+              className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent border-0
               ${mostrarHerramientas ? "!text-acento !scale-110" : ""}`}
               icon={IconTool}
               iconSize={22}
@@ -277,7 +277,7 @@ const MobileBottomNav = () => {
                 setMostrarMenu(!mostrarMenu);
                 openOnly(mostrarMenu ? null : "menu");
               }}
-              variant="secondary"
+              variant="navbar"
               className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
                 currentTheme === "light" ? "!text-texto" : "!text-texto",
                 mostrarMenu ? "!text-acento !scale-110" : ""
@@ -293,10 +293,10 @@ const MobileBottomNav = () => {
             {/* More Menu Dropdown */}
             {mostrarMenu && (
               <div
-                className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 py-2 ${
+                className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 p-2 ${
                   currentTheme === "light"
                     ? "bg-fondo border border-texto/15 text-texto"
-                    : "bg-fondo text-texto border border-texto/15"
+                      : "bg-fondo text-texto border border-texto/15"
                 }`}
               >
                 {/* Cambiar tema usando MainButton */}
@@ -306,10 +306,10 @@ const MobileBottomNav = () => {
                     setMostrarMenu(false);
                   }}
                   variant="secondary"
-                  className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                  className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
                     currentTheme === "light"
-                      ? "!bg-transparent !text-texto"
-                      : "!bg-transparent !text-texto"
+                      ? " !text-texto"
+                      : " !text-texto"
                   }`}
                   icon={currentTheme === "light" ? IconSun : IconMoon}
                   iconSize={20}
@@ -323,8 +323,8 @@ const MobileBottomNav = () => {
                     <MainLinkButton
                       to="/cuenta"
                       onClick={() => setMostrarMenu(false)}
-                      variant="navbar"
-                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      variant="secondary"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
                         isActive("/cuenta") ? "!text-acento" : ""
                       }`}
                     >

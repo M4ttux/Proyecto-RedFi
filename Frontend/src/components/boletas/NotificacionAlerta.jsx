@@ -6,6 +6,7 @@ const NotificacionAlerta = ({ mensaje, tipo, onClose }) => {
     vencimiento: "bg-yellow-600",
     aumento: "bg-red-600",
     info: "bg-blue-600",
+    promocion: "bg-amber-600",
   };
 
   const [visible, setVisible] = useState(true);

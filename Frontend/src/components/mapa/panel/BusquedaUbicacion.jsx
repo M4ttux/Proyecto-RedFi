@@ -43,7 +43,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
 
   return (
     <div className="space-y-4 relative">
-      <div className="flex gap-2 relative" ref={contenedorRef}>
+      <div className="flex gap-2 relative items-center" ref={contenedorRef}>
         <div className="relative flex-1">
           <Input
             label="Buscar ubicación"
@@ -97,7 +97,7 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
           title="Buscar ubicación"
           type="button"
           variant="primary"
-          className="self-end py-2.25"
+          className="py-2.25"
           icon={IconSearch}
           iconAlwaysVisible={true}
         />

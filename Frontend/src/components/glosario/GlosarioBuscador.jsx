@@ -1,20 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { conceptosRed } from "../../data/conceptosValidos";
 import { useTheme } from "../../context/ThemeContext";
 import Input from "../ui/Input";
 import MainH2 from "../ui/MainH2";
 import MainH3 from "../ui/MainH3";
 import MainButton from "../ui/MainButton";
-import { IconX, IconWorldSearch, IconVolume, IconPlayerStopFilled } from "@tabler/icons-react";
+import {
+  IconX,
+  IconWorldSearch,
+  IconVolume,
+  IconPlayerStopFilled,
+  IconChevronDown,
+} from "@tabler/icons-react";
+
 
 const GlosarioBuscador = () => {
   const { currentTheme } = useTheme();
+
   // Estados para búsqueda y resultados
   const [busqueda, setBusqueda] = useState("");
   const [resultado, setResultado] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
   const [leyendo, setLeyendo] = useState(false);
+
+  // Estado para la sección "Explora todos..." (colapsable)
+  const [mostrarExplora, setMostrarExplora] = useState(false);
+
+  // Lista de conceptos ordenada alfabéticamente (memo para performance)
+  const todosLosConceptos = useMemo(
+    () => Object.keys(conceptosRed).sort((a, b) => a.localeCompare(b, "es")),
+    []
+  );
 
   // Limpiar síntesis de voz al desmontar componente
   useEffect(() => {
@@ -56,7 +73,7 @@ const GlosarioBuscador = () => {
     }
   };
 
-  // Filtrar conceptos válidos como sugerencias
+  // Filtrar conceptos válidos como sugerencias en el input principal
   const sugerencias = Object.keys(conceptosRed).filter((concepto) =>
     concepto.toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -75,14 +92,14 @@ const GlosarioBuscador = () => {
       {/* Botones de conceptos populares */}
       <div className="mt-4 flex flex-wrap gap-2 justify-center">
         {[
-          "IP",
+          "IP pública",
           "Router",
           "Ping",
           "DNS",
           "Firewall",
           "Latencia",
-          "WiFi",
-          "Dirección MAC",
+          "Wi-Fi",
+          "MAC Address",
           "Ancho de banda",
           "Servidor",
         ].map((concepto, i) => (
@@ -137,11 +154,13 @@ const GlosarioBuscador = () => {
 
       {/* Lista de sugerencias basada en conceptos válidos */}
       {busqueda && sugerencias.length > 0 && (
-        <ul className={`mt-2 rounded-lg shadow--g text-left max-h-64 overflow-y-auto ${
-          currentTheme === "light"
-            ? "bg-secundario border-2 border-texto/15"
-            : "bg-secundario border border-secundario/50"
-        }`}>
+        <ul
+          className={`mt-2 rounded-lg shadow--g text-left max-h-64 overflow-y-auto ${
+            currentTheme === "light"
+              ? "bg-secundario border-2 border-texto/15"
+              : "bg-secundario border border-secundario/50"
+          }`}
+        >
           {sugerencias.map((sugerencia, idx) => (
             <li
               key={idx}
@@ -167,11 +186,13 @@ const GlosarioBuscador = () => {
 
       {/* Resultado de Wikipedia con opciones de interacción */}
       {resultado && (
-        <div className={`mt-6 shadow-lg rounded-lg p-4 text-left ${
-          currentTheme === "light"
-            ? "bg-secundario border-2 border-texto/15"
-            : "bg-secundario border border-secundario/50"
-        }`}>
+        <div
+          className={`mt-6 shadow-lg rounded-lg p-4 text-left ${
+            currentTheme === "light"
+              ? "bg-secundario border-2 border-texto/15"
+              : "bg-secundario border border-secundario/50"
+          }`}
+        >
           <MainH3>{resultado.title}</MainH3>
           <p className="mt-3">{resultado.extract}</p>
 
@@ -225,7 +246,9 @@ const GlosarioBuscador = () => {
 
       {/* Sección de conceptos destacados */}
       <div className="mt-12">
-        <MainH2 className="text-center justify-center">Conceptos destacados</MainH2>
+        <MainH2 className="text-center justify-center">
+          Conceptos destacados
+        </MainH2>
         <div className="grid md:grid-cols-3 gap-4">
           {[
             {
@@ -257,6 +280,56 @@ const GlosarioBuscador = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Sección: Explora todos los conceptos (colapsable) */}
+      <div className="mt-12">
+        <div className="flex justify-center">
+          <MainButton
+            variant="secondary"
+            onClick={() => setMostrarExplora((v) => !v)}
+            aria-expanded={mostrarExplora}
+            aria-controls="lista-explora"
+            className="flex items-center gap-2"
+          >
+            Explora todos los conceptos disponibles
+            <IconChevronDown
+              size={18}
+              className={`transition-transform duration-300 ${
+                mostrarExplora ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </MainButton>
+        </div>
+
+        {mostrarExplora && (
+          <div
+            id="lista-explora"
+            className={`mt-4 rounded-xl overflow-hidden ${
+              currentTheme === "light"
+                ? "border-2 border-texto/15 bg-secundario"
+                : "border border-secundario/50 bg-secundario"
+            }`}
+          >
+            <div className="max-h-[420px] overflow-y-auto">
+              <ul className="divide-y divide-texto/10">
+                {todosLosConceptos.map((concepto) => (
+                  <li key={concepto}>
+                    <button
+                      type="button"
+                      onClick={() => manejarBusqueda(concepto)}
+                      className="w-full text-left px-4 py-3 hover:bg-secundario focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      aria-label={`Abrir definición de ${concepto}`}
+                      title={`Abrir definición de ${concepto}`}
+                    >
+                      {concepto}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
