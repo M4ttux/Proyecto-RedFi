@@ -30,7 +30,7 @@ export const flujoConversacion = {
       {
         texto: "¿Es gratuito usar Red-Fi?",
         respuesta:
-          "Sí, Red-Fi tiene funciones gratuitas y un plan premium. Gratis puedes: consultar el mapa con reseñas, usar herramientas básicas como test de velocidad e información de red, y escribir reseñas. Con plan premium accedes a gestión de boletas, Red-Fi Academy y funciones sin anuncios.",
+          "Sí, Red-Fi tiene funciones gratuitas y un plan premium. Gratis puedes: consultar el mapa con reseñas, usar herramientas básicas como test de velocidad e información de red, y escribir reseñas. Con plan premium accedes a gestión de boletas, Academia Red-Fi y funciones sin anuncios.",
       },
       {
         texto: "¿Cómo funciona Red-Fi?",

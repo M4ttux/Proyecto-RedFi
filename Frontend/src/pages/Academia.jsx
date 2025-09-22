@@ -71,9 +71,9 @@ const AcademyHome = () => {
         </div>
 
         <div className="text-center max-w-2xl mx-auto mb-6">
-          <MainH2 className="text-center justify-center">¿Por qué elegir Red-Fi Academy?</MainH2>
+          <MainH2 className="text-center justify-center">¿Por qué elegir la Academia Red-Fi?</MainH2>
           <p className="text-lg">
-            En Red-Fi Academy te brindamos formación práctica y de calidad para
+            En la Academia Red-Fi te brindamos formación práctica y de calidad para
             que puedas mejorar tu experiencia con internet y redes.
           </p>
         </div>

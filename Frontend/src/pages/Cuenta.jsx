@@ -114,7 +114,7 @@ const Cuenta = () => {
           <div>
             <MainLinkButton to="/academy" variant="card" isPremium={true}>
               <MainH3 className="text-center justify-center">
-                Red-Fi Academy
+                Academia Red-Fi
               </MainH3>
               <p>
                 Accede a nuestros mini cursos gratuitos sobre redes, Wi-Fi y

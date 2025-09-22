@@ -21,7 +21,7 @@
 - **Alertas automáticas**: Notificaciones antes del vencimiento
 - **Análisis de aumentos**: Comparación mes a mes con alertas de variaciones de precio
 
-### 🎓 **Red-Fi Academy**
+### 🎓 **Academia Red-Fi**
 - **Cursos interactivos**:
   - *Curso 1*: "Cómo solucionar problemas de internet"
   - *Curso 2*: "Cómo medir la velocidad de internet" 

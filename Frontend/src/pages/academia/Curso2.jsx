@@ -209,7 +209,7 @@ const Curso2 = () => {
         <div className="text-center">
           <MainLinkButton to="/academy" variant="secondary">
             <IconArrowLeft />
-            Volver a Red-Fi Academy
+            Volver a la Academia Red-Fi
           </MainLinkButton>
         </div>
       </div>

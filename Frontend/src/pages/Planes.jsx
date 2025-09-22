@@ -14,7 +14,7 @@ const beneficiosBasico = [
   { texto: "Ver y agregar reseñas", disponible: true },
   { texto: "Acceso a las herramientas", disponible: true },
   { texto: "Acceso completo a la gestión de boletas", disponible: false },
-  { texto: "Acceso completo a Red-Fi Academy", disponible: false },
+  { texto: "Acceso completo a la Academia Red-Fi", disponible: false },
   { texto: "Sin anuncios ni banners promocionales", disponible: false },
   { texto: "Notificaciones básicas", disponible: false },
 ];
@@ -24,7 +24,7 @@ const beneficiosPremium = [
   { texto: "Ver y agregar reseñas", disponible: true },
   { texto: "Acceso a las herramientas", disponible: true },
   { texto: "Acceso completo a la gestión de boletas", disponible: true },
-  { texto: "Acceso completo a Red-Fi Academy", disponible: true },
+  { texto: "Acceso completo a la Academia Red-Fi", disponible: true },
   { texto: "Sin anuncios ni banners promocionales", disponible: true },
   { texto: "Notificaciones básicas", disponible: true },
 ];

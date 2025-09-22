@@ -6,7 +6,7 @@ const reseñas = [
   {
     nombre: "Ethan Carter",
     comentario:
-      "¡Los cursos de Red-Fi Academy son excelentes! Me ayudaron a entender mi red y aplicar mejoras reales en casa.",
+      "¡Los cursos de la Academia de Red-Fi son excelentes! Me ayudaron a entender mi red y aplicar mejoras reales en casa.",
     estrellas: 5,
     imagen: "/imgs/avatars/academia/ethan.jpg",
     fecha: "15-03-2025",
