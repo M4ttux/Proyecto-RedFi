@@ -78,7 +78,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       label: "PERÍODO",
       renderCell: (b) => (
         <div className="space-y-1">
-          <span className="font-bold">{b.mes || "—"} {b.anio || "—"}</span>
+          <span className="font-semibold text-texto/75">{b.mes || "—"} {b.anio || "—"}</span>
         </div>
       ),
     },

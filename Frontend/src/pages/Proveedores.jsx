@@ -59,7 +59,7 @@ const Proveedores = () => {
             <Avatar
               fotoUrl={proveedor.logotipo}
               nombre={proveedor.nombre}
-              size={20}
+              size={35}
               className="rounded-full"
             />
           </div>
@@ -132,7 +132,7 @@ const Proveedores = () => {
                     className="bg-texto/5 border border-texto/15 p-5 rounded-xl flex flex-col gap-3"
                   >
                     {/* Usuario + estrellas */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row self-center sm:self-auto sm:items-center sm:justify-between gap-3">
                       <div className="flex items-center gap-3">
                         <Avatar
                           fotoUrl={fotoUrl}
@@ -141,12 +141,17 @@ const Proveedores = () => {
                           className="rounded-full border border-acento"
                         />
                         <div>
-                          <p className="font-medium text-texto">{nombre}</p>
-                          <p className="text-xs text-texto">{fecha}</p>
+                          <MainLinkButton 
+                            to={`/usuarios/${r.user?.id}`}
+                            variant="link"
+                          >
+                            {nombre}
+                          </MainLinkButton>
+                          <p className="text-xs text-texto/75">{fecha}</p>
                         </div>
                       </div>
 
-                      <div className="flex gap-1 text-yellow-600 pl-2 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
+                      <div className="flex gap-1 text-yellow-600 pl-2 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 self-center sm:self-auto">
                         {Array.from({ length: 5 }, (_, i) =>
                           i < r.estrellas ? (
                             <IconCarambolaFilled size={18} key={i} />
@@ -158,8 +163,8 @@ const Proveedores = () => {
                     </div>
 
                     {/* Comentario */}
-                    <p className="text-texto leading-relaxed">
-                      “{r.comentario}”
+                    <p className="text-texto leading-relaxed self-center sm:self-auto">
+                      {r.comentario}
                     </p>
                   </div>
                 );

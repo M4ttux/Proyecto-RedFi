@@ -43,6 +43,7 @@ export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
         estrellas,
         created_at,
         user:user_profiles (
+          id,
           nombre,
           foto_url
         )

@@ -162,7 +162,7 @@ const WifiScanner = () => {
       }`}
     >
       {/* Formulario para nombre de zona y botón de medición */}
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-center">
+      <div className="flex flex-col md:flex-row justify-center items-start gap-4 text-center">
         <div className="w-full md:w-1/2">
           <Input
             name="zona"

@@ -46,7 +46,8 @@ export const obtenerPerfilPorId = async (id, mostrarAlerta = () => {}) => {
         created_at,
         proveedor_id (
           id,
-          nombre
+          nombre,
+          logotipo
         )
       )
     `

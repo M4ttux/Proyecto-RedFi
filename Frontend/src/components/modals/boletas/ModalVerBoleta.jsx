@@ -1,4 +1,4 @@
-import { IconX, IconDownload, IconFileTypePdf } from "@tabler/icons-react";
+import { IconX, IconDownload, IconFileTypePdf, IconTrendingUp, IconTrendingDown } from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
@@ -21,13 +21,23 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
   if (montoAnterior !== null) {
     const diferencia = montoActual - montoAnterior;
     if (diferencia > 0) {
-      diferenciaTexto = `📈 Subió $${diferencia.toFixed(2)}`;
+      diferenciaTexto = (
+        <span className="flex items-center gap-1">
+          <IconTrendingUp size={16} />
+          Subió ${diferencia.toFixed(2)}
+        </span>
+      );
       diferenciaColor = "text-green-700";
     } else if (diferencia < 0) {
-      diferenciaTexto = `📉 Bajó $${Math.abs(diferencia).toFixed(2)}`;
+      diferenciaTexto = (
+        <span className="flex items-center gap-1">
+          <IconTrendingDown size={16} />
+          Bajó ${Math.abs(diferencia).toFixed(2)}
+        </span>
+      );
       diferenciaColor = "text-red-600";
     } else {
-      diferenciaTexto = `🟰 Sin cambios`;
+      diferenciaTexto = `Sin cambios`;
       diferenciaColor = "text-yellow-600";
     }
   }

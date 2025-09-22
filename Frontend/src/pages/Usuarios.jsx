@@ -5,10 +5,11 @@ import { obtenerPerfilPorId } from "../services/perfil/getPerfil";
 import {
   IconCarambola,
   IconCarambolaFilled,
-  IconExternalLink,
+  IconArrowLeft,
 } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
+import MainLinkButton from "../components/ui/MainLinkButton";
 import Avatar from "../components/ui/Avatar";
 import MainLoader from "../components/ui/MainLoader";
 
@@ -39,12 +40,12 @@ const Usuarios = () => {
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
-      <div className="max-w-7xl mx-auto space-y-12">
+      <div className="max-w-7xl mx-auto space-y-12 mb-8">
         {/* Info del usuario */}
         <div className="bg-texto/5 border border-texto/15 rounded-2xl p-6 mb-10 shadow-lg text-center">
           {/* Avatar */}
           <div className="flex justify-center mb-4">
-            <Avatar fotoUrl={foto_url} nombre={nombre} size={50} />
+            <Avatar fotoUrl={foto_url} nombre={nombre} size={35} />
           </div>
 
           {/* Nombre */}
@@ -74,8 +75,11 @@ const Usuarios = () => {
           <MainH2 className="text-center justify-center">Reseñas publicadas</MainH2>
 
           {reseñas && reseñas.length > 0 ? (
-            <ul className="space-y-6">
+            <div className="space-y-6">
               {reseñas.map((r) => {
+                const proveedorNombre = r.proveedor_id?.nombre || "Proveedor desconocido";
+                const proveedorLogo = r.proveedor_id?.logotipo || null;
+
                 const fecha = r.created_at
                   ? new Date(r.created_at).toLocaleDateString("es-AR", {
                       year: "numeric",
@@ -85,16 +89,31 @@ const Usuarios = () => {
                   : "Fecha desconocida";
 
                 return (
-                  <li
+                  <div
                     key={r.id}
                     className="bg-texto/5 border border-texto/15 p-5 rounded-xl flex flex-col gap-3"
                   >
-                    <div className="flex justify-between items-center">
-                      <p className="font-medium text-texto">
-                        
-                        {r.proveedor_id?.nombre || "Proveedor desconocido"}
-                      </p>
-                      <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
+                    {/* Proveedor + estrellas */}
+                    <div className="flex flex-col sm:flex-row self-center sm:self-auto sm:items-center sm:justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar
+                          fotoUrl={proveedorLogo}
+                          nombre={proveedorNombre}
+                          size={10}
+                          className="rounded-full border border-acento"
+                        />
+                        <div>
+                          <MainLinkButton 
+                            to={`/proveedores/${r.proveedor_id?.id}`}
+                            variant="link"
+                          >
+                            {proveedorNombre}
+                          </MainLinkButton>
+                          <p className="text-xs text-texto/75">{fecha}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-1 text-yellow-600 pl-2 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 self-center sm:self-auto">
                         {Array.from({ length: 5 }, (_, i) =>
                           i < r.estrellas ? (
                             <IconCarambolaFilled key={i} size={18} />
@@ -105,21 +124,27 @@ const Usuarios = () => {
                       </div>
                     </div>
 
-                    <p className="text-sm text-texto">{fecha}</p>
-
-                    <p className="text-texto leading-relaxed">
-                      “{r.comentario}”
+                    {/* Comentario */}
+                    <p className="text-texto leading-relaxed self-center sm:self-auto">
+                      {r.comentario}
                     </p>
-                  </li>
+                  </div>
                 );
               })}
-            </ul>
+            </div>
           ) : (
             <p className="text-texto text-center">
               Este usuario aún no ha publicado reseñas.
             </p>
           )}
         </div>
+      </div>
+      {/* Botón volver al mapa */}
+      <div className="text-center">
+        <MainLinkButton to="/mapa" variant="secondary">
+          <IconArrowLeft />
+          Volver al mapa
+        </MainLinkButton>
       </div>
     </section>
   );
