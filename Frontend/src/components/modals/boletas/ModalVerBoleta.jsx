@@ -20,24 +20,26 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
   // Calcula y formatea la diferencia de precios si existe boleta anterior
   if (montoAnterior !== null) {
     const diferencia = montoActual - montoAnterior;
+    const porcentaje = ((diferencia / montoAnterior) * 100).toFixed(1);
+    
     if (diferencia > 0) {
       diferenciaTexto = (
-        <span className="flex items-center gap-1">
+        <span className="flex items-center gap-1 font-bold text-green-600/75">
           <IconTrendingUp size={16} />
-          Subió ${diferencia.toFixed(2)}
+          Subió ${diferencia.toFixed(2)} (+{porcentaje}%)
         </span>
       );
-      diferenciaColor = "text-green-700";
+      diferenciaColor = "text-green-600";
     } else if (diferencia < 0) {
       diferenciaTexto = (
-        <span className="flex items-center gap-1">
+        <span className="flex items-center gap-1 font-bold text-red-600/75">
           <IconTrendingDown size={16} />
-          Bajó ${Math.abs(diferencia).toFixed(2)}
+          Bajó ${Math.abs(diferencia).toFixed(2)} ({porcentaje}%)
         </span>
       );
       diferenciaColor = "text-red-600";
     } else {
-      diferenciaTexto = `Sin cambios`;
+      diferenciaTexto = `Sin cambios (0%)`;
       diferenciaColor = "text-yellow-600";
     }
   }
@@ -89,39 +91,57 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
         {/* Información detallada de la boleta */}
         <div className="space-y-3 ml-0 sm:ml-5 text-xl">
           <p>
-            <strong>Mes:</strong> {boleta.mes}
+            <strong>Mes:</strong> <span className="text-texto/75">{boleta.mes}</span>
           </p>
           <p>
-            <strong>Año:</strong> {boleta.anio}
+            <strong>Año:</strong> <span className="text-texto/75">{boleta.anio}</span>
           </p>
           <p>
-            <strong>Monto:</strong> ${montoActual.toFixed(2)}
+            <strong>Monto:</strong> <span className="text-texto/75">${montoActual.toFixed(2)}</span>
           </p>
           {/* Comparación con boleta anterior del mismo proveedor */}
           <p className={diferenciaColor}>
             <strong>Diferencia:</strong> {diferenciaTexto}
           </p>
           <p>
-            <strong>Proveedor:</strong> {boleta.proveedor}
+            <strong>Proveedor:</strong> <span className="text-texto/75">{boleta.proveedor}</span>
           </p>
           <p>
             <strong>Vencimiento:</strong>{" "}
-            {new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            })}
+            <span
+              className="text-texto/75"
+              title={new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            >
+              {new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </span>
           </p>
 
           {/* Fecha de fin de promoción (opcional) */}
           {boleta.promo_hasta && (
             <p className="text-yellow-600">
               <strong>Promoción hasta:</strong>{" "}
-              {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
+              <span
+                className="text-yellow-600/75"
+                title={new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              >
+                {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </span>
             </p>
           )}
         </div>
@@ -144,7 +164,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
                 <img
                   src={boleta.url_imagen}
                   alt="Boleta"
-                  className="max-h-[300px] object-contain rounded border"
+                  className="max-h-[100px] md:max-h-[200px] object-contain rounded border"
                 />
               )}
               {/* Botón de descarga del archivo */}
@@ -154,7 +174,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
                 className="flex items-center gap-2"
               >
                 <IconDownload size={18} />
-                Descargar archivo
+                Descargar
               </MainButton>
             </>
           ) : (

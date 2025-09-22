@@ -128,7 +128,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
-        <MainH2 className="mb-0">Modificar boleta</MainH2>
+        <MainH2 className="mb-0">Editar boleta</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
@@ -142,7 +142,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
       {/* Formulario de edición de boleta */}
       <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {/* Selector de mes */}
           <Select
             name="mes"
@@ -181,7 +181,10 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             label="Proveedor"
             icon={IconWifi}
           />
+        </div>
 
+        {/* Campos de fechas - responsivo para mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Campo fecha de vencimiento */}
           <Input
             name="vencimiento"

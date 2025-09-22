@@ -223,6 +223,7 @@ const FileInput = ({
                   disabled={disabled || loading}
                   className="text-xs px-2 py-1 h-auto"
                   title="Ver imagen"
+                  iconAlwaysVisible
                 />
                 <label htmlFor={id}>
                   <MainButton
@@ -231,6 +232,7 @@ const FileInput = ({
                     disabled={disabled || loading}
                     className="cursor-pointer text-xs px-2 py-1 h-auto"
                     title="Cambiar imagen"
+                    iconAlwaysVisible
                   />
                 </label>
                 {mostrarBotonQuitar && (
@@ -241,6 +243,7 @@ const FileInput = ({
                     disabled={disabled || loading}
                     className="text-xs px-2 py-1 h-auto"
                     title="Quitar imagen"
+                    iconAlwaysVisible
                   />
                 )}
               </div>
