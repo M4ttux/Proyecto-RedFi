@@ -156,7 +156,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
-        <MainH2 className="mb-0">Agregar nueva boleta</MainH2>
+        <MainH2 className="mb-0">Agregar boleta</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
@@ -170,7 +170,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
       {/* Formulario de creación de boleta */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Campos principales del formulario */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {/* Selector de mes (obligatorio) */}
           <Select
             label={
@@ -239,7 +239,10 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             required
             icon={IconWifi}
           />
+        </div>
 
+        {/* Campos de fechas - responsivo para mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Campo fecha de vencimiento (obligatorio) */}
           <Input
             label={
