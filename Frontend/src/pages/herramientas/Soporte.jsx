@@ -66,7 +66,7 @@ const Soporte = () => {
       <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="text-center mb-8">
-            <MainH1 icon={IconMessageChatbot}>Centro de Soporte</MainH1>
+            <MainH1 icon={IconMessageChatbot}>Centro de soporte</MainH1>
             <p className="text-lg">
               Encuentra ayuda o chatea con nuestro asistente virtual.
             </p>
@@ -79,7 +79,7 @@ const Soporte = () => {
                 ? "bg-secundario border-2 border-texto/15 shadow-lg"
                 : "bg-texto/5 border border-texto/15"
             }`}>
-              <MainH2 className="mb-4">Información Rápida</MainH2>
+              <MainH2 className="mb-4">Información rápida</MainH2>
               <div className="space-y-3">
                 <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">¿Qué es Red-Fi?</MainH3>
@@ -114,7 +114,7 @@ const Soporte = () => {
                 ? "bg-secundario border-2 border-texto/15 shadow-lg"
                 : "bg-texto/5 border border-texto/15"
             }`}>
-              <MainH2 className="mb-4">Soluciones Técnicas Comunes</MainH2>
+              <MainH2 className="mb-4">Soluciones técnicas comunes</MainH2>
               <div className="space-y-3">
                 <div className="p-3 rounded-lg border border-texto/15">
                   <MainH3 className="mb-1">Internet muy lento</MainH3>

@@ -156,7 +156,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
-        <MainH2 className="mb-0">Agregar Nueva Boleta</MainH2>
+        <MainH2 className="mb-0">Agregar nueva boleta</MainH2>
         <MainButton
           onClick={onClose}
           type="button"

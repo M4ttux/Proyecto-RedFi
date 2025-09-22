@@ -8,7 +8,7 @@ const Glosario = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12 mb-8">
         <div className="text-center mb-8">
-          <MainH1 icon={IconSearch}>Glosario de Redes</MainH1>
+          <MainH1 icon={IconSearch}>Glosario de redes</MainH1>
           <p className="text-lg">
             Encuentra lo que buscas en nuestro glosario de redes.
           </p>

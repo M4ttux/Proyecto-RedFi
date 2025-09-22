@@ -42,7 +42,7 @@ const Boletas = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
-          <MainH1 icon={IconReceipt2}>Gestión de Boletas</MainH1>
+          <MainH1 icon={IconReceipt2}>Gestión de boletas</MainH1>
           <p className="text-lg">
             Administrá tus boletas de servicios de internet.
           </p>

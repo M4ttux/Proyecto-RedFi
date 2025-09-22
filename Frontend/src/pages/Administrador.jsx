@@ -277,7 +277,7 @@ const Administrador = () => {
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center mb-8">
-          <MainH1 icon={IconSettings}>Panel de Administración</MainH1>
+          <MainH1 icon={IconSettings}>Panel de administración</MainH1>
           <p className="text-lg">
             Visualizá los datos de todas las tablas del sistema.
           </p>
