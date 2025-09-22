@@ -79,8 +79,8 @@ const Planes = () => {
           {/* Plan Básico */}
           <div className={`shadow-lg rounded-lg p-6 flex flex-col justify-between ${
             currentTheme === "light"
-              ? "bg-secundario border-2 border-texto/15"
-              : "bg-secundario border border-secundario/50"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
+              : "bg-texto/5 border border-texto/15"
           }`}>
             <div>
               <MainH2 className="text-center justify-center">Plan Básico</MainH2>
@@ -107,8 +107,8 @@ const Planes = () => {
           {/* Plan Premium */}
           <div className={`shadow-lg rounded-lg p-6 flex flex-col justify-between ${
             currentTheme === "light"
-              ? "bg-secundario border-2 border-texto/15"
-              : "bg-secundario border border-secundario/50"
+              ? "bg-secundario border-2 border-texto/15 shadow-lg"
+              : "bg-texto/5 border border-texto/15"
           }`}>
             <div>
               <MainH2 className="text-acento text-center justify-center">Plan Premium</MainH2>
