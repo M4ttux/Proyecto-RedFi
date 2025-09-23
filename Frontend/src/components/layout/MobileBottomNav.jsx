@@ -23,7 +23,7 @@ import { useTheme } from "../../context/ThemeContext";
 const MobileBottomNav = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
   const [mostrarMenu, setMostrarMenu] = useState(false);
-  const { usuario } = useAuth();
+  const { usuario, loading } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
   const [mostrarHerramientas, setMostrarHerramientas] = useState(false);
   const location = useLocation();
@@ -192,14 +192,14 @@ const MobileBottomNav = () => {
           </div>
 
           {/* Notifications Icon for Mobile usando MainButton */}
-          {usuario && (
+          {!loading && usuario && (
             <div className="relative">
               <MainButton
                 onClick={() => {
                   setMostrarNotis(!mostrarNotis);
                   openOnly(mostrarNotis ? null : "notis");
                 }}
-                variant="secondary"
+                variant="navbar"
                 className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
                   notificaciones.length > 0
                     ? "!text-acento"
@@ -211,9 +211,9 @@ const MobileBottomNav = () => {
                 iconSize={22}
                 iconAlwaysVisible={true}
               >
-                <span className="text-xs mt-1 font-medium">Alertas</span>
+                <span className="text-xs mt-1 font-medium flex items-center gap-1">Alertas</span>
                 {notificaciones.length > 0 && (
-                  <span className="absolute -top-0 -right-0 bg-red-500 text-texto text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
+                  <span className="absolute -top-0 -right-0 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
                     {notificaciones.length}
                   </span>
                 )}
@@ -282,16 +282,22 @@ const MobileBottomNav = () => {
                 currentTheme === "light" ? "!text-texto" : "!text-texto",
                 mostrarMenu ? "!text-acento !scale-110" : ""
               }`}
-
-              icon={IconDots}
+              icon={loading ? undefined : IconDots}
               iconSize={22}
-              iconAlwaysVisible={true}
+              iconAlwaysVisible={!loading}
             >
-              <span className="text-xs mt-1 font-medium">Más</span>
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-texto/30 border-t-acento rounded-full animate-spin"></div>
+                  <span className="text-xs mt-1 font-medium">Cargando</span>
+                </>
+              ) : (
+                <span className="text-xs mt-1 font-medium">Más</span>
+              )}
             </MainButton>
 
             {/* More Menu Dropdown */}
-            {mostrarMenu && (
+            {mostrarMenu && !loading && (
               <div
                 className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 p-2 ${
                   currentTheme === "light"
@@ -305,7 +311,7 @@ const MobileBottomNav = () => {
                     toggleTheme();
                     setMostrarMenu(false);
                   }}
-                  variant="secondary"
+                  variant="navbar"
                   className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
                     currentTheme === "light"
                       ? " !text-texto"
@@ -323,7 +329,7 @@ const MobileBottomNav = () => {
                     <MainLinkButton
                       to="/cuenta"
                       onClick={() => setMostrarMenu(false)}
-                      variant="secondary"
+                      variant="navbar"
                       className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
                         isActive("/cuenta") ? "!text-acento" : ""
                       }`}

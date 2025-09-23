@@ -15,6 +15,7 @@ import Input from "../../components/ui/Input";
 
 import { useAlerta } from "../../context/AlertaContext";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   useEffect(() => {
@@ -22,13 +23,32 @@ const Login = () => {
   }, []);
 
   const { currentTheme } = useTheme();
+  const { usuario } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [loginAttempted, setLoginAttempted] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { mostrarError } = useAlerta();
 
-  const from = location.state?.from?.pathname || "/cuenta";
+  const from = "/cuenta"; // Siempre ir a cuenta después del login
+
+  // Effect para redirigir si ya está logueado
+  useEffect(() => {
+    if (usuario && !loginAttempted) {
+      console.log('🔥 User already logged in, redirecting to:', from);
+      navigate(from);
+    }
+  }, [usuario, navigate, from, loginAttempted]);
+
+  // Effect para redirigir cuando el usuario se actualiza después del login
+  useEffect(() => {
+    if (loginAttempted && usuario) {
+      console.log('🔥 User logged in successfully, redirecting to:', from);
+      setLoading(false); // Detener loading cuando redirigimos
+      navigate(from);
+    }
+  }, [usuario, loginAttempted, navigate, from]);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,13 +56,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLoginAttempted(false);
 
     try {
       await loginUser(form);
-      navigate(from);
+      console.log('🔥 Login API call successful, waiting for auth state update...');
+      setLoginAttempted(true);
+      // No navegar inmediatamente - esperar a que el useEffect detecte el cambio de usuario
     } catch (err) {
       mostrarError(err.message);
-    } finally {
+      setLoginAttempted(false);
       setLoading(false);
     }
   };

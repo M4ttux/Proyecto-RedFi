@@ -70,9 +70,14 @@ const tablasDisponibles = [
 ];
 
 const Administrador = () => {
+  useEffect(() => {
+    document.title = "Red-Fi | Administración";
+  }, []);
+  
   const [perfil, setPerfil] = useState(null);
   const [tablaActual, setTablaActual] = useState("user_profiles");
   const [loading, setLoading] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(true); // Nuevo estado para auth
   const { mostrarError, mostrarExito } = useAlerta();
   const navigate = useNavigate();
 
@@ -244,9 +249,12 @@ const Administrador = () => {
 
   useEffect(() => {
     const verificarPermisos = async () => {
+      setLoadingAuth(true);
       try {
         const p = await getPerfil();
         setPerfil(p);
+        setLoadingAuth(false);
+        
         if (p.rol !== "admin") {
           navigate("/cuenta", {
             state: {
@@ -256,11 +264,14 @@ const Administrador = () => {
               },
             },
           });
-        } else {
-          await precargarDatos();
+          return;
         }
+        
+        // Solo cargar datos si es admin
+        await precargarDatos();
       } catch (error) {
         mostrarError("Error al cargar perfil de usuario.");
+        setLoadingAuth(false);
         setLoading(false);
       }
     };
@@ -268,7 +279,21 @@ const Administrador = () => {
     verificarPermisos();
   }, [navigate]);
 
-  if (!perfil || perfil.rol !== "admin") return;
+  // Mostrar loader mientras se verifica autenticación
+  if (loadingAuth) {
+    return (
+      <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <MainLoader texto="Verificando permisos de administrador..." size="large" />
+        </div>
+      </section>
+    );
+  }
+
+  // Si no es admin, no mostrar nada (el useEffect ya redirige)
+  if (!perfil || perfil.rol !== "admin") {
+    return null;
+  }
 
   const datosActuales = todosLosDatos[tablaActual] || [];
   const columnas = generarColumnas(tablaActual, datosActuales, acciones);

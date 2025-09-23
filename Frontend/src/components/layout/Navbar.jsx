@@ -41,7 +41,7 @@ const Navbar = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
   const [mostrarTemas, setMostrarTemas] = useState(false);
   const [mostrarHerramientas, setMostrarHerramientas] = useState(false);
-  const { usuario } = useAuth();
+  const { usuario, loading } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
   const { currentTheme, availableThemes, changeTheme, themeData } = useTheme();
   const location = useLocation();
@@ -226,7 +226,13 @@ const Navbar = () => {
               )}
             </div>
 
-            {!usuario ? (
+            {/* Indicador de carga o botones de autenticación */}
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 border-2 border-texto/30 border-t-acento rounded-full animate-spin"></div>
+                <span className="text-sm text-texto/70">Cargando...</span>
+              </div>
+            ) : !usuario ? (
               <MainLinkButton
                 to="/login"
                 variant="accent"
