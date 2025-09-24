@@ -111,7 +111,7 @@ const ModalEditarProveedorTecnologia = ({
             variant="secondary"
             onClick={onClose}
             disabled={cargando}
-            className="flex-1 order-2 sm:order-1"
+            className="flex-1"
           >
             Cancelar
           </MainButton>
@@ -120,7 +120,7 @@ const ModalEditarProveedorTecnologia = ({
             variant="primary"
             loading={cargando}
             disabled={cargando}
-            className="flex-1 order-1 sm:order-2"
+            className="flex-1"
           >
             {cargando ? "Guardando..." : "Guardar"}
           </MainButton>

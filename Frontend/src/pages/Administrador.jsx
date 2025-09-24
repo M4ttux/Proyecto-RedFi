@@ -568,8 +568,8 @@ const Administrador = () => {
         {tablaActual === "ProveedorTecnologia" &&
           proveedorTecnologiaAEliminar && (
             <ModalEliminar
-              titulo="relación prov-tec"
-              descripcion="relación proveedor-tecnología"
+              titulo="vinculación"
+              descripcion="vinculación"
               loading={eliminando}
               onCancelar={() => setProveedorTecnologiaAEliminar(null)}
               onConfirmar={async () => {
@@ -579,7 +579,7 @@ const Administrador = () => {
                     proveedorTecnologiaAEliminar.id,
                     mostrarError
                   );
-                  mostrarExito("Relación proveedor-tecnología eliminada.");
+                  mostrarExito("Vinculación eliminada correctamente.");
                   setProveedorTecnologiaAEliminar(null);
                   await precargarDatos();
                 } catch (e) {
@@ -613,8 +613,8 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "ZonaProveedor" && proveedorZonaAEliminar && (
           <ModalEliminar
-            titulo="relación prov-zona"
-            descripcion="relación proveedor-zona"
+            titulo="cobertura"
+            descripcion="cobertura"
             loading={eliminando}
             onCancelar={() => setProveedorZonaAEliminar(null)}
             onConfirmar={async () => {
@@ -624,7 +624,7 @@ const Administrador = () => {
                   proveedorZonaAEliminar.id,
                   mostrarError
                 );
-                mostrarExito("Relación proveedor-zona eliminada.");
+                mostrarExito("Cobertura eliminada correctamente.");
                 setProveedorZonaAEliminar(null);
                 await precargarDatos();
               } catch (e) {

@@ -86,7 +86,7 @@ const ModalZonaMultiProveedor = ({
       )}
 
       {/* Lista scrolleable de proveedores disponibles */}
-      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 max-h-96 overflow-y-auto p-1">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 max-h-96 overflow-y-auto">
         {proveedores.map((proveedor) => {
           const promedioCalificacion = calcularPromedioCalificacion(
             proveedor.reseñas
@@ -126,7 +126,7 @@ const ModalZonaMultiProveedor = ({
                 </div>
 
                 {/* Calificación promedio con estrellas */}
-                <div className="mb-2 flex justify-center sm:justify-start">
+                <div className="mb-2 hidden min-[480px]:flex justify-center sm:justify-start">
                   {renderStars(promedioCalificacion)}
                 </div>
 
@@ -182,9 +182,19 @@ const ModalZonaMultiProveedor = ({
           );
         })}
       </div>
+      <div className="mt-3">
+        <MainButton
+          onClick={onClose}
+          type="button"
+          variant="primary"
+          className="w-full"
+        >
+          Cerrar
+        </MainButton>
+      </div>
 
       {/* Instrucciones de uso para el usuario */}
-      <div className="mt-6 text-center">
+      <div className="mt-3 text-center">
         <p className="text-sm text-texto/75 italic">
           Haz clic en "Ver más" para ver más información de cada
           proveedor.

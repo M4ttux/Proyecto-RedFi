@@ -130,7 +130,7 @@ const CambiarContraseña = () => {
         </div>
 
         {/* Botones de navegación */}
-        <div className="flex flex-row flex-wrap justify-center gap-3 mx-auto">
+        <div className="flex flex-row justify-center gap-3 mx-auto">
           <MainLinkButton
             to="/editar-perfil"
             disabled={loading}

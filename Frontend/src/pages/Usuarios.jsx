@@ -94,7 +94,7 @@ const Usuarios = () => {
                     className="bg-texto/5 border border-texto/15 p-5 rounded-xl flex flex-col gap-3"
                   >
                     {/* Proveedor + estrellas */}
-                    <div className="flex flex-col sm:flex-row self-center sm:self-auto sm:items-center sm:justify-between gap-3">
+                    <div className="flex flex-row sm:flex-row self-auto sm:items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
                         <Avatar
                           fotoUrl={proveedorLogo}
@@ -125,7 +125,7 @@ const Usuarios = () => {
                     </div>
 
                     {/* Comentario */}
-                    <p className="text-texto leading-relaxed self-center sm:self-auto">
+                    <p className="text-texto leading-relaxed self-auto">
                       {r.comentario}
                     </p>
                   </div>

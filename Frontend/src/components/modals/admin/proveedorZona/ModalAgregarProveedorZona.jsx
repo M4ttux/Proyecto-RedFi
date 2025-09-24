@@ -121,7 +121,7 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
             variant="secondary"
             onClick={onClose}
             disabled={loading}
-            className="flex-1 order-2 sm:order-1"
+            className="flex-1"
           >
             Cancelar
           </MainButton>
@@ -130,7 +130,7 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
             variant="primary"
             loading={loading}
             disabled={loading}
-            className="flex-1 order-1 sm:order-2"
+            className="flex-1"
           >
             {loading ? "Asignando..." : "Asignar"}
           </MainButton>
