@@ -89,14 +89,14 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
       {/* Formulario de edición de reseña */}
-      <form onSubmit={handleSubmit}>
-        <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
           {/* Información del proveedor (solo lectura) */}
           <div>
             <label className="block font-medium text-texto mb-2">
@@ -158,10 +158,9 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
               showCounter={true}
             />
           </div>
-        </div>
 
         {/* Botones de acción */}
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3">
           <MainButton
             type="button"
             variant="secondary"

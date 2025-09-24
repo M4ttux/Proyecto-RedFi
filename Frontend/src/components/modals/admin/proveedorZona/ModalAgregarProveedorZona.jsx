@@ -70,72 +70,72 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
-        <MainH2 className="mb-0">Asignar zonas a proveedor</MainH2>
+        <MainH2 className="mb-0">Asignar zonas</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
-      {/* Selector de proveedor */}
-      <div className="mb-6">
-        <Select
-          label="Proveedor"
-          value={proveedorSeleccionado}
-          onChange={(val) => setProveedorSeleccionado(val)}
-          options={[{ id: "", nombre: "Seleccionar proveedor" }, ...proveedores]}
-          getOptionValue={(opt) => opt.id}
-          getOptionLabel={(opt) => opt.nombre}
-          disabled={loading}
-        />
-      </div>
+      {/* Formulario de asignación */}
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        {/* Selector de proveedor */}
+        <div className="mb-6">
+          <Select
+            label="Proveedor"
+            value={proveedorSeleccionado}
+            onChange={(val) => setProveedorSeleccionado(val)}
+            options={[{ id: "", nombre: "Seleccionar proveedor" }, ...proveedores]}
+            getOptionValue={(opt) => opt.id}
+            getOptionLabel={(opt) => opt.nombre}
+            disabled={loading}
+          />
+        </div>
 
-      {/* Selector de zonas múltiples */}
-      <div className="mb-6">
-        <CheckboxDropdown
-          label="Zonas a asignar"
-          options={zonas.map((z) => ({
-            value: String(z.id),
-            label: z.departamento,
-          }))}
-          value={zonasSeleccionadas.map(String)}
-          onChange={(nuevas) =>
-            setZonasSeleccionadas(nuevas.map((id) => parseInt(id)))
-          }
-          disabled={loading || !proveedorSeleccionado}
-        />
-      </div>
+        {/* Selector de zonas múltiples */}
+        <div className="mb-6">
+          <CheckboxDropdown
+            label="Zonas a asignar"
+            options={zonas.map((z) => ({
+              value: String(z.id),
+              label: z.departamento,
+            }))}
+            value={zonasSeleccionadas.map(String)}
+            onChange={(nuevas) =>
+              setZonasSeleccionadas(nuevas.map((id) => parseInt(id)))
+            }
+            disabled={loading || !proveedorSeleccionado}
+          />
+        </div>
 
-      {/* Divider */}
-      <hr className="border-texto/15 mb-6" />
-
-      {/* Botones de acción */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <MainButton
-          type="button"
-          variant="secondary"
-          onClick={onClose}
-          disabled={loading}
-          className="flex-1 order-2 sm:order-1"
-        >
-          Cancelar
-        </MainButton>
-        <MainButton
-          type="submit"
-          variant="primary"
-          onClick={handleSubmit}
-          loading={loading}
-          disabled={loading}
-          className="flex-1 order-1 sm:order-2"
-        >
-          {loading ? "Asignando..." : "Asignar zonas"}
-        </MainButton>
-      </div>
+        {/* Botones de acción */}
+        <div className="flex gap-3">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1 order-2 sm:order-1"
+          >
+            Cancelar
+          </MainButton>
+          <MainButton
+            type="submit"
+            variant="primary"
+            loading={loading}
+            disabled={loading}
+            className="flex-1 order-1 sm:order-2"
+          >
+            {loading ? "Asignando..." : "Asignar"}
+          </MainButton>
+        </div>
+      </form>
     </ModalContenedor>
   );
 };

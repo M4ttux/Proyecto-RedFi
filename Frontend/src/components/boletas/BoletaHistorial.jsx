@@ -194,8 +194,8 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       {/* Modal de confirmación para eliminar */}
       {boletaAEliminar && (
         <ModalEliminar
-          titulo="Eliminar boleta"
-          descripcion="¿Estás seguro que querés eliminar esta boleta? Esta acción no se puede deshacer."
+          titulo="boleta"
+          descripcion="boleta"
           onConfirmar={confirmarEliminacion}
           onCancelar={() => setBoletaAEliminar(null)}
           loading={eliminando}

@@ -307,8 +307,8 @@ const Reseñas = () => {
       {/* Modal eliminar reseña */}
       {reseñaAEliminar && (
         <ModalEliminar
-          titulo="Eliminar reseña"
-          descripcion="¿Estás seguro que querés eliminar esta reseña? Esta acción no se puede deshacer."
+          titulo="reseña"
+          descripcion="reseña"
           onConfirmar={confirmarEliminacion}
           onCancelar={() => setReseñaAEliminar(null)}
           loading={eliminando}

@@ -57,39 +57,39 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
 
   return (
     <ModalContenedor onClose={onClose}>
-        {/* Encabezado del modal */}
-        <div className="flex justify-between mb-6">
-          <MainH2 className="mb-0">Editar tecnología</MainH2>
-          <MainButton
-            onClick={onClose}
-            type="button"
-            variant="cross"
-            title="Cerrar modal"
-            disabled={loading}
-          >
-            <IconX size={24} />
-          </MainButton>
-        </div>
+      {/* Encabezado del modal */}
+      <div className="flex justify-between mb-6">
+        <MainH2 className="mb-0">Editar tecnología</MainH2>
+        <MainButton
+          onClick={onClose}
+          type="button"
+          variant="cross"
+          title="Cerrar modal"
+          disabled={loading}
+          className="px-0"
+        >
+          <IconX size={24} />
+        </MainButton>
+      </div>
 
-        {/* Formulario de edición de tecnología */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Campo nombre de tecnología (obligatorio) */}
-          <Input
-            name="tecnologia"
-            label={
-              <>
-                Nombre de la tecnología <span className="text-red-600">*</span>
-              </>
-            }
-            value={formData.tecnologia}
-            onChange={handleChange}
-            placeholder="Ej. Fibra óptica"
-            required
-            disabled={loading}
-            maxLength={20}
-            showCounter={true}
-          />
-
+      {/* Formulario de edición de tecnología */}
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
+        {/* Campo nombre de tecnología (obligatorio) */}
+        <Input
+          name="tecnologia"
+          label={
+            <>
+              Nombre <span className="text-red-600">*</span>
+            </>
+          }
+          value={formData.tecnologia}
+          onChange={handleChange}
+          placeholder="Ej. Fibra óptica"
+          required
+          disabled={loading}
+          maxLength={20}
+          showCounter={true}
+        />
         {/* Campo descripción (opcional) */}
         <Textarea
           name="descripcion"
@@ -101,36 +101,37 @@ const ModalEditarTecnologia = ({ tecnologia, onClose, onActualizar }) => {
           disabled={loading}
           maxLength={200}
           showCounter={true}
-        />          {/* Botones de acción */}
-          <div className="flex gap-3 pt-4">
-            <MainButton
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-              disabled={loading}
-              className="flex-1"
-            >
-              Cancelar
-            </MainButton>
-            <MainButton
-              type="submit"
-              variant="primary"
-              disabled={loading}
-              className="flex-1"
-            >
-              {loading ? "Guardando..." : "Guardar cambios"}
-            </MainButton>
-          </div>
-          
-          {/* Nota informativa sobre campos obligatorios */}
-          <div className="text-center mt-6">
+        />
+
+        {/* Botones de acción */}
+        <div className="flex gap-3">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1"
+          >
+            Cancelar
+          </MainButton>
+          <MainButton
+            type="submit"
+            variant="primary"
+            disabled={loading}
+            className="flex-1"
+          >
+            {loading ? "Guardando..." : "Guardar"}
+          </MainButton>
+        </div>
+        {/* Nota informativa sobre campos obligatorios */}
+        <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">
             Los campos marcados con <span className="text-red-600">*</span> son
             obligatorios.
           </p>
         </div>
-        </form>
-      </ModalContenedor>
+      </form>
+    </ModalContenedor>
   );
 };
 

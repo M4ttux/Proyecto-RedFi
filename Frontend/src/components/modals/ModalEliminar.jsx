@@ -4,16 +4,51 @@ import { IconX } from "@tabler/icons-react";
 import ModalContenedor from "../ui/ModalContenedor";
 
 const ModalEliminar = ({
-  titulo = "¿Estás seguro?",
-  descripcion = "Esta acción no se puede deshacer.",
+  titulo, // Palabra a eliminar (ej: "boleta", "proveedor")
+  descripcion, // Palabra a eliminar en descripción (puede ser diferente del título)
   onConfirmar,
   onCancelar,
   loading = false,
 }) => {
+  // Generar título automáticamente
+  const tituloCompleto = titulo ? `Eliminar ${titulo}` : "¿Estás seguro?";
+
+  // Generar descripción automáticamente
+  const getArticulo = (palabra) => {
+    // Palabras que usan "este" en lugar de "esta"
+    const palabrasConEste = ["perfil", "proveedor"];
+    return palabrasConEste.includes(palabra?.toLowerCase()) ? "este" : "esta";
+  };
+
+  const descripcionCompleta = descripcion
+    ? `¿Estás seguro de que querés eliminar ${getArticulo(
+        descripcion
+      )} ${descripcion}?`
+    : "Esta acción no se puede deshacer.";
+
+  // Función para resaltar la palabra específica en rojo
+  const highlightText = (text, wordToHighlight) => {
+    if (!wordToHighlight) return text;
+
+    return text
+      .split(new RegExp(`(${wordToHighlight})`, "gi"))
+      .map((part, index) =>
+        part.toLowerCase() === wordToHighlight.toLowerCase() ? (
+          <span key={index} className="text-red-600 font-bold">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      );
+  };
+
   return (
     <ModalContenedor onClose={onCancelar}>
       <div className="flex justify-between mb-6">
-        <MainH2 className="mb-0">{titulo}</MainH2>
+        <MainH2 className="mb-0">
+          {titulo ? highlightText(tituloCompleto, titulo) : tituloCompleto}
+        </MainH2>
         <MainButton
           onClick={onCancelar}
           type="button"
@@ -25,10 +60,29 @@ const ModalEliminar = ({
           <IconX size={24} />
         </MainButton>
       </div>
-      <p className="text-center font-bold">{descripcion}</p>
 
-      <div className="flex justify-center gap-4 pt-4">
-        <MainButton onClick={onCancelar} variant="secondary" disabled={loading}>
+      {/* Descripción principal con posible resaltado */}
+      <div className="text-center space-y-3">
+        <p className="font-bold text-lg">
+          {descripcion
+            ? highlightText(descripcionCompleta, descripcion)
+            : descripcionCompleta}
+        </p>
+
+        {/* Advertencia fija */}
+        <p className="text-sm text-texto/75 italic">
+          Esta acción no se puede deshacer.
+        </p>
+      </div>
+
+      {/* Botones de acción */}
+      <div className="flex justify-center gap-3 pt-6">
+        <MainButton
+          onClick={onCancelar}
+          variant="secondary"
+          disabled={loading}
+          className="flex-1"
+        >
           Cancelar
         </MainButton>
         <MainButton
@@ -36,10 +90,12 @@ const ModalEliminar = ({
           variant="danger"
           loading={loading}
           disabled={loading}
+          className="flex-1"
         >
           {loading ? "Eliminando..." : "Eliminar"}
         </MainButton>
       </div>
+
     </ModalContenedor>
   );
 };

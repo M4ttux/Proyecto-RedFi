@@ -130,15 +130,27 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       </p>
 
       {/* Botón para ver más información del proveedor */}
-      <MainLinkButton
-        to={`/proveedores/${proveedor.id}`}
-        className="w-full px-4 py-2"
-        icon={IconArrowRight}
-        iconSize={16}
-        iconPosition="right"
-      >
-        Más información
-      </MainLinkButton>
+      <div className="flex gap-3">
+        <MainButton
+          type="button"
+          variant="secondary"
+          onClick={onClose}
+          className="flex-1"
+        >
+          Cerrar
+        </MainButton>
+        <div className="flex-1">
+          <MainLinkButton
+            to={`/proveedores/${proveedor.id}`}
+            className="w-full px-4 py-2"
+            icon={IconArrowRight}
+            iconSize={16}
+            iconPosition="right"
+          >
+            Más información
+          </MainLinkButton>
+        </div>
+      </div>
     </ModalContenedor>
   );
 };

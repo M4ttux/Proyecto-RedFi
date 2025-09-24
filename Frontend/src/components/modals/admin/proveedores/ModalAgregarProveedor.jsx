@@ -89,20 +89,21 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
       {/* Formulario de creación de proveedor */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         {/* Campos básicos: nombre y sitio web */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
               label={
                 <>
-                  Nombre del proveedor <span className="text-red-600">*</span>
+                  Nombre <span className="text-red-600">*</span>
                 </>
               }
               name="nombre"
@@ -191,7 +192,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         </div>
 
         {/* Botones de acción del formulario */}
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-3">
           <MainButton
             type="button"
             variant="secondary"
@@ -208,7 +209,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
             disabled={loading}
             className="flex-1"
           >
-            {loading ? "Creando..." : "Crear proveedor"}
+            {loading ? "Agregando..." : "Agregar"}
           </MainButton>
         </div>
 

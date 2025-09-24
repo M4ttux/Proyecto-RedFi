@@ -162,12 +162,13 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         <div className="flex flex-row gap-4">
           <div className="flex-1">
             <Input
@@ -291,7 +292,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         </div>
 
         {/* Botones de acción */}
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-3">
           <MainButton
             type="button"
             variant="secondary"

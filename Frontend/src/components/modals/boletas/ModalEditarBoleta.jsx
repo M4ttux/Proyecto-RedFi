@@ -91,7 +91,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   };
 
   // Procesa la actualización de la boleta con los cambios realizados
-  const handleGuardarCambios = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevenir recarga de página
     setLoading(true);
     try {
       const datosFinales = {
@@ -141,7 +142,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
       </div>
 
       {/* Formulario de edición de boleta */}
-      <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         <div className="grid grid-cols-2 gap-4">
           {/* Selector de mes */}
           <Select
@@ -183,6 +184,20 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           />
         </div>
 
+        {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
+        {form.proveedor === "Otro" && (
+          <Input
+            label="Nombre del proveedor"
+            name="proveedorOtro"
+            value={form.proveedorOtro}
+            onChange={handleChange}
+            placeholder="Ej. Red Fibra Z"
+            required
+            maxLength={50}
+            showCounter={true}
+          />
+        )}
+
         {/* Campos de fechas - responsivo para mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Campo fecha de vencimiento */}
@@ -206,20 +221,6 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           />
         </div>
 
-        {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
-        {form.proveedor === "Otro" && (
-          <Input
-            label="Nombre del proveedor"
-            name="proveedorOtro"
-            value={form.proveedorOtro}
-            onChange={handleChange}
-            placeholder="Ej. Red Fibra Z"
-            required
-            maxLength={50}
-            showCounter={true}
-          />
-        )}
-
         {/* Campo de carga/edición de archivo */}
         <FileInput
           id="archivoNuevo"
@@ -237,29 +238,30 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
           }
           onClear={handleClearImagen}
         />
-      </div>
 
-      {/* Botones de acción */}
-      <div className="flex justify-center gap-4 pt-4">
-        <MainButton
-          type="button"
-          variant="secondary"
-          onClick={onClose}
-          disabled={loading}
-        >
-          Cancelar
-        </MainButton>
+        {/* Botones de acción */}
+        <div className="flex justify-center gap-3">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1"
+          >
+            Cancelar
+          </MainButton>
 
-        <MainButton
-          type="button"
-          variant="primary"
-          onClick={handleGuardarCambios}
-          loading={loading}
-          disabled={loading}
-        >
-          Guardar Cambios
-        </MainButton>
-      </div>
+          <MainButton
+            type="submit"
+            variant="primary"
+            loading={loading}
+            disabled={loading}
+            className="flex-1"
+          >
+            Guardar
+          </MainButton>
+        </div>
+      </form>
     </ModalContenedor>
   );
 };

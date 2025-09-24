@@ -376,8 +376,8 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "user_profiles" && perfilAEliminar && (
           <ModalEliminar
-            titulo="¿Eliminar perfil?"
-            descripcion={`¿Estás seguro de que querés eliminar el perfil "${perfilAEliminar.nombre}"?`}
+            titulo="perfil"
+            descripcion="perfil"
             loading={eliminando}
             onCancelar={() => setPerfilAEliminar(null)}
             onConfirmar={async () => {
@@ -425,8 +425,8 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "proveedores" && proveedorAEliminar && (
           <ModalEliminar
-            titulo="¿Eliminar proveedor?"
-            descripcion={`¿Estás seguro de que querés eliminar el proveedor "${proveedorAEliminar.nombre}"?`}
+            titulo="proveedor"
+            descripcion="proveedor"
             loading={eliminando}
             onCancelar={() => setProveedorAEliminar(null)}
             onConfirmar={async () => {
@@ -478,8 +478,8 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "reseñas" && reseñaAEliminar && (
           <ModalEliminar
-            titulo="¿Eliminar reseña?"
-            descripcion="¿Estás seguro de que querés eliminar esta reseña?"
+            titulo="reseña"
+            descripcion="reseña"
             loading={eliminando}
             onCancelar={() => setReseñaAEliminar(null)}
             onConfirmar={async () => {
@@ -525,8 +525,8 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "tecnologias" && tecnologiaAEliminar && (
           <ModalEliminar
-            titulo="¿Eliminar tecnología?"
-            descripcion={`¿Estás seguro de que querés eliminar la tecnología "${tecnologiaAEliminar.tecnologia}"?`}
+            titulo="tecnología"
+            descripcion="tecnología"
             loading={eliminando}
             onCancelar={() => setTecnologiaAEliminar(null)}
             onConfirmar={async () => {
@@ -568,8 +568,8 @@ const Administrador = () => {
         {tablaActual === "ProveedorTecnologia" &&
           proveedorTecnologiaAEliminar && (
             <ModalEliminar
-              titulo="¿Eliminar relación proveedor-tecnología?"
-              descripcion={`¿Estás seguro de que querés eliminar todas las tecnologías del proveedor "${proveedorTecnologiaAEliminar.proveedor}"?`}
+              titulo="relación prov-tec"
+              descripcion="relación proveedor-tecnología"
               loading={eliminando}
               onCancelar={() => setProveedorTecnologiaAEliminar(null)}
               onConfirmar={async () => {
@@ -613,8 +613,8 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "ZonaProveedor" && proveedorZonaAEliminar && (
           <ModalEliminar
-            titulo="¿Eliminar relación proveedor-zona?"
-            descripcion={`¿Estás seguro de que querés eliminar todas las zonas del proveedor "${proveedorZonaAEliminar.proveedor}"?`}
+            titulo="relación prov-zona"
+            descripcion="relación proveedor-zona"
             loading={eliminando}
             onCancelar={() => setProveedorZonaAEliminar(null)}
             onConfirmar={async () => {

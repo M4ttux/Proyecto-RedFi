@@ -187,8 +187,12 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
       </div>
 
       {/* Botón de cierre */}
-      <div className="mt-6 flex justify-end">
-        <MainButton variant="primary" onClick={onClose}>
+      <div className="flex mt-6 justify-center">
+        <MainButton
+          variant="primary"
+          onClick={onClose}
+          className="flex-1"
+        >
           Cerrar
         </MainButton>
       </div>

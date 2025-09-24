@@ -59,19 +59,20 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
       {/* Formulario de creación de tecnología */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         {/* Campo nombre de tecnología (obligatorio) */}
         <Input
           name="tecnologia"
           label={
               <>
-                Nombre de la tecnología <span className="text-red-600">*</span>
+                Nombre <span className="text-red-600">*</span>
               </>
             }
           value={formData.tecnologia}
@@ -97,7 +98,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
         />
 
         {/* Botones de acción */}
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-3">
           <MainButton
             type="button"
             variant="secondary"
@@ -113,7 +114,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
             disabled={loading}
             className="flex-1"
           >
-            {loading ? "Creando..." : "Crear tecnología"}
+            {loading ? "Agregando..." : "Agregar"}
           </MainButton>
         </div>
         

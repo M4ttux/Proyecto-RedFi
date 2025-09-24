@@ -14,7 +14,7 @@ import Badge from "../../ui/Badge";
 const ModalReseña = ({ reseña, onClose }) => {
   // Obtiene el ID del usuario para navegación al perfil
   const userId = reseña?.usuario_id;
-  
+
   // Verifica que existe la reseña antes de renderizar
   if (!reseña) return null;
 
@@ -117,16 +117,30 @@ const ModalReseña = ({ reseña, onClose }) => {
         {reseña.comentario}
       </p>
 
-      {/* Botón para navegar al perfil del usuario */}
-      <MainLinkButton
-        to={`/usuarios/${userId}`}
-        className="w-full px-4 py-2"
-        icon={IconArrowRight}
-        iconSize={16}
-        iconPosition="right"
-      >
-        Ver perfil
-      </MainLinkButton>
+      {/* Botones de acción */}
+      <div className="flex gap-3">
+        <MainButton
+          type="button"
+          variant="secondary"
+          onClick={onClose}
+          className="flex-1"
+        >
+          Cerrar
+        </MainButton>
+
+        <div className="flex-1">
+          <MainLinkButton
+            to={`/usuarios/${userId}`}
+            className="w-full px-4 py-2"
+            icon={IconArrowRight}
+            iconSize={16}
+            iconPosition="right"
+          >
+            Ver perfil
+          </MainLinkButton>
+        </div>
+      </div>
+
     </ModalContenedor>
   );
 };

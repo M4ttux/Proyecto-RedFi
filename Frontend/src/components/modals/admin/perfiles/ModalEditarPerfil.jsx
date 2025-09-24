@@ -109,13 +109,14 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
       {/* Formulario de edición */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         {/* Campos de información personal */}
         <div className="flex flex-row gap-4">
           <div className="flex-1">

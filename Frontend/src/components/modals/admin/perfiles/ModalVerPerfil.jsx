@@ -27,49 +27,77 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
           type="button"
           variant="cross"
           title="Cerrar modal"
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
       {/* Avatar y nombre del usuario */}
-      <div className="flex flex-col items-center text-texto mb-6">
-        <Avatar fotoUrl={foto_url} nombre={nombre} size={28} />
-        <p className="mt-4 text-xl font-semibold">{nombre}</p>
+      <div className="flex flex-col items-center mb-8">
+        <div className="relative">
+          <Avatar fotoUrl={foto_url} nombre={nombre} size={32} />
+        </div>
+        <div className="mt-4 text-center">
+          <h3 className="text-2xl font-bold text-texto">{nombre}</h3>
+        </div>
       </div>
 
       {/* Información detallada del perfil */}
-      <div className="bg-secundario rounded-lg px-4 py-4 space-y-4 text-texto border border-secundario/50">
-        <div>
-          <p className="font-bold">Proveedor preferido</p>
-          <p>{proveedor_preferido || "—"}</p>
+      <div className="space-y-6 mb-8">
+        {/* Proveedor preferido */}
+        <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-texto/70 uppercase tracking-wide">
+              Proveedor preferido:
+            </span>
+            <p className="text-lg font-semibold text-texto">
+              {proveedor_preferido || "Sin proveedor asignado"}
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-row gap-4">
-          <div className="flex-1">
-            <p className="text-texto font-bold">Rol</p>
-            <Badge 
-              size="md" 
-              variant={obtenerVarianteBadge("rol", rol)}
-            >
-              {rol}
-            </Badge>
+        {/* Rol y Plan */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-texto/75 uppercase tracking-wide">
+                Rol:
+              </span>
+              <Badge 
+                size="md" 
+                variant={obtenerVarianteBadge("rol", rol)}
+                className="font-semibold"
+              >
+                {rol}
+              </Badge>
+            </div>
           </div>
-          <div className="flex-1">
-            <p className="text-texto font-bold">Plan</p>
-            <Badge 
-              size="md" 
-              variant={obtenerVarianteBadge("plan", plan)}
-            >
-              {plan}
-            </Badge>
+          
+          <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-texto/75 uppercase tracking-wide">
+                Plan:
+              </span>
+              <Badge 
+                size="md" 
+                variant={obtenerVarianteBadge("plan", plan)}
+                className="font-semibold"
+              >
+                {plan}
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Botón de cierre */}
-      <div className="mt-6 flex justify-end">
-        <MainButton variant="primary" onClick={onClose}>
+      <div className="flex justify-center">
+        <MainButton 
+          variant="primary" 
+          className="w-full flex-1" 
+          onClick={onClose}
+        >
           Cerrar
         </MainButton>
       </div>

@@ -162,13 +162,14 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           type="button"
           variant="cross"
           aria-label="Cerrar"
+          className="px-0"
         >
           <IconX />
         </MainButton>
       </div>
       
       {/* Formulario de creación de boleta */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         {/* Campos principales del formulario */}
         <div className="grid grid-cols-2 gap-4">
           {/* Selector de mes (obligatorio) */}
@@ -200,7 +201,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             onChange={handleChange}
             placeholder="Ej. 2025"
             min={2020}
-            max={2035}
+            max={2030}
             maxLength={4}
             required
           />
@@ -241,6 +242,24 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           />
         </div>
 
+        {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
+        {form.proveedor === "Otro" && (
+          <Input
+            label={
+              <>
+                Nombre del proveedor <span className="text-red-600">*</span>
+              </>
+            }
+            name="proveedorOtro"
+            value={form.proveedorOtro}
+            onChange={handleChange}
+            placeholder="Ej. Red Fibra Z"
+            required
+            maxLength={50}
+            showCounter={true}
+          />
+        )}
+
         {/* Campos de fechas - responsivo para mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Campo fecha de vencimiento (obligatorio) */}
@@ -268,24 +287,6 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             icon={IconCalendar}
           />
         </div>
-
-        {/* Campo proveedor personalizado (solo si selecciona "Otro") */}
-        {form.proveedor === "Otro" && (
-          <Input
-            label={
-              <>
-                Nombre del proveedor <span className="text-red-600">*</span>
-              </>
-            }
-            name="proveedorOtro"
-            value={form.proveedorOtro}
-            onChange={handleChange}
-            placeholder="Ej. Red Fibra Z"
-            required
-            maxLength={50}
-            showCounter={true}
-          />
-        )}
         
         {/* Campo de carga de archivo */}
         <FileInput
@@ -299,11 +300,12 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
         />
 
         {/* Botones de acción */}
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-3">
           <MainButton
             type="button"
             variant="secondary"
             onClick={onClose}
+            className="flex-1"
           >
             Cancelar
           </MainButton>
@@ -312,8 +314,9 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             variant="primary"
             loading={loading}
             disabled={loading}
+            className="flex-1"
           >
-            {loading ? "Guardando..." : "Guardar boleta"}
+            {loading ? "Guardando..." : "Guardar"}
           </MainButton>
         </div>
         

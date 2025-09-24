@@ -16,29 +16,27 @@ const ModalVerTecnologia = ({ tecnologia, onClose }) => {
             type="button"
             variant="cross"
             title="Cerrar modal"
+            className="px-0"
           >
             <IconX size={24} />
           </MainButton>
         </div>
 
-        {/* Información de la tecnología */}
-        <div className="space-y-3">
-          {/* Nombre de la tecnología */}
-          <div>
-            <p className="font-bold">Nombre</p>
-            <p>{tecnologia.tecnologia}</p>
-          </div>
-
-          {/* Descripción de la tecnología */}
-          <div>
-            <p className="font-bold">Descripcion</p>
-            <p>{tecnologia.descripcion || "-"}</p>
+        {/* Información detallada de la tecnología */}
+        <div className="space-y-6 mb-8">
+          {/* Descripción */}
+          <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+              <p className="text-texto"> <span className="text-acento font-bold">{tecnologia.tecnologia}</span> = {tecnologia.descripcion || "Sin descripción disponible"}</p>
           </div>
         </div>
 
         {/* Botón de cierre */}
-        <div className="mt-6 flex justify-end">
-          <MainButton variant="primary" onClick={onClose}>
+        <div className="flex justify-center">
+          <MainButton 
+            variant="primary" 
+            className="w-full flex-1" 
+            onClick={onClose}
+          >
             Cerrar
           </MainButton>
         </div>

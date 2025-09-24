@@ -64,13 +64,14 @@ const ModalEditarProveedorZona = ({
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
-        <MainH2 className="mb-0">Editar zonas</MainH2>
+        <MainH2 className="mb-0">Reasignar zonas</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
           variant="cross"
           title="Cerrar modal"
           disabled={cargando}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
@@ -86,46 +87,45 @@ const ModalEditarProveedorZona = ({
         </div>
       </div>
 
-      {/* Selector de zonas con estado actual */}
-      <div className="mb-6">
-        <CheckboxDropdown
-          label="Zonas asignadas"
-          options={todasLasZonas.map((z) => ({
-            value: String(z.id),
-            label: z.departamento,
-          }))}
-          value={seleccionadas.map(String)}
-          onChange={(nuevas) =>
-            setSeleccionadas(nuevas.map((id) => parseInt(id)))
-          }
-        />
-      </div>
+      {/* Formulario de edición */}
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        {/* Selector de zonas con estado actual */}
+        <div className="mb-6">
+          <CheckboxDropdown
+            label="Zonas asignadas"
+            options={todasLasZonas.map((z) => ({
+              value: String(z.id),
+              label: z.departamento,
+            }))}
+            value={seleccionadas.map(String)}
+            onChange={(nuevas) =>
+              setSeleccionadas(nuevas.map((id) => parseInt(id)))
+            }
+          />
+        </div>
 
-      {/* Divider */}
-      <hr className="border-texto/15 mb-6" />
-
-      {/* Botones de acción */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <MainButton
-          type="button"
-          variant="secondary"
-          onClick={onClose}
-          disabled={cargando}
-          className="flex-1 order-2 sm:order-1"
-        >
-          Cancelar
-        </MainButton>
-        <MainButton
-          type="submit"
-          variant="primary"
-          loading={cargando}
-          disabled={cargando}
-          className="flex-1 order-1 sm:order-2"
-          onClick={handleSubmit}
-        >
-          {cargando ? "Guardando..." : "Guardar cambios"}
-        </MainButton>
-      </div>
+        {/* Botones de acción */}
+        <div className="flex gap-3">
+          <MainButton
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={cargando}
+            className="flex-1"
+          >
+            Cancelar
+          </MainButton>
+          <MainButton
+            type="submit"
+            variant="primary"
+            loading={cargando}
+            disabled={cargando}
+            className="flex-1"
+          >
+            {cargando ? "Guardando..." : "Guardar"}
+          </MainButton>
+        </div>
+      </form>
     </ModalContenedor>
   );
 };
