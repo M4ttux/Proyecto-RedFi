@@ -1,8 +1,16 @@
 import { IconMap2 } from "@tabler/icons-react";
 import MainH1 from "../ui/MainH1";
 import MainLinkButton from "../ui/MainLinkButton";
+import { useTheme } from "../../context/ThemeContext";
 
 const HeroSection = () => {
+  const { currentTheme } = useTheme();
+  
+  // Selecciona la imagen según el tema
+  const heroImage = currentTheme === "light" 
+    ? "/imgs/hero-placeholder1.png" 
+    : "/imgs/hero-placeholder2.png";
+
   return (
     <section className="relative flex items-center justify-center px-4 sm:px-6 py-28 bg-secundario">
       {/* Patrón decorativo en el fondo */}
@@ -34,7 +42,7 @@ const HeroSection = () => {
         {/* Imagen del mapa */}
         <div className="flex-1 hidden md:flex justify-end ">
           <img
-            src="/imgs/hero-placeholder2.png"
+            src={heroImage}
             alt="Mapa Red-Fi"
             className="w-auto max-h-[500px]"
           />
