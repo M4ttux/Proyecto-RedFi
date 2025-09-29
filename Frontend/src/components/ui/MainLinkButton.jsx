@@ -62,6 +62,7 @@ const LinkButton = ({
     navbarIcon: "bg-transparent text-acento hover:scale-105 hover:text-texto",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
     link: "text-texto hover:text-acento font-medium !p-0 !h-auto",
+    inline: "text-acento font-bold hover:underline !p-0 !h-auto !m-0 inline",
     card: getCardVariant(), // Estilos dinámicos para tarjetas
     cardAdmin: currentTheme === "light"
     ? "bg-acento/20 backdrop-blur-md border-2 border-acento hover:bg-[#fca75f]/60 text-texto min-h-[130px] flex flex-col justify-center shadow-lg" // Light theme
@@ -83,6 +84,15 @@ const LinkButton = ({
     },
     className
   );
+
+  // Para variante inline, renderizar directamente sin div wrapper
+  if (variant === "inline") {
+    return (
+      <Link to={to} className={finalClass} {...props}>
+        {children}
+      </Link>
+    );
+  }
 
   return (
     <div className="relative">
