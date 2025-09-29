@@ -303,7 +303,89 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     );
   }
 
-  // 7. FALLBACK: TABLA DESCONOCIDA - Generación automática de columnas
+  // 7. TABLA DE CURSOS DE LA ACADEMIA RED-FI
+  else if (tabla === "cursos") {
+    columnasBase.push(
+      // Columna de miniatura del curso
+      {
+        id: "miniatura",
+        label: "MINIATURA",
+        renderCell: (row) => (
+          <div className="w-12 h-12 rounded-lg overflow-hidden bg-fondo-secundario border border-texto/15">
+            {row.miniatura_url ? (
+              <img
+                src={row.miniatura_url}
+                alt={row.titulo}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-texto/30 text-xs font-bold">
+                SIN
+              </div>
+            )}
+          </div>
+        ),
+      },
+      // Columna de título del curso
+      {
+        id: "titulo",
+        label: "TÍTULO",
+        renderCell: (row) => (
+          <div className="font-medium text-texto">
+            {row.titulo}
+          </div>
+        ),
+      },
+      // Columna de descripción del curso (truncada)
+      {
+        id: "descripcion",
+        label: "DESCRIPCIÓN",
+        renderCell: (row) => (
+          <div
+            className="truncate text-ellipsis overflow-hidden max-w-[250px] text-texto/70"
+            title={row.descripcion}
+          >
+            {row.descripcion || "—"}
+          </div>
+        ),
+      },
+      // Columna de video de YouTube
+      {
+        id: "video_youtube",
+        label: "VIDEO",
+        renderCell: (row) => {
+          if (!row.video_youtube_url) return "—";
+          
+          // Extraer ID del video de YouTube
+          const match = row.video_youtube_url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+          const videoId = match ? match[1] : null;
+          
+          return videoId ? (
+            <a
+              href={row.video_youtube_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-red-600 hover:underline"
+              title="Ver en YouTube"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136C4.495 20.455 12 20.455 12 20.455s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              <span className="hidden sm:inline">YouTube</span>
+            </a>
+          ) : (
+            <span className="text-texto/50">URL inválida</span>
+          );
+        },
+      },
+    );
+  }
+
+  // 8. FALLBACK: TABLA DESCONOCIDA - Generación automática de columnas
   else {
     // Obtiene todas las claves del objeto ejemplo para crear columnas genéricas
     const keys = Object.keys(ejemplo);

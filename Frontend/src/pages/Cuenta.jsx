@@ -112,7 +112,7 @@ const Cuenta = () => {
           </div>
 
           <div>
-            <MainLinkButton to="/academy" variant="card" isPremium={true}>
+            <MainLinkButton to="/academia" variant="card" isPremium={true}>
               <MainH3 className="text-center justify-center">
                 Academia Red-Fi
               </MainH3>

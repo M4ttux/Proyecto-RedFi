@@ -27,6 +27,11 @@ import {
   eliminarProveedorZona,
 } from "../services/relaciones/proveedorZonaService";
 
+import {
+  obtenerCursos,
+  eliminarCurso,
+} from "../services/cursos/cursosService";
+
 import ModalEliminar from "../components/modals/ModalEliminar";
 
 import ModalVerPerfil from "../components/modals/admin/perfiles/ModalVerPerfil";
@@ -49,6 +54,10 @@ import ModalEditarProveedorTecnologia from "../components/modals/admin/proveedor
 import ModalAgregarProveedorZona from "../components/modals/admin/proveedorZona/ModalAgregarProveedorZona";
 import ModalEditarProveedorZona from "../components/modals/admin/proveedorZona/ModalEditarProveedorZona";
 
+import ModalAgregarCurso from "../components/modals/admin/cursos/ModalAgregarCurso";
+import ModalVerCurso from "../components/modals/admin/cursos/ModalVerCurso";
+import ModalEditarCurso from "../components/modals/admin/cursos/ModalEditarCurso";
+
 import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
 import MainButton from "../components/ui/MainButton";
@@ -65,6 +74,7 @@ const tablasDisponibles = [
   { id: "proveedores", label: "Proveedores" },
   { id: "reseñas", label: "Reseñas" },
   { id: "tecnologias", label: "Tecnologías" },
+  { id: "cursos", label: "Cursos Academia" },
   { id: "ProveedorTecnologia", label: "Proveedor y Tecnología" },
   { id: "ZonaProveedor", label: "Proveedor y Zona" },
 ];
@@ -107,6 +117,11 @@ const Administrador = () => {
   const [proveedorZonaSeleccionado, setProveedorZonaSeleccionado] = useState(null);
   const [proveedorZonaAEliminar, setProveedorZonaAEliminar] = useState(null);
 
+  const [cursoNuevo, setCursoNuevo] = useState(false);
+  const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
+  const [cursoAVer, setCursoAVer] = useState(null);
+  const [cursoAEliminar, setCursoAEliminar] = useState(null);
+
   const [eliminando, setEliminando] = useState(false);
 
   const [todosLosDatos, setTodosLosDatos] = useState({
@@ -114,6 +129,7 @@ const Administrador = () => {
     proveedores: [],
     reseñas: [],
     tecnologias: [],
+    cursos: [],
   });
 
   const acciones = {
@@ -130,6 +146,9 @@ const Administrador = () => {
       if (tablaActual === "tecnologias") {
         setTecnologiaAVer(row);
       }
+      if (tablaActual === "cursos") {
+        setCursoAVer(row);
+      }
       // ...otros casos
     },
     onEditar: (row) => {
@@ -144,6 +163,9 @@ const Administrador = () => {
       }
       if (tablaActual === "tecnologias") {
         setTecnologiaSeleccionada(row);
+      }
+      if (tablaActual === "cursos") {
+        setCursoSeleccionado(row);
       }
       if (tablaActual === "ProveedorTecnologia") {
         setProveedorTecnologiaSeleccionado(row);
@@ -165,6 +187,9 @@ const Administrador = () => {
       if (tablaActual === "tecnologias") {
         setTecnologiaAEliminar(row);
       }
+      if (tablaActual === "cursos") {
+        setCursoAEliminar(row);
+      }
       if (tablaActual === "ProveedorTecnologia") {
         setProveedorTecnologiaAEliminar(row);
       }
@@ -182,6 +207,7 @@ const Administrador = () => {
         proveedores,
         reseñas,
         tecnologias,
+        cursos,
         proveedorTecnologia,
         zonaProveedor,
       ] = await Promise.all([
@@ -189,6 +215,7 @@ const Administrador = () => {
         obtenerProveedoresAdmin(),
         obtenerReseñasAdmin(),
         obtenerTecnologias(),
+        obtenerCursos(),
         obtenerProveedorTecnologia(),
         obtenerProveedorZona(),
       ]);
@@ -237,6 +264,7 @@ const Administrador = () => {
         proveedores,
         reseñas,
         tecnologias,
+        cursos,
         ProveedorTecnologia: agrupadoPorProveedorTecnologia,
         ZonaProveedor: agrupadoPorZonaProveedor,
       });
@@ -326,6 +354,11 @@ const Administrador = () => {
           {tablaActual === "tecnologias" && (
             <MainButton onClick={() => setTecnologiaNueva(true)} variant="add">
               Agregar Tecnología
+            </MainButton>
+          )}
+          {tablaActual === "cursos" && (
+            <MainButton onClick={() => setCursoNuevo(true)} variant="add">
+              Agregar Curso
             </MainButton>
           )}
           {tablaActual === "ProveedorTecnologia" && (
@@ -629,6 +662,61 @@ const Administrador = () => {
                 await precargarDatos();
               } catch (e) {
                 mostrarError("Error al eliminar relación: " + e.message);
+              } finally {
+                setEliminando(false);
+              }
+            }}
+          />
+        )}
+
+        {/* Cursos Academia */}
+        {/* Agregar */}
+        {tablaActual === "cursos" && cursoNuevo && (
+          <ModalAgregarCurso
+            onClose={() => setCursoNuevo(false)}
+            onActualizar={async () => {
+              setCursoNuevo(false);
+              await precargarDatos();
+            }}
+          />
+        )}
+
+        {/* Ver */}
+        {tablaActual === "cursos" && cursoAVer && (
+          <ModalVerCurso
+            curso={cursoAVer}
+            onClose={() => setCursoAVer(null)}
+          />
+        )}
+        
+        {/* Editar */}
+        {tablaActual === "cursos" && cursoSeleccionado && (
+          <ModalEditarCurso
+            curso={cursoSeleccionado}
+            onClose={() => setCursoSeleccionado(null)}
+            onActualizar={async () => {
+              setCursoSeleccionado(null);
+              await precargarDatos();
+            }}
+          />
+        )}
+        
+        {/* Eliminar */}
+        {tablaActual === "cursos" && cursoAEliminar && (
+          <ModalEliminar
+            titulo="curso"
+            descripcion="curso"
+            loading={eliminando}
+            onCancelar={() => setCursoAEliminar(null)}
+            onConfirmar={async () => {
+              setEliminando(true);
+              try {
+                await eliminarCurso(cursoAEliminar.id);
+                mostrarExito("Curso eliminado correctamente.");
+                setCursoAEliminar(null);
+                await precargarDatos();
+              } catch (e) {
+                mostrarError("Error al eliminar curso: " + e.message);
               } finally {
                 setEliminando(false);
               }

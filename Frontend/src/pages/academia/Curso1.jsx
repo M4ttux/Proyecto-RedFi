@@ -215,9 +215,9 @@ const Curso1 = () => {
           </form>
         </div>
 
-        {/* Botón volver a Academy */}
+        {/* Botón volver a Academia */}
         <div className="text-center">
-          <MainLinkButton to="/academy" variant="secondary">
+          <MainLinkButton to="/academia" variant="secondary">
             <IconArrowLeft />
             Volver a la Academia Red-Fi
           </MainLinkButton>

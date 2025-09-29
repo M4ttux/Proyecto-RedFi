@@ -12,9 +12,7 @@ import Mapa from "../pages/Mapa";
 import Boletas from "../pages/Boletas";
 import Reseñas from "../pages/Reseñas";
 import AcademyHome from "../pages/Academia";
-import Curso1 from '../pages/academia/Curso1';
-import Curso2 from '../pages/academia/Curso2';
-import Curso3 from '../pages/academia/Curso3';
+import CursoIndividual from "../pages/academia/CursoIndividual";
 import RequireAuth from "../components/auth/RequireAuth";
 import RequirePlan from "../components/auth/RequirePlan";
 import EditarPerfil from "../pages/perfil/EditarPerfil";
@@ -85,7 +83,7 @@ export const router = createBrowserRouter([
       },
       // Rutas que requieren plan premium
       { 
-        path: 'academy', 
+        path: 'academia', 
         element: (
           <RequirePlan plan="premium">
             <AcademyHome/>
@@ -93,26 +91,10 @@ export const router = createBrowserRouter([
         ),
       },
       { 
-        path: 'academy/curso1', 
+        path: 'academia/curso/:id', 
         element: (
           <RequirePlan plan="premium">
-            <Curso1 />
-          </RequirePlan>
-        ),
-      },
-      { 
-        path: 'academy/curso2', 
-        element: (
-          <RequirePlan plan="premium">
-            <Curso2 />
-          </RequirePlan>
-        ),
-      },
-      { 
-        path: 'academy/curso3', 
-        element: (
-          <RequirePlan plan="premium">
-            <Curso3 />
+            <CursoIndividual />
           </RequirePlan>
         ),
       },
