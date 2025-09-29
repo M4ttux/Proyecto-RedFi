@@ -230,7 +230,7 @@ const Navbar = () => {
             {loading ? (
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 border-2 border-texto/30 border-t-acento rounded-full animate-spin"></div>
-                <span className="text-sm text-texto/70">Cargando...</span>
+                <span className="text-sm text-texto/75">Cargando...</span>
               </div>
             ) : !usuario ? (
               <MainLinkButton

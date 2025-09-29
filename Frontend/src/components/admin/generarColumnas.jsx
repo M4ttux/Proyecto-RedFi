@@ -319,7 +319,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-texto/30 text-xs font-bold">
+              <div className="w-full h-full flex items-center justify-center text-texto/75 text-xs font-bold">
                 SIN
               </div>
             )}
@@ -342,7 +342,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
-            className="truncate text-ellipsis overflow-hidden max-w-[250px] text-texto/70"
+            className="truncate text-ellipsis overflow-hidden max-w-[250px] text-texto/75"
             title={row.descripcion}
           >
             {row.descripcion || "—"}
@@ -378,7 +378,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               <span className="hidden sm:inline">YouTube</span>
             </a>
           ) : (
-            <span className="text-texto/50">URL inválida</span>
+            <span className="text-texto/75">URL inválida</span>
           );
         },
       },

@@ -1,9 +1,12 @@
-import { useState, useRef } from "react";
-import { IconX, IconUpload, IconPlus, IconTrash } from "@tabler/icons-react";
+import { useState } from "react";
+import { IconX, IconPlus, IconTrash } from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
+import MainH3 from "../../../ui/MainH3";
 import MainButton from "../../../ui/MainButton";
 import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
+import FileInput from "../../../ui/FileInput";
+import Badge from "../../../ui/Badge";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import { 
@@ -31,12 +34,10 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1); // 1: Datos básicos, 2: Quiz
   
-  const fileInputRef = useRef(null);
   const { mostrarError, mostrarExito } = useAlerta();
 
   // Manejo de archivo de miniatura
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (file) => {
     if (!file) return;
 
     // Validar archivo
@@ -57,12 +58,9 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
     setPreviewMiniatura(URL.createObjectURL(file));
   };
 
-  const removerMiniatura = () => {
+  const handleFileClear = () => {
     setMiniatura(null);
     setPreviewMiniatura(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
   };
 
   // Manejo de preguntas del quiz
@@ -216,71 +214,27 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
             />
 
             {/* Miniatura */}
-            <div className="space-y-3">
-              <label className="block text-sm font-medium text-texto">
-                Miniatura del curso
-              </label>
-              
-              {!previewMiniatura ? (
-                <div className="border-2 border-dashed border-texto/30 rounded-lg p-6 text-center">
-                  <IconUpload size={48} className="mx-auto text-texto/50 mb-3" />
-                  <p className="text-sm text-texto/70 mb-3">
-                    Sube una miniatura para el curso
-                  </p>
-                  <p className="text-xs text-texto/50 mb-4">
-                    Máximo 100KB • Resolución máxima 500x500px • JPG, PNG, WebP
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <MainButton
-                    type="button"
-                    variant="secondary"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    Seleccionar imagen
-                  </MainButton>
-                </div>
-              ) : (
-                <div className="border border-texto/30 rounded-lg p-4">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={previewMiniatura}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <p className="font-medium">{miniatura?.name}</p>
-                      <p className="text-sm text-texto/70">
-                        {(miniatura?.size / 1024).toFixed(1)} KB
-                      </p>
-                      <MainButton
-                        type="button"
-                        variant="danger"
-                        className="mt-2"
-                        onClick={removerMiniatura}
-                        iconSize={16}
-                      >
-                        <IconTrash />
-                        Remover
-                      </MainButton>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <FileInput
+              label="Miniatura del curso"
+              accept="image/*"
+              onChange={handleFileChange}
+              value={miniatura}
+              previewUrl={previewMiniatura}
+              setPreviewUrl={setPreviewMiniatura}
+              onClear={handleFileClear}
+              disabled={loading}
+            />
           </div>
         ) : (
           // Paso 2: Quiz
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold">
-                Quiz del curso ({preguntas.length}/10 preguntas)
-              </h3>
+              <div className="flex items-center gap-3">
+                <MainH3 className="mb-0">Quiz del curso</MainH3>
+                <Badge variant="accent" size="sm">
+                  {preguntas.length}/10 preguntas
+                </Badge>
+              </div>
               <MainButton
                 type="button"
                 variant="accent"
@@ -296,7 +250,12 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
             {preguntas.map((pregunta, preguntaIndex) => (
               <div key={preguntaIndex} className="border border-texto/15 rounded-lg p-4 space-y-4">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-medium">Pregunta {preguntaIndex + 1}</h4>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">Pregunta {preguntaIndex + 1}</span>
+                    <Badge variant="muted" size="xs">
+                      {pregunta.pregunta.length}/200
+                    </Badge>
+                  </div>
                   {preguntas.length > 1 && (
                     <MainButton
                       type="button"
@@ -343,7 +302,7 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
                       />
                     </div>
                   ))}
-                  <p className="text-xs text-texto/70">
+                  <p className="text-xs text-texto/75">
                     Marca la opción correcta con el radio button
                   </p>
                 </div>

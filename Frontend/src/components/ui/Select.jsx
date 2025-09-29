@@ -87,9 +87,9 @@ const Select = ({
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
             {/* Muestra spinner durante carga o flecha de dropdown normal */}
             {loading ? (
-              <IconLoader2 size={20} className="animate-spin text-texto/60" />
+              <IconLoader2 size={20} className="animate-spin text-texto/75" />
             ) : (
-              <IconChevronDown size={20} className="text-texto/60" />
+              <IconChevronDown size={20} className="text-texto/75" />
             )}
           </div>
         )}

@@ -87,7 +87,7 @@ const CheckboxDropdown = ({
           {getDisplayText()}
         </span>
         {/* Icono de chevron para indicar dropdown */}
-        <IconChevronDown size={18} className="text-texto/50 flex-shrink-0 ml-2" />
+        <IconChevronDown size={18} className="text-texto/75 flex-shrink-0 ml-2" />
       </button>
 
       {/* Panel desplegable con opciones de checkbox */}

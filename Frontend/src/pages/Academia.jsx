@@ -63,9 +63,9 @@ const AcademyHome = () => {
         {/* Error/Empty state */}
         {!loading && cursos.length === 0 && (
           <div className="text-center py-12 bg-fondo-secundario/50 border border-texto/10 rounded-lg">
-            <IconExclamationCircle size={48} className="mx-auto text-texto/50 mb-4" />
+            <IconExclamationCircle size={48} className="mx-auto text-texto/75 mb-4" />
             <MainH3 className="text-center justify-center mb-2">No hay cursos disponibles</MainH3>
-            <p className="text-texto/70">
+            <p className="text-texto/75">
               Actualmente no hay cursos publicados en la academia.
             </p>
           </div>
@@ -89,12 +89,12 @@ const AcademyHome = () => {
                   />
                 ) : (
                   <div className="w-full h-48 bg-fondo-secundario border border-texto/15 rounded-lg flex items-center justify-center">
-                    <IconBook2 size={48} className="text-texto/30" />
+                    <IconBook2 size={48} className="text-texto/75" />
                   </div>
                 )}
                 <div className="p-4 flex flex-col gap-2 flex-1">
                   <MainH3 className="text-center justify-center line-clamp-2">{curso.titulo}</MainH3>
-                  <p className="line-clamp-3 text-sm text-texto/80">{curso.descripcion}</p>
+                  <p className="line-clamp-3 text-sm text-texto/75">{curso.descripcion}</p>
                 </div>
               </MainLinkButton>
             ))}

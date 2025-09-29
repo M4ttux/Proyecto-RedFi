@@ -54,7 +54,7 @@ const PanelControlMapa = ({
         }`}>
           <div className="flex items-center gap-2 mb-2">
             {ubicacionValida ? (
-              <IconCheck size={16} className="text-green-600" />
+              <IconCheck size={16} className="text-green-700" />
             ) : (
               <IconAlertCircle size={16} className="text-red-500" />
             )}
@@ -69,7 +69,7 @@ const PanelControlMapa = ({
               Zona: <strong>{zonaActual.departamento}</strong>
             </p>
           )}
-          <p className="text-texto/60 text-xs mt-1">
+          <p className="text-texto/75 text-xs mt-1">
             Coordenadas: {ubicacionActual.lat.toFixed(6)}, {ubicacionActual.lng.toFixed(6)}
           </p>
         </div>
@@ -108,40 +108,40 @@ const PanelControlMapa = ({
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: "#D7263D" }}
             ></div>
-            <span className="text-texto/80 mt-0.5">1⭐</span>
-            <span className="text-texto/80 mt-0.5">Muy malo</span>
+            <span className="text-texto/75 mt-0.5">1⭐</span>
+            <span className="text-texto/75 mt-0.5">Muy malo</span>
           </div>
           <div className="flex flex-col items-center">
             <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: "#F46036" }}
             ></div>
-            <span className="text-texto/80 mt-0.5">2⭐</span>
-            <span className="text-texto/80 mt-0.5">Malo</span>
+            <span className="text-texto/75 mt-0.5">2⭐</span>
+            <span className="text-texto/75 mt-0.5">Malo</span>
           </div>
           <div className="flex flex-col items-center">
             <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: "#FFD23F" }}
             ></div>
-            <span className="text-texto/80 mt-0.5">3⭐</span>
-            <span className="text-texto/80 mt-0.5">Regular</span>
+            <span className="text-texto/75 mt-0.5">3⭐</span>
+            <span className="text-texto/75 mt-0.5">Regular</span>
           </div>
           <div className="flex flex-col items-center">
             <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: "#6CC551" }}
             ></div>
-            <span className="text-texto/80 mt-0.5">4⭐</span>
-            <span className="text-texto/80 mt-0.5">Bueno</span>
+            <span className="text-texto/75 mt-0.5">4⭐</span>
+            <span className="text-texto/75 mt-0.5">Bueno</span>
           </div>
           <div className="flex flex-col items-center">
             <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: "#36C9C6" }}
             ></div>
-            <span className="text-texto/80 mt-0.5">5⭐</span>
-            <span className="text-texto/80 mt-0.5">Excelente</span>
+            <span className="text-texto/75 mt-0.5">5⭐</span>
+            <span className="text-texto/75 mt-0.5">Excelente</span>
           </div>
         </div>
       </div>

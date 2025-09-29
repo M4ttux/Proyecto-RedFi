@@ -168,7 +168,7 @@ const CursoIndividual = () => {
     return (
       <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
         <div className="max-w-4xl mx-auto text-center">
-          <IconExclamationCircle size={48} className="mx-auto text-texto/50 mb-4" />
+          <IconExclamationCircle size={48} className="mx-auto text-texto/75 mb-4" />
           <MainH2 className="text-center justify-center mb-4">Curso no encontrado</MainH2>
           <MainLinkButton to="/academia" variant="primary">
             <IconArrowLeft />
@@ -196,7 +196,7 @@ const CursoIndividual = () => {
             className={`px-6 py-3 border-b-2 transition-colors font-medium ${
               activeTab === "video"
                 ? "border-acento text-acento"
-                : "border-transparent text-texto/70 hover:text-texto"
+                : "border-transparent text-texto/75 hover:text-texto"
             }`}
           >
             <IconPlayerPlay size={20} className="inline mr-2" />
@@ -207,7 +207,7 @@ const CursoIndividual = () => {
             className={`px-6 py-3 border-b-2 transition-colors font-medium ${
               activeTab === "quiz"
                 ? "border-acento text-acento"
-                : "border-transparent text-texto/70 hover:text-texto"
+                : "border-transparent text-texto/75 hover:text-texto"
             }`}
           >
             <IconClipboardCheck size={20} className="inline mr-2" />
@@ -232,15 +232,15 @@ const CursoIndividual = () => {
               ) : (
                 <div className="aspect-video bg-fondo-secundario border border-texto/15 rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <IconExclamationCircle size={48} className="mx-auto text-texto/30 mb-4" />
-                    <p className="text-texto/70">Video no disponible</p>
+                    <IconExclamationCircle size={48} className="mx-auto text-texto/75 mb-4" />
+                    <p className="text-texto/75">Video no disponible</p>
                   </div>
                 </div>
               )}
               
               <div className="bg-fondo-secundario/50 border border-texto/10 rounded-lg p-6">
                 <MainH3 className="mb-3">Sobre este curso</MainH3>
-                <p className="text-texto/80 leading-relaxed">
+                <p className="text-texto/75 leading-relaxed">
                   {curso.descripcion}
                 </p>
               </div>
@@ -255,9 +255,9 @@ const CursoIndividual = () => {
                 </div>
               ) : quiz.length === 0 ? (
                 <div className="text-center py-12 bg-fondo-secundario/50 border border-texto/10 rounded-lg">
-                  <IconClipboardCheck size={48} className="mx-auto text-texto/30 mb-4" />
+                  <IconClipboardCheck size={48} className="mx-auto text-texto/75 mb-4" />
                   <MainH3 className="text-center justify-center mb-2">Sin quiz disponible</MainH3>
-                  <p className="text-texto/70">
+                  <p className="text-texto/75">
                     Este curso no tiene un quiz configurado.
                   </p>
                 </div>
@@ -266,15 +266,15 @@ const CursoIndividual = () => {
                   {/* Quiz Header */}
                   <div className="bg-acento/10 border border-acento/30 rounded-lg p-6">
                     <MainH3 className="mb-2">Quiz del curso</MainH3>
-                    <p className="text-texto/80">
+                    <p className="text-texto/75">
                       Responde las {quiz.length} preguntas para evaluar tus conocimientos. 
                       Necesitas al menos 70% para aprobar.
                     </p>
                     {resultadoQuiz && (
                       <div className={`mt-4 p-3 rounded-lg ${
                         resultadoQuiz.porcentaje >= 70 
-                          ? "bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-300" 
-                          : "bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300"
+                          ? "bg-green-500/10 border border-green-500/30 text-green-700" 
+                          : "bg-red-500/10 border border-red-500/30 text-red-700"
                       }`}>
                         <p className="font-medium">
                           Resultado: {resultadoQuiz.correctas}/{resultadoQuiz.total} correctas ({resultadoQuiz.porcentaje}%)
@@ -303,11 +303,11 @@ const CursoIndividual = () => {
                               
                               if (showResult) {
                                 if (isCorrect) {
-                                  buttonClass += "border-green-500 bg-green-500/10 text-green-700 dark:text-green-300";
+                                  buttonClass += "border-green-500 bg-green-500/10 text-green-700";
                                 } else if (isSelected && !isCorrect) {
-                                  buttonClass += "border-red-500 bg-red-500/10 text-red-700 dark:text-red-300";
+                                  buttonClass += "border-red-500 bg-red-500/10 text-red-700";
                                 } else {
-                                  buttonClass += "border-texto/20 bg-fondo-secundario/30 text-texto/60";
+                                  buttonClass += "border-texto/20 bg-fondo-secundario/30 text-texto/75";
                                 }
                               } else if (isSelected) {
                                 buttonClass += "border-acento bg-acento/10 text-acento";

@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import { IconX, IconExternalLink, IconPlayerPlay, IconClipboardCheck } from "@tabler/icons-react";
+import {
+  IconX,
+  IconExternalLink,
+  IconPlayerPlay,
+  IconClipboardCheck,
+} from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
+import MainH3 from "../../../ui/MainH3";
 import MainButton from "../../../ui/MainButton";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import { useAlerta } from "../../../../context/AlertaContext";
@@ -16,7 +22,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
   useEffect(() => {
     const cargarQuiz = async () => {
       if (!curso?.id) return;
-      
+
       setLoadingQuiz(true);
       try {
         const quizData = await obtenerQuizPorCurso(curso.id);
@@ -34,7 +40,9 @@ const ModalVerCurso = ({ curso, onClose }) => {
   // Función para extraer el ID del video de YouTube
   const extraerIdYoutube = (url) => {
     if (!url) return null;
-    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    const match = url.match(
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    );
     return match ? match[1] : null;
   };
 
@@ -45,15 +53,16 @@ const ModalVerCurso = ({ curso, onClose }) => {
   }
 
   return (
-    <ModalContenedor onClose={onClose} className="max-w-4xl">
+    <ModalContenedor onClose={onClose}>
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-6">
-        <MainH2 className="mb-0 flex-1 pr-4">{curso.titulo}</MainH2>
+        <MainH2 className="mb-0 flex-1 pr-4">Detalle del curso</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
           variant="cross"
           title="Cerrar modal"
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
@@ -61,78 +70,71 @@ const ModalVerCurso = ({ curso, onClose }) => {
 
       {/* Navegación por tabs */}
       <div className="flex border-b border-texto/15 mb-6">
-        <button
+        <MainButton
           onClick={() => setActiveTab("info")}
-          className={`px-4 py-2 border-b-2 transition-colors ${
-            activeTab === "info"
-              ? "border-acento text-acento font-medium"
-              : "border-transparent text-texto/70 hover:text-texto"
-          }`}
+          variant="toggle-tabs"
+          active={activeTab === "info"}
         >
           Información
-        </button>
-        <button
+        </MainButton>
+        <MainButton
           onClick={() => setActiveTab("video")}
-          className={`px-4 py-2 border-b-2 transition-colors ${
-            activeTab === "video"
-              ? "border-acento text-acento font-medium"
-              : "border-transparent text-texto/70 hover:text-texto"
-          }`}
+          variant="toggle-tabs"
+          active={activeTab === "video"}
         >
           Video
-        </button>
-        <button
+        </MainButton>
+        <MainButton
           onClick={() => setActiveTab("quiz")}
-          className={`px-4 py-2 border-b-2 transition-colors ${
-            activeTab === "quiz"
-              ? "border-acento text-acento font-medium"
-              : "border-transparent text-texto/70 hover:text-texto"
-          }`}
+          variant="toggle-tabs"
+          active={activeTab === "quiz"}
         >
-          Quiz ({quiz.length} preguntas)
-        </button>
+          Quiz
+        </MainButton>
       </div>
 
       {/* Contenido según tab activo */}
-      <div className="space-y-6">
+      <div className="space-y-6 mb-8">
         {activeTab === "info" && (
           <>
             {/* Miniatura y datos básicos */}
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="space-y-6">
+              {/* Título */}
+              <div>
+                <MainH3
+                  className="font-medium text-sm text-texto/75 uppercase tracking-wide mb-2"
+                  variant="noflex"
+                >
+                  Título
+                </MainH3>
+                <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+                  <p className="text-texto leading-relaxed">{curso.titulo}</p>
+                </div>
+              </div>
+
+              {/* Miniatura centrada */}
               {curso.miniatura_url && (
-                <div className="md:w-64 flex-shrink-0">
+                <div className="flex justify-center">
                   <img
                     src={curso.miniatura_url}
                     alt={curso.titulo}
-                    className="w-full rounded-lg shadow-sm"
+                    className="w-64 h-auto rounded-lg shadow-sm"
                   />
                 </div>
               )}
-              
-              <div className="flex-1 space-y-4">
-                <div>
-                  <h3 className="font-medium text-sm text-texto/70 uppercase tracking-wide mb-2">
-                    Descripción
-                  </h3>
-                  <p className="text-texto leading-relaxed">{curso.descripcion}</p>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium text-sm text-texto/70 uppercase tracking-wide mb-2">
-                    Video de YouTube
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <IconPlayerPlay size={20} className="text-red-500 flex-shrink-0" />
-                    <a
-                      href={curso.video_youtube_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-acento hover:underline truncate"
-                    >
-                      {curso.video_youtube_url}
-                    </a>
-                    <IconExternalLink size={16} className="text-texto/50 flex-shrink-0" />
-                  </div>
+
+              {/* Descripción */}
+              <div>
+                <MainH3
+                  className="font-medium text-sm text-texto/75 uppercase tracking-wide mb-2"
+                  variant="noflex"
+                >
+                  Descripción
+                </MainH3>
+                <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+                  <p className="text-texto leading-relaxed">
+                    {curso.descripcion}
+                  </p>
                 </div>
               </div>
             </div>
@@ -148,12 +150,11 @@ const ModalVerCurso = ({ curso, onClose }) => {
                     src={`https://www.youtube.com/embed/${videoId}`}
                     title={curso.titulo}
                     className="w-full h-full"
-                    frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
                 </div>
-                <div className="flex items-center justify-between text-sm text-texto/70">
+                <div className="flex items-center justify-between text-sm text-texto/75">
                   <span>Video incrustado desde YouTube</span>
                   <MainButton
                     as="a"
@@ -170,8 +171,11 @@ const ModalVerCurso = ({ curso, onClose }) => {
               </>
             ) : (
               <div className="text-center py-8">
-                <IconPlayerPlay size={48} className="mx-auto text-texto/30 mb-4" />
-                <p className="text-texto/70 mb-4">No se pudo cargar el video</p>
+                <IconPlayerPlay
+                  size={48}
+                  className="mx-auto text-texto/75 mb-4"
+                />
+                <p className="text-texto/75 mb-4">No se pudo cargar el video</p>
                 <MainButton
                   as="a"
                   href={curso.video_youtube_url}
@@ -192,63 +196,84 @@ const ModalVerCurso = ({ curso, onClose }) => {
           <div className="space-y-6">
             {loadingQuiz ? (
               <div className="text-center py-8">
-                <p className="text-texto/70">Cargando quiz...</p>
+                <p className="text-texto/75">Cargando quiz...</p>
               </div>
             ) : quiz.length === 0 ? (
               <div className="text-center py-8">
-                <IconClipboardCheck size={48} className="mx-auto text-texto/30 mb-4" />
-                <p className="text-texto/70">Este curso no tiene quiz configurado</p>
+                <IconClipboardCheck
+                  size={48}
+                  className="mx-auto text-texto/75 mb-4"
+                />
+                <p className="text-texto/75">
+                  Este curso no tiene quiz configurado
+                </p>
               </div>
             ) : (
               <>
-                <div className="bg-fondo-secundario/50 rounded-lg p-4 border border-texto/10">
+                <div className="bg-texto/5 rounded-lg p-4 border border-texto/10">
                   <div className="flex items-center gap-2 mb-2">
                     <IconClipboardCheck size={20} className="text-acento" />
-                    <h3 className="font-medium">Información del Quiz</h3>
+                    <MainH3 className="font-medium mb-0" variant="noflex">
+                      Información del Quiz
+                    </MainH3>
                   </div>
-                  <p className="text-sm text-texto/70">
-                    Este curso incluye un quiz de {quiz.length} pregunta{quiz.length !== 1 ? "s" : ""} para
-                    evaluar los conocimientos adquiridos.
+                  <p className="text-sm">
+                    Este curso incluye un quiz de {quiz.length} pregunta
+                    {quiz.length !== 1 ? "s" : ""} para evaluar los
+                    conocimientos adquiridos.
                   </p>
                 </div>
 
                 {quiz.map((pregunta, index) => (
-                  <div key={pregunta.id || index} className="border border-texto/15 rounded-lg p-4">
+                  <div
+                    key={pregunta.id || index}
+                    className="border border-texto/15 rounded-lg p-4 bg-texto/5"
+                  >
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="bg-acento text-fondo w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">
+                      <div className="bg-acento text-texto w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">
                         {index + 1}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium mb-3">{pregunta.pregunta}</h4>
-                        
+                        <p className="font-medium mb-3 text-lg">
+                          {pregunta.pregunta}
+                        </p>
+
                         <div className="space-y-2">
-                          {pregunta.opciones.map((opcion, opcionIndex) => (
+                          {(
+                            pregunta.quiz_opciones ||
+                            pregunta.opciones ||
+                            []
+                          ).map((opcion, opcionIndex) => (
                             <div
                               key={opcion.id || opcionIndex}
                               className={`flex items-center gap-3 p-3 rounded-lg border ${
                                 opcion.es_correcta
-                                  ? "border-green-500/30 bg-green-500/10"
+                                  ? "border-green-700/50 bg-green-600/20"
                                   : "border-texto/10 bg-fondo-secundario/30"
                               }`}
                             >
-                              <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                                opcion.es_correcta
-                                  ? "border-green-500 bg-green-500"
-                                  : "border-texto/30"
-                              }`}>
+                              <div
+                                className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                                  opcion.es_correcta
+                                    ? "border-green-500 bg-green-500"
+                                    : "border-texto/30"
+                                }`}
+                              >
                                 {opcion.es_correcta && (
-                                  <div className="w-2 h-2 rounded-full bg-white" />
+                                  <div className="w-2 h-2 rounded-full" />
                                 )}
                               </div>
-                              <span className={
-                                opcion.es_correcta
-                                  ? "font-medium text-green-700 dark:text-green-300"
-                                  : "text-texto/80"
-                              }>
-                                {opcion.texto}
+                              <span
+                                className={
+                                  opcion.es_correcta
+                                    ? "font-medium"
+                                    : "text-texto/75"
+                                }
+                              >
+                                {opcion.opcion || opcion.texto}
                               </span>
                               {opcion.es_correcta && (
-                                <span className="ml-auto text-xs text-green-600 dark:text-green-400 font-medium">
+                                <span className="ml-auto text-xs font-medium">
                                   Correcta
                                 </span>
                               )}
@@ -264,12 +289,11 @@ const ModalVerCurso = ({ curso, onClose }) => {
           </div>
         )}
       </div>
-
-      {/* Footer */}
-      <div className="flex justify-end pt-6 border-t border-texto/15">
+      {/* Botón de cierre */}
+      <div className="flex justify-center">
         <MainButton
-          type="button"
-          variant="secondary"
+          variant="primary"
+          className="w-full flex-1"
           onClick={onClose}
         >
           Cerrar

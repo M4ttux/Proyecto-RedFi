@@ -270,11 +270,11 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
               
               {!previewMiniatura ? (
                 <div className="border-2 border-dashed border-texto/30 rounded-lg p-6 text-center">
-                  <IconUpload size={48} className="mx-auto text-texto/50 mb-3" />
-                  <p className="text-sm text-texto/70 mb-3">
+                  <IconUpload size={48} className="mx-auto text-texto/75 mb-3" />
+                  <p className="text-sm text-texto/75 mb-3">
                     Sube una nueva miniatura para el curso
                   </p>
-                  <p className="text-xs text-texto/50 mb-4">
+                  <p className="text-xs text-texto/75 mb-4">
                     Máximo 100KB • Resolución máxima 500x500px • JPG, PNG, WebP
                   </p>
                   <input
@@ -304,7 +304,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                       {mantenerMiniaturaOriginal ? (
                         <>
                           <p className="font-medium">Miniatura actual</p>
-                          <p className="text-sm text-texto/70">Miniatura existente del curso</p>
+                          <p className="text-sm text-texto/75">Miniatura existente del curso</p>
                           <div className="flex gap-2 mt-2">
                             <input
                               ref={fileInputRef}
@@ -339,7 +339,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                             {miniatura ? miniatura.name : "Sin miniatura"}
                           </p>
                           {miniatura && (
-                            <p className="text-sm text-texto/70">
+                            <p className="text-sm text-texto/75">
                               {(miniatura.size / 1024).toFixed(1)} KB
                             </p>
                           )}
@@ -382,7 +382,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
           <div className="space-y-6">
             {loadingQuiz ? (
               <div className="text-center py-8">
-                <p className="text-texto/70">Cargando quiz...</p>
+                <p className="text-texto/75">Cargando quiz...</p>
               </div>
             ) : (
               <>
@@ -452,7 +452,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                           />
                         </div>
                       ))}
-                      <p className="text-xs text-texto/70">
+                      <p className="text-xs text-texto/75">
                         Marca la opción correcta con el radio button
                       </p>
                     </div>

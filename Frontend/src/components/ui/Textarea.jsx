@@ -60,7 +60,7 @@ const Textarea = ({
               ? (value?.length || 0) >= maxLength 
                 ? "text-red-600 font-medium" 
                 : "text-yellow-600 font-medium"
-              : "text-texto/60"
+              : "text-texto/75"
           }`}>
             {value?.length || 0}/{maxLength}
           </p>

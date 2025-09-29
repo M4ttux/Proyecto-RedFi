@@ -48,7 +48,7 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
         {/* Proveedor preferido */}
         <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-texto/70 uppercase tracking-wide">
+            <span className="text-sm font-medium text-texto/75 uppercase tracking-wide">
               Proveedor preferido:
             </span>
             <p className="text-lg font-semibold text-texto">

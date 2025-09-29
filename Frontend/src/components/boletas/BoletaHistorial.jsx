@@ -44,7 +44,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   // Formatear fecha con tooltip informativo
   const formatearFechaConTooltip = (fechaISO) => {
-    if (!fechaISO) return <span className="text-xs text-texto/40">—</span>;
+    if (!fechaISO) return <span className="text-xs text-texto/75">—</span>;
 
     const fecha = new Date(fechaISO);
     const formatoCorto = fecha.toLocaleDateString("es-AR");

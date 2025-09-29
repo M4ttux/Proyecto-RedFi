@@ -34,7 +34,7 @@ const Input = ({
         {/* Icono izquierdo opcional */}
         {Icon && (
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon size={20} className="text-texto/40" />
+            <Icon size={20} className="text-texto/75" />
           </div>
         )}
 
@@ -101,7 +101,7 @@ const Input = ({
         <div className="absolute inset-y-0 right-3 flex items-center">
           {loading ? (
             /* Spinner de carga */
-            <IconLoader2 size={20} className="animate-spin text-texto/60" />
+            <IconLoader2 size={20} className="animate-spin text-texto/75" />
           ) : isInvalid ? null : endIconAction ? (
             /* Botón de acción personalizable */
             <button
@@ -110,7 +110,7 @@ const Input = ({
               title={endIconAction.label || "Acción"}
               aria-label={endIconAction.label || "Acción del ícono"}
               tabIndex={0}
-              className="text-texto/60 hover:text-texto transition focus:outline-none"
+              className="text-texto/75 hover:text-texto transition focus:outline-none"
             >
               {endIconAction.icon}
             </button>
@@ -127,7 +127,7 @@ const Input = ({
               ? (value?.length || 0) >= maxLength 
                 ? "text-red-600 font-medium" 
                 : "text-yellow-600 font-medium"
-              : "text-texto/60"
+              : "text-texto/75"
           }`}>
             {value?.length || 0}/{maxLength}
           </p>

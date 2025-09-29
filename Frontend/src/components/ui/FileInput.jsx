@@ -144,7 +144,7 @@ const FileInput = ({
             {label}
           </label>
           {getLimitMessage() && (
-            <p className="text-xs text-texto/60 mb-2">
+            <p className="text-xs text-texto/75 mb-2">
               {getLimitMessage()}
             </p>
           )}

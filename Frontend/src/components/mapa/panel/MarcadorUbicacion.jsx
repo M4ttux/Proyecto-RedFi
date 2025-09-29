@@ -5,7 +5,7 @@ const MarcadorUbicacion = ({ coordenadas, zona, esValida }) => {
 
   return (
     <div className="absolute z-20 transform -translate-x-1/2 -translate-y-full">
-      <div className={`relative ${esValida ? 'text-green-500' : 'text-red-500'}`}>
+      <div className={`relative ${esValida ? 'text-green-700' : 'text-red-500'}`}>
         {/* Marcador principal */}
         <div className={`w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center ${
           esValida ? 'bg-green-500' : 'bg-red-500'

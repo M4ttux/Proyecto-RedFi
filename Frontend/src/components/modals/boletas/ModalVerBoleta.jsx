@@ -24,12 +24,12 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
     
     if (diferencia > 0) {
       diferenciaTexto = (
-        <span className="flex items-center gap-1 font-bold text-green-600/75">
+        <span className="flex items-center gap-1 font-bold text-green-700/75">
           <IconTrendingUp size={16} />
           Subió ${diferencia.toFixed(2)} (+{porcentaje}%)
         </span>
       );
-      diferenciaColor = "text-green-600";
+      diferenciaColor = "text-green-700";
     } else if (diferencia < 0) {
       diferenciaTexto = (
         <span className="flex items-center gap-1 font-bold text-red-600/75">

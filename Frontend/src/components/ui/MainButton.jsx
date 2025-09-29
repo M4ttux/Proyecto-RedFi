@@ -37,9 +37,15 @@ const Button = ({
 
   // Estilos base comunes a todas las variantes
   const baseStyles = classNames(
-    "inline-flex items-center justify-center gap-2 rounded-lg font-bold transition focus:outline-none duration-300",
-    defaultPx,
-    defaultPy
+    "inline-flex items-center justify-center gap-2 font-bold transition focus:outline-none duration-300",
+    {
+      "rounded-lg": variant !== "toggle-tabs",
+      "border-b-2 transition-colors": variant === "toggle-tabs",
+      "px-4 py-2": variant === "toggle-tabs",
+    },
+    variant !== "toggle-tabs" ? "rounded-lg" : "",
+    variant !== "toggle-tabs" ? defaultPx : "",
+    variant !== "toggle-tabs" ? defaultPy : ""
   );
 
   const { currentTheme } = useTheme();
@@ -54,7 +60,7 @@ const Button = ({
         : "bg-texto/5 text-texto hover:bg-[#2a3955] border-1 border-texto/15",
     danger: "bg-red-600 text-white hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
-    cross: "text-texto/60 hover:text-red-400",
+    cross: "text-texto/75 hover:text-red-400",
     add: "bg-green-700 text-white hover:bg-green-500",
     see: "bg-blue-600 text-white hover:bg-blue-400",
     edit: "bg-yellow-600 text-white hover:bg-yellow-400",
@@ -64,6 +70,9 @@ const Button = ({
       : currentTheme === "light"
       ? "bg-secundario border-texto/15 text-texto hover:bg-[#d2e4ff]"
       : "bg-secundario border-texto/10 text-texto hover:bg-[#2a3955]",
+    "toggle-tabs": active
+      ? "border-acento text-acento"
+      : "border-transparent text-texto/75 hover:text-texto",
     navbar: "bg-transparent text-texto hover:bg-white/10",
   };
 
