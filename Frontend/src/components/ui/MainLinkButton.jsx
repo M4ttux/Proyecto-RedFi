@@ -20,7 +20,7 @@ const LinkButton = ({
   const { plan } = useRole();
   
   // Detecta si es variante de tarjeta para aplicar estilos especiales
-  const esCard = variant === "card" || variant === "cardAdmin";
+  const esCard = variant === "card" || variant === "cardAdmin" || variant === "curso";
   const hasCustomPadding = /\bp[trblxy]?-\d+\b/.test(className);
   const { currentTheme } = useTheme();
   

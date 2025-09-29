@@ -77,6 +77,7 @@ const ModalConfirmacionPlan = ({ usuarioId, nuevoPlan, onClose }) => {
           variant="secondary"
           onClick={onClose}
           disabled={cargando}
+          className="flex-1"
         >
           Cancelar
         </MainButton>
@@ -87,6 +88,7 @@ const ModalConfirmacionPlan = ({ usuarioId, nuevoPlan, onClose }) => {
           onClick={handleConfirmar}
           loading={cargando}
           disabled={cargando}
+          className="flex-1"
         >
           Confirmar
         </MainButton>

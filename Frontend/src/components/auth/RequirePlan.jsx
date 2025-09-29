@@ -22,9 +22,6 @@ const RequirePlan = ({ children, plan = "basico", redirectTo = "/planes" }) => {
       // Mensajes personalizados por ruta
       const mensajesPorRuta = {
         "/academia": "La Academia está disponible solo para usuarios Premium. ¡Actualiza tu plan para acceder!",
-        "/academia/curso1": "Los cursos están disponibles solo para usuarios Premium. ¡Actualiza tu plan!",
-        "/academia/curso2": "Los cursos están disponibles solo para usuarios Premium. ¡Actualiza tu plan!",
-        "/academia/curso3": "Los cursos están disponibles solo para usuarios Premium. ¡Actualiza tu plan!",
         "/glosario": "El Glosario está disponible solo para usuarios Premium. ¡Actualiza tu plan!",
         "/boletas": "Las Boletas están disponibles solo para usuarios Premium. ¡Actualiza tu plan!",
       };

@@ -80,6 +80,7 @@ const AcademyHome = () => {
                 key={curso.id}
                 variant="curso"
                 className="block hover:scale-[1.02] transition-transform duration-200"
+                isPremium={true}
               >
                 {/* Miniatura - lado izquierdo */}
                 <div className="w-32 h-24 flex-shrink-0">

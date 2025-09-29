@@ -167,7 +167,7 @@ const CursoIndividual = () => {
   if (!curso) {
     return (
       <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <IconExclamationCircle size={48} className="mx-auto text-texto/75 mb-4" />
           <MainH2 className="text-center justify-center mb-4">Curso no encontrado</MainH2>
           <MainLinkButton to="/academia" variant="primary">
@@ -183,7 +183,7 @@ const CursoIndividual = () => {
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center">
           <MainH1 icon={IconBook2}>{curso.titulo}</MainH1>
