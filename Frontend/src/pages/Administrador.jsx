@@ -30,7 +30,7 @@ import {
 import {
   obtenerCursos,
   eliminarCurso,
-} from "../services/cursos/cursosService";
+} from "../services/cursos";
 
 import ModalEliminar from "../components/modals/ModalEliminar";
 

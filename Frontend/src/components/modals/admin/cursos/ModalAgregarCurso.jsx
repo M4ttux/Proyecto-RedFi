@@ -6,8 +6,15 @@ import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import { useAlerta } from "../../../../context/AlertaContext";
-import { crearCurso, validarMiniatura, validarDimensionesImagen } from "../../../../services/cursos/cursosService";
-import { guardarQuiz, validarQuiz, crearPreguntaVacia, validarUrlYoutube } from "../../../../services/cursos/quizService";
+import { 
+  crearCurso, 
+  validarMiniatura, 
+  validarDimensionesImagen, 
+  guardarQuiz, 
+  validarQuiz, 
+  crearPreguntaVacia, 
+  validarUrlYoutube 
+} from "../../../../services/cursos";
 
 const ModalAgregarCurso = ({ onClose, onActualizar }) => {
   // Estados del formulario principal

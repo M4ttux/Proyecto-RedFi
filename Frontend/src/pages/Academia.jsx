@@ -8,7 +8,7 @@ import MainLoader from "../components/ui/MainLoader";
 import ReseñasDestacadas from "../components/academia/reseñasDestacadas";
 import { useTheme } from "../context/ThemeContext";
 import { useAlerta } from "../context/AlertaContext";
-import { obtenerCursos } from "../services/cursos/cursosService";
+import { obtenerCursos } from "../services/cursos";
 
 const AcademyHome = () => {
   const [cursos, setCursos] = useState([]);

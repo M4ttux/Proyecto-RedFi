@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { IconArrowLeft, IconBook2, IconPlayerPlay, IconClipboardCheck, IconExclamationCircle, IconCheck, IconX } from "@tabler/icons-react";
 import MainH1 from "../../components/ui/MainH1";
@@ -8,8 +8,7 @@ import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import MainLoader from "../../components/ui/MainLoader";
 import { useAlerta } from "../../context/AlertaContext";
-import { obtenerCursoPorId } from "../../services/cursos/cursosService";
-import { obtenerQuizPorCurso } from "../../services/cursos/quizService";
+import { obtenerCursoPorId, obtenerQuizPorCurso } from "../../services/cursos";
 
 const CursoIndividual = () => {
   const { id } = useParams();
@@ -22,7 +21,14 @@ const CursoIndividual = () => {
   const [respuestas, setRespuestas] = useState({});
   const [quizEnviado, setQuizEnviado] = useState(false);
   const [resultadoQuiz, setResultadoQuiz] = useState(null);
+  const [quizCargado, setQuizCargado] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
+  const mostrarErrorRef = useRef(mostrarError);
+  
+  // Mantener la referencia actualizada
+  useEffect(() => {
+    mostrarErrorRef.current = mostrarError;
+  }, [mostrarError]);
 
   useEffect(() => {
     const cargarCurso = async () => {
@@ -34,6 +40,7 @@ const CursoIndividual = () => {
 
       console.log("Intentando cargar curso con ID:", id);
       setLoading(true);
+      setQuizCargado(false); // Reset del estado del quiz al cambiar de curso
       try {
         // Usar obtenerCursoPorId directamente (sin parseInt porque es UUID)
         const cursoEncontrado = await obtenerCursoPorId(id);
@@ -41,7 +48,7 @@ const CursoIndividual = () => {
         
         if (!cursoEncontrado) {
           console.log("Curso no encontrado para ID:", id);
-          mostrarError("Curso no encontrado");
+          mostrarErrorRef.current("Curso no encontrado");
           navigate("/academia");
           return;
         }
@@ -51,7 +58,7 @@ const CursoIndividual = () => {
         console.log("Curso cargado exitosamente:", cursoEncontrado.titulo);
       } catch (error) {
         console.error("Error al cargar el curso:", error);
-        mostrarError(`Error al cargar el curso: ${error.message}`);
+        mostrarErrorRef.current(`Error al cargar el curso: ${error.message}`);
         navigate("/academia");
       } finally {
         setLoading(false);
@@ -59,10 +66,10 @@ const CursoIndividual = () => {
     };
 
     cargarCurso();
-  }, [id, navigate, mostrarError]);
+  }, [id, navigate]); // Quitamos mostrarError de las dependencias
 
-  const cargarQuiz = async () => {
-    if (!curso?.id) return;
+  const cargarQuiz = useCallback(async () => {
+    if (!curso?.id || quizCargado) return;
     
     setLoadingQuiz(true);
     try {
@@ -73,18 +80,20 @@ const CursoIndividual = () => {
         console.log("Opciones de primera pregunta:", quizData[0].quiz_opciones);
       }
       setQuiz(quizData);
+      setQuizCargado(true); // Marcar como cargado
     } catch (error) {
-      mostrarError("Error al cargar el quiz");
+      mostrarErrorRef.current("Error al cargar el quiz");
     } finally {
       setLoadingQuiz(false);
     }
-  };
+  }, [curso?.id, quizCargado]); // Quitamos mostrarError de las dependencias
 
   useEffect(() => {
-    if (curso && activeTab === "quiz" && quiz.length === 0) {
+    // Cargar el quiz automáticamente cuando el curso se carga
+    if (curso && !quizCargado) {
       cargarQuiz();
     }
-  }, [curso, activeTab]);
+  }, [curso, quizCargado, cargarQuiz]);
 
   const extraerIdYoutube = (url) => {
     if (!url) return null;
@@ -106,7 +115,6 @@ const CursoIndividual = () => {
       mostrarError("Debes responder todas las preguntas");
       return;
     }
-
     let correctas = 0;
     const resultados = {};
 

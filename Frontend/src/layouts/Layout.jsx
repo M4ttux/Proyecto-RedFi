@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import MobileBottomNav from "../components/layout/MobileBottomNav";
 import Footer from "../components/layout/Footer";
+import ScrollToTop from "../components/ui/ScrollToTop";
 import { AuthProvider } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
 
@@ -11,6 +12,7 @@ const Layout = () => {
 
   return (
     <AuthProvider>
+      <ScrollToTop />
       <header className="z-50">
         <Navbar />
       </header>

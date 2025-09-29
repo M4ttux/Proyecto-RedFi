@@ -4,7 +4,7 @@ import MainH2 from "../../../ui/MainH2";
 import MainButton from "../../../ui/MainButton";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import { useAlerta } from "../../../../context/AlertaContext";
-import { obtenerQuizPorCurso } from "../../../../services/cursos/quizService";
+import { obtenerQuizPorCurso } from "../../../../services/cursos";
 
 const ModalVerCurso = ({ curso, onClose }) => {
   const [quiz, setQuiz] = useState([]);
