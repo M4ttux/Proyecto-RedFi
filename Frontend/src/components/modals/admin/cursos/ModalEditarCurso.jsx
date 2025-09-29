@@ -1,9 +1,14 @@
-import { useState, useRef, useEffect } from "react";
-import { IconX, IconUpload, IconPlus, IconTrash } from "@tabler/icons-react";
+import { useState, useEffect, useRef } from "react";
+import { IconX, IconPlus, IconTrash, IconBulb, IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
+import MainH3 from "../../../ui/MainH3";
+import MainH4 from "../../../ui/MainH4";
 import MainButton from "../../../ui/MainButton";
 import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
+import FileInput from "../../../ui/FileInput";
+import RadioButton from "../../../ui/RadioButton";
+import Badge from "../../../ui/Badge";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import { 
@@ -34,9 +39,18 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
   const [loading, setLoading] = useState(false);
   const [loadingQuiz, setLoadingQuiz] = useState(true);
   const [step, setStep] = useState(1); // 1: Datos básicos, 2: Quiz
-  
-  const fileInputRef = useRef(null);
+  const [preguntaExpandida, setPreguntaExpandida] = useState(0); // Índice de la pregunta expandida
   const { mostrarError, mostrarExito } = useAlerta();
+  
+  // Usar ref para funciones de alerta para evitar dependencias problemáticas
+  const mostrarErrorRef = useRef(mostrarError);
+  const mostrarExitoRef = useRef(mostrarExito);
+  
+  // Actualizar refs cuando cambien las funciones
+  useEffect(() => {
+    mostrarErrorRef.current = mostrarError;
+    mostrarExitoRef.current = mostrarExito;
+  });
 
   // Cargar quiz existente
   useEffect(() => {
@@ -55,7 +69,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
         }
         setQuizCargado(true);
       } catch (error) {
-        mostrarError("Error al cargar el quiz del curso");
+        mostrarErrorRef.current("Error al cargar el quiz del curso");
         setPreguntas([crearPreguntaVacia()]);
       } finally {
         setLoadingQuiz(false);
@@ -63,24 +77,23 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
     };
 
     cargarQuiz();
-  }, [curso?.id, mostrarError]);
+  }, [curso?.id]); // Remover mostrarError de las dependencias
 
   // Manejo de archivo de miniatura
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (file) => {
     if (!file) return;
 
     // Validar archivo
     const fileErrors = validarMiniatura(file);
     if (fileErrors.length > 0) {
-      mostrarError(fileErrors.join(", "));
+      mostrarErrorRef.current(fileErrors.join(", "));
       return;
     }
 
     // Validar dimensiones
     const dimensionErrors = await validarDimensionesImagen(file);
     if (dimensionErrors.length > 0) {
-      mostrarError(dimensionErrors.join(", "));
+      mostrarErrorRef.current(dimensionErrors.join(", "));
       return;
     }
 
@@ -89,34 +102,29 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
     setMantenerMiniaturaOriginal(false);
   };
 
-  const removerMiniatura = () => {
-    setMiniatura(null);
-    setPreviewMiniatura(null);
-    setMantenerMiniaturaOriginal(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
 
-  const restaurarMiniaturaOriginal = () => {
-    setMiniatura(null);
-    setPreviewMiniatura(curso?.miniatura_url || null);
-    setMantenerMiniaturaOriginal(true);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
 
   // Manejo de preguntas del quiz
   const agregarPregunta = () => {
     if (preguntas.length < 10) {
-      setPreguntas([...preguntas, crearPreguntaVacia()]);
+      const nuevasPreguntas = [...preguntas, crearPreguntaVacia()];
+      setPreguntas(nuevasPreguntas);
+      setPreguntaExpandida(nuevasPreguntas.length - 1); // Expandir la nueva pregunta
     }
   };
 
   const eliminarPregunta = (index) => {
     if (preguntas.length > 1) {
-      setPreguntas(preguntas.filter((_, i) => i !== index));
+      const nuevasPreguntas = preguntas.filter((_, i) => i !== index);
+      setPreguntas(nuevasPreguntas);
+      
+      // Ajustar el índice de la pregunta expandida
+      if (preguntaExpandida >= index) {
+        setPreguntaExpandida(Math.max(0, preguntaExpandida - 1));
+      }
+      if (preguntaExpandida >= nuevasPreguntas.length) {
+        setPreguntaExpandida(nuevasPreguntas.length - 1);
+      }
     }
   };
 
@@ -129,31 +137,34 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
   const actualizarOpcion = (preguntaIndex, opcionIndex, campo, valor) => {
     const nuevasPreguntas = [...preguntas];
     
+    // Determinar qué propiedad usar para las opciones
+    const opcionesKey = nuevasPreguntas[preguntaIndex].quiz_opciones ? 'quiz_opciones' : 'opciones';
+    
     if (campo === "es_correcta" && valor) {
       // Solo una opción puede ser correcta
-      nuevasPreguntas[preguntaIndex].opciones.forEach(opcion => {
+      nuevasPreguntas[preguntaIndex][opcionesKey].forEach(opcion => {
         opcion.es_correcta = false;
       });
     }
     
-    nuevasPreguntas[preguntaIndex].opciones[opcionIndex][campo] = valor;
+    nuevasPreguntas[preguntaIndex][opcionesKey][opcionIndex][campo] = valor;
     setPreguntas(nuevasPreguntas);
   };
 
   // Validación y envío
   const validarDatosBasicos = () => {
     if (!titulo.trim()) {
-      mostrarError("El título es requerido");
+      mostrarErrorRef.current("El título es requerido");
       return false;
     }
     if (!descripcion.trim()) {
-      mostrarError("La descripción es requerida");
+      mostrarErrorRef.current("La descripción es requerida");
       return false;
     }
     
     const urlError = validarUrlYoutube(videoUrl);
     if (urlError) {
-      mostrarError(urlError);
+      mostrarErrorRef.current(urlError);
       return false;
     }
 
@@ -172,7 +183,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
     // Validar quiz
     const quizErrors = validarQuiz(preguntas);
     if (quizErrors.length > 0) {
-      mostrarError(quizErrors.join(", "));
+      mostrarErrorRef.current(quizErrors.join(", "));
       return;
     }
 
@@ -186,16 +197,17 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
       };
 
       const archivoMiniatura = mantenerMiniaturaOriginal ? null : miniatura;
-      await actualizarCurso(curso.id, cursoData, archivoMiniatura);
+      const miniaturaAnterior = curso?.miniatura_url || null;
+      await actualizarCurso(curso.id, cursoData, archivoMiniatura, miniaturaAnterior);
 
       // Guardar quiz actualizado
       await guardarQuiz(curso.id, preguntas);
 
-      mostrarExito("Curso actualizado exitosamente");
+      mostrarExitoRef.current("Curso actualizado exitosamente");
       onActualizar?.();
       onClose();
     } catch (error) {
-      mostrarError(error.message || "Error al actualizar el curso");
+      mostrarErrorRef.current(error.message || "Error al actualizar el curso");
     } finally {
       setLoading(false);
     }
@@ -206,30 +218,36 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
   }
 
   return (
-    <ModalContenedor onClose={onClose} className="max-w-4xl">
+    <ModalContenedor onClose={onClose}>
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-6">
-        <MainH2 className="mb-0">
-          {step === 1 ? "Editar curso - Datos básicos" : "Editar curso - Quiz"}
-        </MainH2>
+        <MainH2 className="mb-0">Editar curso</MainH2>
         <MainButton
           onClick={onClose}
           type="button"
           variant="cross"
           title="Cerrar modal"
           disabled={loading}
+          className="px-0"
         >
           <IconX size={24} />
         </MainButton>
       </div>
 
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="space-y-2 md:space-y-4"
+      >
         {step === 1 ? (
           // Paso 1: Datos básicos
           <div className="space-y-6">
             {/* Título */}
             <Input
-              label="Título del curso"
+              label={
+                <>
+                  Titulo <span className="text-red-600">*</span>
+                </>
+              }
               name="titulo"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
@@ -241,7 +259,11 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
 
             {/* Descripción */}
             <Textarea
-              label="Descripción"
+              label={
+                <>
+                  Descripción <span className="text-red-600">*</span>
+                </>
+              }
               name="descripcion"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
@@ -254,128 +276,36 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
 
             {/* URL de YouTube */}
             <Input
-              label="URL del video de YouTube"
+              label={
+                <>
+                  URL del video de YouTube{" "}
+                  <span className="text-red-600">*</span>
+                </>
+              }
               name="videoUrl"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
               placeholder="https://www.youtube.com/watch?v=..."
+              maxLength={200}
+              showCounter
               required
             />
 
             {/* Miniatura */}
-            <div className="space-y-3">
-              <label className="block text-sm font-medium text-texto">
-                Miniatura del curso
-              </label>
-              
-              {!previewMiniatura ? (
-                <div className="border-2 border-dashed border-texto/30 rounded-lg p-6 text-center">
-                  <IconUpload size={48} className="mx-auto text-texto/75 mb-3" />
-                  <p className="text-sm text-texto/75 mb-3">
-                    Sube una nueva miniatura para el curso
-                  </p>
-                  <p className="text-xs text-texto/75 mb-4">
-                    Máximo 100KB • Resolución máxima 500x500px • JPG, PNG, WebP
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <MainButton
-                    type="button"
-                    variant="secondary"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    Seleccionar imagen
-                  </MainButton>
-                </div>
-              ) : (
-                <div className="border border-texto/30 rounded-lg p-4">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={previewMiniatura}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      {mantenerMiniaturaOriginal ? (
-                        <>
-                          <p className="font-medium">Miniatura actual</p>
-                          <p className="text-sm text-texto/75">Miniatura existente del curso</p>
-                          <div className="flex gap-2 mt-2">
-                            <input
-                              ref={fileInputRef}
-                              type="file"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                              className="hidden"
-                            />
-                            <MainButton
-                              type="button"
-                              variant="secondary"
-                              onClick={() => fileInputRef.current?.click()}
-                              iconSize={16}
-                            >
-                              <IconUpload />
-                              Cambiar
-                            </MainButton>
-                            <MainButton
-                              type="button"
-                              variant="danger"
-                              onClick={removerMiniatura}
-                              iconSize={16}
-                            >
-                              <IconTrash />
-                              Quitar
-                            </MainButton>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <p className="font-medium">
-                            {miniatura ? miniatura.name : "Sin miniatura"}
-                          </p>
-                          {miniatura && (
-                            <p className="text-sm text-texto/75">
-                              {(miniatura.size / 1024).toFixed(1)} KB
-                            </p>
-                          )}
-                          <div className="flex gap-2 mt-2">
-                            <MainButton
-                              type="button"
-                              variant="secondary"
-                              onClick={restaurarMiniaturaOriginal}
-                              iconSize={16}
-                            >
-                              Restaurar original
-                            </MainButton>
-                            <input
-                              ref={fileInputRef}
-                              type="file"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                              className="hidden"
-                            />
-                            <MainButton
-                              type="button"
-                              variant="secondary"
-                              onClick={() => fileInputRef.current?.click()}
-                              iconSize={16}
-                            >
-                              <IconUpload />
-                              Cambiar
-                            </MainButton>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <FileInput
+              label={
+                <>
+                  Miniatura del curso <span className="text-red-600">*</span>
+                </>
+              }
+              accept="image/*"
+              onChange={handleFileChange}
+              value={miniatura}
+              previewUrl={previewMiniatura}
+              setPreviewUrl={setPreviewMiniatura}
+              disabled={loading}
+              hideRemoveButton={true}
+            />
           </div>
         ) : (
           // Paso 2: Quiz
@@ -387,9 +317,12 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
             ) : (
               <>
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-bold">
-                    Quiz del curso ({preguntas.length}/10 preguntas)
-                  </h3>
+                  <div className="flex items-center gap-3">
+                    <MainH3 className="mb-0">Quiz del curso</MainH3>
+                    <Badge variant="accent" size="sm">
+                      {preguntas.length}/10 preguntas
+                    </Badge>
+                  </div>
                   <MainButton
                     type="button"
                     variant="accent"
@@ -402,69 +335,166 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                   </MainButton>
                 </div>
 
-                {preguntas.map((pregunta, preguntaIndex) => (
-                  <div key={preguntaIndex} className="border border-texto/15 rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Pregunta {preguntaIndex + 1}</h4>
-                      {preguntas.length > 1 && (
-                        <MainButton
-                          type="button"
-                          variant="delete"
-                          onClick={() => eliminarPregunta(preguntaIndex)}
-                          iconSize={16}
-                        >
-                          <IconTrash />
-                        </MainButton>
+                {preguntas.map((pregunta, preguntaIndex) => {
+                  const estaExpandida = preguntaExpandida === preguntaIndex;
+                  const tieneContenido = pregunta.pregunta.trim() !== '';
+                  const opciones = pregunta.quiz_opciones || pregunta.opciones || [];
+                  const tieneOpcionesCompletas = opciones.some(op => (op.texto || op.opcion || '').trim() !== '');
+                  
+                  return (
+                    <div
+                      key={preguntaIndex}
+                      className="border border-texto/15 rounded-lg overflow-hidden"
+                    >
+                      {/* Header del acordeón */}
+                      <div 
+                        className="flex justify-between items-center p-2 cursor-pointer bg-texto/5 transition-colors"
+                        onClick={() => setPreguntaExpandida(estaExpandida ? -1 : preguntaIndex)}
+                      >
+                        <div className="flex items-center gap-4">
+                          <span className="font-bold">
+                            Pregunta {preguntaIndex + 1}
+                          </span>
+                          
+                          {/* Indicadores de estado */}
+                          <div className="flex items-center gap-2">
+                            {tieneContenido && (
+                              <div className="w-2 h-2 bg-green-500 rounded-full" title="Pregunta completada" />
+                            )}
+                            {tieneOpcionesCompletas && (
+                              <div className="w-2 h-2 bg-blue-500 rounded-full" title="Opciones agregadas" />
+                            )}
+                            {!tieneContenido && !tieneOpcionesCompletas && (
+                              <div className="w-2 h-2 bg-gray-400 rounded-full" title="Pregunta vacía" />
+                            )}
+                          </div>
+                          
+                          {/* Preview del contenido cuando está colapsado */}
+                          {!estaExpandida && tieneContenido && (
+                            <span className="text-sm text-texto/75 truncate max-w-[200px]">
+                              {pregunta.pregunta}
+                            </span>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                          {preguntas.length > 1 && (
+                            <MainButton
+                              type="button"
+                              variant="delete"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                eliminarPregunta(preguntaIndex);
+                              }}
+                              title={`Eliminar pregunta ${preguntaIndex + 1}`}
+                            >
+                            </MainButton>
+                          )}
+                          
+                          {estaExpandida ? (
+                            <IconChevronUp size={20} className="text-texto/75" />
+                          ) : (
+                            <IconChevronDown size={20} className="text-texto/75" />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Contenido expandible */}
+                      {estaExpandida && (
+                        <div className="p-4 space-y-4 border-t border-texto/10">
+                          <Textarea
+                            label={
+                              <>
+                                Pregunta <span className="text-red-600">*</span>
+                              </>
+                            }
+                            value={pregunta.pregunta}
+                            onChange={(e) =>
+                              actualizarPregunta(
+                                preguntaIndex,
+                                "pregunta",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Escribe la pregunta..."
+                            required
+                            maxLength={200}
+                            showCounter
+                            rows={2}
+                          />
+
+                          <div className="space-y-2">
+                            <MainH4
+                              className="text-sm font-medium text-texto mb-3"
+                              variant="noflex"
+                            >
+                              Opciones de respuesta <span className="text-red-600">*</span>
+                            </MainH4>
+                            {opciones.map((opcion, opcionIndex) => (
+                              <div
+                                key={opcionIndex}
+                                className="w-full"
+                              >
+                                {/* Contenedor principal con radio button al costado del input */}
+                                <div className="flex items-start gap-3 w-full">
+                                  <div className="flex-shrink-0 pt-2">
+                                    <RadioButton
+                                      id={`radio_edit_${preguntaIndex}_${opcionIndex}`}
+                                      name={`correcta_${preguntaIndex}`}
+                                      checked={opcion.es_correcta}
+                                      onChange={() =>
+                                        actualizarOpcion(
+                                          preguntaIndex,
+                                          opcionIndex,
+                                          "es_correcta",
+                                          true
+                                        )
+                                      }
+                                      hideLabel={true}
+                                      size="md"
+                                      title="Marcar como respuesta correcta"
+                                    />
+                                  </div>
+                                  
+                                  <div className="flex-1 min-w-0">
+                                    <Input
+                                      placeholder={`Opción ${opcionIndex + 1}`}
+                                      value={opcion.texto || opcion.opcion || ''}
+                                      onChange={(e) =>
+                                        actualizarOpcion(
+                                          preguntaIndex,
+                                          opcionIndex,
+                                          "texto",
+                                          e.target.value
+                                        )
+                                      }
+                                      className="w-full"
+                                      required
+                                      maxLength={100}
+                                      showCounter
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            <div className="text-xs text-texto/75 bg-texto/5 p-2 rounded border border-texto/10 flex items-start gap-2">
+                              <IconBulb size={14} className="flex-shrink-0 text-acento" />
+                              <span><strong>Tip:</strong> Marca la opción correcta
+                              seleccionando el círculo correspondiente</span>
+                            </div>
+                          </div>
+                        </div>
                       )}
                     </div>
-
-                    <Textarea
-                      label="Pregunta"
-                      value={pregunta.pregunta}
-                      onChange={(e) => actualizarPregunta(preguntaIndex, "pregunta", e.target.value)}
-                      placeholder="Escribe la pregunta..."
-                      required
-                      maxLength={200}
-                      showCounter
-                      rows={2}
-                    />
-
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-texto">
-                        Opciones de respuesta
-                      </label>
-                      {pregunta.opciones.map((opcion, opcionIndex) => (
-                        <div key={opcionIndex} className="flex items-center gap-3">
-                          <input
-                            type="radio"
-                            name={`correcta_${preguntaIndex}`}
-                            checked={opcion.es_correcta}
-                            onChange={() => actualizarOpcion(preguntaIndex, opcionIndex, "es_correcta", true)}
-                            className="w-4 h-4 text-acento"
-                          />
-                          <Input
-                            placeholder={`Opción ${opcionIndex + 1}`}
-                            value={opcion.texto}
-                            onChange={(e) => actualizarOpcion(preguntaIndex, opcionIndex, "texto", e.target.value)}
-                            className="flex-1"
-                            required
-                            maxLength={100}
-                          />
-                        </div>
-                      ))}
-                      <p className="text-xs text-texto/75">
-                        Marca la opción correcta con el radio button
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </>
             )}
           </div>
         )}
 
         {/* Botones de acción */}
-        <div className="flex justify-between pt-6 border-t border-texto/15">
+        <div className="flex gap-3">
           {step === 1 ? (
             <>
               <MainButton
@@ -472,6 +502,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                 variant="secondary"
                 onClick={onClose}
                 disabled={loading}
+                className="flex-1"
               >
                 Cancelar
               </MainButton>
@@ -480,6 +511,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                 variant="primary"
                 onClick={handleSiguiente}
                 disabled={loadingQuiz}
+                className="flex-1"
               >
                 {loadingQuiz ? "Cargando..." : "Siguiente: Quiz"}
               </MainButton>
@@ -491,6 +523,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                 variant="secondary"
                 onClick={() => setStep(1)}
                 disabled={loading}
+                className="flex-1"
               >
                 Anterior
               </MainButton>
@@ -500,11 +533,19 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                 onClick={handleSubmit}
                 loading={loading}
                 disabled={loading || loadingQuiz}
+                className="flex-1"
               >
                 {loading ? "Actualizando..." : "Actualizar curso"}
               </MainButton>
             </>
           )}
+        </div>
+
+        <div className="text-center mt-6">
+          <p className="text-sm text-texto/75 italic">
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
+          </p>
         </div>
       </form>
     </ModalContenedor>

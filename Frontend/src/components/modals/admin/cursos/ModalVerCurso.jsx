@@ -4,6 +4,8 @@ import {
   IconExternalLink,
   IconPlayerPlay,
   IconClipboardCheck,
+  IconChevronDown,
+  IconChevronUp,
 } from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
 import MainH3 from "../../../ui/MainH3";
@@ -16,6 +18,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
   const [quiz, setQuiz] = useState([]);
   const [loadingQuiz, setLoadingQuiz] = useState(true);
   const [activeTab, setActiveTab] = useState("info"); // info, video, quiz
+  const [preguntaExpandida, setPreguntaExpandida] = useState(0); // Índice de la pregunta expandida
   const { mostrarError } = useAlerta();
 
   // Cargar quiz del curso
@@ -224,66 +227,104 @@ const ModalVerCurso = ({ curso, onClose }) => {
                   </p>
                 </div>
 
-                {quiz.map((pregunta, index) => (
-                  <div
-                    key={pregunta.id || index}
-                    className="border border-texto/15 rounded-lg p-4 bg-texto/5"
-                  >
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="bg-acento text-texto w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium mb-3 text-lg">
-                          {pregunta.pregunta}
-                        </p>
-
-                        <div className="space-y-2">
-                          {(
-                            pregunta.quiz_opciones ||
-                            pregunta.opciones ||
-                            []
-                          ).map((opcion, opcionIndex) => (
-                            <div
-                              key={opcion.id || opcionIndex}
-                              className={`flex items-center gap-3 p-3 rounded-lg border ${
-                                opcion.es_correcta
-                                  ? "border-green-700/50 bg-green-600/20"
-                                  : "border-texto/10 bg-fondo-secundario/30"
-                              }`}
-                            >
-                              <div
-                                className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                                  opcion.es_correcta
-                                    ? "border-green-500 bg-green-500"
-                                    : "border-texto/30"
-                                }`}
-                              >
-                                {opcion.es_correcta && (
-                                  <div className="w-2 h-2 rounded-full" />
-                                )}
-                              </div>
-                              <span
-                                className={
-                                  opcion.es_correcta
-                                    ? "font-medium"
-                                    : "text-texto/75"
-                                }
-                              >
-                                {opcion.opcion || opcion.texto}
-                              </span>
-                              {opcion.es_correcta && (
-                                <span className="ml-auto text-xs font-medium">
-                                  Correcta
-                                </span>
-                              )}
-                            </div>
-                          ))}
+                {quiz.map((pregunta, index) => {
+                  const estaExpandida = preguntaExpandida === index;
+                  const opciones = pregunta.quiz_opciones || pregunta.opciones || [];
+                  const opcionCorrecta = opciones.find(op => op.es_correcta);
+                  
+                  return (
+                    <div
+                      key={pregunta.id || index}
+                      className="border border-texto/15 rounded-lg overflow-hidden"
+                    >
+                      {/* Header del acordeón */}
+                      <div 
+                        className="flex justify-between items-center p-2 cursor-pointer bg-texto/5 transition-colors"
+                        onClick={() => setPreguntaExpandida(estaExpandida ? -1 : index)}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="bg-acento text-texto w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                            {index + 1}
+                          </div>
+                          
+                          <div className="flex items-center gap-3">
+                            <span className="font-bold">
+                              Pregunta {index + 1}
+                            </span>
+                            
+                            {/* Indicador de respuesta correcta */}
+                            <div className="w-2 h-2 bg-green-500 rounded-full" title="Pregunta con respuesta correcta" />
+                          </div>
+                          
+                          {/* Preview del contenido cuando está colapsado */}
+                          {!estaExpandida && (
+                            <span className="text-sm text-texto/75 truncate max-w-[300px]">
+                              {pregunta.pregunta}
+                            </span>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                          {estaExpandida ? (
+                            <IconChevronUp size={20} className="text-texto/75" />
+                          ) : (
+                            <IconChevronDown size={20} className="text-texto/75" />
+                          )}
                         </div>
                       </div>
+
+                      {/* Contenido expandible */}
+                      {estaExpandida && (
+                        <div className="p-4 space-y-4 border-t border-texto/10">
+                          <div className="mb-4">
+                            <p className="font-medium text-lg text-texto">
+                              {pregunta.pregunta}
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            {opciones.map((opcion, opcionIndex) => (
+                              <div
+                                key={opcion.id || opcionIndex}
+                                className={`flex items-center gap-3 p-3 rounded-lg border ${
+                                  opcion.es_correcta
+                                    ? "border-green-700/50 bg-green-600/20"
+                                    : "border-texto/10 bg-texto/5"
+                                }`}
+                              >
+                                <div
+                                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                                    opcion.es_correcta
+                                      ? "border-green-500 bg-green-500"
+                                      : "border-texto/30"
+                                  }`}
+                                >
+                                  {opcion.es_correcta && (
+                                    <div className="w-2 h-2 rounded-full" />
+                                  )}
+                                </div>
+                                <span
+                                  className={
+                                    opcion.es_correcta
+                                      ? "font-medium"
+                                      : "text-texto/75"
+                                  }
+                                >
+                                  {opcion.opcion || opcion.texto}
+                                </span>
+                                {opcion.es_correcta && (
+                                  <span className="ml-auto text-xs font-medium text-green-600">
+                                    ✓ Correcta
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </>
             )}
           </div>

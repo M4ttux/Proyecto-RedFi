@@ -311,7 +311,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         id: "miniatura",
         label: "MINIATURA",
         renderCell: (row) => (
-          <div className="w-12 h-12 rounded-lg overflow-hidden bg-fondo-secundario border border-texto/15">
+          <div className="w-12 h-12 rounded-lg overflow-hidden bg-fondo/5 border border-texto/15">
             {row.miniatura_url ? (
               <img
                 src={row.miniatura_url}

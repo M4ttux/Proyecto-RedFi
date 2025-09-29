@@ -25,21 +25,25 @@ export const validarQuiz = (preguntas) => {
       errors.push(`La pregunta ${preguntaNum} no puede estar vacía`);
     }
 
+    // Obtener opciones independientemente de la estructura (quiz_opciones vs opciones)
+    const opciones = pregunta.quiz_opciones || pregunta.opciones || [];
+
     // Validar opciones
-    if (!Array.isArray(pregunta.opciones) || pregunta.opciones.length !== 3) {
+    if (!Array.isArray(opciones) || opciones.length !== 3) {
       errors.push(`La pregunta ${preguntaNum} debe tener exactamente 3 opciones`);
       return;
     }
 
     // Validar que todas las opciones tengan texto
-    pregunta.opciones.forEach((opcion, opcionIndex) => {
-      if (!opcion.texto || opcion.texto.trim() === "") {
+    opciones.forEach((opcion, opcionIndex) => {
+      const textoOpcion = opcion.texto || opcion.opcion || '';
+      if (!textoOpcion || textoOpcion.trim() === "") {
         errors.push(`La opción ${opcionIndex + 1} de la pregunta ${preguntaNum} no puede estar vacía`);
       }
     });
 
     // Validar que haya exactamente una respuesta correcta
-    const correctas = pregunta.opciones.filter(opcion => opcion.es_correcta);
+    const correctas = opciones.filter(opcion => opcion.es_correcta);
     if (correctas.length !== 1) {
       errors.push(`La pregunta ${preguntaNum} debe tener exactamente una respuesta correcta`);
     }
@@ -76,23 +80,27 @@ export const validarPregunta = (pregunta, numeroPregunta) => {
     errors.push(`La pregunta ${numeroPregunta} no puede tener más de 200 caracteres`);
   }
 
-  if (!Array.isArray(pregunta.opciones) || pregunta.opciones.length !== 3) {
+  // Obtener opciones independientemente de la estructura (quiz_opciones vs opciones)
+  const opciones = pregunta.quiz_opciones || pregunta.opciones || [];
+
+  if (!Array.isArray(opciones) || opciones.length !== 3) {
     errors.push(`La pregunta ${numeroPregunta} debe tener exactamente 3 opciones`);
     return errors;
   }
 
   // Validar opciones
-  pregunta.opciones.forEach((opcion, index) => {
-    if (!opcion.texto || opcion.texto.trim() === "") {
+  opciones.forEach((opcion, index) => {
+    const textoOpcion = opcion.texto || opcion.opcion || '';
+    if (!textoOpcion || textoOpcion.trim() === "") {
       errors.push(`La opción ${index + 1} de la pregunta ${numeroPregunta} no puede estar vacía`);
     }
-    if (opcion.texto && opcion.texto.length > 100) {
+    if (textoOpcion && textoOpcion.length > 100) {
       errors.push(`La opción ${index + 1} de la pregunta ${numeroPregunta} no puede tener más de 100 caracteres`);
     }
   });
 
   // Validar respuesta correcta
-  const correctas = pregunta.opciones.filter(opcion => opcion.es_correcta);
+  const correctas = opciones.filter(opcion => opcion.es_correcta);
   if (correctas.length !== 1) {
     errors.push(`La pregunta ${numeroPregunta} debe tener exactamente una respuesta correcta`);
   }

@@ -230,7 +230,7 @@ const CursoIndividual = () => {
                   />
                 </div>
               ) : (
-                <div className="aspect-video bg-fondo-secundario border border-texto/15 rounded-lg flex items-center justify-center">
+                <div className="aspect-video bg-texto/5 border border-texto/15 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <IconExclamationCircle size={48} className="mx-auto text-texto/75 mb-4" />
                     <p className="text-texto/75">Video no disponible</p>
@@ -238,7 +238,7 @@ const CursoIndividual = () => {
                 </div>
               )}
               
-              <div className="bg-fondo-secundario/50 border border-texto/10 rounded-lg p-6">
+              <div className="bg-texto/5 border border-texto/10 rounded-lg p-6">
                 <MainH3 className="mb-3">Sobre este curso</MainH3>
                 <p className="text-texto/75 leading-relaxed">
                   {curso.descripcion}
@@ -254,7 +254,7 @@ const CursoIndividual = () => {
                   <MainLoader texto="Cargando quiz..." />
                 </div>
               ) : quiz.length === 0 ? (
-                <div className="text-center py-12 bg-fondo-secundario/50 border border-texto/10 rounded-lg">
+                <div className="text-center py-12 bg-texto/5 border border-texto/10 rounded-lg">
                   <IconClipboardCheck size={48} className="mx-auto text-texto/75 mb-4" />
                   <MainH3 className="text-center justify-center mb-2">Sin quiz disponible</MainH3>
                   <p className="text-texto/75">
@@ -285,7 +285,7 @@ const CursoIndividual = () => {
 
                   {/* Questions */}
                   {quiz.map((pregunta, index) => (
-                    <div key={pregunta.id} className="bg-fondo-secundario/50 border border-texto/10 rounded-lg p-6">
+                    <div key={pregunta.id} className="bg-texto/5 border border-texto/10 rounded-lg p-6">
                       <div className="flex items-start gap-4 mb-4">
                         <div className="bg-acento text-texto w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
                           {index + 1}
@@ -307,7 +307,7 @@ const CursoIndividual = () => {
                                 } else if (isSelected && !isCorrect) {
                                   buttonClass += "border-red-500 bg-red-500/10 text-red-700";
                                 } else {
-                                  buttonClass += "border-texto/20 bg-fondo-secundario/30 text-texto/75";
+                                  buttonClass += "border-texto/20 bg-texto/5 text-texto/75";
                                 }
                               } else if (isSelected) {
                                 buttonClass += "border-acento bg-acento/10 text-acento";

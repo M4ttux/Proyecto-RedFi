@@ -15,6 +15,7 @@ const FileInput = ({
   loading = false,
   existingImage = null,
   sinPreview = false,
+  hideRemoveButton = false,
 }) => {
   const inputRef = useRef(null);
   const [internalPreview, setInternalPreview] = useState(null);
@@ -133,7 +134,7 @@ const FileInput = ({
   // Variables de control para el renderizado condicional
   const hayPreview = internalPreview;
   const mostrarPreview = !sinPreview && hayPreview;
-  const mostrarBotonQuitar = value || hayPreview;
+  const mostrarBotonQuitar = !hideRemoveButton && (value || hayPreview);
 
   return (
     <div className="space-y-3 text-texto">

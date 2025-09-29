@@ -67,9 +67,11 @@ export const guardarQuiz = async (cursoId, preguntas, mostrarAlerta = () => {}) 
       if (errorPregunta) throw errorPregunta;
 
       // Crear opciones para esta pregunta
-      const opciones = pregunta.opciones.map(opcion => ({
+      // Manejar ambas estructuras: quiz_opciones (del backend) y opciones (locales)
+      const opcionesRaw = pregunta.quiz_opciones || pregunta.opciones || [];
+      const opciones = opcionesRaw.map(opcion => ({
         pregunta_id: nuevaPregunta.id,
-        opcion: opcion.texto,
+        opcion: opcion.texto || opcion.opcion || '',
         es_correcta: opcion.es_correcta
       }));
 

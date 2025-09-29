@@ -55,6 +55,10 @@ export const validarUrlYoutube = (url) => {
     return "La URL de YouTube es requerida";
   }
 
+  if (url.length > 200) {
+    return "La URL de YouTube no puede tener más de 200 caracteres";
+  }
+
   const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[a-zA-Z0-9_-]{11}$/;
   
   if (!youtubeRegex.test(url)) {

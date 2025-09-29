@@ -62,7 +62,7 @@ const AcademyHome = () => {
 
         {/* Error/Empty state */}
         {!loading && cursos.length === 0 && (
-          <div className="text-center py-12 bg-fondo-secundario/50 border border-texto/10 rounded-lg">
+          <div className="text-center py-12 bg-texto/5 border border-texto/10 rounded-lg">
             <IconExclamationCircle size={48} className="mx-auto text-texto/75 mb-4" />
             <MainH3 className="text-center justify-center mb-2">No hay cursos disponibles</MainH3>
             <p className="text-texto/75">
@@ -71,30 +71,35 @@ const AcademyHome = () => {
           </div>
         )}
 
-        {/* Cursos grid */}
+        {/* Cursos list */}
         {!loading && cursos.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+          <div className="space-y-4 mb-12">
             {cursos.map((curso) => (
               <MainLinkButton
                 to={`/academia/curso/${curso.id}`}
                 key={curso.id}
                 variant="curso"
-                className="h-full hover:scale-105 transition-transform duration-200"
+                className="block hover:scale-[1.02] transition-transform duration-200"
               >
-                {curso.miniatura_url ? (
-                  <img
-                    src={curso.miniatura_url}
-                    alt={curso.titulo}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-fondo-secundario border border-texto/15 rounded-lg flex items-center justify-center">
-                    <IconBook2 size={48} className="text-texto/75" />
-                  </div>
-                )}
-                <div className="p-4 flex flex-col gap-2 flex-1">
-                  <MainH3 className="text-center justify-center line-clamp-2">{curso.titulo}</MainH3>
-                  <p className="line-clamp-3 text-sm text-texto/75">{curso.descripcion}</p>
+                {/* Miniatura - lado izquierdo */}
+                <div className="w-32 h-24 flex-shrink-0">
+                  {curso.miniatura_url ? (
+                    <img
+                      src={curso.miniatura_url}
+                      alt={curso.titulo}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-texto/5 border border-texto/15 flex items-center justify-center">
+                      <IconBook2 size={24} className="text-texto/75" />
+                    </div>
+                  )}
+                </div>
+                
+                {/* Contenido - lado derecho */}
+                <div className="flex-1 p-4 min-h-[6rem] flex flex-col justify-center">
+                  <MainH3 className="text-left mb-2 line-clamp-1">{curso.titulo}</MainH3>
+                  <p className="line-clamp-2 text-sm text-texto/75 leading-relaxed">{curso.descripcion}</p>
                 </div>
               </MainLinkButton>
             ))}
