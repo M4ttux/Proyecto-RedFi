@@ -106,13 +106,19 @@ const MobileBottomNav = () => {
             </MainButton>
 
             {mostrarHerramientas && (
-              <div
-                className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
-                  currentTheme === "light"
-                    ? "bg-fondo border border-texto/15 text-texto"
-                    : "bg-fondo text-texto border border-texto/15"
-                }`}
-              >
+              <>
+                {/* Overlay para cerrar el dropdown en móvil */}
+                <div 
+                  className="fixed inset-0 z-40 lg:hidden" 
+                  onClick={() => setMostrarHerramientas(false)}
+                />
+                <div
+                  className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
+                    currentTheme === "light"
+                      ? "bg-fondo border border-texto/15 text-texto"
+                      : "bg-fondo text-texto border border-texto/15"
+                  }`}
+                >
                 <MainLinkButton
                   to="/herramientas"
                   onClick={() => setMostrarHerramientas(false)}
@@ -188,6 +194,7 @@ const MobileBottomNav = () => {
                   </MainLinkButton>
                 </div>
               </div>
+              </>
             )}
           </div>
 
@@ -223,7 +230,7 @@ const MobileBottomNav = () => {
                 <>
                   {/* Overlay para cerrar el dropdown en móvil */}
                   <div 
-                    className="fixed inset-0 z-40 sm:hidden" 
+                    className="fixed inset-0 z-40 lg:hidden" 
                     onClick={() => setMostrarNotis(false)}
                   />
                   <div
@@ -298,13 +305,19 @@ const MobileBottomNav = () => {
 
             {/* More Menu Dropdown */}
             {mostrarMenu && !loading && (
-              <div
-                className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 p-2 ${
-                  currentTheme === "light"
-                    ? "bg-fondo border border-texto/15 text-texto"
-                      : "bg-fondo text-texto border border-texto/15"
-                }`}
-              >
+              <>
+                {/* Overlay para cerrar el dropdown en móvil */}
+                <div 
+                  className="fixed inset-0 z-40 lg:hidden" 
+                  onClick={() => setMostrarMenu(false)}
+                />
+                <div
+                  className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 p-2 ${
+                    currentTheme === "light"
+                      ? "bg-fondo border border-texto/15 text-texto"
+                        : "bg-fondo text-texto border border-texto/15"
+                  }`}
+                >
                 {/* Cambiar tema usando MainButton */}
                 <MainButton
                   onClick={() => {
@@ -375,6 +388,7 @@ const MobileBottomNav = () => {
                   </MainLinkButton>
                 )}
               </div>
+              </>
             )}
           </div>
         </div>

@@ -121,68 +121,75 @@ const Navbar = () => {
               </MainButton>
 
               {mostrarHerramientas && (
-                <div
-                  className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
-                    currentTheme === "light"
-                      ? "bg-fondo border border-texto/15 text-texto"
-                      : "bg-fondo text-texto border border-texto/15"
-                  }`}
-                >
-                  <MainLinkButton
-                    to="/herramientas"
-                    variant="navbar"
-                    className="!w-full !justify-start !px-3 !py-2"
+                <>
+                  {/* Overlay invisible para cerrar el dropdown al hacer clic fuera */}
+                  <div 
+                    className="fixed inset-0 z-40" 
                     onClick={() => setMostrarHerramientas(false)}
+                  />
+                  <div
+                    className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
+                      currentTheme === "light"
+                        ? "bg-fondo border border-texto/15 text-texto"
+                        : "bg-fondo text-texto border border-texto/15"
+                    }`}
                   >
-                    Todas las herramientas
-                  </MainLinkButton>
-                  <div className="ml-1 pl-2 mt-1 space-y-1 border-l border-texto/15">
                     <MainLinkButton
-                      to="/mapa"
+                      to="/herramientas"
                       variant="navbar"
                       className="!w-full !justify-start !px-3 !py-2"
                       onClick={() => setMostrarHerramientas(false)}
                     >
-                      Mapa
+                      Todas las herramientas
                     </MainLinkButton>
+                    <div className="ml-1 pl-2 mt-1 space-y-1 border-l border-texto/15">
+                      <MainLinkButton
+                        to="/mapa"
+                        variant="navbar"
+                        className="!w-full !justify-start !px-3 !py-2"
+                        onClick={() => setMostrarHerramientas(false)}
+                      >
+                        Mapa
+                      </MainLinkButton>
 
-                    <MainLinkButton
-                      to="/informacion-red"
-                      variant="navbar"
-                      className="!w-full !justify-start !px-3 !py-2"
-                      onClick={() => setMostrarHerramientas(false)}
-                    >
-                      Información de red
-                    </MainLinkButton>
+                      <MainLinkButton
+                        to="/informacion-red"
+                        variant="navbar"
+                        className="!w-full !justify-start !px-3 !py-2"
+                        onClick={() => setMostrarHerramientas(false)}
+                      >
+                        Información de red
+                      </MainLinkButton>
 
-                    <MainLinkButton
-                      to="/test-velocidad"
-                      variant="navbar"
-                      className="!w-full !justify-start !px-3 !py-2"
-                      onClick={() => setMostrarHerramientas(false)}
-                    >
-                      Test de velocidad
-                    </MainLinkButton>
+                      <MainLinkButton
+                        to="/test-velocidad"
+                        variant="navbar"
+                        className="!w-full !justify-start !px-3 !py-2"
+                        onClick={() => setMostrarHerramientas(false)}
+                      >
+                        Test de velocidad
+                      </MainLinkButton>
 
-                    <MainLinkButton
-                      to="/analisis-conexion"
-                      variant="navbar"
-                      className="!w-full !justify-start !px-3 !py-2"
-                      onClick={() => setMostrarHerramientas(false)}
-                    >
-                      Análisis de conexión
-                    </MainLinkButton>
+                      <MainLinkButton
+                        to="/analisis-conexion"
+                        variant="navbar"
+                        className="!w-full !justify-start !px-3 !py-2"
+                        onClick={() => setMostrarHerramientas(false)}
+                      >
+                        Análisis de conexión
+                      </MainLinkButton>
 
-                    <MainLinkButton
-                      to="/soporte"
-                      variant="navbar"
-                      className="!w-full !justify-start !px-3 !py-2"
-                      onClick={() => setMostrarHerramientas(false)}
-                    >
-                      Soporte
-                    </MainLinkButton>
+                      <MainLinkButton
+                        to="/soporte"
+                        variant="navbar"
+                        className="!w-full !justify-start !px-3 !py-2"
+                        onClick={() => setMostrarHerramientas(false)}
+                      >
+                        Soporte
+                      </MainLinkButton>
+                    </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
 
@@ -270,13 +277,19 @@ const Navbar = () => {
                   </MainButton>
 
                   {mostrarNotis && (
-                    <div
-                      className={`absolute right-0 mt-2 w-72 rounded-lg shadow-lg z-50 p-4 space-y-2 ${
-                        currentTheme === "light"
-                          ? "bg-fondo text-texto border border-texto/15 "
-                          : "bg-fondo text-texto border border-texto/15"
-                      }`}
-                    >
+                    <>
+                      {/* Overlay para cerrar el dropdown al hacer clic fuera */}
+                      <div 
+                        className="fixed inset-0 z-40" 
+                        onClick={() => setMostrarNotis(false)}
+                      />
+                      <div
+                        className={`absolute right-0 mt-2 w-72 rounded-lg shadow-lg z-50 p-4 space-y-2 ${
+                          currentTheme === "light"
+                            ? "bg-fondo text-texto border border-texto/15 "
+                            : "bg-fondo text-texto border border-texto/15"
+                        }`}
+                      >
                       {notificaciones.length === 0 ? (
                         <p className="italic text-center">
                           No hay notificaciones
@@ -308,6 +321,7 @@ const Navbar = () => {
                         ))
                       )}
                     </div>
+                    </>
                   )}
                 </div>
                 <MainLinkButton
