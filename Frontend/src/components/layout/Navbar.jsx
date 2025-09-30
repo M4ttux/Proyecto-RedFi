@@ -39,7 +39,7 @@ export const useNotificaciones = () => {
 
 const Navbar = () => {
   const [mostrarNotis, setMostrarNotis] = useState(false);
-  const [mostrarTemas, setMostrarTemas] = useState(false);
+
   const [mostrarHerramientas, setMostrarHerramientas] = useState(false);
   const { usuario, loading } = useAuth();
   const { notificaciones, setNotificaciones } = useNotificaciones();
@@ -55,23 +55,20 @@ const Navbar = () => {
     return themeData?.texto || "#FFFFFF";
   };
 
-  // Función para traducir nombres de temas
-  const traducirTema = (theme) => {
-    const traducciones = {
-      light: "Claro",
-      dark: "Oscuro"
-    };
-    return traducciones[theme] || theme;
-  };
+
 
   const openOnly = (menu) => {
     setMostrarHerramientas(menu === "tools");
-    setMostrarTemas(menu === "themes");
     setMostrarNotis(menu === "notis");
   };
 
   const getThemeIcon = () => {
     return currentTheme === "light" ? IconSun : IconMoon;
+  };
+
+  const toggleTheme = () => {
+    const nextTheme = currentTheme === "light" ? "dark" : "light";
+    changeTheme(nextTheme);
   };
 
   return (
@@ -103,7 +100,6 @@ const Navbar = () => {
               <MainButton
                 onClick={() => {
                   setMostrarHerramientas((v) => !v);
-                  setMostrarTemas(false);
                   setMostrarNotis(false);
                   openOnly(mostrarHerramientas ? null : "tools")
                 }}
@@ -193,45 +189,15 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Botón de tema - siempre visible */}
-            <div className="relative">
-              <MainButton
-                onClick={() => {
-                  setMostrarTemas(!mostrarTemas);
-                  openOnly(mostrarTemas ? null : "themes");
-                }}
-                variant="navbar"
-                icon={getThemeIcon()}
-                iconSize={26}
-                title="Cambiar tema"
-              />
-
-              {mostrarTemas && (
-                <div
-                  className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg z-50 p-2 space-y-1 ${
-                    currentTheme === "light"
-                      ? "bg-fondo border border-texto/15 text-texto"
-                      : "bg-fondo text-texto border border-texto/15"
-                  }`}
-                >
-                  {availableThemes.map((theme) => (
-                    <MainButton
-                      key={theme}
-                      onClick={() => {
-                        changeTheme(theme);
-                        setMostrarTemas(false);
-                      }}
-                      variant={currentTheme === theme ? "primary" : "secondary"}
-                      className={`w-full !justify-start ${
-                        currentTheme === theme ? "!bg-primario !text-white" : ""
-                      }`}
-                    >
-                      <span className="capitalize font-bold">{traducirTema(theme)}</span>
-                    </MainButton>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* Botón de tema - toggle directo */}
+            <MainButton
+              onClick={toggleTheme}
+              variant="navbar"
+              icon={getThemeIcon()}
+              iconSize={26}
+              title={`Cambiar a tema ${currentTheme === "light" ? "oscuro" : "claro"}`}
+              className="transition-all duration-200 hover:scale-110"
+            />
 
             {/* Indicador de carga o botones de autenticación */}
             {loading ? (
