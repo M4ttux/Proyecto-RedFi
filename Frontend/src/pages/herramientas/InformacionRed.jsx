@@ -51,7 +51,7 @@ const InformacionRed = () => {
             La dirección IP pública que ves es la que tu proveedor de internet
             asignó a tu conexión. Esta IP permite que te identifiquen en
             internet y cambia dependiendo de tu tipo de plan (hogar, móvil,
-            empresa) o si reiniciás el módem. También se usa para determinar tu
+            empresa) o si reinicias el módem. También se usa para determinar tu
             ubicación aproximada.
           </p>
         </div>

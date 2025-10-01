@@ -21,7 +21,7 @@ export const registerUser = async ({ email, password }) => {
 
   if (error) {
     if (error.message.includes("User already registered")) {
-      throw new Error("Este correo ya está registrado. Probá iniciar sesión.");
+      throw new Error("Este correo ya está registrado. Intente iniciar sesión.");
     }
     throw new Error("Error al registrar el usuario.");
   }

@@ -104,7 +104,7 @@ const EditarPerfil = () => {
         {/* Título */}
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconUserEdit}>Editar perfil</MainH1>
-          <p className="text-lg">Modificá tu información personal.</p>
+          <p className="text-lg">Modifica tu información personal.</p>
         </div>
 
         {/* Card */}

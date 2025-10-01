@@ -33,7 +33,7 @@ const AnalisisConexion = () => {
         >
           <MainH3>¿Como funciona el análisis de conexión por zonas?</MainH3>
           <p>
-            Su funcionalidad es "escanear" la calidad de su conexión Wi-Fi en diferentes zonas de su hogar. El objetivo es ayudarl a encontrar la ubicación óptima para su router.
+            Su funcionalidad es "escanear" la calidad de su conexión Wi-Fi en diferentes zonas de su hogar. El objetivo es ayudar a encontrar la ubicación óptima para su router.
           </p>
         </div>
         <div
@@ -45,13 +45,13 @@ const AnalisisConexion = () => {
         >
           <MainH3>¿Como se usar el análisis de conexión por zonas?</MainH3>
           <p>
-            Para usar el analisis de conexión por zonas, simplemente debes
+            Para usar el análisis de conexión por zonas, simplemente debes
             ingresar el nombre de la zona que deseas analizar y presionar el
             botón "Analizar". El sistema te mostrará la información de la zona
             que ingresaste.
           </p>
           <p>
-            Si realiza el analisis mas de 2 veces, se le habilitará el boton de "Recomendar ubicación". La funcionalidad del mismo es analizar los resultados y le dirá cuál de las zonas medidas tiene la mejor calidad de señal (menor ping y jitter combinados).
+            Si realiza el análisis más de 2 veces, se le habilitará el botón de "Recomendar ubicación". La funcionalidad del mismo es analizar los resultados y le dirá cuál de las zonas medidas tiene la mejor calidad de señal (menor ping y jitter combinados).
           </p>
         </div>
         {/* Botón volver a herramientas */}

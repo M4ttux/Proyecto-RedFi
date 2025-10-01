@@ -50,7 +50,7 @@ const AcademyHome = () => {
         </div>
 
         <div className="text-center mb-8">
-          <MainH2 className="text-center justify-center">Ingresá a nuestros cursos</MainH2>
+          <MainH2 className="text-center justify-center">Acceda a nuestros cursos</MainH2>
         </div>
 
         {/* Loading state */}

@@ -57,7 +57,7 @@ const CambiarContraseña = () => {
         {/* Título */}
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconUserEdit}>Cambiar contraseña</MainH1>
-          <p className="text-lg">Asegurate de elegir una contraseña segura.</p>
+          <p className="text-lg">Asegúrate de elegir una contraseña segura.</p>
         </div>
 
         {/* Card */}

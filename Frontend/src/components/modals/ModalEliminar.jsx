@@ -21,7 +21,7 @@ const ModalEliminar = ({
   };
 
   const descripcionCompleta = descripcion
-    ? `¿Estás seguro de que querés eliminar ${getArticulo(
+    ? `¿Estás seguro de que quieres eliminar ${getArticulo(
         descripcion
       )} ${descripcion}?`
     : "Esta acción no se puede deshacer.";

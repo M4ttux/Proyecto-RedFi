@@ -14,7 +14,7 @@ const Herramientas = () => {
         <div className="text-center mb-8">
           <MainH1 icon={IconTool}>Herramientas Red-Fi</MainH1>
           <p className="text-lg">
-            Descubrí nuestras herramientas de Red-Fi diseñadas para mejorar tu experiencia de conexión: desde mapas colaborativos con reseñas, hasta tests de velocidad y análisis de cobertura en tu hogar. ¡Probá cada una y optimizá tu red!
+            Descubrí nuestras herramientas de Red-Fi diseñadas para mejorar tu experiencia de conexión: desde mapas colaborativos con reseñas, hasta tests de velocidad y análisis de cobertura en tu hogar. ¡Proba cada una y optimiza tu red!
           </p>
         </div>
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -24,7 +24,7 @@ const Herramientas = () => {
                 Mapa de Red-Fi
               </MainH3>
               <p>
-                Explorá qué proveedores ofrecen servicio en tu zona, leé reseñas de otros usuarios y dejá tu propia opinión sobre tu experiencia.
+                Explora qué proveedores ofrecen servicio en tu zona, lee reseñas de otros usuarios y deja tu propia opinión sobre tu experiencia.
               </p>
             </MainLinkButton>
           </div>
@@ -34,7 +34,7 @@ const Herramientas = () => {
                 Información de red
               </MainH3>
               <p>
-                Conocé tu IP pública, ubicación aproximada y detalles técnicos de tu conexión actual.
+                Conoce tu IP pública, ubicación aproximada y detalles técnicos de tu conexión actual.
               </p>
             </MainLinkButton>
           </div>
@@ -54,7 +54,7 @@ const Herramientas = () => {
                 Análisis de conexión por zonas
               </MainH3>
               <p>
-                Simulá un análisis Wi-Fi en tu hogar para identificar las zonas con mejor o peor señal.
+                Simula un análisis Wi-Fi en tu hogar para identificar las zonas con mejor o peor señal.
               </p>
             </MainLinkButton>
           </div>
@@ -64,7 +64,7 @@ const Herramientas = () => {
                 Soporte
               </MainH3>
               <p>
-                Simulá un análisis Wi-Fi en tu hogar para identificar las zonas con mejor o peor señal.
+                Encuentra soluciones a problemas comunes de conexión y habla con nuestro chatbot de soporte.
               </p>
             </MainLinkButton>
           </div>

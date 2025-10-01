@@ -70,7 +70,7 @@ const Cuenta = () => {
         <div className="text-center mb-8">
           <MainH1 icon={IconUser}>Mi cuenta</MainH1>
           <p className="text-lg">
-            Modificá tus datos personales y tus preferencias.
+            Modifica tus datos personales y tus preferencias.
           </p>
         </div>
 
@@ -161,7 +161,7 @@ const Cuenta = () => {
               <MainH3 className="text-center justify-center">
                 Glosario de redes
               </MainH3>
-              <p>Buscá términos como IP, ping, latencia y más.</p>
+              <p>Busca términos como IP, ping, latencia y más.</p>
             </MainLinkButton>
           </div>
         </div>
@@ -173,7 +173,7 @@ const Cuenta = () => {
                 Gestionar Red-Fi
               </MainH3>
               <p>
-                Accedé al panel de administración para gestionar usuarios,
+                Accede al panel de administración para gestionar usuarios,
                 proveedores, reseñas y tecnologías.
               </p>
             </MainLinkButton>

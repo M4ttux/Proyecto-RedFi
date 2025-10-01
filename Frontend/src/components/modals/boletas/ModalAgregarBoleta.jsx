@@ -79,22 +79,22 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     try {
       // Validaciones manuales
       if (!form.mes) {
-        mostrarError("Debés seleccionar un mes válido.");
+        mostrarError("Debes seleccionar un mes válido.");
         return;
       }
       if (!form.proveedor) {
-        mostrarError("Debés seleccionar un proveedor válido.");
+        mostrarError("Debes seleccionar un proveedor válido.");
         return;
       }
 
       if (form.proveedor === "Otro" && !form.proveedorOtro.trim()) {
-        mostrarError("Debés ingresar el nombre del proveedor.");
+        mostrarError("Debes ingresar el nombre del proveedor.");
         return;
       }
 
       const user = await obtenerUsuarioActual();
       if (!user) {
-        mostrarError("Debés iniciar sesión.");
+        mostrarError("Debes iniciar sesión.");
         return;
       }
 

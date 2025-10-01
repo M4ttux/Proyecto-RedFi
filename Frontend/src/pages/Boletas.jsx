@@ -44,7 +44,7 @@ const Boletas = () => {
         <div className="text-center mb-8">
           <MainH1 icon={IconReceipt2}>Gestión de boletas</MainH1>
           <p className="text-lg">
-            Administrá tus boletas de servicios de internet.
+            Administra tus boletas de servicios de internet.
           </p>
         </div>
 

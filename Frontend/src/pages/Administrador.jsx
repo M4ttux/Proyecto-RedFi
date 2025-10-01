@@ -332,7 +332,7 @@ const Administrador = () => {
         <div className="text-center mb-8">
           <MainH1 icon={IconSettings}>Panel de administración</MainH1>
           <p className="text-lg">
-            Visualizá los datos de todas las tablas del sistema.
+            Visualiza los datos de todas las tablas del sistema.
           </p>
         </div>
 
