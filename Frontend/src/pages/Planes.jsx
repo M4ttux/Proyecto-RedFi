@@ -7,6 +7,7 @@ import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
 import MainButton from "../components/ui/MainButton";
 import MainLinkButton from "../components/ui/MainLinkButton";
+import MainLoader from "../components/ui/MainLoader";
 import ModalConfirmacionPlan from "../components/modals/plan/ModalConfirmacionPlan";
 
 const beneficiosBasico = [
@@ -31,9 +32,8 @@ const beneficiosPremium = [
 
 const Planes = () => {
   const { usuario } = useAuth();
-  const { plan } = useRole();
+  const { plan, loadingRole } = useRole();
   const { currentTheme } = useTheme();
-  const planActual = plan || "basico";
 
   const [mostrarModal, setMostrarModal] = useState(false);
   const [planDestino, setPlanDestino] = useState("");
@@ -64,6 +64,21 @@ const Planes = () => {
     </ul>
   );
 
+  // Si los datos del rol están cargando, mostrar estado de carga
+  if (loadingRole) {
+    return (
+      <section className="py-16 px-4 sm:px-6 text-texto w-full">
+        <div className="max-w-7xl mx-auto">
+          <MainLoader 
+            texto="Cargando información de planes..."
+            size="large"
+            className="py-20"
+          />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12 mb-8">
@@ -90,7 +105,7 @@ const Planes = () => {
               </p>
               {renderBeneficios(beneficiosBasico)}
             </div>
-            {usuario && planActual === "basico" ? (
+            {usuario && plan === "basico" ? (
               <MainButton variant="disabled" className="px-6 py-3">
                 Este es tu plan actual
               </MainButton>
@@ -118,7 +133,7 @@ const Planes = () => {
               </p>
               {renderBeneficios(beneficiosPremium)}
             </div>
-            {usuario && planActual === "premium" ? (
+            {usuario && plan === "premium" ? (
               <MainButton variant="disabled" className="px-6 py-3">
                 Este es tu plan actual
               </MainButton>
