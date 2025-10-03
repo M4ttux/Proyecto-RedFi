@@ -16,6 +16,23 @@ import { subirImagenBoleta } from "../../../services/boletas/upload";
 import { guardarBoleta } from "../../../services/boletas/crud";
 import { useAlerta } from "../../../context/AlertaContext";
 
+// Helpers para manejar fecha base del período y formato YYYY-MM-DD
+const aIndiceMes = (mes) => {
+  const nombres = [
+    "enero","febrero","marzo","abril","mayo","junio",
+    "julio","agosto","septiembre","octubre","noviembre","diciembre"
+  ];
+  if (!mes) return 0;
+  if (!isNaN(mes)) return Math.max(0, Math.min(11, parseInt(mes, 10) - 1));
+  const i = nombres.indexOf(String(mes).toLowerCase());
+  return i >= 0 ? i : 0;
+};
+
+const aFechaISO = (fecha) => {
+  const dosDigitos = (n) => String(n).padStart(2, "0");
+  return `${fecha.getFullYear()}-${dosDigitos(fecha.getMonth() + 1)}-${dosDigitos(fecha.getDate())}`;
+};
+
 const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificaciones }) => {
   // Estado del formulario con datos de la boleta
   const [form, setForm] = useState({
@@ -71,30 +88,60 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
     setForm((prev) => ({ ...prev, [campo]: valor }));
   };
 
+  // Fecha base (1° del mes/año elegidos) para bloquear fechas anteriores
+  const indiceMes = aIndiceMes(form.mes);
+  const anioNumero = parseInt(form.anio, 10);
+  const fechaBase =
+    form.mes && form.anio ? new Date(anioNumero, indiceMes, 1) : null;
+  const minISO = fechaBase ? aFechaISO(fechaBase) : undefined;
+
   // Procesa el envío del formulario y guarda la boleta
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Validaciones manuales
+      // Validaciones básicas
       if (!form.mes) {
         mostrarError("Debes seleccionar un mes válido.");
+        setLoading(false);
+        return;
+      }
+      if (!form.anio) {
+        mostrarError("Debes ingresar un año válido.");
+        setLoading(false);
         return;
       }
       if (!form.proveedor) {
         mostrarError("Debes seleccionar un proveedor válido.");
+        setLoading(false);
+        return;
+      }
+      if (form.proveedor === "Otro" && !form.proveedorOtro.trim()) {
+        mostrarError("Debes ingresar el nombre del proveedor.");
+        setLoading(false);
         return;
       }
 
-      if (form.proveedor === "Otro" && !form.proveedorOtro.trim()) {
-        mostrarError("Debes ingresar el nombre del proveedor.");
+      // Validación de fechas contra el período
+      const fechaVenc = form.vencimiento ? new Date(form.vencimiento + "T12:00:00") : null;
+      const fechaPromo = form.promoHasta ? new Date(form.promoHasta + "T12:00:00") : null;
+
+      if (fechaBase && fechaVenc && fechaVenc < fechaBase) {
+        mostrarError("La fecha de vencimiento debe ser posterior o igual al período seleccionado.");
+        setLoading(false);
+        return;
+      }
+      if (fechaBase && fechaPromo && fechaPromo < fechaBase) {
+        mostrarError("La fecha de promoción debe ser posterior o igual al período seleccionado.");
+        setLoading(false);
         return;
       }
 
       const user = await obtenerUsuarioActual();
       if (!user) {
         mostrarError("Debes iniciar sesión.");
+        setLoading(false);
         return;
       }
 
@@ -260,9 +307,8 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           />
         )}
 
-        {/* Campos de fechas - responsivo para mobile */}
+        {/* Campos de fechas */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Campo fecha de vencimiento (obligatorio) */}
           <Input
             label={
               <>
@@ -275,9 +321,9 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             onChange={handleChange}
             required
             icon={IconCalendar}
+            min={minISO}   // 👈 restricción
           />
 
-          {/* Campo fin de promoción (opcional) */}
           <Input
             label="Fin de promoción"
             name="promoHasta"
@@ -285,10 +331,11 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             value={form.promoHasta}
             onChange={handleChange}
             icon={IconCalendar}
+            min={minISO}   // 👈 restricción
           />
         </div>
         
-        {/* Campo de carga de archivo */}
+        {/* Campo de archivo */}
         <FileInput
           id="archivo"
           label="Archivo de la boleta"
@@ -299,7 +346,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           accept="image/*, application/pdf"
         />
 
-        {/* Botones de acción */}
+        {/* Botones */}
         <div className="flex justify-center gap-3">
           <MainButton
             type="button"
@@ -320,11 +367,9 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           </MainButton>
         </div>
         
-        {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">
-            Los campos marcados con <span className="text-red-600">*</span> son
-            obligatorios.
+            Los campos marcados con <span className="text-red-600">*</span> son obligatorios.
           </p>
         </div>
       </form>

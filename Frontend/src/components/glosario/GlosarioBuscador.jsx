@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { conceptosRed } from "../../data/conceptosValidos";
 import { useTheme } from "../../context/ThemeContext";
 import Input from "../ui/Input";
@@ -13,7 +13,6 @@ import {
   IconChevronDown,
 } from "@tabler/icons-react";
 
-
 const GlosarioBuscador = () => {
   const { currentTheme } = useTheme();
 
@@ -26,6 +25,19 @@ const GlosarioBuscador = () => {
 
   // Estado para la sección "Explora todos..." (colapsable)
   const [mostrarExplora, setMostrarExplora] = useState(false);
+
+  // Ref al contenedor del bloque expandible
+  const refExplora = useRef(null);
+
+  // Ref al bloque de resultados (para scrollear hacia arriba cuando se selecciona un concepto)
+  const refResultado = useRef(null);
+
+  // Cuando se abre el colapsable, scrollear hasta él
+  useEffect(() => {
+    if (mostrarExplora && refExplora.current) {
+      refExplora.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [mostrarExplora]);
 
   // Lista de conceptos ordenada alfabéticamente (memo para performance)
   const todosLosConceptos = useMemo(
@@ -66,6 +78,13 @@ const GlosarioBuscador = () => {
           extract: "No se encontró información.",
         });
       }
+
+      // 👇 cuando hay resultado, scrollear hacia arriba para mostrarlo
+      setTimeout(() => {
+        if (refResultado.current) {
+          refResultado.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 200);
     } catch (err) {
       setError("Error al consultar Wikipedia.");
     } finally {
@@ -187,6 +206,7 @@ const GlosarioBuscador = () => {
       {/* Resultado de Wikipedia con opciones de interacción */}
       {resultado && (
         <div
+          ref={refResultado}
           className={`mt-6 shadow-lg rounded-lg p-4 text-left ${
             currentTheme === "light"
               ? "bg-secundario border-2 border-texto/15"
@@ -283,7 +303,7 @@ const GlosarioBuscador = () => {
       </div>
 
       {/* Sección: Explora todos los conceptos (colapsable) */}
-      <div className="mt-12">
+      <div className="mt-12" ref={refExplora}>
         <div className="flex justify-center">
           <MainButton
             variant="secondary"

@@ -49,8 +49,9 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           ),
       },
       // Columna combinada de rol y plan del usuario
+      // id => "rol" para que el click en header ordene por el rol subyacente
       {
-        id: "rol_y_plan",
+        id: "rol",
         label: "ROL Y PLAN",
         renderCell: (row) => {
           const rol = row.rol;
@@ -61,10 +62,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {/* Badge de Rol - Admin destacado con variante especial */}
               {rol ? (
                 rol === "admin" ? (
-                  <Badge
-                    size="xs"
-                    variant="admin"
-                  >
+                  <Badge size="xs" variant="admin">
                     {rol.toUpperCase()}
                   </Badge>
                 ) : (
@@ -77,10 +75,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               {/* Badge de Plan - Premium destacado con variante especial */}
               {plan ? (
                 plan === "premium" ? (
-                  <Badge
-                    size="xs"
-                    variant="premium"
-                  >
+                  <Badge size="xs" variant="premium">
                     {plan.toUpperCase()}
                   </Badge>
                 ) : (
@@ -146,7 +141,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
                 className="text-texto/75 hover:underline"
               >
                 {/* Remueve https:// o http:// para mostrar URL más limpia */}
-                {row.sitio_web.replace(/^https?:\/\//, '')}
+                {row.sitio_web.replace(/^https?:\/\//, "")}
               </a>
             ) : (
               "—"
@@ -171,13 +166,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
   // 3. TABLA DE RESEÑAS DE USUARIOS SOBRE PROVEEDORES
   else if (tabla === "reseñas") {
     columnasBase.push(
-      // Columna de usuario que escribió la reseña
+      // Columna de usuario que escribió la reseña (nota: nested; el orden por header no aplicará directo)
       {
         id: "user_profiles",
         label: "USUARIOS",
         renderCell: (row) => row.user_profiles?.nombre || "—",
       },
-      // Columna de proveedor reseñado
+      // Columna de proveedor reseñado (nota: nested)
       {
         id: "proveedores",
         label: "PROVEEDORES",
@@ -191,7 +186,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           <div className="inline-flex items-center gap-1 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
             {/* Genera array de 5 estrellas, llenas o vacías según la calificación */}
             {Array.from({ length: 5 }, (_, i) =>
-              i < row.estrellas ? (
+              i < (Number(row.estrellas) || 0) ? (
                 <IconCarambolaFilled
                   key={i}
                   size={18}
@@ -235,8 +230,8 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
-          className="truncate text-ellipsis overflow-hidden max-w-[200px]"
-          title={row.descripcion}
+            className="truncate text-ellipsis overflow-hidden max-w-[200px]"
+            title={row.descripcion}
           >
             {row.descripcion || "—"}
           </div>
@@ -250,7 +245,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     columnasBase.push(
       // Columna de nombre del proveedor
       {
-        id: "proveedor_id",
+        id: "proveedor", // id mapeado al string agrupado en Admin
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
@@ -279,7 +274,7 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
     columnasBase.push(
       // Columna de nombre del proveedor
       {
-        id: "proveedor_id",
+        id: "proveedor", // id mapeado al string agrupado en Admin
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },

@@ -9,6 +9,9 @@ import MainLoader from "../ui/MainLoader";
 import Table from "../ui/Table";
 import { useAlerta } from "../../context/AlertaContext";
 
+// >>> NUEVO: control de filtro + orden
+import FiltroOrden from "../ui/FiltroOrden";
+
 const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   // Estados para control de UI y modales
   const [cargando, setCargando] = useState(true);
@@ -17,6 +20,21 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   const [boletaAEliminar, setBoletaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
+
+  // >>> NUEVO: estados de filtro + orden
+  const [filtro, setFiltro] = useState("");
+  const [ordenCampo, setOrdenCampo] = useState("fecha_carga"); // por defecto: más recientes
+  const [ordenDir, setOrdenDir] = useState("desc");
+
+  // Opciones de orden disponibles
+  const opcionesOrden = [
+    { value: "fecha_carga", label: "Fecha de carga" },
+    { value: "vencimiento", label: "Vencimiento" },
+    { value: "promo_hasta", label: "Promo hasta" },
+    { value: "monto", label: "Monto" },
+    { value: "proveedor", label: "Proveedor" },
+    { value: "periodo", label: "Período (mes/año)" },
+  ];
 
   // Simular tiempo de carga para mejor UX
   useEffect(() => {
@@ -57,10 +75,51 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
     return <span title={formatoLargo}>{formatoCorto}</span>;
   };
 
-  // Ordenar boletas por fecha de carga (más recientes primero)
-  const boletasOrdenadas = [...boletas].sort(
-    (a, b) => new Date(b.fecha_carga) - new Date(a.fecha_carga)
-  );
+  // >>> NUEVO: helpers de filtro/orden
+  const norm = (v) => (v ?? "").toString().toLowerCase();
+  const textoPeriodo = (b) => `${b?.mes ?? ""} ${b?.anio ?? ""}`.trim();
+  const valorOrden = (b, campo) => {
+    if (campo === "periodo") {
+      // año y mes como número (anio-mes) para ordenar correctamente
+      const y = Number(b?.anio) || 0;
+      const m = Number(b?.mes) || 0;
+      return y * 100 + m;
+    }
+    if (campo === "monto") return Number(b?.monto) || 0;
+    if (campo === "proveedor") return norm(b?.proveedor);
+    if (campo === "fecha_carga" || campo === "vencimiento" || campo === "promo_hasta") {
+      const val = b?.[campo];
+      if (!val) return 0;
+      // algunos vienen como "YYYY-MM-DD", para tooltip le agregaste T12:00:00 en render; acá no hace falta
+      return new Date(val).getTime();
+    }
+    // fallback: intenta directo
+    const v = b?.[campo];
+    if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) return new Date(v).getTime();
+    return typeof v === "string" ? norm(v) : v;
+  };
+
+  // >>> NUEVO: derivar boletas filtradas + ordenadas
+  const boletasFiltradas = (boletas ?? []).filter((b) => {
+    const f = norm(filtro);
+    if (!f) return true;
+    return (
+      norm(b?.proveedor).includes(f) ||
+      norm(textoPeriodo(b)).includes(f) ||
+      String(b?.monto ?? "").includes(f)
+    );
+  });
+
+  const boletasOrdenadas = [...boletasFiltradas].sort((a, b) => {
+    const va = valorOrden(a, ordenCampo);
+    const vb = valorOrden(b, ordenCampo);
+    if (va == null && vb == null) return 0;
+    if (va == null) return ordenDir === "asc" ? -1 : 1;
+    if (vb == null) return ordenDir === "asc" ? 1 : -1;
+    if (va < vb) return ordenDir === "asc" ? -1 : 1;
+    if (va > vb) return ordenDir === "asc" ? 1 : -1;
+    return 0;
+  });
 
   // Configuración de columnas para la tabla
   const columnas = [
@@ -102,7 +161,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           </div>
           <div className="flex items-center gap-1">
             <span className="font-semibold text-red-600">Vence:</span>
-            {formatearFechaConTooltip(b.vencimiento + "T12:00:00")}
+            {formatearFechaConTooltip(b.vencimiento ? b.vencimiento + "T12:00:00" : null)}
           </div>
           {b.promo_hasta && (
             <div className="flex items-center gap-1">
@@ -162,7 +221,31 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           </p>
         </div>
       ) : (
-        <Table columns={columnas} data={boletasOrdenadas} />
+        <>
+          {/* >>> NUEVO: Filtro + Orden para boletas */}
+          <FiltroOrden
+            filtro={filtro}
+            setFiltro={setFiltro}
+            ordenCampo={ordenCampo}
+            setOrdenCampo={setOrdenCampo}
+            ordenDir={ordenDir}
+            setOrdenDir={setOrdenDir}
+            opcionesOrden={opcionesOrden}
+            placeholder="Buscar por proveedor, período o monto…"
+          />
+
+          <Table
+            columns={columnas}
+            data={boletasOrdenadas}
+            // si implementaste header clickeable en Table.jsx:
+            ordenCampo={ordenCampo}
+            ordenDir={ordenDir}
+            onSortChange={(campo, dir) => {
+              setOrdenCampo(campo);
+              setOrdenDir(dir);
+            }}
+          />
+        </>
       )}
 
       {/* MODALES*/}

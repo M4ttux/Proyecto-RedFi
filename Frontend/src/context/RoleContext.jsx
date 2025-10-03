@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { getPerfil } from "../services/perfil/getPerfil";
 
@@ -25,43 +25,55 @@ export const RoleProvider = ({ children }) => {
   // Obtiene el usuario y estado de carga del contexto de autenticación
   const { usuario, loading } = useAuth();
 
+  // Ref para evitar condiciones de carrera entre múltiples lecturas del perfil
+  const latestReq = useRef(0);
+
+  // Función reutilizable que carga el perfil y aplica anti-carrera
+  const cargarPerfilSeguro = useCallback(async (user) => {
+    // Si no hay usuario, limpia los estados y termina la carga
+    if (!user) {
+      setRol(null);
+      setPlan(null);
+      setLoadingRole(false);
+      return;
+    }
+
+    setLoadingRole(true);
+    const reqId = ++latestReq.current;
+
+    try {
+      // Obtiene el perfil completo del usuario desde la base de datos
+      // Si tu getPerfil acepta userId, pásalo: getPerfil(user.id)
+      const perfil = await getPerfil();
+
+      // Aplica los datos solo si esta respuesta es la más reciente
+      if (reqId === latestReq.current) {
+        // Actualiza los estados con los datos del perfil o null si no existen
+        setRol(perfil?.rol || null);
+        setPlan(perfil?.plan || null);
+      }
+    } catch (error) {
+      // En caso de error, limpia los estados (solo si es la respuesta vigente)
+      if (reqId === latestReq.current) {
+        console.error("Error al obtener el perfil del usuario:", error.message);
+        setRol(null);
+        setPlan(null);
+      }
+    } finally {
+      if (reqId === latestReq.current) setLoadingRole(false);
+    }
+  }, []);
+
   // Efecto para cargar datos del perfil cuando cambia el usuario
   useEffect(() => {
     /**
      * Función para cargar los datos de rol y plan del usuario autenticado
      * Se ejecuta cuando hay cambios en el estado de autenticación
      */
-    const cargarDatosPerfil = async () => {
-      // Si no hay usuario, limpia los estados y termina la carga
-      if (!usuario) {
-        setRol(null);
-        setPlan(null);
-        setLoadingRole(false);
-        return;
-      }
-
-      try {
-        setLoadingRole(true);
-        // Obtiene el perfil completo del usuario desde la base de datos
-        const perfil = await getPerfil();
-        // Actualiza los estados con los datos del perfil o null si no existen
-        setRol(perfil?.rol || null);
-        setPlan(perfil?.plan || null);
-      } catch (error) {
-        console.error("Error al obtener el perfil del usuario:", error.message);
-        // En caso de error, limpia los estados
-        setRol(null);
-        setPlan(null);
-      } finally {
-        setLoadingRole(false);
-      }
-    };
-
-    // Solo carga el perfil si la autenticación ya terminó de cargar
     if (!loading) {
-      cargarDatosPerfil();
+      cargarPerfilSeguro(usuario);
     }
-  }, [usuario, loading]); // Se re-ejecuta cuando cambia el usuario o el estado de carga
+  }, [usuario, loading, cargarPerfilSeguro]); // Se re-ejecuta cuando cambia el usuario o el estado de carga
 
   // Funciones auxiliares para verificar roles específicos
   const esAdmin = () => rol === "admin";
@@ -88,17 +100,24 @@ export const RoleProvider = ({ children }) => {
    */
   const refrescarRol = async () => {
     if (!usuario) return;
-    
+
+    const reqId = ++latestReq.current;
     try {
       setLoadingRole(true);
       // Re-obtiene los datos del perfil desde la base de datos
       const perfil = await getPerfil();
-      setRol(perfil?.rol || null);
-      setPlan(perfil?.plan || null);
+
+      // Aplica los datos solo si esta respuesta es la más reciente
+      if (reqId === latestReq.current) {
+        setRol(perfil?.rol || null);
+        setPlan(perfil?.plan || null);
+      }
     } catch (error) {
-      console.error("Error al refrescar el perfil del usuario:", error.message);
+      if (reqId === latestReq.current) {
+        console.error("Error al refrescar el perfil del usuario:", error.message);
+      }
     } finally {
-      setLoadingRole(false);
+      if (reqId === latestReq.current) setLoadingRole(false);
     }
   };
 

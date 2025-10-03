@@ -12,7 +12,7 @@ export const updatePerfil = async (fields, mostrarAlerta = () => {}) => {
   // Valida que exista sesión antes de actualizar
   if (userError || !user) {
     mostrarAlerta("Error al obtener el usuario.");
-    throw userError;
+    throw (userError || new Error("Usuario no autenticado."));
   }
 
   // Actualiza la fila del perfil en user_profiles
@@ -43,7 +43,7 @@ export const updatePerfilYFoto = async (
   // Valida que exista sesión
   if (userError || !user) {
     mostrarAlerta("Error al obtener el usuario.");
-    throw userError;
+    throw (userError || new Error("Usuario no autenticado."));
   }
 
   // Validación del nombre
@@ -91,22 +91,24 @@ export const updatePerfilYFoto = async (
     // Validación de resolución
     const imagenValida = await new Promise((resolve, reject) => {
       const img = new Image();
+      const url = URL.createObjectURL(foto);
       img.onload = () => {
-        if (img.width > 500 || img.height > 500) {
-          reject(
-            mostrarAlerta("La resolución máxima permitida es 500x500 píxeles."),
-            new Error("La resolución máxima permitida es 500x500 píxeles.")
-          );
+        const tooBig = img.width > 500 || img.height > 500;
+        URL.revokeObjectURL(url);
+        if (tooBig) {
+          reject(new Error("La resolución máxima permitida es 500x500 píxeles."));
         } else {
           resolve(true);
         }
       };
-      img.onerror = () =>
-        reject(
-          mostrarAlerta("No se pudo procesar la imagen."),
-          new Error("No se pudo procesar la imagen.")
-        );
-      img.src = URL.createObjectURL(foto);
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("No se pudo procesar la imagen."));
+      };
+      img.src = url;
+    }).catch((e) => {
+      mostrarAlerta(e.message || "No se pudo procesar la imagen.");
+      throw e;
     });
 
     // Aborta si la imagen no pasa validaciones
@@ -133,6 +135,7 @@ export const updatePerfilYFoto = async (
       .upload(rutaCompleta, foto, {
         cacheControl: "3600",
         upsert: true,
+        contentType: foto.type,
       });
     if (uploadError) {
       mostrarAlerta("Error al subir la imagen al servidor.");

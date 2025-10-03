@@ -14,6 +14,23 @@ import {
 import { actualizarBoletaConImagen } from "../../../services/boletas/crud";
 import { useAlerta } from "../../../context/AlertaContext";
 
+// Helpers en español para trabajar con la fecha base del período
+const aIndiceMes = (mes) => {
+  const nombres = [
+    "enero","febrero","marzo","abril","mayo","junio",
+    "julio","agosto","septiembre","octubre","noviembre","diciembre"
+  ];
+  if (!mes) return 0;
+  if (!isNaN(mes)) return Math.max(0, Math.min(11, parseInt(mes, 10) - 1));
+  const i = nombres.indexOf(String(mes).toLowerCase());
+  return i >= 0 ? i : 0;
+};
+
+const aFechaISO = (fecha) => {
+  const dos = (n) => String(n).padStart(2, "0");
+  return `${fecha.getFullYear()}-${dos(fecha.getMonth() + 1)}-${dos(fecha.getDate())}`;
+};
+
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   // Verifica si el proveedor está en la lista predefinida
   const esProveedorValido = [
@@ -27,7 +44,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   const formatFecha = (fecha) => {
     if (!fecha) return "";
     const d = new Date(fecha);
-    return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    // Evita desfases de zona horaria manteniendo solo la parte de fecha
+    return d.toISOString().split("T")[0];
   };
 
   // Estado del formulario inicializado con datos de la boleta existente
@@ -36,7 +54,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     proveedor: esProveedorValido ? boleta.proveedor : "Otro",
     proveedorOtro: esProveedorValido ? "" : boleta.proveedor,
     vencimiento: formatFecha(boleta.vencimiento),
-    promoHasta: formatFecha(boleta.promo_hasta), // <-- este nombre depende del campo original
+    promoHasta: formatFecha(boleta.promo_hasta),
   });
 
   // Estados para la gestión de archivos e imagen
@@ -49,18 +67,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
   // Opciones disponibles para el selector de mes
   const meses = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",
   ];
 
   // Opciones disponibles para el selector de proveedor
@@ -90,19 +98,39 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     setImagenEliminada(true);
   };
 
+  // --- Fecha base del período (1° del mes/año) y min para inputs ---
+  const indiceMes = aIndiceMes(form.mes);
+  const anioNumero = parseInt(form.anio, 10);
+  const fechaBase = form.mes && form.anio ? new Date(anioNumero, indiceMes, 1) : null;
+  const minISO = fechaBase ? aFechaISO(fechaBase) : undefined;
+
   // Procesa la actualización de la boleta con los cambios realizados
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevenir recarga de página
+    e.preventDefault();
     setLoading(true);
     try {
+      // Validaciones de fechas contra el período
+      const fechaVenc = form.vencimiento ? new Date(form.vencimiento + "T12:00:00") : null;
+      const fechaPromo = form.promoHasta ? new Date(form.promoHasta + "T12:00:00") : null;
+
+      if (fechaBase && fechaVenc && fechaVenc < fechaBase) {
+        mostrarError("La fecha de vencimiento debe ser posterior o igual al período seleccionado.");
+        setLoading(false);
+        return;
+      }
+      if (fechaBase && fechaPromo && fechaPromo < fechaBase) {
+        mostrarError("La fecha de promoción debe ser posterior o igual al período seleccionado.");
+        setLoading(false);
+        return;
+      }
+
       const datosFinales = {
         ...form,
-        proveedor:
-          form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor,
-        promo_hasta: form.promoHasta, // mapear a snake_case si es necesario
+        proveedor: form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor,
+        promo_hasta: form.promoHasta, // mapeo al nombre esperado por el backend si usa snake_case
       };
 
-      // Eliminar campos innecesarios o camelCase
+      // Eliminar campos innecesarios o solo de UI
       delete datosFinales.proveedorOtro;
       delete datosFinales.promoHasta;
 
@@ -208,6 +236,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onChange={handleChange}
             label="Fecha de vencimiento"
             icon={IconCalendar}
+            min={minISO}  // 👈 bloqueo a partir del 1° del período
           />
 
           {/* Campo fin de promoción */}
@@ -218,6 +247,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onChange={handleChange}
             label="Fin de promoción"
             icon={IconCalendar}
+            min={minISO}  // 👈 bloqueo a partir del 1° del período
           />
         </div>
 

@@ -69,6 +69,9 @@ import { generarColumnas } from "../components/admin/generarColumnas";
 
 import { useAlerta } from "../context/AlertaContext";
 
+// Control reutilizable para filtro + orden
+import FiltroOrden from "../components/ui/FiltroOrden";
+
 const tablasDisponibles = [
   { id: "user_profiles", label: "Perfiles" },
   { id: "proveedores", label: "Proveedores" },
@@ -79,6 +82,8 @@ const tablasDisponibles = [
   { id: "ZonaProveedor", label: "Proveedor y Zona" },
 ];
 
+const TABLAS_CON_FILTRO_ORDEN = new Set(["user_profiles", "reseñas"]);
+
 const Administrador = () => {
   useEffect(() => {
     document.title = "Red-Fi | Administración";
@@ -87,7 +92,7 @@ const Administrador = () => {
   const [perfil, setPerfil] = useState(null);
   const [tablaActual, setTablaActual] = useState("user_profiles");
   const [loading, setLoading] = useState(true);
-  const [loadingAuth, setLoadingAuth] = useState(true); // Nuevo estado para auth
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const { mostrarError, mostrarExito } = useAlerta();
   const navigate = useNavigate();
 
@@ -132,6 +137,65 @@ const Administrador = () => {
     cursos: [],
   });
 
+  // Estados de filtro/orden
+  const [filtro, setFiltro] = useState("");
+  const [ordenCampo, setOrdenCampo] = useState("nombre"); // default para Perfiles
+  const [ordenDir,   setOrdenDir]   = useState("asc");
+
+  // Reset y defaults según la tabla con FO
+  useEffect(() => {
+    if (tablaActual === "user_profiles") {
+      setFiltro("");
+      setOrdenCampo("nombre");
+      setOrdenDir("asc");
+    } else if (tablaActual === "reseñas") {
+      setFiltro("");
+      setOrdenCampo("created_at");
+      setOrdenDir("desc");
+    }
+  }, [tablaActual]);
+
+  // Opciones de orden por tabla (solo para las que tienen FO)
+  const opcionesOrdenPorTabla = {
+    user_profiles: [
+      { value: "nombre", label: "Nombre" },
+      { value: "email", label: "Email" },
+      { value: "created_at", label: "Fecha alta" },
+    ],
+    reseñas: [
+      { value: "created_at", label: "Fecha" },
+      { value: "estrellas", label: "Puntuación" },
+      { value: "comentario", label: "Comentario" },
+    ],
+  };
+  const opcionesOrden = opcionesOrdenPorTabla[tablaActual] ?? [];
+
+  // Helpers de filtro/orden
+  const _norm = (v) => (v ?? "").toString().toLowerCase();
+
+  // Campos genéricos (sirven para Perfiles)
+  const _candidateFields = (item) => [
+    item.nombre,
+    item.email,
+    item.descripcion,
+    item.categoria,
+    item.titulo,
+  ];
+
+  const _valueForSort = (obj, key) => {
+    const v = obj?.[key];
+    if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) {
+      return new Date(v).getTime();
+    }
+    return typeof v === "string" ? v.toLowerCase() : v;
+  };
+
+  // Orden permitidos por tabla (para ignorar headers no soportados)
+  const CAMPOS_ORDEN_PERMITIDOS = {
+    user_profiles: new Set(["nombre", "email", "created_at"]),
+    reseñas: new Set(["created_at", "estrellas", "comentario"]),
+  };
+
   const acciones = {
     onVer: (row) => {
       if (tablaActual === "user_profiles") {
@@ -149,7 +213,6 @@ const Administrador = () => {
       if (tablaActual === "cursos") {
         setCursoAVer(row);
       }
-      // ...otros casos
     },
     onEditar: (row) => {
       if (tablaActual === "user_profiles") {
@@ -258,7 +321,6 @@ const Administrador = () => {
         }, {})
       );
 
-      // Setear datos agrupados
       setTodosLosDatos({
         user_profiles: perfiles,
         proveedores,
@@ -294,8 +356,6 @@ const Administrador = () => {
           });
           return;
         }
-        
-        // Solo cargar datos si es admin
         await precargarDatos();
       } catch (error) {
         mostrarError("Error al cargar perfil de usuario.");
@@ -326,6 +386,82 @@ const Administrador = () => {
   const datosActuales = todosLosDatos[tablaActual] || [];
   const columnas = generarColumnas(tablaActual, datosActuales, acciones);
 
+  // === Filtrado SOLO para Perfiles y Reseñas ===
+  const datosFiltrados = (datosActuales ?? []).filter((item) => {
+    if (!TABLAS_CON_FILTRO_ORDEN.has(tablaActual)) return true;
+
+    const f = _norm(filtro);
+    if (!f) return true;
+
+    if (tablaActual === "user_profiles") {
+      return _candidateFields(item).some((c) => _norm(c).includes(f));
+    }
+
+    if (tablaActual === "reseñas") {
+      const proveedor = item?.proveedores?.nombre ?? "";
+      const usuario = item?.user_profiles?.nombre ?? "";
+      const comentario = item?.comentario ?? "";
+      const estrellas = String(item?.estrellas ?? "");
+      return (
+        _norm(proveedor).includes(f) ||
+        _norm(usuario).includes(f) ||
+        _norm(comentario).includes(f) ||
+        estrellas.includes(f)
+      );
+    }
+
+    return true;
+  });
+
+  // === Orden SOLO para Perfiles y Reseñas ===
+  const datosOrdenados = [...datosFiltrados].sort((a, b) => {
+    if (!TABLAS_CON_FILTRO_ORDEN.has(tablaActual)) return 0;
+
+    // Perfiles: usar helper genérico
+    if (tablaActual === "user_profiles") {
+      const va = _valueForSort(a, ordenCampo);
+      const vb = _valueForSort(b, ordenCampo);
+      if (va == null && vb == null) return 0;
+      if (va == null) return ordenDir === "asc" ? -1 : 1;
+      if (vb == null) return ordenDir === "asc" ? 1 : -1;
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // Reseñas: ordenar por campos concretos
+    if (tablaActual === "reseñas") {
+      const getVal = (row) => {
+        if (ordenCampo === "created_at") {
+          const t = row?.created_at || row?.fecha || row?.updated_at;
+          return t ? new Date(t).getTime() : 0;
+        }
+        if (ordenCampo === "estrellas") return Number(row?.estrellas) || 0;
+        if (ordenCampo === "comentario") return _norm(row?.comentario);
+        return 0;
+      };
+      const va = getVal(a);
+      const vb = getVal(b);
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    return 0;
+  });
+
+  // Array final a la tabla (solo FO en perfiles y reseñas)
+  const datosParaTabla = TABLAS_CON_FILTRO_ORDEN.has(tablaActual)
+    ? datosOrdenados
+    : datosActuales;
+
+  // Placeholder de búsqueda por tabla
+  const placeholderFO = tablaActual === "user_profiles"
+    ? "Buscar en perfiles…"
+    : tablaActual === "reseñas"
+    ? "Buscar en reseñas…"
+    : `Buscar…`;
+
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -345,6 +481,20 @@ const Administrador = () => {
               tablaActual={tablaActual}
               setTablaActual={setTablaActual}
             />
+
+            {/* Mostrar Filtro + Orden SOLO en Perfiles y Reseñas */}
+            {TABLAS_CON_FILTRO_ORDEN.has(tablaActual) && (
+              <FiltroOrden
+                filtro={filtro}
+                setFiltro={setFiltro}
+                ordenCampo={ordenCampo}
+                setOrdenCampo={setOrdenCampo}
+                ordenDir={ordenDir}
+                setOrdenDir={setOrdenDir}
+                opcionesOrden={opcionesOrden}
+                placeholder={placeholderFO}
+              />
+            )}
 
             <div className="flex justify-center mb-4">{tablaActual === "proveedores" && (
             <MainButton onClick={() => setProveedorNuevo(true)} variant="add">
@@ -377,7 +527,23 @@ const Administrador = () => {
 
         </div>
 
-            <Table columns={columnas} data={datosActuales} />
+            {/* Pasamos props de orden SOLO en Perfiles y Reseñas */}
+            <Table
+              columns={columnas}
+              data={datosParaTabla}
+              {...(TABLAS_CON_FILTRO_ORDEN.has(tablaActual)
+                ? {
+                    ordenCampo,
+                    ordenDir,
+                    onSortChange: (campo, dir) => {
+                      const permitidos = CAMPOS_ORDEN_PERMITIDOS[tablaActual];
+                      if (!permitidos?.has(campo)) return; // ignorar headers no soportados
+                      setOrdenCampo(campo);
+                      setOrdenDir(dir);
+                    },
+                  }
+                : {})}
+            />
 
             <div className="text-center mt-6">
               <MainLinkButton to="/" variant="secondary">

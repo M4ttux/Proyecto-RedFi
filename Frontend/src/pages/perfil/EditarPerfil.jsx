@@ -90,12 +90,17 @@ const EditarPerfil = () => {
     try {
       await updatePerfilYFoto({ ...form, preview });
       mostrarExito("Perfil actualizado correctamente.");
-    } catch (error) {
-      mostrarError("Ocurrió un error inesperado: " + error.message);
-      console.error("Error completo:", error);
+    } catch (err) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "No se pudo actualizar el perfil.";
+      mostrarError(msg);
+      console.error("Error completo:", err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
