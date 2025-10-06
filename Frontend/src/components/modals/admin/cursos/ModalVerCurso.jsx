@@ -5,7 +5,6 @@ import {
   IconPlayerPlay,
   IconClipboardCheck,
   IconChevronDown,
-  IconChevronUp,
 } from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
 import MainH3 from "../../../ui/MainH3";
@@ -18,7 +17,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
   const [quiz, setQuiz] = useState([]);
   const [loadingQuiz, setLoadingQuiz] = useState(true);
   const [activeTab, setActiveTab] = useState("info"); // info, video, quiz
-  const [preguntaExpandida, setPreguntaExpandida] = useState(0); // Índice de la pregunta expandida
+  const [preguntaExpandida, setPreguntaExpandida] = useState(-1); // Índice de la pregunta expandida (-1 = ninguna expandida)
   const { mostrarError } = useAlerta();
 
   // Cargar quiz del curso
@@ -56,9 +55,9 @@ const ModalVerCurso = ({ curso, onClose }) => {
   }
 
   return (
-    <ModalContenedor onClose={onClose}>
-      {/* Encabezado */}
-      <div className="flex justify-between items-center mb-6">
+    <ModalContenedor onClose={onClose} variant="curso">
+      {/* Encabezado fijo */}
+      <div className="flex justify-between items-center p-6 flex-shrink-0">
         <MainH2 className="mb-0 flex-1 pr-4">Detalle del curso</MainH2>
         <MainButton
           onClick={onClose}
@@ -70,6 +69,9 @@ const ModalVerCurso = ({ curso, onClose }) => {
           <IconX size={24} />
         </MainButton>
       </div>
+
+      {/* Contenido scrolleable */}
+      <div className="flex-1 overflow-y-auto px-6 py-4">
 
       {/* Navegación por tabs */}
       <div className="flex border-b border-texto/15 mb-6">
@@ -97,11 +99,11 @@ const ModalVerCurso = ({ curso, onClose }) => {
       </div>
 
       {/* Contenido según tab activo */}
-      <div className="space-y-6 mb-8">
+      <div className="space-y-2 md:space-y-4">
         {activeTab === "info" && (
           <>
             {/* Miniatura y datos básicos */}
-            <div className="space-y-6">
+            <div className="space-y-2 md:space-y-4">
               {/* Título */}
               <div>
                 <MainH3
@@ -145,7 +147,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
         )}
 
         {activeTab === "video" && (
-          <div className="space-y-4">
+          <div className="space-y-2 md:space-y-4">
             {videoId ? (
               <>
                 <div className="aspect-video rounded-lg overflow-hidden">
@@ -196,7 +198,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
         )}
 
         {activeTab === "quiz" && (
-          <div className="space-y-6">
+          <div className="space-y-2 md:space-y-4">
             {loadingQuiz ? (
               <div className="text-center py-8">
                 <p className="text-texto/75">Cargando quiz...</p>
@@ -213,20 +215,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
               </div>
             ) : (
               <>
-                <div className="bg-texto/5 rounded-lg p-4 border border-texto/10">
-                  <div className="flex items-center gap-2 mb-2">
-                    <IconClipboardCheck size={20} className="text-acento" />
-                    <MainH3 className="font-medium mb-0" variant="noflex">
-                      Información del Quiz
-                    </MainH3>
-                  </div>
-                  <p className="text-sm">
-                    Este curso incluye un quiz de {quiz.length} pregunta
-                    {quiz.length !== 1 ? "s" : ""} para evaluar los
-                    conocimientos adquiridos.
-                  </p>
-                </div>
-
+                {/* Lista de preguntas en acordeón */}
                 {quiz.map((pregunta, index) => {
                   const estaExpandida = preguntaExpandida === index;
                   const opciones = pregunta.quiz_opciones || pregunta.opciones || [];
@@ -252,8 +241,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
                               Pregunta {index + 1}
                             </span>
                             
-                            {/* Indicador de respuesta correcta */}
-                            <div className="w-2 h-2 bg-green-500 rounded-full" title="Pregunta con respuesta correcta" />
+
                           </div>
                           
                           {/* Preview del contenido cuando está colapsado */}
@@ -265,11 +253,12 @@ const ModalVerCurso = ({ curso, onClose }) => {
                         </div>
                         
                         <div className="flex items-center gap-4">
-                          {estaExpandida ? (
-                            <IconChevronUp size={20} className="text-texto/75" />
-                          ) : (
-                            <IconChevronDown size={20} className="text-texto/75" />
-                          )}
+                          <IconChevronDown 
+                            size={20} 
+                            className={`text-texto/75 transition-transform ${
+                              estaExpandida ? "rotate-180" : "rotate-0"
+                            }`} 
+                          />
                         </div>
                       </div>
 
@@ -330,8 +319,10 @@ const ModalVerCurso = ({ curso, onClose }) => {
           </div>
         )}
       </div>
-      {/* Botón de cierre */}
-      <div className="flex justify-center">
+      </div>
+      
+      {/* Botón de cierre fijo */}
+      <div className="flex justify-center p-6 flex-shrink-0">
         <MainButton
           variant="primary"
           className="w-full flex-1"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconX, IconPlus, IconTrash, IconBulb, IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import { IconX, IconPlus, IconTrash, IconBulb, IconChevronDown } from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
 import MainH3 from "../../../ui/MainH3";
 import MainH4 from "../../../ui/MainH4";
@@ -35,7 +35,7 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
   // Estados de control
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1); // 1: Datos básicos, 2: Quiz
-  const [preguntaExpandida, setPreguntaExpandida] = useState(0); // Índice de la pregunta expandida
+  const [preguntaExpandida, setPreguntaExpandida] = useState(-1); // Índice de la pregunta expandida (-1 = ninguna expandida)
 
   const { mostrarError, mostrarExito } = useAlerta();
 
@@ -79,10 +79,10 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
       
       // Ajustar el índice de la pregunta expandida
       if (preguntaExpandida >= index) {
-        setPreguntaExpandida(Math.max(0, preguntaExpandida - 1));
+        setPreguntaExpandida(preguntaExpandida > 0 ? preguntaExpandida - 1 : -1);
       }
       if (preguntaExpandida >= nuevasPreguntas.length) {
-        setPreguntaExpandida(nuevasPreguntas.length - 1);
+        setPreguntaExpandida(nuevasPreguntas.length > 0 ? nuevasPreguntas.length - 1 : -1);
       }
     }
   };
@@ -168,9 +168,9 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
   };
 
   return (
-    <ModalContenedor onClose={onClose}>
-      {/* Encabezado */}
-      <div className="flex justify-between items-center mb-6">
+    <ModalContenedor onClose={onClose} variant="curso">
+      {/* Encabezado fijo */}
+      <div className="flex justify-between items-center p-6 flex-shrink-0">
         <MainH2 className="mb-0">Agregar curso</MainH2>
         <MainButton
           onClick={onClose}
@@ -184,13 +184,15 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
         </MainButton>
       </div>
 
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="space-y-2 md:space-y-4"
-      >
+      {/* Contenido scrolleable */}
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="space-y-2 md:space-y-4"
+        >
         {step === 1 ? (
           // Paso 1: Datos básicos
-          <div className="space-y-6">
+          <div>
             {/* Título */}
             <Input
               label={
@@ -259,27 +261,33 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
           </div>
         ) : (
           // Paso 2: Quiz
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <MainH3 className="mb-0">Quiz del curso</MainH3>
-                <Badge variant="accent" size="sm">
-                  {preguntas.length}/10 preguntas
-                </Badge>
+          <div className="space-y-4">
+            {/* Header del quiz - sticky */}
+            <div className="sticky top-0 bg-secundario z-10 pb-4 border-b border-texto/10 mb-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <div className="flex items-center gap-3">
+                  <MainH3 className="mb-0">Quiz del curso</MainH3>
+                  <Badge variant="accent" size="sm">
+                    {preguntas.length}/10 preguntas
+                  </Badge>
+                </div>
+                <MainButton
+                  type="button"
+                  variant="accent"
+                  onClick={agregarPregunta}
+                  disabled={preguntas.length >= 10}
+                  iconSize={16}
+                  className="w-full sm:w-auto"
+                >
+                  <IconPlus />
+                  Agregar pregunta
+                </MainButton>
               </div>
-              <MainButton
-                type="button"
-                variant="accent"
-                onClick={agregarPregunta}
-                disabled={preguntas.length >= 10}
-                iconSize={16}
-              >
-                <IconPlus />
-                Agregar pregunta
-              </MainButton>
             </div>
 
-            {preguntas.map((pregunta, preguntaIndex) => {
+            {/* Lista de preguntas con scroll */}
+            <div className="space-y-3 max-h-[50vh] overflow-y-auto pr-2">
+              {preguntas.map((pregunta, preguntaIndex) => {
               const estaExpandida = preguntaExpandida === preguntaIndex;
               const tieneContenido = pregunta.pregunta.trim() !== '';
               const tieneOpcionesCompletas = pregunta.opciones.some(op => op.texto.trim() !== '');
@@ -299,18 +307,7 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
                         Pregunta {preguntaIndex + 1}
                       </span>
                       
-                      {/* Indicadores de estado */}
-                      <div className="flex items-center gap-2">
-                        {tieneContenido && (
-                          <div className="w-2 h-2 bg-green-500 rounded-full" title="Pregunta completada" />
-                        )}
-                        {tieneOpcionesCompletas && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full" title="Opciones agregadas" />
-                        )}
-                        {!tieneContenido && !tieneOpcionesCompletas && (
-                          <div className="w-2 h-2 bg-gray-400 rounded-full" title="Pregunta vacía" />
-                        )}
-                      </div>
+
                       
                       {/* Preview del contenido cuando está colapsado */}
                       {!estaExpandida && tieneContenido && (
@@ -334,11 +331,12 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
                         </MainButton>
                       )}
                       
-                      {estaExpandida ? (
-                        <IconChevronUp size={20} className="text-texto/75" />
-                      ) : (
-                        <IconChevronDown size={20} className="text-texto/75" />
-                      )}
+                      <IconChevronDown 
+                        size={20} 
+                        className={`text-texto/75 transition-transform ${
+                          estaExpandida ? "rotate-180" : "rotate-0"
+                        }`} 
+                      />
                     </div>
                   </div>
 
@@ -431,55 +429,9 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
                 </div>
               );
             })}
+            </div>
           </div>
         )}
-
-        {/* Botones de acción */}
-        <div className="flex gap-3">
-          {step === 1 ? (
-            <>
-              <MainButton
-                type="button"
-                variant="secondary"
-                onClick={onClose}
-                disabled={loading}
-                className="flex-1"
-              >
-                Cancelar
-              </MainButton>
-              <MainButton
-                type="button"
-                variant="primary"
-                onClick={handleSiguiente}
-                className="flex-1"
-              >
-                Siguiente: Quiz
-              </MainButton>
-            </>
-          ) : (
-            <>
-              <MainButton
-                type="button"
-                variant="secondary"
-                onClick={() => setStep(1)}
-                disabled={loading}
-                className="flex-1"
-              >
-                Anterior
-              </MainButton>
-              <MainButton
-                type="button"
-                variant="primary"
-                onClick={handleSubmit}
-                loading={loading}
-                disabled={loading}
-                className="flex-1"
-              >
-                {loading ? "Creando..." : "Crear curso"}
-              </MainButton>
-            </>
-          )}
-        </div>
 
         <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">
@@ -487,7 +439,55 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
             obligatorios.
           </p>
         </div>
-      </form>
+        </form>
+      </div>
+
+      {/* Botones de acción fijos */}
+      <div className="flex gap-3 p-6 flex-shrink-0">
+        {step === 1 ? (
+          <>
+            <MainButton
+              type="button"
+              variant="secondary"
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1"
+            >
+              Cancelar
+            </MainButton>
+            <MainButton
+              type="button"
+              variant="primary"
+              onClick={handleSiguiente}
+              className="flex-1"
+            >
+              Siguiente: Quiz
+            </MainButton>
+          </>
+        ) : (
+          <>
+            <MainButton
+              type="button"
+              variant="secondary"
+              onClick={() => setStep(1)}
+              disabled={loading}
+              className="flex-1"
+            >
+              Anterior
+            </MainButton>
+            <MainButton
+              type="button"
+              variant="primary"
+              onClick={handleSubmit}
+              loading={loading}
+              disabled={loading}
+              className="flex-1"
+            >
+              {loading ? "Creando..." : "Crear curso"}
+            </MainButton>
+          </>
+        )}
+      </div>
     </ModalContenedor>
   );
 };
