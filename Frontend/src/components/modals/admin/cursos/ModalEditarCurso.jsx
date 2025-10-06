@@ -255,14 +255,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
       {/* Contenido scrolleable */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (step === 1) {
-              handleSiguiente();
-            } else {
-              handleSubmit();
-            }
-          }}
+          onSubmit={(e) => e.preventDefault()}
           className="space-y-2 md:space-y-4"
         >
           {step === 1 ? (
@@ -336,7 +329,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
             </div>
           ) : (
             // Paso 2: Quiz
-            <div className="space-y-6">
+            <div className="space-y-2 md:space-y-4">
               {loadingQuiz ? (
                 <div className="text-center py-8">
                   <p className="text-texto/75">Cargando quiz...</p>
@@ -367,7 +360,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                   </div>
 
                   {/* Lista de preguntas con scroll */}
-                  <div className="space-y-3 max-h-[50vh] overflow-y-auto pr-2">
+                  <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
                     {preguntas.map((pregunta, preguntaIndex) => {
                       const estaExpandida = preguntaExpandida === preguntaIndex;
                       const tieneContenido = pregunta.pregunta.trim() !== "";
@@ -531,61 +524,60 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
               )}
             </div>
           )}
-
-          
-          {/* Botones de acción */}
-          <div className="flex gap-3 pt-4 mt-6">
-            {step === 1 ? (
-              <>
-                <MainButton
-                  type="button"
-                  variant="secondary"
-                  onClick={onClose}
-                  disabled={loading}
-                  className="flex-1"
-                >
-                  Cancelar
-                </MainButton>
-                <MainButton
-                  type="button"
-                  variant="primary"
-                  onClick={handleSiguiente}
-                  className="flex-1"
-                >
-                  Siguiente: Quiz
-                </MainButton>
-              </>
-            ) : (
-              <>
-                <MainButton
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setStep(1)}
-                  disabled={loading}
-                  className="flex-1"
-                >
-                  Anterior
-                </MainButton>
-                <MainButton
-                  type="submit"
-                  variant="primary"
-                  onClick={handleSubmit}
-                  loading={loading}
-                  disabled={loading || loadingQuiz}
-                  className="flex-1"
-                >
-                  {loading ? "Actualizando..." : "Actualizar curso"}
-                </MainButton>
-              </>
-            )}
-          </div>
-          <div className="text-center mt-6">
-            <p className="text-sm text-texto/75 italic">
-              Los campos marcados con <span className="text-red-600">*</span>{" "}
-              son obligatorios.
-            </p>
-          </div>
         </form>
+      </div>
+
+      {/* Botones de acción fijos */}
+      <div className="flex gap-3 px-6 py-4 flex-shrink-0">
+        {step === 1 ? (
+          <>
+            <MainButton
+              type="button"
+              variant="secondary"
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1"
+            >
+              Cancelar
+            </MainButton>
+            <MainButton
+              type="button"
+              variant="primary"
+              onClick={handleSiguiente}
+              className="flex-1"
+            >
+              Siguiente: Quiz
+            </MainButton>
+          </>
+        ) : (
+          <>
+            <MainButton
+              type="button"
+              variant="secondary"
+              onClick={() => setStep(1)}
+              disabled={loading}
+              className="flex-1"
+            >
+              Anterior
+            </MainButton>
+            <MainButton
+              type="button"
+              variant="primary"
+              onClick={handleSubmit}
+              loading={loading}
+              disabled={loading || loadingQuiz}
+              className="flex-1"
+            >
+              {loading ? "Actualizando..." : "Actualizar curso"}
+            </MainButton>
+          </>
+        )}
+      </div>
+      <div className="text-center py-4">
+        <p className="text-sm text-texto/75 italic">
+          Los campos marcados con <span className="text-red-600">*</span> son
+          obligatorios.
+        </p>
       </div>
     </ModalContenedor>
   );
