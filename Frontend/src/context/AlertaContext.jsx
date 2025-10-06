@@ -28,6 +28,7 @@ export const AlertaProvider = ({ children }) => {
   /**
    * Función principal para mostrar una nueva alerta
    * Genera un ID único y agrega la alerta al estado global
+   * Mantiene máximo 3 alertas visibles, eliminando la más antigua si es necesario
    */
   const mostrarAlerta = (mensaje, tipo = 'error', opciones = {}) => {
     // Genera ID único combinando timestamp y número aleatorio
@@ -39,8 +40,17 @@ export const AlertaProvider = ({ children }) => {
       ...opciones // Permite opciones adicionales como duración, autoOcultar, etc.
     };
     
-    // Agrega la nueva alerta al final del array
-    setAlertas(prev => [...prev, nuevaAlerta]);
+    // Agrega la nueva alerta y mantiene máximo 3 alertas
+    setAlertas(prev => {
+      const nuevasAlertas = [...prev, nuevaAlerta];
+      
+      // Si hay más de 3 alertas, elimina las más antiguas (del principio del array)
+      if (nuevasAlertas.length > 3) {
+        return nuevasAlertas.slice(-3); // Mantiene solo las últimas 3
+      }
+      
+      return nuevasAlertas;
+    });
     return id; // Retorna ID para posible manipulación posterior
   };
 

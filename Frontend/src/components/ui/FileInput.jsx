@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import MainButton from "./MainButton";
 import { IconX, IconFileTypePdf } from "@tabler/icons-react";
+import { useAlerta } from "../../context/AlertaContext";
 
 const FileInput = ({
   id = "archivo",
@@ -19,6 +20,7 @@ const FileInput = ({
 }) => {
   const inputRef = useRef(null);
   const [internalPreview, setInternalPreview] = useState(null);
+  const { mostrarError } = useAlerta();
 
   // Determina qué tipos de archivo acepta el input
   const getAcceptedTypes = () => {
@@ -42,6 +44,58 @@ const FileInput = ({
     }
     
     return null;
+  };
+
+  // Validación de archivos según tipo y restricciones
+  const validarArchivo = (file) => {
+    return new Promise((resolve, reject) => {
+      // Validar tamaño de PDF (máx. 50MB)
+      if (file.type === "application/pdf") {
+        const maxSizePDF = 50 * 1024 * 1024; // 50MB en bytes
+        if (file.size > maxSizePDF) {
+          reject("El archivo PDF no puede superar los 50MB");
+          return;
+        }
+        resolve(true);
+        return;
+      }
+
+      // Validar imágenes (máx. 300KB y 500x500px)
+      if (file.type.startsWith("image/")) {
+        const maxSizeImage = 300 * 1024; // 300KB en bytes
+        
+        // Validar tamaño del archivo
+        if (file.size > maxSizeImage) {
+          reject("La imagen no puede superar los 300KB");
+          return;
+        }
+
+        // Validar dimensiones de la imagen
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl); // Limpiar memoria
+          
+          if (img.width > 500 || img.height > 500) {
+            reject("La imagen no puede superar los 500x500 píxeles");
+          } else {
+            resolve(true);
+          }
+        };
+        
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject("Error al cargar la imagen para validación");
+        };
+        
+        img.src = objectUrl;
+        return;
+      }
+
+      // Otros tipos de archivo se aceptan sin validación específica
+      resolve(true);
+    });
   };
 
   // Detecta si el archivo actual es un PDF
@@ -85,7 +139,7 @@ const FileInput = ({
   }, [previewUrl, existingImage]);
 
   // Maneja la selección de archivos y genera preview según el tipo
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -94,22 +148,36 @@ const FileInput = ({
       inputRef.current.value = "";
     }
 
-    onChange?.(file);
+    try {
+      // Validar el archivo antes de procesarlo
+      await validarArchivo(file);
+      
+      // Si la validación es exitosa, procesar el archivo
+      onChange?.(file);
 
-    if (!sinPreview) {
-      // Para PDFs, crear URL temporal en lugar de base64
-      if (file.type === "application/pdf") {
-        const objectUrl = URL.createObjectURL(file);
-        setInternalPreview(objectUrl);
-        setPreviewUrl?.(objectUrl);
-      } else {
-        // Para imágenes, usar base64 como antes
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setInternalPreview(reader.result);
-          setPreviewUrl?.(reader.result);
-        };
-        reader.readAsDataURL(file);
+      if (!sinPreview) {
+        // Para PDFs, crear URL temporal en lugar de base64
+        if (file.type === "application/pdf") {
+          const objectUrl = URL.createObjectURL(file);
+          setInternalPreview(objectUrl);
+          setPreviewUrl?.(objectUrl);
+        } else {
+          // Para imágenes, usar base64 como antes
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setInternalPreview(reader.result);
+            setPreviewUrl?.(reader.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    } catch (error) {
+      // Mostrar mensaje de error y no procesar el archivo
+      mostrarError(error);
+      
+      // Resetear el input para que el usuario pueda seleccionar otro archivo
+      if (inputRef.current) {
+        inputRef.current.value = "";
       }
     }
   };
