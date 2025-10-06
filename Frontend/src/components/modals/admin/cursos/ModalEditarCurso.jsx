@@ -533,7 +533,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
           )}
 
           
-          {/* Botones de acción dentro del form */}
+          {/* Botones de acción */}
           <div className="flex gap-3 pt-4 mt-6">
             {step === 1 ? (
               <>

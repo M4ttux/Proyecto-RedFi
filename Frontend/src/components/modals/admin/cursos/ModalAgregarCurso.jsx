@@ -439,8 +439,8 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
             </div>
           </div>
         )}
-          {/* Botones de acción dentro del form */}
-          <div className="flex gap-3 pt-4 mt-6 border-t border-texto/10">
+          {/* Botones de acción */}
+          <div className="flex gap-3 pt-4 mt-6">
             {step === 1 ? (
               <>
                 <MainButton
