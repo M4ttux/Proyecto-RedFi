@@ -82,7 +82,7 @@ const tablasDisponibles = [
   { id: "ZonaProveedor", label: "Proveedor y Zona" },
 ];
 
-const TABLAS_CON_FILTRO_ORDEN = new Set(["user_profiles", "reseñas"]);
+const TABLAS_CON_FILTRO_ORDEN = new Set(["user_profiles", "reseñas", "proveedores", "tecnologias", "cursos", "ProveedorTecnologia", "ZonaProveedor"]);
 
 const Administrador = () => {
   useEffect(() => {
@@ -150,8 +150,28 @@ const Administrador = () => {
       setOrdenDir("asc");
     } else if (tablaActual === "reseñas") {
       setFiltro("");
-      setOrdenCampo("created_at");
-      setOrdenDir("desc");
+      setOrdenCampo("nombre");
+      setOrdenDir("asc");
+    } else if (tablaActual === "proveedores") {
+      setFiltro("");
+      setOrdenCampo("nombre");
+      setOrdenDir("asc");
+    } else if (tablaActual === "tecnologias") {
+      setFiltro("");
+      setOrdenCampo("tecnologia");
+      setOrdenDir("asc");
+    } else if (tablaActual === "cursos") {
+      setFiltro("");
+      setOrdenCampo("titulo");
+      setOrdenDir("asc");
+    } else if (tablaActual === "ProveedorTecnologia") {
+      setFiltro("");
+      setOrdenCampo("proveedor");
+      setOrdenDir("asc");
+    } else if (tablaActual === "ZonaProveedor") {
+      setFiltro("");
+      setOrdenCampo("proveedor");
+      setOrdenDir("asc");
     }
   }, [tablaActual]);
 
@@ -159,13 +179,32 @@ const Administrador = () => {
   const opcionesOrdenPorTabla = {
     user_profiles: [
       { value: "nombre", label: "Nombre" },
-      { value: "email", label: "Email" },
-      { value: "created_at", label: "Fecha alta" },
+      { value: "proveedor_preferido", label: "Proveedor preferido" },
+      { value: "rol", label: "Rol" },
+      { value: "plan", label: "Plan" },
     ],
     reseñas: [
-      { value: "created_at", label: "Fecha" },
+      { value: "nombre", label: "Nombre" },
+      { value: "proveedores", label: "Proveedores" },
       { value: "estrellas", label: "Puntuación" },
       { value: "comentario", label: "Comentario" },
+    ],
+    proveedores: [
+      { value: "nombre", label: "Nombre" },
+    ],
+    tecnologias: [
+      { value: "tecnologia", label: "Tecnología" },
+    ],
+    cursos: [
+      { value: "titulo", label: "Título" },
+    ],
+    ProveedorTecnologia: [
+      { value: "proveedor", label: "Proveedor" },
+      { value: "tecnologias", label: "Tecnologías" },
+    ],
+    ZonaProveedor: [
+      { value: "proveedor", label: "Proveedor" },
+      { value: "zonas", label: "Zonas" },
     ],
   };
   const opcionesOrden = opcionesOrdenPorTabla[tablaActual] ?? [];
@@ -176,7 +215,9 @@ const Administrador = () => {
   // Campos genéricos (sirven para Perfiles)
   const _candidateFields = (item) => [
     item.nombre,
-    item.email,
+    item.proveedor_preferido,
+    item.rol,
+    item.plan,
     item.descripcion,
     item.categoria,
     item.titulo,
@@ -184,6 +225,24 @@ const Administrador = () => {
 
   const _valueForSort = (obj, key) => {
     const v = obj?.[key];
+    
+    // Lógica especial para rol: admin primero en orden ascendente
+    if (key === "rol") {
+      if (v === "admin") return "0_admin"; // Admin va primero
+      return v ? `1_${v.toLowerCase()}` : "2_sin_rol";
+    }
+    
+    // Lógica especial para plan: premium primero en orden ascendente
+    if (key === "plan") {
+      if (v === "premium") return "0_premium"; // Premium va primero
+      return v ? `1_${v.toLowerCase()}` : "2_sin_plan";
+    }
+    
+    // Lógica especial para proveedor_preferido: ordenar alfabéticamente, sin preferido al final
+    if (key === "proveedor_preferido") {
+      return v ? v.toLowerCase() : "zzz_sin_proveedor";
+    }
+    
     if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) {
       return new Date(v).getTime();
     }
@@ -192,8 +251,13 @@ const Administrador = () => {
 
   // Orden permitidos por tabla (para ignorar headers no soportados)
   const CAMPOS_ORDEN_PERMITIDOS = {
-    user_profiles: new Set(["nombre", "email", "created_at"]),
-    reseñas: new Set(["created_at", "estrellas", "comentario"]),
+    user_profiles: new Set(["nombre", "proveedor_preferido", "rol", "plan"]),
+    reseñas: new Set(["nombre", "proveedores", "estrellas", "comentario"]),
+    proveedores: new Set(["nombre"]),
+    tecnologias: new Set(["tecnologia"]),
+    cursos: new Set(["titulo"]),
+    ProveedorTecnologia: new Set(["proveedor", "tecnologias"]),
+    ZonaProveedor: new Set(["proveedor", "zonas"]),
   };
 
   const acciones = {
@@ -410,6 +474,39 @@ const Administrador = () => {
       );
     }
 
+    if (tablaActual === "proveedores") {
+      const nombre = item?.nombre ?? "";
+      return _norm(nombre).includes(f);
+    }
+
+    if (tablaActual === "tecnologias") {
+      const tecnologia = item?.tecnologia ?? "";
+      return _norm(tecnologia).includes(f);
+    }
+
+    if (tablaActual === "cursos") {
+      const titulo = item?.titulo ?? "";
+      return _norm(titulo).includes(f);
+    }
+
+    if (tablaActual === "ProveedorTecnologia") {
+      const proveedor = item?.proveedor ?? "";
+      const tecnologias = (item?.tecnologias || []).join(" ");
+      return (
+        _norm(proveedor).includes(f) ||
+        _norm(tecnologias).includes(f)
+      );
+    }
+
+    if (tablaActual === "ZonaProveedor") {
+      const proveedor = item?.proveedor ?? "";
+      const zonas = (item?.zonas || []).join(" ");
+      return (
+        _norm(proveedor).includes(f) ||
+        _norm(zonas).includes(f)
+      );
+    }
+
     return true;
   });
 
@@ -432,9 +529,13 @@ const Administrador = () => {
     // Reseñas: ordenar por campos concretos
     if (tablaActual === "reseñas") {
       const getVal = (row) => {
-        if (ordenCampo === "created_at") {
-          const t = row?.created_at || row?.fecha || row?.updated_at;
-          return t ? new Date(t).getTime() : 0;
+        if (ordenCampo === "nombre") {
+          const nombre = row?.user_profiles?.nombre || "";
+          return _norm(nombre);
+        }
+        if (ordenCampo === "proveedores") {
+          const proveedor = row?.proveedores?.nombre || "";
+          return _norm(proveedor);
         }
         if (ordenCampo === "estrellas") return Number(row?.estrellas) || 0;
         if (ordenCampo === "comentario") return _norm(row?.comentario);
@@ -442,6 +543,63 @@ const Administrador = () => {
       };
       const va = getVal(a);
       const vb = getVal(b);
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // Proveedores: ordenar por nombre
+    if (tablaActual === "proveedores") {
+      const va = _norm(a?.nombre || "");
+      const vb = _norm(b?.nombre || "");
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // Tecnologías: ordenar por tecnologia
+    if (tablaActual === "tecnologias") {
+      const va = _norm(a?.tecnologia || "");
+      const vb = _norm(b?.tecnologia || "");
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // Cursos: ordenar por titulo
+    if (tablaActual === "cursos") {
+      const va = _norm(a?.titulo || "");
+      const vb = _norm(b?.titulo || "");
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // ProveedorTecnologia: ordenar por proveedor o tecnologias
+    if (tablaActual === "ProveedorTecnologia") {
+      let va, vb;
+      if (ordenCampo === "proveedor") {
+        va = _norm(a?.proveedor || "");
+        vb = _norm(b?.proveedor || "");
+      } else if (ordenCampo === "tecnologias") {
+        va = _norm((a?.tecnologias || []).join(", "));
+        vb = _norm((b?.tecnologias || []).join(", "));
+      }
+      if (va < vb) return ordenDir === "asc" ? -1 : 1;
+      if (va > vb) return ordenDir === "asc" ? 1 : -1;
+      return 0;
+    }
+
+    // ZonaProveedor: ordenar por proveedor o zonas
+    if (tablaActual === "ZonaProveedor") {
+      let va, vb;
+      if (ordenCampo === "proveedor") {
+        va = _norm(a?.proveedor || "");
+        vb = _norm(b?.proveedor || "");
+      } else if (ordenCampo === "zonas") {
+        va = _norm((a?.zonas || []).join(", "));
+        vb = _norm((b?.zonas || []).join(", "));
+      }
       if (va < vb) return ordenDir === "asc" ? -1 : 1;
       if (va > vb) return ordenDir === "asc" ? 1 : -1;
       return 0;
@@ -460,6 +618,16 @@ const Administrador = () => {
     ? "Buscar en perfiles…"
     : tablaActual === "reseñas"
     ? "Buscar en reseñas…"
+    : tablaActual === "proveedores"
+    ? "Buscar por nombre de proveedor…"
+    : tablaActual === "tecnologias"
+    ? "Buscar por nombre de tecnología…"
+    : tablaActual === "cursos"
+    ? "Buscar por título del curso…"
+    : tablaActual === "ProveedorTecnologia"
+    ? "Buscar por proveedor o tecnología…"
+    : tablaActual === "ZonaProveedor"
+    ? "Buscar por proveedor o zona…"
     : `Buscar…`;
 
   return (

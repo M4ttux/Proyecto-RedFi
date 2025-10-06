@@ -27,10 +27,10 @@ const FiltroOrden = ({
   );
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
-      {/* Filtro */}
-      <div className={classNames(baseBox, "flex-1 relative px-3")}>
-        <IconSearch className="h-5 w-5 opacity-70 absolute left-3 top-2.5 pointer-events-none" />
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3 mb-4">
+      {/* Filtro - Ocupa el espacio restante después de los selects */}
+      <div className={classNames(baseBox, "flex-1 relative px-3 justify-center")}>
+        <IconSearch className="h-5 w-5 opacity-70 absolute left-3 pointer-events-none" />
         <input
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
@@ -39,41 +39,40 @@ const FiltroOrden = ({
         />
       </div>
 
-      {/* Orden */}
-      <div className="flex items-center gap-3">
-        <div className={classNames(baseBox, "px-3")}>
-          <IconArrowsSort className="h-5 w-5 opacity-70" />
-          <select
-            value={ordenCampo}
-            onChange={(e) => setOrdenCampo(e.target.value)}
-            className={classNames(baseInput, "w-auto bg-transparent")}
-          >
-            {opcionesOrden.map((opt) => (
-              <option
-                key={opt.value}
-                value={opt.value}
-                className="bg-fondo text-texto"
-              >
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Select campo - 20% del ancho en desktop */}
+      <div className={classNames(baseBox, "px-3 flex-1 sm:flex-none sm:w-[20%]")}>
+        <IconArrowsSort className="h-5 w-5 opacity-70 flex-shrink-0" />
+        <select
+          value={ordenCampo}
+          onChange={(e) => setOrdenCampo(e.target.value)}
+          className={classNames(baseInput, "w-full bg-transparent min-w-0")}
+        >
+          {opcionesOrden.map((opt) => (
+            <option
+              key={opt.value}
+              value={opt.value}
+              className="bg-fondo text-texto"
+            >
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div className={classNames(baseBox, "px-3")}>
-          <select
-            value={ordenDir}
-            onChange={(e) => setOrdenDir(e.target.value)}
-            className={classNames(baseInput, "w-auto bg-transparent")}
-          >
-            <option value="asc" className="bg-fondo text-texto">
-              Ascendente
-            </option>
-            <option value="desc" className="bg-fondo text-texto">
-              Descendente
-            </option>
-          </select>
-        </div>
+      {/* Select dirección - 20% del ancho en desktop */}
+      <div className={classNames(baseBox, "px-3 flex-1 sm:flex-none sm:w-[20%]")}>
+        <select
+          value={ordenDir}
+          onChange={(e) => setOrdenDir(e.target.value)}
+          className={classNames(baseInput, "w-full bg-transparent min-w-0")}
+        >
+          <option value="asc" className="bg-fondo text-texto">
+            Ascendente
+          </option>
+          <option value="desc" className="bg-fondo text-texto">
+            Descendente
+          </option>
+        </select>
       </div>
     </div>
   );

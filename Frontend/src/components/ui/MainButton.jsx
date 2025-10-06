@@ -53,10 +53,10 @@ const Button = ({
   // Configuración de estilos para cada variante del botón
   const variants = {
     primary: "bg-primario text-white hover:bg-[#336ef0]",
-    accent: "bg-acento text-white hover:bg-[#fca75f]",
+    accent: "bg-acento text-white hover:bg-[#fca75f] border-1 border-texto/15",
     secondary:
       currentTheme === "light"
-        ? "bg-texto/5 text-texto hover:bg-[#d2e4ff] border-2 border-texto/15"
+        ? "bg-texto/5 text-texto hover:bg-[#d2e4ff] border-1 border-texto/15"
         : "bg-texto/5 text-texto hover:bg-[#2a3955] border-1 border-texto/15",
     danger: "bg-red-600 text-white hover:bg-red-400",
     disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
