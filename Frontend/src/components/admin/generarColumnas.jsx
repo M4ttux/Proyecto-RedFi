@@ -2,6 +2,7 @@ import { IconCarambola, IconCarambolaFilled } from "@tabler/icons-react";
 import MainButton from "../ui/MainButton";
 import Avatar from "../ui/Avatar";
 import Badge from "../ui/Badge";
+import IconoMapa from "./IconoMapa";
 
 export const generarColumnas = (tabla, datos, acciones = {}) => {
   // Validación: si no hay datos, retorna array vacío
@@ -294,6 +295,32 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           ) : (
             "—"
           ),
+      },
+      // Columna de mapas para visualizar zonas
+      {
+        id: "mapa",
+        label: "MAPA",
+        renderCell: (row) => {
+          if (!row.zonasCompletas || !row.zonasCompletas.length) {
+            return (
+              <div className="flex justify-center">
+                <span className="text-texto/50 text-xs">Sin datos</span>
+              </div>
+            );
+          }
+          
+          return (
+            <div className="flex gap-1 justify-center">
+              {row.zonasCompletas.map((zona, i) => (
+                <IconoMapa 
+                  key={zona.id || i}
+                  zona={zona}
+                  onClick={acciones.onVerMapa}
+                />
+              ))}
+            </div>
+          );
+        },
       }
     );
   }

@@ -9,7 +9,7 @@ export const obtenerProveedorZona = async (mostrarAlerta = () => {}) => {
       proveedor_id,
       proveedores (id, nombre),
       zona_id,
-      zonas (id, departamento)
+      zonas (id, departamento, geom)
     `);
 
   if (error) {

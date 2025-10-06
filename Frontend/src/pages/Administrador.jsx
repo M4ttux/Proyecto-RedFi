@@ -53,6 +53,7 @@ import ModalEditarProveedorTecnologia from "../components/modals/admin/proveedor
 
 import ModalAgregarProveedorZona from "../components/modals/admin/proveedorZona/ModalAgregarProveedorZona";
 import ModalEditarProveedorZona from "../components/modals/admin/proveedorZona/ModalEditarProveedorZona";
+import ModalMapa from "../components/modals/admin/ModalMapa";
 
 import ModalAgregarCurso from "../components/modals/admin/cursos/ModalAgregarCurso";
 import ModalVerCurso from "../components/modals/admin/cursos/ModalVerCurso";
@@ -126,6 +127,9 @@ const Administrador = () => {
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
   const [cursoAVer, setCursoAVer] = useState(null);
   const [cursoAEliminar, setCursoAEliminar] = useState(null);
+
+  // Estado para modal de mapa de zona
+  const [zonaParaMapa, setZonaParaMapa] = useState(null);
 
   const [eliminando, setEliminando] = useState(false);
 
@@ -324,6 +328,9 @@ const Administrador = () => {
         setProveedorZonaAEliminar(row);
       }
     },
+    onVerMapa: (zona) => {
+      setZonaParaMapa(zona);
+    },
   };
 
   const precargarDatos = async () => {
@@ -375,11 +382,16 @@ const Administrador = () => {
               id,
               proveedor: item.proveedores?.nombre || "—",
               zonas: [],
+              zonasCompletas: [], // Guardar objetos completos para el mapa
             };
           }
-          const zona = item.zonas?.departamento;
-          if (zona && !acc[id].zonas.includes(zona)) {
-            acc[id].zonas.push(zona);
+          const zonaNombre = item.zonas?.departamento;
+          const zonaCompleta = item.zonas;
+          if (zonaNombre && !acc[id].zonas.includes(zonaNombre)) {
+            acc[id].zonas.push(zonaNombre);
+          }
+          if (zonaCompleta && !acc[id].zonasCompletas.find(z => z.id === zonaCompleta.id)) {
+            acc[id].zonasCompletas.push(zonaCompleta);
           }
           return acc;
         }, {})
@@ -1000,6 +1012,14 @@ const Administrador = () => {
                 setEliminando(false);
               }
             }}
+          />
+        )}
+
+        {/* Modal de mapa para visualizar zonas */}
+        {zonaParaMapa && (
+          <ModalMapa
+            zona={zonaParaMapa}
+            onClose={() => setZonaParaMapa(null)}
           />
         )}
 
