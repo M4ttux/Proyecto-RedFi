@@ -189,10 +189,10 @@ const WifiScanner = () => {
 
       {/* Controles principales del análisis */}
       <div className="w-full mt-6 flex flex-row items-center justify-center gap-3">
-        <MainButton onClick={reiniciarAnalisis} variant="danger" className="flex-1">
+        <MainButton onClick={reiniciarAnalisis} disabled={enProgreso} variant="danger" className="flex-1">
           Reiniciar análisis
         </MainButton>
-        <MainButton onClick={recomendarUbicacion} variant="accent" className="flex-1">
+        <MainButton onClick={recomendarUbicacion} disabled={enProgreso} variant="accent" className="flex-1">
           Recomendar zona
         </MainButton>
       </div>

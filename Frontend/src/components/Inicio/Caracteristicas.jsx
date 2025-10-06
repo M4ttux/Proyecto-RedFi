@@ -53,7 +53,7 @@ const Caracteristicas = () => {
     <section className="py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto text-center space-y-12">
         <div className="space-y-5">
-          <MainH2 className="text-center justify-center">
+          <MainH2 className="text-center justify-center mb-8">
             ¿Por qué elegir Red-Fi?
           </MainH2>
           <p className="max-w-2xl mx-auto text-texto leading-relaxed">

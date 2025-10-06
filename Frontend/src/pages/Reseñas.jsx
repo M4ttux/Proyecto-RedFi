@@ -13,6 +13,8 @@ import {
   IconLoader2,
   IconStars,
   IconArrowLeft,
+  IconMap,
+  IconPlus,
 } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import ModalEliminar from "../components/modals/ModalEliminar";
@@ -222,10 +224,14 @@ const Reseñas = () => {
               <MainH3 className="text-center justify-center">
                 No tienes reseñas publicadas
               </MainH3>
-              <p className="text-texto mb-4">
+              <p className="text-texto mb-6">
                 Comienza compartiendo tu experiencia con diferentes proveedores
                 de internet.
               </p>
+              <MainLinkButton to="/mapa" variant="primary">
+                <IconMap />
+                Ir al mapa para agregar reseñas
+              </MainLinkButton>
             </div>
           </div>
         ) : (
@@ -276,8 +282,14 @@ const Reseñas = () => {
           </>
         )}
 
-        {/* Botón volver al perfil */}
-        <div className="text-center">
+        {/* Botones de navegación */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {reseñas.length > 0 && (
+            <MainLinkButton to="/mapa" variant="accent">
+              <IconPlus />
+              Agregar nueva reseña
+            </MainLinkButton>
+          )}
           <MainLinkButton to="/cuenta" variant="secondary">
             <IconArrowLeft />
             Volver al perfil

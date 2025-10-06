@@ -6,7 +6,7 @@ const CTASection = () => {
   return (
     <section className="bg-secundario text-texto py-16 text-center px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        <MainH2 className="text-center justify-center">¿Listo para mejorar tu conexión?</MainH2>
+        <MainH2 className="text-center justify-center mb-8">¿Listo para mejorar tu conexión?</MainH2>
         <p>
           Explora el mapa interactivo y descubre qué proveedor se adapta mejor a
           tu zona.

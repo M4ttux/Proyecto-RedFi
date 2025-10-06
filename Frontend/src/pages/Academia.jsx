@@ -100,7 +100,7 @@ const AcademyHome = () => {
                 {/* Contenido - lado derecho */}
                 <div className="flex-1 p-4 min-h-[6rem] flex flex-col justify-center">
                   <MainH3 className="text-left mb-2 line-clamp-1">{curso.titulo}</MainH3>
-                  <p className="line-clamp-2 text-sm text-texto/75 leading-relaxed">{curso.descripcion}</p>
+                  <p className="line-clamp-2 text-sm text-texto/75 leading-relaxed text-left">{curso.descripcion}</p>
                 </div>
               </MainLinkButton>
             ))}
