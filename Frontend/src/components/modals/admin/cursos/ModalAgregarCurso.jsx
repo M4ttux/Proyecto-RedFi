@@ -187,7 +187,14 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
       {/* Contenido scrolleable */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (step === 1) {
+              handleSiguiente();
+            } else {
+              handleSubmit();
+            }
+          }}
           className="space-y-2 md:space-y-4"
         >
         {step === 1 ? (
@@ -432,62 +439,61 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
             </div>
           </div>
         )}
-
-        <div className="text-center mt-6">
-          <p className="text-sm text-texto/75 italic">
-            Los campos marcados con <span className="text-red-600">*</span> son
-            obligatorios.
-          </p>
-        </div>
+          {/* Botones de acción dentro del form */}
+          <div className="flex gap-3 pt-4 mt-6 border-t border-texto/10">
+            {step === 1 ? (
+              <>
+                <MainButton
+                  type="button"
+                  variant="secondary"
+                  onClick={onClose}
+                  disabled={loading}
+                  className="flex-1"
+                >
+                  Cancelar
+                </MainButton>
+                <MainButton
+                  type="button"
+                  variant="primary"
+                  onClick={handleSiguiente}
+                  className="flex-1"
+                >
+                  Siguiente: Quiz
+                </MainButton>
+              </>
+            ) : (
+              <>
+                <MainButton
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setStep(1)}
+                  disabled={loading}
+                  className="flex-1"
+                >
+                  Anterior
+                </MainButton>
+                <MainButton
+                  type="submit"
+                  variant="primary"
+                  onClick={handleSubmit}
+                  loading={loading}
+                  disabled={loading}
+                  className="flex-1"
+                >
+                  {loading ? "Creando..." : "Crear curso"}
+                </MainButton>
+              </>
+            )}
+          </div>
+          <div className="text-center mt-6">
+            <p className="text-sm text-texto/75 italic">
+              Los campos marcados con <span className="text-red-600">*</span>{" "}
+              son obligatorios.
+            </p>
+          </div>
         </form>
       </div>
-
-      {/* Botones de acción fijos */}
-      <div className="flex gap-3 p-6 flex-shrink-0">
-        {step === 1 ? (
-          <>
-            <MainButton
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-              disabled={loading}
-              className="flex-1"
-            >
-              Cancelar
-            </MainButton>
-            <MainButton
-              type="button"
-              variant="primary"
-              onClick={handleSiguiente}
-              className="flex-1"
-            >
-              Siguiente: Quiz
-            </MainButton>
-          </>
-        ) : (
-          <>
-            <MainButton
-              type="button"
-              variant="secondary"
-              onClick={() => setStep(1)}
-              disabled={loading}
-              className="flex-1"
-            >
-              Anterior
-            </MainButton>
-            <MainButton
-              type="button"
-              variant="primary"
-              onClick={handleSubmit}
-              loading={loading}
-              disabled={loading}
-              className="flex-1"
-            >
-              {loading ? "Creando..." : "Crear curso"}
-            </MainButton>
-          </>
-        )}
-      </div>
+      
     </ModalContenedor>
   );
 };

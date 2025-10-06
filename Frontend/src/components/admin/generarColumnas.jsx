@@ -304,13 +304,13 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
           if (!row.zonasCompletas || !row.zonasCompletas.length) {
             return (
               <div className="flex justify-center">
-                <span className="text-texto/50 text-xs">Sin datos</span>
+                <span className="text-texto/75 text-xs">Sin datos</span>
               </div>
             );
           }
           
           return (
-            <div className="flex gap-1 justify-center">
+            <div className="flex gap-3 sm:justify-center justify-start">
               {row.zonasCompletas.map((zona, i) => (
                 <IconoMapa 
                   key={zona.id || i}

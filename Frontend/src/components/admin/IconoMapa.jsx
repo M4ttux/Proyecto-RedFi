@@ -21,10 +21,10 @@ const IconoMapa = ({ zona, onClick, className = "" }) => {
     <MainButton
       onClick={handleClick}
       variant="secondary"
-      className={`px-2 py-1 ${className}`}
       title={`Ver zona ${zona.departamento} en el mapa`}
       icon={IconMap}
-      iconSize={16}
+      iconSize={24}
+      iconAlwaysVisible={true}
     />
   );
 };

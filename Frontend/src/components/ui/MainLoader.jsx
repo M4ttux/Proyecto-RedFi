@@ -51,11 +51,11 @@ const MainLoader = ({
           backdropFilter: "blur(4px)", // Efecto de desenfoque
         }}
       >
-        <div className="flex flex-col items-center gap-3 text-texto">
+        <div className="flex flex-col items-center justify-center gap-3 text-texto text-center px-4">
           <IconLoader2 size={currentSize.icon} className="animate-spin text-texto" />
           {/* Texto opcional con estilos dinámicos */}
           {texto && (
-            <p className={classNames(currentSize.text, "tracking-wide")}>
+            <p className={classNames(currentSize.text, "tracking-wide text-center")}>
               {texto}
             </p>
           )}
@@ -66,12 +66,12 @@ const MainLoader = ({
 
   // Variante inline (por defecto) - se integra en el flujo del documento
   return (
-    <div className={classNames("flex flex-col items-center justify-center gap-3 text-texto", className)}>
+    <div className={classNames("flex flex-col items-center justify-center gap-3 text-texto text-center w-full", className)}>
       {/* Spinner animado con tamaño dinámico */}
-      <IconLoader2 size={currentSize.icon} className="animate-spin" />
+      <IconLoader2 size={currentSize.icon} className="animate-spin mx-auto" />
       {/* Texto opcional con estilos según tamaño */}
       {texto && (
-        <span className={classNames(currentSize.text, "font-medium")}>
+        <span className={classNames(currentSize.text, "font-medium text-center w-full")}>
           {texto}
         </span>
       )}
