@@ -1,3 +1,4 @@
+import { useState } from "react";
 import classNames from "classnames";
 import { IconLoader2, IconChevronDown } from "@tabler/icons-react";
 
@@ -17,6 +18,7 @@ const Select = ({
   required = false,
   isInvalid = false,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="space-y-1 relative">
       {/* Renderiza la etiqueta si se proporciona */}
@@ -33,6 +35,8 @@ const Select = ({
           name={name}
           multiple={multiple}
           value={value}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => setIsOpen(false)}
           onChange={(e) => {
             // Maneja la selección múltiple convirtiendo HTMLCollection a array
             if (multiple) {
@@ -89,7 +93,12 @@ const Select = ({
             {loading ? (
               <IconLoader2 size={20} className="animate-spin text-texto/75" />
             ) : (
-              <IconChevronDown size={20} className="text-texto/75" />
+              <IconChevronDown 
+                size={20} 
+                className={`text-texto/75 transition-transform ${
+                  isOpen ? "rotate-180" : "rotate-0"
+                }`} 
+              />
             )}
           </div>
         )}

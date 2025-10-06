@@ -196,7 +196,6 @@ const Navbar = () => {
               icon={getThemeIcon()}
               iconSize={26}
               title={`Cambiar a tema ${currentTheme === "light" ? "oscuro" : "claro"}`}
-              className="transition-all duration-200 hover:scale-110"
             />
 
             {/* Indicador de carga o botones de autenticación */}
