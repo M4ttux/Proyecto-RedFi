@@ -267,6 +267,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             boleta.url_imagen && !imagenEliminada ? boleta.url_imagen : null
           }
           onClear={handleClearImagen}
+          esBoletas={true}
         />
 
         {/* Botones de acción */}

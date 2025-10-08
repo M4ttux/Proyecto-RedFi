@@ -17,6 +17,7 @@ const FileInput = ({
   existingImage = null,
   sinPreview = false,
   hideRemoveButton = false,
+  esBoletas = false, // Nueva prop para identificar uso en Boletas
 }) => {
   const inputRef = useRef(null);
   const [internalPreview, setInternalPreview] = useState(null);
@@ -35,12 +36,24 @@ const FileInput = ({
   const getLimitMessage = () => {
     const { acceptsImages, acceptsPDF } = getAcceptedTypes();
     
+    // Límites específicos para Boletas
+    if (esBoletas) {
+      if (acceptsImages && acceptsPDF) {
+        return "Imágenes: máx. 800KB y 2000x2000px • PDFs: máx. 10MB";
+      } else if (acceptsImages) {
+        return "Máx. 800KB y resolución 2000x2000px";
+      } else if (acceptsPDF) {
+        return "Máx. 10MB";
+      }
+    }
+    
+    // Límites estándar para otros usos
     if (acceptsImages && acceptsPDF) {
-      return "Imágenes: máx. 300KB y 500x500px • PDFs: máx. 50MB";
+      return "Imágenes: máx. 300KB y 500x500px • PDFs: máx. 10MB";
     } else if (acceptsImages) {
       return "Máx. 300KB y resolución 500x500px";
     } else if (acceptsPDF) {
-      return "Máx. 50MB";
+      return "Máx. 10MB";
     }
     
     return null;
@@ -49,24 +62,36 @@ const FileInput = ({
   // Validación de archivos según tipo y restricciones
   const validarArchivo = (file) => {
     return new Promise((resolve, reject) => {
-      // Validar tamaño de PDF (máx. 50MB)
+      // Validar tamaño de PDF
       if (file.type === "application/pdf") {
-        const maxSizePDF = 50 * 1024 * 1024; // 50MB en bytes
+        const maxSizePDF = esBoletas 
+          ? 50 * 1024 * 1024  // 10MB para Boletas
+          : 10 * 1024 * 1024; // 10MB estándar
+        
+        const limitText = esBoletas ? "10MB" : "10MB";
+        
         if (file.size > maxSizePDF) {
-          reject("El archivo PDF no puede superar los 50MB");
+          reject(`El archivo PDF no puede superar los ${limitText}`);
           return;
         }
         resolve(true);
         return;
       }
 
-      // Validar imágenes (máx. 300KB y 500x500px)
+      // Validar imágenes
       if (file.type.startsWith("image/")) {
-        const maxSizeImage = 300 * 1024; // 300KB en bytes
+        const maxSizeImage = esBoletas 
+          ? 800 * 1024  // 800KB para Boletas
+          : 300 * 1024; // 300KB estándar
+          
+        const maxDimension = esBoletas ? 2000 : 500; // 2000x2000px para Boletas, 500x500px estándar
+        
+        const sizeText = esBoletas ? "800KB" : "300KB";
+        const dimensionText = esBoletas ? "2000x2000" : "500x500";
         
         // Validar tamaño del archivo
         if (file.size > maxSizeImage) {
-          reject("La imagen no puede superar los 300KB");
+          reject(`La imagen no puede superar los ${sizeText}`);
           return;
         }
 
@@ -77,8 +102,8 @@ const FileInput = ({
         img.onload = () => {
           URL.revokeObjectURL(objectUrl); // Limpiar memoria
           
-          if (img.width > 500 || img.height > 500) {
-            reject("La imagen no puede superar los 500x500 píxeles");
+          if (img.width > maxDimension || img.height > maxDimension) {
+            reject(`La imagen no puede superar los ${dimensionText} píxeles`);
           } else {
             resolve(true);
           }

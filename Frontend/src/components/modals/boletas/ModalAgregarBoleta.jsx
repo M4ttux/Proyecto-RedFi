@@ -344,6 +344,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           previewUrl={previewUrl}
           setPreviewUrl={setPreviewUrl}
           accept="image/*, application/pdf"
+          esBoletas={true}
         />
 
         {/* Botones */}
