@@ -103,7 +103,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
         {activeTab === "info" && (
           <>
             {/* Miniatura y datos básicos */}
-            <div className="space-y-2 md:space-y-4">
+            <div className="space-y-4">
               {/* Título */}
               <div>
                 <MainH3
@@ -147,7 +147,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
         )}
 
         {activeTab === "video" && (
-          <div className="space-y-2 md:space-y-4">
+          <div className="space-y-4">
             {videoId ? (
               <>
                 <div className="aspect-video rounded-lg overflow-hidden">
@@ -246,7 +246,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
                           
                           {/* Preview del contenido cuando está colapsado */}
                           {!estaExpandida && (
-                            <span className="text-sm text-texto/75 truncate max-w-[300px]">
+                            <span className="text-sm text-texto/75 truncate max-w-[200px] md:max-w-[300px]">
                               {pregunta.pregunta}
                             </span>
                           )}
@@ -302,7 +302,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
                                   {opcion.opcion || opcion.texto}
                                 </span>
                                 {opcion.es_correcta && (
-                                  <span className="ml-auto text-xs font-medium text-green-600">
+                                  <span className="ml-auto text-xs font-bold text-green-600 whitespace-nowrap">
                                     ✓ Correcta
                                   </span>
                                 )}

@@ -2,10 +2,10 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
 import { IconX } from "@tabler/icons-react";
 import maplibregl from "maplibre-gl";
-import ModalContenedor from "../../ui/ModalContenedor";
-import MainButton from "../../ui/MainButton";
-import MainH2 from "../../ui/MainH2";
-import { BOUNDS_CORRIENTES } from "../../../constants/constantes";
+import ModalContenedor from "../../../ui/ModalContenedor";
+import MainButton from "../../../ui/MainButton";
+import MainH2 from "../../../ui/MainH2";
+import { BOUNDS_CORRIENTES } from "../../../../constants/constantes";
 
 const ModalMapa = ({ zona, onClose }) => {
   const mapContainer = useRef(null);
@@ -106,7 +106,7 @@ const ModalMapa = ({ zona, onClose }) => {
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
-        <MainH2 className="mb-0">Zona: {zona.departamento}</MainH2>
+        <MainH2 className="mb-0">Mapa de la zona</MainH2>
         <MainButton
           type="button"
           onClick={onClose}
@@ -132,10 +132,10 @@ const ModalMapa = ({ zona, onClose }) => {
         />
 
         {cargando && (
-          <div className="absolute inset-0 bg-texto/5 flex items-center justify-center rounded-lg">
+          <div className="absolute inset-0 bg-[#1f2a40] flex items-center justify-center rounded-lg">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 border-2 border-texto/15 border-t-acento rounded-full animate-spin"></div>
-              <span className="text-sm">Cargando mapa...</span>
+              <span className="text-sm font-bold text-white">Cargando mapa...</span>
             </div>
           </div>
         )}

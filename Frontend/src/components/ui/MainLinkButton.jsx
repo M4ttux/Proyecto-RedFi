@@ -68,8 +68,8 @@ const LinkButton = ({
     ? "bg-acento/20 backdrop-blur-md border-2 border-acento hover:bg-[#fca75f]/60 text-texto min-h-[130px] flex flex-col justify-center shadow-lg" // Light theme
     : "bg-acento/20 backdrop-blur-md border border-white/10 hover:bg-[#fca75f]/30 text-texto min-h-[130px] flex flex-col justify-center shadow-lg", // Dark theme
     curso: currentTheme === "light"
-    ? "flex flex-row bg-secundario border-2 border-texto/15 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full hover:bg-[#2a3955]/10" // Light theme - horizontal layout
-    : "flex flex-row bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full hover:bg-secundario/80", // Dark theme - horizontal layout
+    ? "flex flex-col md:flex-row bg-secundario border-2 border-texto/15 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full hover:bg-[#2a3955]/10 hover:scale-[1.02]" // Light theme - vertical on mobile, horizontal on desktop
+    : "flex flex-col md:flex-row bg-secundario border border-secundario/50 rounded-lg overflow-hidden transition shadow-lg text-texto w-full h-full hover:bg-secundario/80 hover:scale-[1.02]", // Dark theme - vertical on mobile, horizontal on desktop
   };
 
   // Estilos específicos para estado de carga

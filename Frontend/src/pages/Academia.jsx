@@ -73,34 +73,32 @@ const AcademyHome = () => {
 
         {/* Cursos list */}
         {!loading && cursos.length > 0 && (
-          <div className="space-y-4 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-0 md:space-y-4 mb-12">
             {cursos.map((curso) => (
               <MainLinkButton
                 to={`/academia/curso/${curso.id}`}
                 key={curso.id}
                 variant="curso"
-                className="block hover:scale-[1.02] transition-transform duration-200"
+                className="h-full p-3 md:p-0"
                 isPremium={true}
               >
-                {/* Miniatura - lado izquierdo */}
-                <div className="w-32 h-24 flex-shrink-0">
+                {/* Miniatura */}
+                <div className="w-full md:w-32 h-32 flex-shrink-0 flex items-center justify-center overflow-hidden pt-3 md:pl-3">
                   {curso.miniatura_url ? (
                     <img
                       src={curso.miniatura_url}
                       alt={curso.titulo}
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-full object-contain rounded-lg"
                     />
                   ) : (
-                    <div className="w-full h-full bg-texto/5 border border-texto/15 flex items-center justify-center">
-                      <IconBook2 size={24} className="text-texto/75" />
-                    </div>
+                    <IconBook2 size={24} className="text-texto/75" />
                   )}
                 </div>
                 
-                {/* Contenido - lado derecho */}
-                <div className="flex-1 p-4 min-h-[6rem] flex flex-col justify-center">
-                  <MainH3 className="text-left mb-2 line-clamp-1">{curso.titulo}</MainH3>
-                  <p className="line-clamp-2 text-sm text-texto/75 leading-relaxed text-left">{curso.descripcion}</p>
+                {/* Contenido */}
+                <div className="flex-1 p-3 flex flex-col justify-center">
+                  <MainH3 className="text-center md:text-left justify-center md:justify-start mb-1 md:mb-2 line-clamp-1">{curso.titulo}</MainH3>
+                  <p className="line-clamp-2 text-xs md:text-sm text-texto/75 leading-relaxed text-center md:text-left">{curso.descripcion}</p>
                 </div>
               </MainLinkButton>
             ))}

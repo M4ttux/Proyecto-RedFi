@@ -16,7 +16,7 @@ const ModalEliminar = ({
   // Generar descripción automáticamente
   const getArticulo = (palabra) => {
     // Palabras que usan "este" en lugar de "esta"
-    const palabrasConEste = ["perfil", "proveedor"];
+    const palabrasConEste = ["perfil", "proveedor", "curso"];
     return palabrasConEste.includes(palabra?.toLowerCase()) ? "este" : "esta";
   };
 

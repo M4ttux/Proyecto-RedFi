@@ -53,7 +53,7 @@ import ModalEditarProveedorTecnologia from "../components/modals/admin/proveedor
 
 import ModalAgregarProveedorZona from "../components/modals/admin/proveedorZona/ModalAgregarProveedorZona";
 import ModalEditarProveedorZona from "../components/modals/admin/proveedorZona/ModalEditarProveedorZona";
-import ModalMapa from "../components/modals/admin/ModalMapa";
+import ModalMapa from "../components/modals/admin/proveedorZona/ModalMapa";
 
 import ModalAgregarCurso from "../components/modals/admin/cursos/ModalAgregarCurso";
 import ModalVerCurso from "../components/modals/admin/cursos/ModalVerCurso";

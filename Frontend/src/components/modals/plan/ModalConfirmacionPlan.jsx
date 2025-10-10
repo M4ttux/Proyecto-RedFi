@@ -14,7 +14,7 @@ const ModalConfirmacionPlan = ({ usuarioId, nuevoPlan, onClose }) => {
 
   const mensajes = {
     premium: {
-      titulo: "\u00a1Gracias por pasarte al plan Premium!",
+      titulo: "Unirse al plan Premium",
       descripcion:
         "Ahora tienes acceso completo a la Academia Red-Fi, herramientas avanzadas y mucho más.",
       icono: <IconStar size={64} className="text-green-700 mx-auto mb-4" />,

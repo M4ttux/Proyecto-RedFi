@@ -283,14 +283,14 @@ const Reseñas = () => {
         )}
 
         {/* Botones de navegación */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-row gap-4 justify-center">
           {reseñas.length > 0 && (
-            <MainLinkButton to="/mapa" variant="accent">
+            <MainLinkButton to="/mapa" variant="accent" className="flex-1">
               <IconPlus />
-              Agregar nueva reseña
+              Agregar reseña
             </MainLinkButton>
           )}
-          <MainLinkButton to="/cuenta" variant="secondary">
+          <MainLinkButton to="/cuenta" variant="secondary" className="flex-1">
             <IconArrowLeft />
             Volver al perfil
           </MainLinkButton>

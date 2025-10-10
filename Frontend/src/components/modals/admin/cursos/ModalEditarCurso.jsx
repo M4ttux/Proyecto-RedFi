@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import {
   IconX,
   IconPlus,
-  IconTrash,
   IconBulb,
   IconChevronDown,
 } from "@tabler/icons-react";
@@ -391,7 +390,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
 
                               {/* Preview del contenido cuando está colapsado */}
                               {!estaExpandida && tieneContenido && (
-                                <span className="text-sm text-texto/75 truncate max-w-[200px]">
+                                <span className="text-sm text-texto/75 truncate max-w-[150px] md:max-w-[200px]">
                                   {pregunta.pregunta}
                                 </span>
                               )}
@@ -402,6 +401,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                                 <MainButton
                                   type="button"
                                   variant="delete"
+                                  iconAlwaysVisible = {true}
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     eliminarPregunta(preguntaIndex);
