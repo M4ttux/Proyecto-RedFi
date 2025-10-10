@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IconArrowLeft, IconSettings } from "@tabler/icons-react"
 import { getPerfil } from "../services/perfil/getPerfil";
 import {
-  obtenerPerfilesAdmin,
-  eliminarPerfilPorId,
+  obtenerPerfilesAdmin
 } from "../services/perfil/adminPerfil";
 import { obtenerProveedoresAdmin } from "../services/proveedores/obtenerProveedor";
 import { eliminarProveedor } from "../services/proveedores/crudProveedor";
@@ -32,6 +31,10 @@ import {
   eliminarCurso,
 } from "../services/cursos";
 
+import {
+  eliminarUsuarioCompleto,
+} from "../services/perfil/adminPerfil";
+
 import ModalEliminar from "../components/modals/ModalEliminar";
 
 import ModalVerPerfil from "../components/modals/admin/perfiles/ModalVerPerfil";
@@ -58,6 +61,8 @@ import ModalMapa from "../components/modals/admin/proveedorZona/ModalMapa";
 import ModalAgregarCurso from "../components/modals/admin/cursos/ModalAgregarCurso";
 import ModalVerCurso from "../components/modals/admin/cursos/ModalVerCurso";
 import ModalEditarCurso from "../components/modals/admin/cursos/ModalEditarCurso";
+
+import ModalAgregarPerfil from "../components/modals/admin/perfiles/ModalAgregarPerfil";
 
 import Table from "../components/ui/Table";
 import MainH1 from "../components/ui/MainH1";
@@ -127,6 +132,8 @@ const Administrador = () => {
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
   const [cursoAVer, setCursoAVer] = useState(null);
   const [cursoAEliminar, setCursoAEliminar] = useState(null);
+
+  const [usuarioNuevo, setUsuarioNuevo] = useState(false);
 
   // Estado para modal de mapa de zona
   const [zonaParaMapa, setZonaParaMapa] = useState(null);
@@ -460,7 +467,7 @@ const Administrador = () => {
   }
 
   const datosActuales = todosLosDatos[tablaActual] || [];
-  const columnas = generarColumnas(tablaActual, datosActuales, acciones);
+  const columnas = generarColumnas(tablaActual, datosActuales, acciones, perfil);
 
   // === Filtrado SOLO para Perfiles y Reseñas ===
   const datosFiltrados = (datosActuales ?? []).filter((item) => {
@@ -681,6 +688,11 @@ const Administrador = () => {
               Agregar Proveedor
             </MainButton>
           )}
+          {tablaActual === "user_profiles" && (
+            <MainButton onClick={() => setUsuarioNuevo(true)} variant="add">
+              Agregar Usuario
+            </MainButton>
+          )}
           {tablaActual === "tecnologias" && (
             <MainButton onClick={() => setTecnologiaNueva(true)} variant="add">
               Agregar Tecnología
@@ -737,6 +749,15 @@ const Administrador = () => {
         {/* === MODALES === */}
 
         {/* Perfiles */}
+        {tablaActual === "user_profiles" && usuarioNuevo && (
+          <ModalAgregarPerfil
+            onClose={() => setUsuarioNuevo(false)}
+            onActualizar={async () => {
+              setUsuarioNuevo(false);
+              await precargarDatos();
+            }}
+          />
+        )}
         {/* Ver */}
         {tablaActual === "user_profiles" && perfilAVer && (
           <ModalVerPerfil
@@ -755,19 +776,19 @@ const Administrador = () => {
         {/* Eliminar */}
         {tablaActual === "user_profiles" && perfilAEliminar && (
           <ModalEliminar
-            titulo="perfil"
-            descripcion="perfil"
+            titulo="usuario"
+            descripcion="usuario y todas sus reseñas"
             loading={eliminando}
             onCancelar={() => setPerfilAEliminar(null)}
             onConfirmar={async () => {
               setEliminando(true);
               try {
-                await eliminarPerfilPorId(perfilAEliminar.id, mostrarError);
-                mostrarExito("Perfil eliminado con éxito.");
+                await eliminarUsuarioCompleto(perfilAEliminar.id);
+                mostrarExito("Usuario eliminado correctamente.");
                 setPerfilAEliminar(null);
-                precargarDatos();
+                await precargarDatos();
               } catch (error) {
-                mostrarError("Error al eliminar perfil: " + error.message);
+                mostrarError("Error al eliminar usuario: " + error.message);
               } finally {
                 setEliminando(false);
               }

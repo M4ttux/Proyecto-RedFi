@@ -4,7 +4,7 @@ import Avatar from "../ui/Avatar";
 import Badge from "../ui/Badge";
 import IconoMapa from "./IconoMapa";
 
-export const generarColumnas = (tabla, datos, acciones = {}) => {
+export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = null) => {
   // Validación: si no hay datos, retorna array vacío
   if (!datos.length) return [];
 
@@ -455,16 +455,45 @@ export const generarColumnas = (tabla, datos, acciones = {}) => {
               </MainButton>
             )}
             {/* Botón Eliminar - Si existe callback */}
-            {acciones.onEliminar && (
-              <MainButton
-                onClick={() => acciones.onEliminar(row)}
-                title="Eliminar"
-                variant="delete"
-                iconAlwaysVisible={true}
-              >
-                <span className="hidden sm:inline">Eliminar</span>
-              </MainButton>
-            )}
+            {acciones.onEliminar && (() => {
+              // Verificar si es tabla de perfiles y si el usuario está eliminándose a sí mismo
+              const esUsuarioLogueado = tabla === "user_profiles" && 
+                                      usuarioLogueado && 
+                                      row.id === usuarioLogueado.id;
+              
+              // Si es el usuario logueado, envolver en div con tooltip
+              if (esUsuarioLogueado) {
+                return (
+                  <div 
+                    className="relative inline-block"
+                    title="No puedes eliminarte a ti mismo"
+                  >
+                    <MainButton
+                      onClick={() => {}} // No hacer nada al hacer click
+                      variant="delete"
+                      iconAlwaysVisible={true}
+                      disabled={true}
+                      className="pointer-events-none" // Asegurar que no se pueda hacer click
+                    >
+                      <span className="hidden sm:inline">Eliminar</span>
+                    </MainButton>
+                  </div>
+                );
+              }
+              
+              // Usuario normal, botón funcional
+              return (
+                <MainButton
+                  onClick={() => acciones.onEliminar(row)}
+                  title="Eliminar"
+                  variant="delete"
+                  iconAlwaysVisible={true}
+                  disabled={false}
+                >
+                  <span className="hidden sm:inline">Eliminar</span>
+                </MainButton>
+              );
+            })()}
           </div>
         );
       },

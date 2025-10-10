@@ -15,9 +15,12 @@ const ModalEliminar = ({
 
   // Generar descripción automáticamente
   const getArticulo = (palabra) => {
+    // Extraer solo la primera palabra para determinar el artículo
+    const primeraPalabra = palabra?.split(" ")[0]?.toLowerCase();
+    
     // Palabras que usan "este" en lugar de "esta"
-    const palabrasConEste = ["perfil", "proveedor", "curso"];
-    return palabrasConEste.includes(palabra?.toLowerCase()) ? "este" : "esta";
+    const palabrasConEste = ["perfil", "proveedor", "curso", "user_profiles", "usuario"];
+    return palabrasConEste.includes(primeraPalabra) ? "este" : "esta";
   };
 
   const descripcionCompleta = descripcion
