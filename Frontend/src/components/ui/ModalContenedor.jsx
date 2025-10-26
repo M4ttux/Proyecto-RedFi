@@ -18,7 +18,7 @@ const ModalContenedor = ({
         return {
           maxWidth,
           maxHeight,
-          overflow: "overflow-visible"
+          overflow: "overflow-y-auto" // Cambiado a auto para permitir scroll si es necesario
         };
     }
   };

@@ -113,9 +113,11 @@ const ModalReseña = ({ reseña, onClose }) => {
       </div>
 
       {/* Comentario completo de la reseña */}
-      <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-center leading-relaxed mb-6">
-        {reseña.comentario}
-      </p>
+      <div className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 mb-6 max-h-[300px] overflow-y-auto">
+        <p className="text-center leading-relaxed whitespace-pre-wrap break-words">
+          {reseña.comentario}
+        </p>
+      </div>
 
       {/* Botones de acción */}
       <div className="flex gap-3">

@@ -116,30 +116,31 @@ if (proveedoresVisibles.length > 1) {
     });
 
     // Renderizar proveedores adicionales como bordes con grosor uniforme
-    for (let i = 1; i < proveedoresVisibles.length; i++) {
-      const proveedor = proveedoresVisibles[i];
-      const lineLayerId = `line-border-${zonaId}-${i}`;
-      
-      // Grosor uniforme de 4px para todos los bordes
-      const lineWidth = 2;
-      // Para crear el efecto "contraído", usamos offset negativo
-      const offsetDistance = -(i * 2); // -2px, -4px, -6px... hacia adentro
-      
-      map.addLayer({
-        id: lineLayerId,
-        type: "line",
-        source: sourceId,
-        paint: {
-          "line-color": proveedor.color || "#888888",
-          "line-width": lineWidth,
-          "line-opacity": 0.9,
-          "line-offset": offsetDistance, // Offset hacia adentro para crear contracción
-        },
-        layout: {
-          visibility: "visible",
-        },
-      });
-    }
+    // COMENTADO: Bordes de colores eliminados
+    // for (let i = 1; i < proveedoresVisibles.length; i++) {
+    //   const proveedor = proveedoresVisibles[i];
+    //   const lineLayerId = `line-border-${zonaId}-${i}`;
+    //   
+    //   // Grosor uniforme de 4px para todos los bordes
+    //   const lineWidth = 2;
+    //   // Para crear el efecto "contraído", usamos offset negativo
+    //   const offsetDistance = -(i * 2); // -2px, -4px, -6px... hacia adentro
+    //   
+    //   map.addLayer({
+    //     id: lineLayerId,
+    //     type: "line",
+    //     source: sourceId,
+    //     paint: {
+    //       "line-color": proveedor.color || "#888888",
+    //       "line-width": lineWidth,
+    //       "line-opacity": 0.9,
+    //       "line-offset": offsetDistance, // Offset hacia adentro para crear contracción
+    //     },
+    //     layout: {
+    //       visibility: "visible",
+    //     },
+    //   });
+    // }
 
     // Eventos de hover para la zona
     let popup = new maplibregl.Popup({
