@@ -23,8 +23,10 @@ const ModalProveedor = ({ proveedor, onClose }) => {
 
   // Obtiene las tecnologías disponibles desde la relación ProveedorTecnologia
   const tecnologias =
-    proveedor.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
-    [];
+    proveedor.ProveedorTecnologia?.map((rel) => ({
+      nombre: rel.tecnologias?.tecnologia,
+      descripcion: rel.tecnologias?.descripcion,
+    })) || [];
 
   // Renderiza el sistema de estrellas con promedio de calificaciones
   const renderStars = (promedio) => {
@@ -100,8 +102,11 @@ const ModalProveedor = ({ proveedor, onClose }) => {
                 variant="accent"
                 size="xs"
                 collapseOnMobile={index === 1} // oculta la 2da en mobile
+                truncate={true}
+                maxWidth="150px"
+                title={tec.descripcion}
               >
-                {tec}
+                {tec.nombre}
               </Badge>
             ))}
 

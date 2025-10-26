@@ -8,7 +8,7 @@ export const obtenerProveedoresPorZona = async (zonaId, mostrarAlerta = () => {}
       `
       *,
       ProveedorTecnologia (
-        tecnologias (*)
+        tecnologias (id, tecnologia, descripcion)
       ),
       ZonaProveedor!inner (
         zonas!inner (*)

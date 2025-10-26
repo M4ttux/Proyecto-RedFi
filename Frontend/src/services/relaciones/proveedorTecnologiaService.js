@@ -9,7 +9,7 @@ export const obtenerProveedorTecnologia = async (mostrarAlerta = () => {}) => {
       proveedor_id,
       proveedores (id, nombre),
       tecnologia_id,
-      tecnologias (id, tecnologia)
+      tecnologias (id, tecnologia, descripcion)
     `);
 
   if (error) {

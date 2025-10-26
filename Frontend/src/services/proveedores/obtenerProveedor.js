@@ -8,7 +8,7 @@ export const obtenerProveedores = async (mostrarAlerta = () => {}) => {
       `
       *,
       ProveedorTecnologia (
-        tecnologias (*)
+        tecnologias (id, tecnologia, descripcion)
       ),
       ZonaProveedor (
         zonas (*)
@@ -36,7 +36,7 @@ export const obtenerProveedorPorId = async (id, mostrarAlerta = () => {}) => {
       `
       *,
       ProveedorTecnologia (
-        tecnologias (*)
+        tecnologias (id, tecnologia, descripcion)
       ),
       reseñas (
         comentario,
@@ -66,7 +66,7 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
     .from("proveedores")
     .select(
       `id, nombre, color, descripcion, sitio_web, logotipo, 
-       ProveedorTecnologia(tecnologias(id, tecnologia)), 
+       ProveedorTecnologia(tecnologias(id, tecnologia, descripcion)), 
        ZonaProveedor(zonas(id, departamento)),
        reseñas(id, estrellas)`
     )
@@ -79,9 +79,11 @@ export const obtenerProveedoresAdmin = async (mostrarAlerta = () => {}) => {
 
   return data.map((p) => ({
     ...p,
-    tecnologias: p.ProveedorTecnologia?.map((t) =>
-      String(t.tecnologias?.tecnologia)
-    ).filter(Boolean),
+    tecnologias: p.ProveedorTecnologia?.map((t) => ({
+      id: t.tecnologias?.id,
+      nombre: t.tecnologias?.tecnologia,
+      descripcion: t.tecnologias?.descripcion,
+    })).filter(Boolean),
     zonas: p.ZonaProveedor?.map((z) => String(z.zonas?.id)).filter(Boolean),
   }));
 };

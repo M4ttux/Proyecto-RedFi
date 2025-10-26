@@ -142,6 +142,9 @@ const ModalZonaMultiProveedor = ({
                             variant="accent"
                             size="xs"
                             collapseOnMobile={index === 1} // oculta la 2da en mobile
+                            truncate={true}
+                            maxWidth="150px"
+                            title={tech.tecnologias?.descripcion}
                           >
                             {tech.tecnologias?.tecnologia}
                           </Badge>

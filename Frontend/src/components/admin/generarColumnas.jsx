@@ -258,8 +258,16 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
           Array.isArray(row.tecnologias) && row.tecnologias.length ? (
             <div className="flex flex-wrap gap-1 overflow-hidden">
               {row.tecnologias.map((tec, i) => (
-                <Badge key={i} size="xs" variant="muted" rounded="lg">
-                  {tec}
+                <Badge 
+                  key={i} 
+                  size="xs" 
+                  variant="muted" 
+                  rounded="lg"
+                  truncate={true}
+                  maxWidth="120px"
+                  title={tec.descripcion}
+                >
+                  {tec.nombre}
                 </Badge>
               ))}
             </div>

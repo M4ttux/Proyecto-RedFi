@@ -68,7 +68,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
       onActualizar?.();
       onClose();
     } catch (error) {
-      console.error("❌ Error general:", error);
+      console.error("Error general:", error);
       mostrarError(
         "Error al crear proveedor: " +
           (error.message || error.error_description || "Error desconocido")

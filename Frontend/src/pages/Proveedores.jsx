@@ -46,8 +46,10 @@ const Proveedores = () => {
   }
 
   const tecnologias =
-    proveedor?.ProveedorTecnologia?.map((rel) => rel.tecnologias?.tecnologia) ||
-    [];
+    proveedor?.ProveedorTecnologia?.map((rel) => ({
+      nombre: rel.tecnologias?.tecnologia,
+      descripcion: rel.tecnologias?.descripcion,
+    })) || [];
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -76,8 +78,11 @@ const Proveedores = () => {
                     key={index}
                     variant="accent"
                     size="sm"
+                    truncate={true}
+                    maxWidth="150px"
+                    title={tec.descripcion}
                   >
-                    {tec}
+                    {tec.nombre}
                   </Badge>
                 ))}
               </div>

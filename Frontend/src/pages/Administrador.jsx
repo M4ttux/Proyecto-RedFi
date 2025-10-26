@@ -372,9 +372,13 @@ const Administrador = () => {
               tecnologias: [],
             };
           }
-          const tec = item.tecnologias?.tecnologia;
-          if (tec && !acc[id].tecnologias.includes(tec)) {
-            acc[id].tecnologias.push(tec);
+          const tec = item.tecnologias;
+          if (tec && !acc[id].tecnologias.find(t => t.id === tec.id)) {
+            acc[id].tecnologias.push({
+              id: tec.id,
+              nombre: tec.tecnologia,
+              descripcion: tec.descripcion,
+            });
           }
           return acc;
         }, {})

@@ -180,14 +180,14 @@ export const actualizarCurso = async (cursoId, cursoData, miniaturaFile, miniatu
  */
 export const eliminarCurso = async (cursoId, mostrarAlerta = () => {}) => {
   try {
-    console.log("🗑️ Iniciando eliminación del curso:", cursoId);
+    console.log("Iniciando eliminación del curso:", cursoId);
     
     // 1. Eliminar todos los archivos del curso del storage (toda la carpeta)
     try {
       await eliminarArchivosDelCurso(cursoId, mostrarAlerta);
-      console.log("✅ Archivos del curso eliminados del storage");
+      console.log("Archivos del curso eliminados del storage");
     } catch (deleteError) {
-      console.warn("⚠️ No se pudieron eliminar los archivos del curso:", deleteError);
+      console.warn("No se pudieron eliminar los archivos del curso:", deleteError);
       // No fallar el proceso si no se pueden eliminar los archivos
     }
     
@@ -198,14 +198,14 @@ export const eliminarCurso = async (cursoId, mostrarAlerta = () => {}) => {
       .eq("id", cursoId);
 
     if (error) {
-      console.error("❌ Error al eliminar curso de la BD:", error);
+      console.error("Error al eliminar curso de la BD:", error);
       throw error;
     }
     
-    console.log("✅ Curso eliminado completamente");
+    console.log("Curso eliminado completamente");
     return true;
   } catch (error) {
-    console.error("❌ Error general en eliminación:", error);
+    console.error("Error general en eliminación:", error);
     mostrarAlerta("Error al eliminar el curso.");
     throw new Error("Error al eliminar el curso");
   }

@@ -5,8 +5,8 @@ export const subirLogoProveedor = async (proveedorId, file) => {
   const timestamp = Date.now();
   const path = `${proveedorId}/logo-${timestamp}.png`;
 
-  console.log("📤 Subiendo logo en ruta:", path);
-  console.log("📄 Archivo recibido:", file);
+  console.log("Subiendo logo en ruta:", path);
+  console.log("Archivo recibido:", file);
 
   const { error: uploadError } = await supabase.storage
     .from("proveedores")
@@ -17,7 +17,7 @@ export const subirLogoProveedor = async (proveedorId, file) => {
     });
 
   if (uploadError) {
-    console.error("❌ Error al subir logo:", uploadError);
+    console.error("Error al subir logo:", uploadError);
     throw uploadError;
   }
 
@@ -32,7 +32,7 @@ export const eliminarLogoProveedor = async (proveedorId) => {
     .list(proveedorId.toString());
 
   if (listError) {
-    console.error("❌ Error al listar archivos:", listError);
+    console.error("Error al listar archivos:", listError);
     throw listError;
   }
 
@@ -44,11 +44,11 @@ export const eliminarLogoProveedor = async (proveedorId) => {
       .remove(filesToDelete);
 
     if (error) {
-      console.error("❌ Error al eliminar logos:", error);
+      console.error("Error al eliminar logos:", error);
       throw error;
     }
 
-    console.log("✅ Logos eliminados:", filesToDelete);
+    console.log("Logos eliminados:", filesToDelete);
   }
 };
 
@@ -71,13 +71,13 @@ export const eliminarLogoPorURL = async (logoUrl) => {
       .remove([logoPath]);
 
     if (error) {
-      console.error("❌ Error al eliminar logo por URL:", error);
+      console.error("Error al eliminar logo por URL:", error);
       throw error;
     }
 
-    console.log("✅ Logo eliminado:", logoPath);
+    console.log("Logo eliminado:", logoPath);
   } catch (error) {
-    console.error("❌ Error al procesar URL de logo:", error);
+    console.error("Error al procesar URL de logo:", error);
     throw error;
   }
 };

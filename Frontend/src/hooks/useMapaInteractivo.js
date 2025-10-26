@@ -155,7 +155,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
         await cargarReseñasEnMapa(mapRef.current, null, filtrosAUsar);
         filtrosActualesRef.current = filtrosAUsar;
       } catch (error) {
-        console.error("❌ Error cargando reseñas iniciales:", error);
+        console.error("Error cargando reseñas iniciales:", error);
       }
     }
   }, []);
@@ -184,7 +184,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
       actualizarVisibilidadReseñas(mapRef.current, filtrosNormalizados);
       filtrosActualesRef.current = filtrosNormalizados;
     } catch (error) {
-      console.error("❌ Error actualizando filtros:", error);
+      console.error("Error actualizando filtros:", error);
     }
   }, [filtrosNormalizados]);
 
@@ -245,7 +245,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
         // Configura event listener para clicks en el mapa
         map.on("click", manejarClickGlobal);
       } catch (error) {
-        console.error("❌ Error en carga inicial del mapa:", error);
+        console.error("Error en carga inicial del mapa:", error);
         setCargandoMapa(false);
       }
     });
@@ -285,7 +285,7 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
       // Actualiza visibilidad de reseñas
       actualizarFiltrosReseñas();
     } catch (error) {
-      console.error("❌ Error actualizando filtros:", error);
+      console.error("Error actualizando filtros:", error);
     }
   }, [filtrosNormalizados, actualizarFiltrosReseñas]);
 

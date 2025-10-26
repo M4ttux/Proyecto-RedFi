@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     
     if (userIdChanged || userStatusChanged) {
       const updateAction = () => {
-        console.log('🔥 Auth state actually changed:', newUser ? 'Logged in' : 'Logged out');
+        console.log('Estado de sesión cambiado:', newUser ? 'Logged in' : 'Logged out');
         lastUserRef.current = newUser;
         setUsuario(newUser);
       };
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         timeoutRef.current = setTimeout(updateAction, 100);
       }
     } else {
-      console.log('🔥 Auth state change ignored (duplicate)');
+      console.log('Cambio de estado de autenticación ignorado (duplicado)');
     }
   }, []);
 

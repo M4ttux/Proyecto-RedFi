@@ -36,7 +36,7 @@ const Login = () => {
   // Effect para redirigir si ya está logueado
   useEffect(() => {
     if (usuario && !loginAttempted) {
-      console.log('🔥 User already logged in, redirecting to:', from);
+      console.log('Usuario ya ha iniciado sesión, redirigiendo a:', from);
       navigate(from);
     }
   }, [usuario, navigate, from, loginAttempted]);
@@ -44,7 +44,7 @@ const Login = () => {
   // Effect para redirigir cuando el usuario se actualiza después del login
   useEffect(() => {
     if (loginAttempted && usuario) {
-      console.log('🔥 User logged in successfully, redirecting to:', from);
+      console.log('Usuario ha iniciado sesión correctamente, redirigiendo a:', from);
       setLoading(false); // Detener loading cuando redirigimos
       navigate(from);
     }
@@ -60,7 +60,7 @@ const Login = () => {
 
     try {
       await loginUser(form);
-      console.log('🔥 Login API call successful, waiting for auth state update...');
+      console.log('Llamada a la API de inicio de sesión exitosa, esperando actualización del estado de autenticación...');
       setLoginAttempted(true);
       // No navegar inmediatamente - esperar a que el useEffect detecte el cambio de usuario
     } catch (err) {

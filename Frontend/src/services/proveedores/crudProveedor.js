@@ -55,12 +55,12 @@ export const eliminarProveedor = async (id, mostrarAlerta = () => {}) => {
     const { error } = await supabase.from("proveedores").delete().eq("id", id);
 
     if (error) {
-      console.error("❌ Error al eliminar Proveedor:", error);
+      console.error("Error al eliminar Proveedor:", error);
       mostrarAlerta("Error al eliminar el proveedor.");
       throw error;
     }
   } catch (err) {
-    console.error("❌ Error general en eliminación:", err);
+    console.error("Error general en eliminación:", err);
     throw err;
   }
 };

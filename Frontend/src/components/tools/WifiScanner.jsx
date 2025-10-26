@@ -33,9 +33,9 @@ const WifiScanner = () => {
       if (window.Speedtest) {
         // Inicializa la instancia del speedtest
         medidorRef.current = new window.Speedtest();
-        console.log("✅ Speedtest inicializado");
+        console.log("Speedtest inicializado");
       } else {
-        console.error("❌ Speedtest.js no se cargó correctamente.");
+        console.error("Speedtest.js no se cargó correctamente.");
       }
     };
     document.body.appendChild(script);
@@ -102,7 +102,7 @@ const WifiScanner = () => {
 
     // Manejo de errores durante el test
     t.onerror = (err) => {
-      console.error("❌ Error al medir:", err);
+      console.error("Error al medir:", err);
       mostrarError("Ocurrió un error durante la medición.");
       setEnProgreso(false);
       setPasoActual(0);
@@ -111,7 +111,7 @@ const WifiScanner = () => {
 
     // Callback cuando el test termina
     t.onend = () => {
-      console.log("✅ Test finalizado");
+      console.log("Test finalizado");
       setEnProgreso(false);
     };
 

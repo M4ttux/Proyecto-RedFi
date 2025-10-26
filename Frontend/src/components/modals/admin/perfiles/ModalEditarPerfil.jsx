@@ -137,39 +137,39 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
       
       // Caso 1: Usuario eliminó la imagen (no hay preview ni archivo)
       if (!previewUrl && !fotoFile && imagenOriginal) {
-        console.log("🗑️ Eliminando imagen del usuario");
+        console.log("Eliminando imagen del usuario");
         try {
           await eliminarImagenPerfilPorURL(imagenOriginal);
-          console.log("✅ Imagen eliminada exitosamente");
+          console.log("Imagen eliminada exitosamente");
           datosActualizados.foto_url = null;
         } catch (deleteError) {
-          console.warn("⚠️ No se pudo eliminar imagen:", deleteError);
+          console.warn("No se pudo eliminar imagen:", deleteError);
           // No fallar el proceso, solo mantener la imagen actual
         }
       }
       // Caso 2: Usuario subió nueva imagen
       else if (fotoFile && previewUrl?.startsWith('data:')) {
-        console.log("📤 Subiendo nueva imagen para usuario ID:", perfil.id);
+        console.log("Subiendo nueva imagen para usuario ID:", perfil.id);
         try {
           // 1. Subir nueva imagen PRIMERO
           const nuevaFotoUrl = await subirImagenPerfil(fotoFile, perfil.id);
-          console.log("✅ Nueva imagen subida:", nuevaFotoUrl);
+          console.log("Nueva imagen subida:", nuevaFotoUrl);
           
           datosActualizados.foto_url = nuevaFotoUrl;
           
           // 2. Eliminar imagen antigua DESPUÉS del éxito
           if (imagenOriginal && imagenOriginal !== nuevaFotoUrl) {
             try {
-              console.log("🗑️ Eliminando imagen anterior:", imagenOriginal);
+              console.log("Eliminando imagen anterior:", imagenOriginal);
               await eliminarImagenPerfilPorURL(imagenOriginal);
-              console.log("✅ Imagen anterior eliminada");
+              console.log("Imagen anterior eliminada");
             } catch (deleteError) {
-              console.warn("⚠️ No se pudo eliminar imagen anterior:", deleteError);
+              console.warn("No se pudo eliminar imagen anterior:", deleteError);
               // No fallar el proceso si no se puede eliminar la anterior
             }
           }
         } catch (uploadError) {
-          console.error("❌ Error al subir nueva imagen:", uploadError);
+          console.error("Error al subir nueva imagen:", uploadError);
           throw uploadError;
         }
       }

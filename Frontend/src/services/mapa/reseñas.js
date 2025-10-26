@@ -125,7 +125,7 @@ export const cargarReseñasEnMapa = async (
     actualizarVisibilidadReseñas(map, filtros, reseñasLayerId);
 
   } catch (error) {
-    console.error("❌ Error en cargarReseñasEnMapa:", error);
+    console.error("Error en cargarReseñasEnMapa:", error);
     throw error;
   }
 };

@@ -76,7 +76,7 @@ export const eliminarMiniatura = async (miniaturaUrl, mostrarAlerta = () => {}) 
  */
 export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}) => {
   try {
-    console.log("🗑️ Listando archivos del curso:", cursoId);
+    console.log("Listando archivos del curso:", cursoId);
     
     // Listar todos los archivos en la carpeta del curso
     const { data: files, error: listError } = await supabase.storage
@@ -84,7 +84,7 @@ export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}
       .list(cursoId.toString());
 
     if (listError) {
-      console.error("❌ Error al listar archivos del curso:", listError);
+      console.error("Error al listar archivos del curso:", listError);
       throw listError;
     }
 
@@ -92,20 +92,20 @@ export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}
     if (files && files.length > 0) {
       const filesToDelete = files.map((file) => `${cursoId}/${file.name}`);
       
-      console.log("🗑️ Eliminando archivos:", filesToDelete);
+      console.log("Eliminando archivos:", filesToDelete);
 
       const { error } = await supabase.storage
         .from("cursos")
         .remove(filesToDelete);
 
       if (error) {
-        console.error("❌ Error al eliminar archivos del curso:", error);
+        console.error("Error al eliminar archivos del curso:", error);
         throw error;
       }
 
-      console.log("✅ Archivos del curso eliminados:", filesToDelete);
+      console.log("Archivos del curso eliminados:", filesToDelete);
     } else {
-      console.log("ℹ️ No se encontraron archivos para eliminar en el curso:", cursoId);
+      console.log("ℹNo se encontraron archivos para eliminar en el curso:", cursoId);
     }
     
     return true;
@@ -133,11 +133,11 @@ export const actualizarMiniatura = async (miniaturaAnterior, nuevaMiniatura, cur
       // 2. Eliminar miniatura anterior DESPUÉS del éxito (si existe y es diferente)
       if (miniaturaAnterior && miniaturaAnterior !== nuevaUrl) {
         try {
-          console.log("🗑️ Eliminando miniatura anterior:", miniaturaAnterior);
+          console.log("Eliminando miniatura anterior:", miniaturaAnterior);
           await eliminarMiniatura(miniaturaAnterior, mostrarAlerta);
-          console.log("✅ Miniatura anterior eliminada");
+          console.log("Miniatura anterior eliminada");
         } catch (deleteError) {
-          console.warn("⚠️ No se pudo eliminar miniatura anterior:", deleteError);
+          console.warn("No se pudo eliminar miniatura anterior:", deleteError);
           // No fallar el proceso si no se puede eliminar la anterior
         }
       }

@@ -37,7 +37,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         setLogoFile(file);
         setPreviewUrl(url);
       } catch (error) {
-        console.error("❌ Error al generar archivo desde URL:", error);
+        console.error("Error al generar archivo desde URL:", error);
       }
     };
 
@@ -86,20 +86,20 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
       let logoUrl = form.logotipo || null;
       const logoAntiguo = proveedor.logotipo;
 
-      console.log("🔄 Iniciando actualización de proveedor");
-      console.log("📷 Logo actual:", logoAntiguo);
-      console.log("📁 Archivo seleccionado:", logoFile);
-      console.log("🖼️ Preview URL:", previewUrl);
-      console.log("🗑️ Eliminar logo marcado:", form.eliminarLogo);
+      console.log("Iniciando actualización de proveedor");
+      console.log("Logo actual:", logoAntiguo);
+      console.log("Archivo seleccionado:", logoFile);
+      console.log("Preview URL:", previewUrl);
+      console.log("Eliminar logo marcado:", form.eliminarLogo);
 
       // Caso 1: Eliminar logo actual
       if (form.eliminarLogo) {
-        console.log("🗑️ Eliminando logo actual");
+        console.log("Eliminando logo actual");
         logoUrl = null;
         // Eliminar logo del bucket si existe
         if (logoOriginal) {
           await eliminarLogoPorURL(logoOriginal);
-          console.log("✅ Logo eliminado del bucket");
+          console.log("Logo eliminado del bucket");
         }
       } 
       // Caso 2: Subir nueva imagen
@@ -107,22 +107,22 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         // Verificar si realmente es un archivo nuevo seleccionado por el usuario
         const esArchivoNuevoSeleccionado = previewUrl?.startsWith('data:');
         
-        console.log("📋 Es archivo nuevo:", esArchivoNuevoSeleccionado);
+        console.log("Es archivo nuevo:", esArchivoNuevoSeleccionado);
         
         if (esArchivoNuevoSeleccionado) {
-          console.log("📤 Subiendo nueva imagen para proveedor ID:", proveedor.id);
+          console.log("Subiendo nueva imagen para proveedor ID:", proveedor.id);
           // 1. Subir nueva imagen PRIMERO (usando ID del proveedor)
           logoUrl = await subirLogoProveedor(proveedor.id, logoFile);
-          console.log("✅ Nueva imagen subida:", logoUrl);
+          console.log("Nueva imagen subida:", logoUrl);
           
           // 2. Eliminar imagen antigua DESPUÉS del éxito
           if (logoOriginal && logoOriginal !== logoUrl) {
             try {
-              console.log("🗑️ Eliminando logo anterior:", logoOriginal);
+              console.log("Eliminando logo anterior:", logoOriginal);
               await eliminarLogoPorURL(logoOriginal);
-              console.log("✅ Logo anterior eliminado");
+              console.log("Logo anterior eliminado");
             } catch (deleteError) {
-              console.warn("⚠️ No se pudo eliminar logo anterior:", deleteError);
+              console.warn("No se pudo eliminar logo anterior:", deleteError);
               // No fallar el proceso si no se puede eliminar el anterior
             }
           }

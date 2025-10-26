@@ -123,13 +123,13 @@ export const eliminarImagenPerfilPorURL = async (imageUrl) => {
       .remove([imagePath]);
 
     if (error) {
-      console.error("❌ Error al eliminar imagen por URL:", error);
+      console.error("Error al eliminar imagen por URL:", error);
       throw error;
     }
 
-    console.log("✅ Imagen de perfil eliminada:", imagePath);
+    console.log("Imagen de perfil eliminada:", imagePath);
   } catch (error) {
-    console.error("❌ Error al procesar URL de imagen:", error);
+    console.error("Error al procesar URL de imagen:", error);
     throw error;
   }
 };

@@ -55,7 +55,7 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes) => {
         setCoordenadasSeleccionadas({ lat, lng });
         desactivarSeleccion();
       } else {
-        console.warn("❌ Ubicación fuera de Corrientes");
+        console.warn("Ubicación fuera de Corrientes");
       }
     };
 
@@ -77,7 +77,7 @@ export const useSeleccionUbicacion = (mapRef, boundsCorrientes) => {
   const desactivarSeleccion = useCallback(() => {
     if (!mapRef.current) return;
     
-    console.log("🔄 Desactivando modo selección...");
+    console.log("Desactivando modo selección...");
     setModoSeleccion(false);
     
     const map = mapRef.current;

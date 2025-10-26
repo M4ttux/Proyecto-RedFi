@@ -187,7 +187,7 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       await cargarReseñasIniciales(filtros);
       mostrarExito("Reseña publicada con éxito.");
     } catch (error) {
-      console.error("❌ Error al enviar reseña:", error);
+      console.error("Error al enviar reseña:", error);
       mostrarError("Ocurrió un error al publicar la reseña.");
     }
   };

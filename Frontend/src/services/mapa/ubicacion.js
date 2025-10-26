@@ -307,7 +307,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const { latitude, longitude } = coords;
-        console.log("📍 Ubicación obtenida:", { latitude, longitude });
+        console.log("Ubicación obtenida:", { latitude, longitude });
 
         try {
           const params = new URLSearchParams({
@@ -327,7 +327,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
             address.city || address.town || address.village || "una ciudad desconocida";
           const provincia = (address.state || "una provincia desconocida").toLowerCase();
 
-          console.log("🏙️ Ubicación detectada:", { ciudad, provincia });
+          console.log("Ubicación detectada:", { ciudad, provincia });
 
           if (provincia === "corrientes") {
             mostrarAlerta(`Estás en ${ciudad}, Corrientes`);
@@ -348,7 +348,7 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
         }
       },
       (error) => {
-        console.error("❌ Error de geolocalización:", error);
+        console.error("Error de geolocalización:", error);
 
         let mensaje = "No se pudo obtener tu ubicación.";
         switch (error.code) {
@@ -400,7 +400,7 @@ export const colocarMarcadorUbicacion = (map, coords) => {
 
     map.__marcadorUbicacion = marker;
   } catch (error) {
-    console.error("❌ Error colocando marcador:", error);
+    console.error("Error colocando marcador:", error);
   }
 };
 
@@ -425,7 +425,7 @@ export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = ()
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const { latitude, longitude } = coords;
-        console.log("📍 Coordenadas obtenidas:", { latitude, longitude });
+        console.log("Coordenadas obtenidas:", { latitude, longitude });
 
         try {
           const params = new URLSearchParams({
@@ -457,7 +457,7 @@ export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = ()
         }
       },
       (error) => {
-        console.error("❌ Error de geolocalización:", error);
+        console.error("Error de geolocalización:", error);
         mostrarAlerta("No se pudo obtener tu ubicación.");
         resolve(null);
       },
