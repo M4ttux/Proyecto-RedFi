@@ -46,7 +46,9 @@ export const cargarProveedoresEnMapa = async (
     }
   }
 
-  
+  // Guardar zonasConProveedores en el mapa para acceso global
+  map._zonasConProveedores = zonasConProveedores;
+  map._proveedoresData = proveedoresConEstado;
   // Colección de marcadores "+N" para zonas con múltiples proveedores
   const multiMarkers = [];
 // Segunda pasada: renderizar cada zona con todos sus proveedores
@@ -68,7 +70,10 @@ if (proveedoresVisibles.length > 1) {
       geometry: { type: "Point", coordinates: centro },
       properties: {
         zonaId: zonaId,
-        count: proveedoresVisibles.length
+        count: proveedoresVisibles.length,
+        displayText: proveedoresVisibles.length <= 3 
+          ? String(proveedoresVisibles.length) 
+          : "+3"
       }
     });
   }
@@ -232,13 +237,13 @@ if (proveedoresVisibles.length > 1) {
       }
     });
 
-    // Texto "+N"
+    // Texto "+N" o "2"
     map.addLayer({
       id: "multi-markers-text",
       type: "symbol",
       source: multiSourceId,
       layout: {
-        "text-field": "+{count}",
+        "text-field": ["get", "displayText"],
         "text-size": 12,
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
         "text-allow-overlap": true
@@ -253,22 +258,37 @@ if (proveedoresVisibles.length > 1) {
       const f = features && features[0];
       if (!f) return;
       const zonaId = f.properties.zonaId;
-      const zonaInfo = zonasConProveedores.get(zonaId);
+      
+      // Usar datos actuales del mapa
+      const zonasConProveedoresActual = map._zonasConProveedores;
+      const filtrosActuales = map._filtrosActuales || {};
+      const zonaInfo = zonasConProveedoresActual?.get(zonaId);
       if (!zonaInfo) return;
 
       const proveedoresVisibles = zonaInfo.proveedores.filter(p => 
-        getVisiblePorZona(p, zonaId, filtros)
+        getVisiblePorZona(p, zonaId, filtrosActuales)
       );
-      if (proveedoresVisibles.length > 1 && onZonaMultiProveedorClick) {
-        onZonaMultiProveedorClick(proveedoresVisibles, zonaInfo.zona);
+      
+      // Obtener callbacks actuales
+      const onZonaMultiClick = map._onZonaMultiProveedorClick;
+      const setProveedor = map._setProveedorActivo;
+      
+      if (proveedoresVisibles.length > 1 && onZonaMultiClick) {
+        onZonaMultiClick(proveedoresVisibles, zonaInfo.zona);
       } else if (proveedoresVisibles.length === 1) {
-        setProveedorActivo(proveedoresVisibles[0]);
+        setProveedor(proveedoresVisibles[0]);
       }
     };
 
     map.on("click", "multi-markers-bg", markerClick);
     map.on("click", "multi-markers-text", markerClick);
   }
+
+  // Guardar callbacks y filtros en el mapa para acceso en event handlers
+  map._setProveedorActivo = setProveedorActivo;
+  map._onZonaMultiProveedorClick = onZonaMultiProveedorClick;
+  map._filtrosActuales = filtros;
+
 const handleGlobalClick = (e) => {
     if (window.modoSeleccionActivo) return;
     
@@ -290,16 +310,24 @@ const handleGlobalClick = (e) => {
     // Obtener la zona clickeada
     const zonaFeature = zonaFeatures[0];
     const zonaId = zonaFeature.properties.zonaId;
-    const zonaInfo = zonasConProveedores.get(zonaId);
+    
+    // Usar datos del mapa en lugar de closure
+    const zonasConProveedoresActual = map._zonasConProveedores;
+    const filtrosActuales = map._filtrosActuales || {};
+    const zonaInfo = zonasConProveedoresActual?.get(zonaId);
     
     if (!zonaInfo) return;
     
     const proveedoresVisibles = zonaInfo.proveedores.filter(p => 
-      getVisiblePorZona(p, zonaId, filtros)
+      getVisiblePorZona(p, zonaId, filtrosActuales)
     );
     
+    // Obtener callbacks actuales del mapa
+    const onZonaMultiClick = map._onZonaMultiProveedorClick;
+    const setProveedor = map._setProveedorActivo;
+    
     // Si hay múltiples proveedores, usar el callback especial
-    if (proveedoresVisibles.length > 1 && onZonaMultiProveedorClick) {
+    if (proveedoresVisibles.length > 1 && onZonaMultiClick) {
       if (window.zonaMultipleHandled) return;
       
       window.zonaMultipleHandled = true;
@@ -307,13 +335,13 @@ const handleGlobalClick = (e) => {
         window.zonaMultipleHandled = false;
       }, 100);
       
-      onZonaMultiProveedorClick(proveedoresVisibles, zonaInfo.zona);
+      onZonaMultiClick(proveedoresVisibles, zonaInfo.zona);
       return;
     }
     
     // Si solo hay un proveedor, abrir modal individual
     if (proveedoresVisibles.length === 1) {
-      setProveedorActivo(proveedoresVisibles[0]);
+      setProveedor(proveedoresVisibles[0]);
     }
   };
   
@@ -326,6 +354,9 @@ const handleGlobalClick = (e) => {
 };
 
 export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
+  // Actualizar filtros actuales en el mapa para que el event handler los use
+  map._filtrosActuales = filtros;
+  
   // Esta función actualiza la visibilidad de las capas existentes basado en los filtros
   const zonasActualizadas = new Map();
   
@@ -348,9 +379,19 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
           const proveedoresZona = proveedoresRef.current.filter(p => 
             p.ZonaProveedor?.some(rz => rz.zonas?.id === zonaId)
           );
-          const algunoVisible = proveedoresZona.some(p => getVisiblePorZona(p, zonaId, filtros));
+          const proveedoresVisibles = proveedoresZona.filter(p => getVisiblePorZona(p, zonaId, filtros));
+          const algunoVisible = proveedoresVisibles.length > 0;
           
           map.setLayoutProperty(fillLayerId, "visibility", algunoVisible ? "visible" : "none");
+          
+          // Actualizar el color del relleno según los proveedores visibles
+          if (algunoVisible) {
+            // Si solo hay un proveedor visible, usar su color
+            // Si hay múltiples, usar el color del primero (como comportamiento por defecto)
+            const primerProveedorVisible = proveedoresVisibles[0];
+            const nuevoColor = primerProveedorVisible.color || "#888888";
+            map.setPaintProperty(fillLayerId, "fill-color", nuevoColor);
+          }
           
           // También actualizar las capas de borde
           for (let i = 1; i <= 10; i++) { // Máximo 10 proveedores por zona
@@ -362,6 +403,7 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
         }
       }
     });
+  });
   
   // Actualizar/crear la capa de marcadores "+N"
   try {
@@ -390,7 +432,13 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
           features.push({
             type: "Feature",
             geometry: { type: "Point", coordinates: centro },
-            properties: { zonaId, count: proveedoresVisibles.length }
+            properties: { 
+              zonaId, 
+              count: proveedoresVisibles.length,
+              displayText: proveedoresVisibles.length <= 3 
+                ? String(proveedoresVisibles.length) 
+                : "+3"
+            }
           });
         }
       }
@@ -421,7 +469,7 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
         type: "symbol",
         source: multiSourceId,
         layout: {
-          "text-field": "+{count}",
+          "text-field": ["get", "displayText"],
           "text-size": 12,
           "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-allow-overlap": true
@@ -434,7 +482,6 @@ export const actualizarVisibilidadEnMapa = (map, proveedoresRef, filtros) => {
   } catch(e) {
     // Ignorar errores menores si el mapa aún no terminó de cargar las capas
   }
-});
 };
 
 export const obtenerProveedoresPorZona = (zona, proveedores, filtros) => {
