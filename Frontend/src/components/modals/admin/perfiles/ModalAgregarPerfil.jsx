@@ -129,7 +129,7 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
             placeholder="Tu nombre completo"
             required
             icon={IconUser}
-            maxLength={25}
+            maxLength={40}
             showCounter={true}
           />
           {/* Email */}

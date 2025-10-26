@@ -232,7 +232,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             placeholder={cargandoInicial ? "Cargando..." : "Tu nombre completo"}
             required
             icon={IconUser}
-            maxLength={25}
+            maxLength={40}
             showCounter={true}
             disabled={loading || cargandoInicial}
           />

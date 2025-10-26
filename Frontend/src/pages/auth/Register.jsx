@@ -151,7 +151,7 @@ const Register = () => {
               value={form.nombre}
               onChange={handleChange}
               required
-              maxLength={25}
+              maxLength={40}
               showCounter={true}
             />
             <Select
