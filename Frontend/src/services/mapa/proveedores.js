@@ -273,9 +273,11 @@ if (proveedoresVisibles.length > 1) {
       const onZonaMultiClick = map._onZonaMultiProveedorClick;
       const setProveedor = map._setProveedorActivo;
       
-      if (proveedoresVisibles.length > 1 && onZonaMultiClick) {
+      // Siempre usar ModalZonaMultiProveedor para consistencia
+      if (proveedoresVisibles.length >= 1 && onZonaMultiClick) {
         onZonaMultiClick(proveedoresVisibles, zonaInfo.zona);
-      } else if (proveedoresVisibles.length === 1) {
+      } else if (proveedoresVisibles.length === 1 && !onZonaMultiClick) {
+        // Fallback solo si no hay callback disponible
         setProveedor(proveedoresVisibles[0]);
       }
     };
@@ -326,8 +328,8 @@ const handleGlobalClick = (e) => {
     const onZonaMultiClick = map._onZonaMultiProveedorClick;
     const setProveedor = map._setProveedorActivo;
     
-    // Si hay múltiples proveedores, usar el callback especial
-    if (proveedoresVisibles.length > 1 && onZonaMultiClick) {
+    // Siempre usar ModalZonaMultiProveedor para consistencia en la experiencia de usuario
+    if (proveedoresVisibles.length >= 1 && onZonaMultiClick) {
       if (window.zonaMultipleHandled) return;
       
       window.zonaMultipleHandled = true;
@@ -339,8 +341,8 @@ const handleGlobalClick = (e) => {
       return;
     }
     
-    // Si solo hay un proveedor, abrir modal individual
-    if (proveedoresVisibles.length === 1) {
+    // Fallback en caso de que no haya callback disponible (no debería suceder normalmente)
+    if (proveedoresVisibles.length === 1 && !onZonaMultiClick) {
       setProveedor(proveedoresVisibles[0]);
     }
   };

@@ -59,7 +59,9 @@ const ModalZonaMultiProveedor = ({
     <ModalContenedor onClose={onClose}>
       {/* Encabezado del modal */}
       <div className="flex justify-between mb-6">
-        <MainH2 className="mb-0">Proveedores</MainH2>
+        <MainH2 className="mb-0">
+          {proveedores.length === 1 ? "Proveedor" : "Proveedores"}
+        </MainH2>
         <MainButton
           onClick={onClose}
           type="button"
@@ -79,7 +81,7 @@ const ModalZonaMultiProveedor = ({
             {zonaInfo.departamento || "Zona seleccionada"}
           </p>
           <p className="hidden sm:block text-sm text-texto mt-1">
-            Se encontraron <strong>{proveedores.length} proveedores</strong> en
+            Se {proveedores.length === 1 ? "encontró" : "encontraron"} <strong>{proveedores.length} {proveedores.length === 1 ? "proveedor" : "proveedores"}</strong> en
             esta área
           </p>
         </div>
