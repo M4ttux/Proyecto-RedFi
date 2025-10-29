@@ -37,7 +37,7 @@ const Button = ({
 
   // Estilos base comunes a todas las variantes
   const baseStyles = classNames(
-    "inline-flex items-center justify-center gap-2 font-bold transition focus:outline-none duration-300",
+    "inline-flex items-center justify-center gap-2 font-bold transition focus:outline-none duration-300 min-h-[40px]",
     {
       "rounded-lg": variant !== "toggle-tabs",
       "border-b-2 transition-colors": variant === "toggle-tabs",
@@ -52,24 +52,24 @@ const Button = ({
 
   // Configuración de estilos para cada variante del botón
   const variants = {
-    primary: "bg-primario text-white hover:bg-[#336ef0]",
+    primary: "bg-primario text-white hover:bg-[#336ef0] border-1 border-texto/15",
     accent: "bg-acento text-white hover:bg-[#fca75f] border-1 border-texto/15",
     secondary:
       currentTheme === "light"
-        ? "bg-texto/5 text-texto hover:bg-[#d2e4ff] border-1 border-texto/15"
-        : "bg-texto/5 text-texto hover:bg-[#2a3955] border-1 border-texto/15",
-    danger: "bg-red-600 text-white hover:bg-red-400",
-    disabled: "bg-gray-400 text-gray-700 cursor-not-allowed",
+        ? "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15"
+        : "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15",
+    danger: "bg-red-600 text-white hover:bg-red-400 border-1 border-texto/15",
+    disabled: "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15",
     cross: "text-texto/75 hover:text-red-400",
-    add: "bg-green-700 text-white hover:bg-green-500",
-    see: "bg-blue-600 text-white hover:bg-blue-400",
-    edit: "bg-yellow-600 text-white hover:bg-yellow-400",
-    delete: "bg-red-600 text-white hover:bg-red-400",
+    add: "bg-green-700 text-white hover:bg-green-500 border-1 border-texto/15",
+    see: "bg-blue-600 text-white hover:bg-blue-400 border-1 border-texto/15",
+    edit: "bg-yellow-600 text-white hover:bg-yellow-400 border-1 border-texto/15",
+    delete: "bg-red-600 text-white hover:bg-red-400 border-1 border-texto/15",
     toggle: active
-      ? "bg-primario border-secundario/50 text-white hover:bg-[#336ef0]"
+      ? "bg-primario border-1 border-texto/15 text-white hover:bg-[#336ef0]"
       : currentTheme === "light"
-      ? "bg-secundario border-texto/15 text-texto hover:bg-[#d2e4ff]"
-      : "bg-secundario border-texto/10 text-texto hover:bg-[#2a3955]",
+      ? "bg-secundario border-1 border-texto/15 text-texto hover:bg-[#d2e4ff]"
+      : "bg-secundario border-1 border-texto/15 text-texto hover:bg-[#2a3955]",
     "toggle-tabs": active
       ? "border-acento text-acento"
       : "border-transparent text-texto/75 hover:text-texto",
@@ -77,7 +77,7 @@ const Button = ({
   };
 
   // Estilos específicos para estado de carga
-  const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed";
+  const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15";
 
   // Mapeo de iconos automáticos según la variante del botón
   const autoIcon =

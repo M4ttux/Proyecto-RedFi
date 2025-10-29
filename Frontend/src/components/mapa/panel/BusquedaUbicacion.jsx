@@ -97,7 +97,6 @@ const BusquedaUbicacion = ({ boundsCorrientes, mapRef }) => {
           title="Buscar ubicación"
           type="button"
           variant="primary"
-          className="py-2.25"
           icon={IconSearch}
           iconAlwaysVisible={true}
         />

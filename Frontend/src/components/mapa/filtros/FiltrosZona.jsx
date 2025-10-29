@@ -107,7 +107,6 @@ const FiltrosZona = ({
             }
             variant="toggle"
             active={filtros.valoracionMin === 0}
-            className="border-2"
           >
             Todas
           </MainButton>

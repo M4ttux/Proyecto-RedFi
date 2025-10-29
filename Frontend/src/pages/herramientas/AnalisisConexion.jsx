@@ -8,8 +8,8 @@ import { useTheme } from "../../context/ThemeContext";
 
 const AnalisisConexion = () => {
   useEffect(() => {
-      document.title = "Red-Fi | Análisis de conexión por zonas";
-  })
+    document.title = "Red-Fi | Análisis de conexión por zonas";
+  });
   const { currentTheme } = useTheme();
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -25,7 +25,7 @@ const AnalisisConexion = () => {
           <WifiScanner />
         </div>
         <div
-          className={`w-full p-8 rounded-lg ${
+          className={`w-full p-8 rounded-lg max-w-4xl mx-auto ${
             currentTheme === "light"
               ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
@@ -33,26 +33,33 @@ const AnalisisConexion = () => {
         >
           <MainH3>¿Como funciona el análisis de conexión por zonas?</MainH3>
           <p>
-            Su funcionalidad es "escanear" la calidad de su conexión Wi-Fi en diferentes zonas de su hogar. El objetivo es ayudar a encontrar la ubicación óptima para su router.
+            Su funcionalidad es "escanear" la calidad de su conexión Wi-Fi en
+            diferentes zonas de su hogar. El objetivo es ayudar a encontrar la
+            ubicación óptima para su router.
           </p>
         </div>
         <div
-          className={`w-full p-8 rounded-lg ${
+          className={`w-full p-8 rounded-lg max-w-4xl mx-auto ${
             currentTheme === "light"
               ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
           }`}
         >
           <MainH3>¿Como se usar el análisis de conexión por zonas?</MainH3>
-          <p>
-            Para usar el análisis de conexión por zonas, simplemente debes
-            ingresar el nombre de la zona que deseas analizar y presionar el
-            botón "Analizar". El sistema te mostrará la información de la zona
-            que ingresaste.
-          </p>
-          <p>
-            Si realiza el análisis más de 2 veces, se le habilitará el botón de "Recomendar ubicación". La funcionalidad del mismo es analizar los resultados y le dirá cuál de las zonas medidas tiene la mejor calidad de señal (menor ping y jitter combinados).
-          </p>
+          <div class="space-y-4">
+            <p>
+              Para usar el análisis de conexión por zonas, simplemente debes
+              ingresar el nombre de la zona que deseas analizar y presionar el
+              botón "Analizar". El sistema te mostrará la información de la zona
+              que ingresaste.
+            </p>
+            <p>
+              Si realiza el análisis más de 2 veces, se le habilitará el botón
+              de "Recomendar ubicación". La funcionalidad del mismo es analizar
+              los resultados y le dirá cuál de las zonas medidas tiene la mejor
+              calidad de señal (menor ping y jitter combinados).
+            </p>
+          </div>
         </div>
         {/* Botón volver a herramientas */}
         <div className="text-center">

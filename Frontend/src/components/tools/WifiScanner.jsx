@@ -162,8 +162,8 @@ const WifiScanner = () => {
       }`}
     >
       {/* Formulario para nombre de zona y botón de medición */}
-      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-3 text-center">
-        <div className="w-full md:w-1/2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-center items-start">
+        <div className="w-full">
           <Input
             name="zona"
             value={nombreZona}
@@ -181,7 +181,7 @@ const WifiScanner = () => {
           onClick={medirZona}
           disabled={enProgreso}
           loading={enProgreso}
-          className="w-full md:flex-1"
+          className="w-full"
         >
           {enProgreso ? "Analizando..." : "Medir conexión"}
         </MainButton>

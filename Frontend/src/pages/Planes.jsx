@@ -106,13 +106,13 @@ const Planes = () => {
               {renderBeneficios(beneficiosBasico)}
             </div>
             {usuario && plan === "basico" ? (
-              <MainButton variant="disabled" className="px-6 py-3">
+              <MainButton variant="disabled" className="px-4 py-2">
                 Este es tu plan actual
               </MainButton>
             ) : (
               <MainButton
                 onClick={() => abrirModalCambioPlan("basico")}
-                className="px-6 py-3"
+                className="px-4 py-2"
               >
                 Cambiar a Básico
               </MainButton>
@@ -134,13 +134,13 @@ const Planes = () => {
               {renderBeneficios(beneficiosPremium)}
             </div>
             {usuario && plan === "premium" ? (
-              <MainButton variant="disabled" className="px-6 py-3">
+              <MainButton variant="disabled" className="px-4 py-2">
                 Este es tu plan actual
               </MainButton>
             ) : (
               <MainButton
                 onClick={() => abrirModalCambioPlan("premium")}
-                className="px-6 py-3"
+                className="px-4 py-2"
               >
                 Cambiar a Premium
               </MainButton>

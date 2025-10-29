@@ -25,7 +25,7 @@ const InformacionRed = () => {
           <DetectorProveedor />
         </div>
         <div
-          className={`w-full p-8 rounded-lg ${
+          className={`w-full p-8 rounded-lg max-w-4xl mx-auto ${
             currentTheme === "light"
               ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"
@@ -40,7 +40,7 @@ const InformacionRed = () => {
           </p>
         </div>
         <div
-          className={`w-full p-8 rounded-lg ${
+          className={`w-full p-8 rounded-lg max-w-4xl mx-auto ${
             currentTheme === "light"
               ? "bg-secundario border-2 border-texto/15 shadow-lg"
               : "bg-texto/5 border border-texto/15"

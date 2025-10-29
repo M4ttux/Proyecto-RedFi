@@ -73,7 +73,7 @@ const AcademyHome = () => {
 
         {/* Cursos list */}
         {!loading && cursos.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-0 md:space-y-4 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-0 md:space-y-4 mb-12 max-w-4xl mx-auto">
             {cursos.map((curso) => (
               <MainLinkButton
                 to={`/academia/curso/${curso.id}`}
@@ -98,7 +98,7 @@ const AcademyHome = () => {
                 {/* Contenido */}
                 <div className="flex-1 p-3 flex flex-col justify-center">
                   <MainH3 className="text-center md:text-left justify-center md:justify-start mb-1 md:mb-2 line-clamp-1">{curso.titulo}</MainH3>
-                  <p className="line-clamp-2 text-xs md:text-sm text-texto/75 leading-relaxed text-center md:text-left">{curso.descripcion}</p>
+                  <p className="line-clamp-1 text-xs md:text-sm text-texto/75 leading-relaxed text-center md:text-left">{curso.descripcion}</p>
                 </div>
               </MainLinkButton>
             ))}

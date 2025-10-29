@@ -355,7 +355,7 @@ const FileInput = ({
               variant="accent"
               loading={loading}
               disabled={disabled}
-              className="cursor-pointer w-full text-sm"
+              className="cursor-pointer w-full"
             >
               Seleccionar archivo
             </MainButton>
