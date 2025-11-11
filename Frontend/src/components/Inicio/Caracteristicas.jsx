@@ -77,7 +77,9 @@ const Caracteristicas = () => {
               <div className="flex justify-center mb-4 sm:mb-5 text-acento">
                 <div>{f.icono}</div>
               </div>
-              <MainH3 className="text-acento text-center justify-center">{f.titulo}</MainH3>
+              <MainH3 className="text-acento text-center justify-center">
+                {f.titulo}
+              </MainH3>
               <p className="text-texto leading-relaxed">{f.descripcion}</p>
             </div>
           ))}

@@ -1,4 +1,10 @@
-import { IconX, IconDownload, IconFileTypePdf, IconTrendingUp, IconTrendingDown } from "@tabler/icons-react";
+import {
+  IconX,
+  IconDownload,
+  IconFileTypePdf,
+  IconTrendingUp,
+  IconTrendingDown,
+} from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
@@ -21,7 +27,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
   if (montoAnterior !== null) {
     const diferencia = montoActual - montoAnterior;
     const porcentaje = ((diferencia / montoAnterior) * 100).toFixed(1);
-    
+
     if (diferencia > 0) {
       diferenciaTexto = (
         <span className="flex items-center gap-1 font-bold text-green-700/75">
@@ -47,24 +53,27 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
   // Verifica si el archivo adjunto es un PDF
   const esPDF = (url) => {
     if (!url) return false;
-    return url.toLowerCase().includes('.pdf') || url.toLowerCase().includes('application/pdf');
+    return (
+      url.toLowerCase().includes(".pdf") ||
+      url.toLowerCase().includes("application/pdf")
+    );
   };
 
   // Extrae el nombre del archivo desde la URL
   const obtenerNombreArchivo = (url) => {
-    if (!url) return 'archivo.pdf';
-    const nombreCompleto = url.split('/').pop() || url.split('\\').pop();
+    if (!url) return "archivo.pdf";
+    const nombreCompleto = url.split("/").pop() || url.split("\\").pop();
     return nombreCompleto || `boleta-${boleta.mes}-${boleta.anio}.pdf`;
   };
 
   // Inicia la descarga del archivo de la boleta
   const descargarArchivo = () => {
     if (!boleta.url_imagen) return;
-    
-    const link = document.createElement('a');
+
+    const link = document.createElement("a");
     link.href = boleta.url_imagen;
     link.download = `boleta-${boleta.mes}-${boleta.anio}-${boleta.proveedor}`;
-    link.target = '_blank';
+    link.target = "_blank";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -91,20 +100,24 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
         {/* Información detallada de la boleta */}
         <div className="space-y-3 ml-0 sm:ml-5 text-xl">
           <p>
-            <strong>Mes:</strong> <span className="text-texto/75">{boleta.mes}</span>
+            <strong>Mes:</strong>{" "}
+            <span className="text-texto/75">{boleta.mes}</span>
           </p>
           <p>
-            <strong>Año:</strong> <span className="text-texto/75">{boleta.anio}</span>
+            <strong>Año:</strong>{" "}
+            <span className="text-texto/75">{boleta.anio}</span>
           </p>
           <p>
-            <strong>Monto:</strong> <span className="text-texto/75">${montoActual.toFixed(2)}</span>
+            <strong>Monto:</strong>{" "}
+            <span className="text-texto/75">${montoActual.toFixed(2)}</span>
           </p>
           {/* Comparación con boleta anterior del mismo proveedor */}
           <p className={diferenciaColor}>
             <strong>Diferencia:</strong> {diferenciaTexto}
           </p>
           <p>
-            <strong>Proveedor:</strong> <span className="text-texto/75">{boleta.proveedor}</span>
+            <strong>Proveedor:</strong>{" "}
+            <span className="text-texto/75">{boleta.proveedor}</span>
           </p>
           <p>
             <strong>Vencimiento:</strong>{" "}
@@ -130,11 +143,14 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
               <strong>Promoción hasta:</strong>{" "}
               <span
                 className="text-yellow-600/75"
-                title={new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                })}
+                title={new Date(boleta.promo_hasta).toLocaleDateString(
+                  "es-AR",
+                  {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  }
+                )}
               >
                 {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
                   day: "2-digit",
@@ -188,11 +204,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
 
       {/* Botón de cierre */}
       <div className="flex mt-6 justify-center">
-        <MainButton
-          variant="primary"
-          onClick={onClose}
-          className="flex-1"
-        >
+        <MainButton variant="primary" onClick={onClose} className="flex-1">
           Cerrar
         </MainButton>
       </div>

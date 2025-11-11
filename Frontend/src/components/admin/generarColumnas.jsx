@@ -4,7 +4,12 @@ import Avatar from "../ui/Avatar";
 import Badge from "../ui/Badge";
 import IconoMapa from "./IconoMapa";
 
-export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = null) => {
+export const generarColumnas = (
+  tabla,
+  datos,
+  acciones = {},
+  usuarioLogueado = null
+) => {
   // Validación: si no hay datos, retorna array vacío
   if (!datos.length) return [];
 
@@ -31,7 +36,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
         label: "NOMBRE",
         renderCell: (row) => row.nombre,
       },
-      // Columna de proveedor preferido (opcional)
+      // Columna de proveedor preferido
       {
         id: "proveedor_preferido",
         label: "PROVEEDOR PREFERIDO",
@@ -50,17 +55,16 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
           ),
       },
       // Columna combinada de rol y plan del usuario
-      // id => "rol" para que el click en header ordene por el rol subyacente
       {
         id: "rol",
         label: "ROL Y PLAN",
         renderCell: (row) => {
           const rol = row.rol;
           const plan = row.plan;
-          
+
           return (
             <div className="flex flex-wrap gap-1 items-center">
-              {/* Badge de Rol - Admin destacado con variante especial */}
+              {/* Badge de Rol*/}
               {rol ? (
                 rol === "admin" ? (
                   <Badge size="xs" variant="admin">
@@ -72,8 +76,8 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
                   </Badge>
                 )
               ) : null}
-              
-              {/* Badge de Plan - Premium destacado con variante especial */}
+
+              {/* Badge de Plan*/}
               {plan ? (
                 plan === "premium" ? (
                   <Badge size="xs" variant="premium">
@@ -85,7 +89,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
                   </Badge>
                 )
               ) : null}
-              
+
               {/* Texto de fallback si no tiene rol ni plan */}
               {!rol && !plan && "—"}
             </div>
@@ -107,12 +111,12 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
         ),
       },
       // Columna de nombre del proveedor
-      { 
-        id: "nombre", 
-        label: "NOMBRE", 
-        renderCell: (row) => row.nombre 
+      {
+        id: "nombre",
+        label: "NOMBRE",
+        renderCell: (row) => row.nombre,
       },
-      // Columna de descripción del proveedor (truncada para evitar overflow)
+      // Columna de descripción del proveedor
       {
         id: "descripcion",
         label: "DESCRIPCIÓN",
@@ -125,7 +129,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
           </div>
         ),
       },
-      // Columna de sitio web del proveedor (como link clickeable)
+      // Columna de sitio web del proveedor
       {
         id: "sitio_web",
         label: "SITIO WEB",
@@ -135,9 +139,9 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
             title={row.sitio_web}
           >
             {row.sitio_web ? (
-              <a 
-                href={row.sitio_web} 
-                target="_blank" 
+              <a
+                href={row.sitio_web}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-texto/75 hover:underline"
               >
@@ -150,7 +154,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
           </div>
         ),
       },
-      // Columna de color representativo del proveedor (muestra como círculo de color)
+      // Columna de color representativo del proveedor
       {
         id: "color",
         label: "COLOR",
@@ -167,13 +171,13 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
   // 3. TABLA DE RESEÑAS DE USUARIOS SOBRE PROVEEDORES
   else if (tabla === "reseñas") {
     columnasBase.push(
-      // Columna de usuario que escribió la reseña (nota: nested; el orden por header no aplicará directo)
+      // Columna de usuario que escribió la reseña
       {
         id: "user_profiles",
         label: "USUARIOS",
         renderCell: (row) => row.user_profiles?.nombre || "—",
       },
-      // Columna de proveedor reseñado (nota: nested)
+      // Columna de proveedor reseñado
       {
         id: "proveedores",
         label: "PROVEEDORES",
@@ -200,7 +204,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
           </div>
         ),
       },
-      // Columna de comentario de la reseña (limitado en líneas)
+      // Columna de comentario de la reseña
       {
         id: "comentario",
         label: "COMENTARIO",
@@ -241,16 +245,16 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
     );
   }
 
-  // 5. TABLA RELACIONAL: PROVEEDOR-TECNOLOGÍA (muchos a muchos)
+  // 5. TABLA RELACIONAL: PROVEEDOR-TECNOLOGÍA
   else if (tabla === "ProveedorTecnologia") {
     columnasBase.push(
       // Columna de nombre del proveedor
       {
-        id: "proveedor", // id mapeado al string agrupado en Admin
+        id: "proveedor",
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
-      // Columna de tecnologías que soporta el proveedor (múltiples badges)
+      // Columna de tecnologías que soporta el proveedor
       {
         id: "tecnologias",
         label: "TECNOLOGÍAS",
@@ -258,10 +262,10 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
           Array.isArray(row.tecnologias) && row.tecnologias.length ? (
             <div className="flex flex-wrap gap-1 overflow-hidden">
               {row.tecnologias.map((tec, i) => (
-                <Badge 
-                  key={i} 
-                  size="xs" 
-                  variant="muted" 
+                <Badge
+                  key={i}
+                  size="xs"
+                  variant="muted"
                   rounded="lg"
                   truncate={true}
                   maxWidth="120px"
@@ -278,16 +282,16 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
     );
   }
 
-  // 6. TABLA RELACIONAL: ZONA-PROVEEDOR (muchos a muchos)
+  // 6. TABLA RELACIONAL: ZONA-PROVEEDOR
   else if (tabla === "ZonaProveedor") {
     columnasBase.push(
       // Columna de nombre del proveedor
       {
-        id: "proveedor", // id mapeado al string agrupado en Admin
+        id: "proveedor",
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
-      // Columna de zonas donde opera el proveedor (múltiples badges)
+      // Columna de zonas donde opera el proveedor
       {
         id: "zonas",
         label: "ZONAS",
@@ -316,11 +320,11 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
               </div>
             );
           }
-          
+
           return (
             <div className="flex gap-3 sm:justify-center justify-start">
               {row.zonasCompletas.map((zona, i) => (
-                <IconoMapa 
+                <IconoMapa
                   key={zona.id || i}
                   zona={zona}
                   onClick={acciones.onVerMapa}
@@ -361,12 +365,10 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
         id: "titulo",
         label: "TÍTULO",
         renderCell: (row) => (
-          <div className="font-medium text-texto">
-            {row.titulo}
-          </div>
+          <div className="font-medium text-texto">{row.titulo}</div>
         ),
       },
-      // Columna de descripción del curso (truncada)
+      // Columna de descripción del curso
       {
         id: "descripcion",
         label: "DESCRIPCIÓN",
@@ -385,11 +387,13 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
         label: "VIDEO",
         renderCell: (row) => {
           if (!row.video_youtube_url) return "—";
-          
+
           // Extraer ID del video de YouTube
-          const match = row.video_youtube_url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+          const match = row.video_youtube_url.match(
+            /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+          );
           const videoId = match ? match[1] : null;
-          
+
           return videoId ? (
             <a
               href={row.video_youtube_url}
@@ -398,12 +402,8 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
               className="flex items-center gap-1 text-red-600 hover:underline"
               title="Ver en YouTube"
             >
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136C4.495 20.455 12 20.455 12 20.455s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136C4.495 20.455 12 20.455 12 20.455s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
               <span className="hidden sm:inline">YouTube</span>
             </a>
@@ -411,7 +411,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
             <span className="text-texto/75">URL inválida</span>
           );
         },
-      },
+      }
     );
   }
 
@@ -434,13 +434,13 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
       id: "acciones",
       label: "ACCIONES",
       renderCell: (row) => {
-        // Oculta el botón "Ver" para tablas relacionales que no necesitan vista de detalle
+        // Oculta el botón "Ver" para tablas especificas que no necesitan vista de detalle
         const ocultarVer =
           tabla === "ProveedorTecnologia" || tabla === "ZonaProveedor";
 
         return (
           <div className="flex flex-wrap gap-2 lg:gap-2">
-            {/* Botón Ver - Solo si existe callback y no está en lista de exclusión */}
+            {/* Botón Ver*/}
             {!ocultarVer && acciones.onVer && (
               <MainButton
                 onClick={() => acciones.onVer(row)}
@@ -451,7 +451,7 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
                 <span className="hidden sm:inline">Ver</span>
               </MainButton>
             )}
-            {/* Botón Editar - Si existe callback */}
+            {/* Botón Editar*/}
             {acciones.onEditar && (
               <MainButton
                 onClick={() => acciones.onEditar(row)}
@@ -462,46 +462,48 @@ export const generarColumnas = (tabla, datos, acciones = {}, usuarioLogueado = n
                 <span className="hidden sm:inline">Editar</span>
               </MainButton>
             )}
-            {/* Botón Eliminar - Si existe callback */}
-            {acciones.onEliminar && (() => {
-              // Verificar si es tabla de perfiles y si el usuario está eliminándose a sí mismo
-              const esUsuarioLogueado = tabla === "user_profiles" && 
-                                      usuarioLogueado && 
-                                      row.id === usuarioLogueado.id;
-              
-              // Si es el usuario logueado, envolver en div con tooltip
-              if (esUsuarioLogueado) {
-                return (
-                  <div 
-                    className="relative inline-block"
-                    title="No puedes eliminarte a ti mismo"
-                  >
-                    <MainButton
-                      onClick={() => {}} // No hacer nada al hacer click
-                      variant="delete"
-                      iconAlwaysVisible={true}
-                      disabled={true}
-                      className="pointer-events-none" // Asegurar que no se pueda hacer click
+            {/* Botón Eliminar*/}
+            {acciones.onEliminar &&
+              (() => {
+                // Verificar si es tabla de perfiles y si el usuario está eliminándose a sí mismo
+                const esUsuarioLogueado =
+                  tabla === "user_profiles" &&
+                  usuarioLogueado &&
+                  row.id === usuarioLogueado.id;
+
+                // Si es el usuario logueado, envolver en div con tooltip
+                if (esUsuarioLogueado) {
+                  return (
+                    <div
+                      className="relative inline-block"
+                      title="No puedes eliminarte a ti mismo"
                     >
-                      <span className="hidden sm:inline">Eliminar</span>
-                    </MainButton>
-                  </div>
+                      <MainButton
+                        onClick={() => {}} // No hacer nada al hacer click
+                        variant="delete"
+                        iconAlwaysVisible={true}
+                        disabled={true}
+                        className="pointer-events-none" // Asegurar que no se pueda hacer click
+                      >
+                        <span className="hidden sm:inline">Eliminar</span>
+                      </MainButton>
+                    </div>
+                  );
+                }
+
+                // Usuario normal, botón funcional
+                return (
+                  <MainButton
+                    onClick={() => acciones.onEliminar(row)}
+                    title="Eliminar"
+                    variant="delete"
+                    iconAlwaysVisible={true}
+                    disabled={false}
+                  >
+                    <span className="hidden sm:inline">Eliminar</span>
+                  </MainButton>
                 );
-              }
-              
-              // Usuario normal, botón funcional
-              return (
-                <MainButton
-                  onClick={() => acciones.onEliminar(row)}
-                  title="Eliminar"
-                  variant="delete"
-                  iconAlwaysVisible={true}
-                  disabled={false}
-                >
-                  <span className="hidden sm:inline">Eliminar</span>
-                </MainButton>
-              );
-            })()}
+              })()}
           </div>
         );
       },

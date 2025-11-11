@@ -7,9 +7,13 @@ import { supabase } from "../../supabase/client";
 /**
  * Sube una miniatura al storage de Supabase organizándola por curso ID
  */
-export const subirMiniatura = async (miniaturaFile, cursoId, mostrarAlerta = () => {}) => {
+export const subirMiniatura = async (
+  miniaturaFile,
+  cursoId,
+  mostrarAlerta = () => {}
+) => {
   try {
-    const fileExt = miniaturaFile.name.split('.').pop();
+    const fileExt = miniaturaFile.name.split(".").pop();
     const fileName = `miniatura-${Date.now()}.${fileExt}`;
     // Organizar archivos en carpeta del curso para mejor organización
     const filePath = `${cursoId}/${fileName}`;
@@ -18,15 +22,15 @@ export const subirMiniatura = async (miniaturaFile, cursoId, mostrarAlerta = () 
       .from("cursos")
       .upload(filePath, miniaturaFile, {
         cacheControl: "3600",
-        upsert: false
+        upsert: false,
       });
 
     if (uploadError) throw uploadError;
 
     // Obtener URL pública
-    const { data: { publicUrl } } = supabase.storage
-      .from("cursos")
-      .getPublicUrl(filePath);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("cursos").getPublicUrl(filePath);
 
     return publicUrl;
   } catch (error) {
@@ -39,26 +43,29 @@ export const subirMiniatura = async (miniaturaFile, cursoId, mostrarAlerta = () 
 /**
  * Elimina una miniatura del storage usando la nueva estructura de carpetas
  */
-export const eliminarMiniatura = async (miniaturaUrl, mostrarAlerta = () => {}) => {
+export const eliminarMiniatura = async (
+  miniaturaUrl,
+  mostrarAlerta = () => {}
+) => {
   try {
     if (!miniaturaUrl) return true;
-    
+
     // Extraer el path de la URL - nueva estructura: cursoId/filename
     const url = new URL(miniaturaUrl);
     // Decodificar la ruta removiendo el prefijo del storage público
-    const pathSegments = url.pathname.split('/');
-    const cursosIndex = pathSegments.findIndex(segment => segment === 'cursos');
-    
+    const pathSegments = url.pathname.split("/");
+    const cursosIndex = pathSegments.findIndex(
+      (segment) => segment === "cursos"
+    );
+
     if (cursosIndex === -1) {
       throw new Error("URL de miniatura inválida");
     }
-    
-    // El path será algo como: "curso-id/miniatura-123456.jpg"
-    const filePath = pathSegments.slice(cursosIndex + 1).join('/');
 
-    const { error } = await supabase.storage
-      .from("cursos")
-      .remove([filePath]);
+    // El path será algo como: "curso-id/miniatura-123456.jpg"
+    const filePath = pathSegments.slice(cursosIndex + 1).join("/");
+
+    const { error } = await supabase.storage.from("cursos").remove([filePath]);
 
     if (error) throw error;
     return true;
@@ -74,10 +81,13 @@ export const eliminarMiniatura = async (miniaturaUrl, mostrarAlerta = () => {}) 
  * Elimina todos los archivos de un curso (borra toda la carpeta del curso)
  * Siguiendo el patrón de eliminarLogoProveedor
  */
-export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}) => {
+export const eliminarArchivosDelCurso = async (
+  cursoId,
+  mostrarAlerta = () => {}
+) => {
   try {
     console.log("Listando archivos del curso:", cursoId);
-    
+
     // Listar todos los archivos en la carpeta del curso
     const { data: files, error: listError } = await supabase.storage
       .from("cursos")
@@ -91,7 +101,7 @@ export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}
     // Si hay archivos, eliminarlos todos
     if (files && files.length > 0) {
       const filesToDelete = files.map((file) => `${cursoId}/${file.name}`);
-      
+
       console.log("Eliminando archivos:", filesToDelete);
 
       const { error } = await supabase.storage
@@ -105,9 +115,12 @@ export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}
 
       console.log("Archivos del curso eliminados:", filesToDelete);
     } else {
-      console.log("ℹNo se encontraron archivos para eliminar en el curso:", cursoId);
+      console.log(
+        "ℹNo se encontraron archivos para eliminar en el curso:",
+        cursoId
+      );
     }
-    
+
     return true;
   } catch (error) {
     console.error("Error al eliminar archivos del curso:", error);
@@ -122,14 +135,19 @@ export const eliminarArchivosDelCurso = async (cursoId, mostrarAlerta = () => {}
  * 1. Subir nueva imagen PRIMERO
  * 2. Eliminar imagen anterior DESPUÉS del éxito
  */
-export const actualizarMiniatura = async (miniaturaAnterior, nuevaMiniatura, cursoId, mostrarAlerta = () => {}) => {
+export const actualizarMiniatura = async (
+  miniaturaAnterior,
+  nuevaMiniatura,
+  cursoId,
+  mostrarAlerta = () => {}
+) => {
   try {
     let nuevaUrl = null;
 
     // 1. Subir nueva miniatura PRIMERO
     if (nuevaMiniatura) {
       nuevaUrl = await subirMiniatura(nuevaMiniatura, cursoId, mostrarAlerta);
-      
+
       // 2. Eliminar miniatura anterior DESPUÉS del éxito (si existe y es diferente)
       if (miniaturaAnterior && miniaturaAnterior !== nuevaUrl) {
         try {

@@ -31,7 +31,9 @@ const H1 = ({
       {...props}
     >
       {/* Icono opcional con comportamiento responsivo */}
-      {Icon && <Icon size={48} className="mr-2 text-acento hidden sm:inline-block" />}
+      {Icon && (
+        <Icon size={48} className="mr-2 text-acento hidden sm:inline-block" />
+      )}
       {/* Contenido del encabezado */}
       {children}
     </h1>

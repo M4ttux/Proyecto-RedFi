@@ -9,18 +9,22 @@ import { ejecutarSpeedtest } from "../../services/speedtestService";
 
 const TestVelocidad = () => {
   useEffect(() => {
-      document.title = "Red-Fi | Test de velocidad";
-    }, []);
+    document.title = "Red-Fi | Test de velocidad";
+  }, []);
   // Contextos para tema y alertas
   const { currentTheme } = useTheme();
   const { mostrarError, mostrarExito } = useAlerta();
-  
+
   // Estados para el control del test y resultados
   const [loading, setLoading] = useState(false);
   const [resultados, setResultados] = useState(null);
-  
+
   // Estado para el progreso visual animado de cada métrica durante el test
-  const [progreso, setProgreso] = useState({ descarga: 0, subida: 0, latencia: 0 });
+  const [progreso, setProgreso] = useState({
+    descarga: 0,
+    subida: 0,
+    latencia: 0,
+  });
 
   // Inicia la ejecución del test de velocidad
   const iniciarTest = async () => {
@@ -92,13 +96,15 @@ const TestVelocidad = () => {
         return "0.00 " + unit;
       }
     })();
-    
+
     // Colores del medidor según el tema actual
     const backgroundRing =
-      currentTheme === "light" ? "var(--color-secundario)" : "rgba(255,255,255,0.1)";
+      currentTheme === "light"
+        ? "var(--color-secundario)"
+        : "rgba(255,255,255,0.1)";
     const ringColor =
       resultados && !loading ? "var(--color-acento)" : "var(--color-primario)";
-    
+
     return (
       <div className="flex flex-col items-center">
         {/* Contenedor del medidor circular */}
@@ -116,10 +122,14 @@ const TestVelocidad = () => {
             className="absolute inset-4 rounded-full flex flex-col items-center justify-center text-center"
             style={{
               backgroundColor:
-                currentTheme === "light" ? "var(--color-fondo)" : "rgba(0,0,0,0.5)",
+                currentTheme === "light"
+                  ? "var(--color-fondo)"
+                  : "rgba(0,0,0,0.5)",
             }}
           >
-            <span className="text-xl font-bold sm:text-2xl">{mostrarValor}</span>
+            <span className="text-xl font-bold sm:text-2xl">
+              {mostrarValor}
+            </span>
           </div>
         </div>
         {/* Etiqueta descriptiva del medidor */}
@@ -134,7 +144,9 @@ const TestVelocidad = () => {
         {/* Encabezado de la herramienta */}
         <div className="text-center mb-8">
           <MainH1 icon={IconGauge}>Test de velocidad</MainH1>
-          <p className="text-lg">Medí la velocidad de tu conexión a internet en tiempo real.</p>
+          <p className="text-lg">
+            Medí la velocidad de tu conexión a internet en tiempo real.
+          </p>
         </div>
 
         {/* Botón para iniciar o mostrar estado del test */}

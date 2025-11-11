@@ -65,7 +65,7 @@ export const actualizarBoletaConImagen = async (
       promo_hasta: nuevosDatos.promoHasta,
     }),
   };
-  
+
   // Limpieza de campos temporales que no van a la base de datos
   delete datosLimpios.promoHasta;
   delete datosLimpios.proveedorOtro;

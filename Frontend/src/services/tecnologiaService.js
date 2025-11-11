@@ -2,7 +2,10 @@ import { supabase } from "../supabase/client";
 
 // Obtener todas las tecnologías
 export const obtenerTecnologias = async (mostrarAlerta = () => {}) => {
-  const { data, error } = await supabase.from("tecnologias").select("*").order("tecnologia", { ascending: true });
+  const { data, error } = await supabase
+    .from("tecnologias")
+    .select("*")
+    .order("tecnologia", { ascending: true });
   if (error) {
     mostrarAlerta("Error al obtener tecnologías");
     throw error;
@@ -11,7 +14,11 @@ export const obtenerTecnologias = async (mostrarAlerta = () => {}) => {
 };
 
 // Editar tecnología
-export const editarTecnologia = async (id, nuevosDatos, mostrarAlerta = () => {}) => {
+export const editarTecnologia = async (
+  id,
+  nuevosDatos,
+  mostrarAlerta = () => {}
+) => {
   const { error } = await supabase
     .from("tecnologias")
     .update(nuevosDatos)
@@ -25,22 +32,20 @@ export const editarTecnologia = async (id, nuevosDatos, mostrarAlerta = () => {}
 
 // Eliminar tecnología
 export const eliminarTecnologia = async (id, mostrarAlerta = () => {}) => {
-  const { error } = await supabase
-    .from("tecnologias")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("tecnologias").delete().eq("id", id);
 
   if (error) {
     mostrarAlerta("Error al eliminar la tecnología");
     throw error;
-  } 
+  }
 };
 
 // Agregar nueva tecnología
-export const agregarTecnologia = async (nuevaTecno, mostrarAlerta = () => {}) => {
-  const { error } = await supabase
-    .from("tecnologias")
-    .insert([nuevaTecno]);
+export const agregarTecnologia = async (
+  nuevaTecno,
+  mostrarAlerta = () => {}
+) => {
+  const { error } = await supabase.from("tecnologias").insert([nuevaTecno]);
 
   if (error) {
     mostrarAlerta("Error al agregar la tecnología");

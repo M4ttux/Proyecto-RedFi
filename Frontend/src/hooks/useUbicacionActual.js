@@ -4,7 +4,10 @@
  * mostrarla en el mapa y gestionar el marcador de ubicación actual
  */
 
-import { manejarUbicacionActual, eliminarMarcadorUbicacion } from "../services/mapa";
+import {
+  manejarUbicacionActual,
+  eliminarMarcadorUbicacion,
+} from "../services/mapa";
 import { useAlerta } from "../context/AlertaContext";
 import { useState } from "react";
 
@@ -33,7 +36,11 @@ export const useUbicacionActual = (boundsCorrientes, mapRef) => {
     setCargandoUbicacion(true);
     try {
       // Llama al servicio que maneja la geolocalización y validación
-      await manejarUbicacionActual(boundsCorrientes, mostrarInfo, mapRef.current);
+      await manejarUbicacionActual(
+        boundsCorrientes,
+        mostrarInfo,
+        mapRef.current
+      );
       // Marca que el marcador está visible si la ubicación fue exitosa
       setMarcadorVisible(true);
     } catch (e) {
@@ -60,10 +67,9 @@ export const useUbicacionActual = (boundsCorrientes, mapRef) => {
 
   // Retorna estado y funciones para el manejo de ubicación actual
   return {
-    cargandoUbicacion,       // Estado de carga de la geolocalización
-    marcadorVisible,         // Estado de visibilidad del marcador
-    handleUbicacionActual,   // Función para obtener ubicación actual
-    eliminarMarcador,        // Función para eliminar marcador de ubicación
+    cargandoUbicacion, // Estado de carga de la geolocalización
+    marcadorVisible, // Estado de visibilidad del marcador
+    handleUbicacionActual, // Función para obtener ubicación actual
+    eliminarMarcador, // Función para eliminar marcador de ubicación
   };
 };
-

@@ -137,16 +137,14 @@ const Reseñas = () => {
       id: "evaluacion",
       label: "EVALUACIÓN",
       renderCell: (r) => (
-        <div className="space-y-2">
-          {renderEstrellas(r.estrellas)}
-        </div>
+        <div className="space-y-2">{renderEstrellas(r.estrellas)}</div>
       ),
     },
     {
       id: "comentario",
       label: "COMENTARIO",
       renderCell: (r) => (
-        <div 
+        <div
           className="text-sm text-texto truncate text-ellipsis overflow-hidden max-w-[200px] line-clamp-3 leading-relaxed"
           title={r.comentario}
         >

@@ -41,11 +41,15 @@ const PreguntasFrecuentes = () => {
   return (
     <section
       className={`py-16 px-4 sm:px-6 text-texto ${
-        currentTheme === "light" ? "bg-secundario border-2 border-texto/15" : "bg-texto/5"
+        currentTheme === "light"
+          ? "bg-secundario border-2 border-texto/15"
+          : "bg-texto/5"
       }`}
     >
       <div className="max-w-7xl mx-auto">
-        <MainH2 className="text-center justify-center mb-8">Preguntas frecuentes</MainH2>
+        <MainH2 className="text-center justify-center mb-8">
+          Preguntas frecuentes
+        </MainH2>
 
         <div className="grid gap-16 sm:grid-cols-2">
           {preguntas.map((item, i) => (
@@ -54,7 +58,14 @@ const PreguntasFrecuentes = () => {
               <p className="leading-relaxed">
                 {item.titulo.includes("Red-Fi cobra") ? (
                   <>
-                    No. Red-Fi es totalmente gratuito. Sin embargo, algunas funciones avanzadas como la carga y gestión de boletas, historial completo o navegación sin anuncios están disponibles solo para usuarios con cuenta <MainLinkButton to="/planes" variant="inline">Premium</MainLinkButton>.
+                    No. Red-Fi es totalmente gratuito. Sin embargo, algunas
+                    funciones avanzadas como la carga y gestión de boletas,
+                    historial completo o navegación sin anuncios están
+                    disponibles solo para usuarios con cuenta{" "}
+                    <MainLinkButton to="/planes" variant="inline">
+                      Premium
+                    </MainLinkButton>
+                    .
                   </>
                 ) : (
                   item.contenido

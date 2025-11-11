@@ -3,9 +3,7 @@ import { supabase } from "../../supabase/client";
 
 // Obtener todas las relaciones proveedor-tecnología
 export const obtenerProveedorTecnologia = async (mostrarAlerta = () => {}) => {
-  const { data, error } = await supabase
-    .from("ProveedorTecnologia")
-    .select(`
+  const { data, error } = await supabase.from("ProveedorTecnologia").select(`
       proveedor_id,
       proveedores (id, nombre),
       tecnologia_id,
@@ -21,7 +19,10 @@ export const obtenerProveedorTecnologia = async (mostrarAlerta = () => {}) => {
 };
 
 // Obtener tecnologías de un proveedor
-export const obtenerTecnologiasPorProveedor = async (proveedorId, mostrarAlerta = () => {}) => {
+export const obtenerTecnologiasPorProveedor = async (
+  proveedorId,
+  mostrarAlerta = () => {}
+) => {
   const { data, error } = await supabase
     .from("ProveedorTecnologia")
     .select("tecnologia_id")
@@ -36,7 +37,11 @@ export const obtenerTecnologiasPorProveedor = async (proveedorId, mostrarAlerta 
 };
 
 // Actualizar tecnologías de un proveedor
-export const actualizarTecnologiasProveedor = async (proveedorId, nuevasTecnologias, mostrarAlerta = () => {}) => {
+export const actualizarTecnologiasProveedor = async (
+  proveedorId,
+  nuevasTecnologias,
+  mostrarAlerta = () => {}
+) => {
   // Eliminar todas las tecnologías actuales
   const { error: errorDelete } = await supabase
     .from("ProveedorTecnologia")
@@ -65,7 +70,9 @@ export const actualizarTecnologiasProveedor = async (proveedorId, nuevasTecnolog
 };
 
 // Obtener proveedores sin tecnologías
-export const obtenerProveedoresSinTecnologias = async (mostrarAlerta = () => {}) => {
+export const obtenerProveedoresSinTecnologias = async (
+  mostrarAlerta = () => {}
+) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select("id, nombre, ProveedorTecnologia(tecnologias(id))")
@@ -83,7 +90,10 @@ export const obtenerProveedoresSinTecnologias = async (mostrarAlerta = () => {})
 };
 
 // Elimina todas las relaciones proveedor-tecnología de un proveedor
-export const eliminarProveedorTecnologia = async (proveedorId, mostrarAlerta = () => {}) => {
+export const eliminarProveedorTecnologia = async (
+  proveedorId,
+  mostrarAlerta = () => {}
+) => {
   const { error } = await supabase
     .from("ProveedorTecnologia")
     .delete()

@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useState, useCallback, useRef, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import {
   obtenerSesionActual,
   escucharCambiosDeSesion,
@@ -22,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
   // Estado de carga para mostrar loaders mientras se verifica la sesión
   const [loading, setLoading] = useState(true);
-  
+
   // Ref para prevenir cambios duplicados
   const lastUserRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -32,10 +40,13 @@ export const AuthProvider = ({ children }) => {
     // Solo actualizar si el usuario realmente cambió
     const userIdChanged = lastUserRef.current?.id !== newUser?.id;
     const userStatusChanged = Boolean(lastUserRef.current) !== Boolean(newUser);
-    
+
     if (userIdChanged || userStatusChanged) {
       const updateAction = () => {
-        console.log('Estado de sesión cambiado:', newUser ? 'Logged in' : 'Logged out');
+        console.log(
+          "Estado de sesión cambiado:",
+          newUser ? "Logged in" : "Logged out"
+        );
         lastUserRef.current = newUser;
         setUsuario(newUser);
       };
@@ -54,14 +65,14 @@ export const AuthProvider = ({ children }) => {
         timeoutRef.current = setTimeout(updateAction, 100);
       }
     } else {
-      console.log('Cambio de estado de autenticación ignorado (duplicado)');
+      console.log("Cambio de estado de autenticación ignorado (duplicado)");
     }
   }, []);
 
   // Efecto para cargar la sesión inicial y configurar el listener de cambios
   useEffect(() => {
     let isMounted = true; // Flag para evitar actualizaciones si el componente se desmonta
-    
+
     /**
      * Función para cargar la sesión actual al inicializar el contexto
      * Maneja errores de conexión y actualiza el estado de carga
@@ -88,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
     // Ejecuta la carga inicial
     cargarSesion();
-    
+
     // Configura listener para cambios de sesión en tiempo real
     const suscripcion = escucharCambiosDeSesion((user) => {
       if (isMounted) {
@@ -108,15 +119,16 @@ export const AuthProvider = ({ children }) => {
   }, []); // Array vacío = solo se ejecuta una vez al montar
 
   // Memoizar el valor del contexto para evitar re-renders innecesarios
-  const contextValue = useMemo(() => ({
-    usuario,
-    loading
-  }), [usuario, loading]);
+  const contextValue = useMemo(
+    () => ({
+      usuario,
+      loading,
+    }),
+    [usuario, loading]
+  );
 
   // Proporciona el estado de autenticación a toda la aplicación
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

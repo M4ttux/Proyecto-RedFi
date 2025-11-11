@@ -10,16 +10,16 @@ const WifiScanner = () => {
   const [nombreZona, setNombreZona] = useState("");
   const [resultados, setResultados] = useState({});
   const [recomendacion, setRecomendacion] = useState("");
-  
+
   // Estados para el control del progreso del test
   const [enProgreso, setEnProgreso] = useState(false);
   const [pasoActual, setPasoActual] = useState(0);
   const [completado, setCompletado] = useState(false);
-  
+
   // Referencias para la librería de speedtest
   const medidorRef = useRef(null);
   const testActivo = useRef(null);
-  
+
   const { mostrarError, mostrarInfo } = useAlerta();
   const { currentTheme } = useTheme();
 
@@ -39,7 +39,7 @@ const WifiScanner = () => {
       }
     };
     document.body.appendChild(script);
-    
+
     // Cleanup: remueve el script cuando el componente se desmonta
     return () => document.body.removeChild(script);
   }, []);
@@ -189,10 +189,20 @@ const WifiScanner = () => {
 
       {/* Controles principales del análisis */}
       <div className="w-full mt-6 flex flex-row items-center justify-center gap-3">
-        <MainButton onClick={reiniciarAnalisis} disabled={enProgreso} variant="danger" className="flex-1">
+        <MainButton
+          onClick={reiniciarAnalisis}
+          disabled={enProgreso}
+          variant="danger"
+          className="flex-1"
+        >
           Reiniciar análisis
         </MainButton>
-        <MainButton onClick={recomendarUbicacion} disabled={enProgreso} variant="accent" className="flex-1">
+        <MainButton
+          onClick={recomendarUbicacion}
+          disabled={enProgreso}
+          variant="accent"
+          className="flex-1"
+        >
           Recomendar zona
         </MainButton>
       </div>
@@ -257,7 +267,7 @@ const WifiScanner = () => {
             ))}
           </ul>
         </div>
-      )} 
+      )}
     </div>
   );
 };

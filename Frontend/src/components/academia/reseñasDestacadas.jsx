@@ -34,7 +34,9 @@ const ReseñasDestacadas = () => {
   return (
     <section className="py-16 px-4 sm:px-6">
       <div className="text-center max-w-2xl mx-auto mb-6">
-        <MainH2 className="text-center justify-center">Historias de estudiantes</MainH2>
+        <MainH2 className="text-center justify-center">
+          Historias de estudiantes
+        </MainH2>
         <p className="text-lg">Revisa las historias de nuestros estudiantes</p>
       </div>
       <div className="max-w-7xl mx-auto text-center">

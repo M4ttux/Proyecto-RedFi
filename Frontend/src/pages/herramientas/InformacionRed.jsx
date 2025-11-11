@@ -8,8 +8,8 @@ import { useEffect } from "react";
 
 const InformacionRed = () => {
   useEffect(() => {
-      document.title = "Red-Fi | Información de red";
-    }, []);
+    document.title = "Red-Fi | Información de red";
+  }, []);
   const { currentTheme } = useTheme();
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -57,10 +57,7 @@ const InformacionRed = () => {
         </div>
         {/* Botón volver a herramientas */}
         <div className="text-center">
-          <MainLinkButton 
-            to="/herramientas" 
-            variant="secondary" 
-          >
+          <MainLinkButton to="/herramientas" variant="secondary">
             <IconArrowLeft />
             Volver a herramientas
           </MainLinkButton>

@@ -142,7 +142,6 @@ const ModalReseña = ({ reseña, onClose }) => {
           </MainLinkButton>
         </div>
       </div>
-
     </ModalContenedor>
   );
 };

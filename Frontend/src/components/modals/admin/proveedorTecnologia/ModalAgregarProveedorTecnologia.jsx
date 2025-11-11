@@ -7,13 +7,16 @@ import Select from "../../../ui/Select";
 import { IconX } from "@tabler/icons-react";
 import { useAlerta } from "../../../../context/AlertaContext";
 import { obtenerTecnologias } from "../../../../services/tecnologiaService";
-import { obtenerProveedoresSinTecnologias, actualizarTecnologiasProveedor } from "../../../../services/relaciones/proveedorTecnologiaService";
+import {
+  obtenerProveedoresSinTecnologias,
+  actualizarTecnologiasProveedor,
+} from "../../../../services/relaciones/proveedorTecnologiaService";
 
 const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
   // Estados para las opciones de selección
   const [proveedores, setProveedores] = useState([]);
   const [tecnologias, setTecnologias] = useState([]);
-  
+
   // Estados para las selecciones del usuario
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [tecnologiasSeleccionadas, setTecnologiasSeleccionadas] = useState([]);
@@ -84,7 +87,12 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
       </div>
 
       {/* Formulario de asignación */}
-      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         {/* Selector de proveedor */}
         <div className="mb-6">
           <Select

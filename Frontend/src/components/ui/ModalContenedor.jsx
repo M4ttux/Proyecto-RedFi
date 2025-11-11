@@ -1,9 +1,9 @@
-const ModalContenedor = ({ 
-  children, 
-  onClose = null, 
+const ModalContenedor = ({
+  children,
+  onClose = null,
   maxWidth = "max-w-xl",
   maxHeight = "max-h-[90vh]", // Parámetro para controlar altura máxima
-  variant = "default" // Nueva prop para diferentes variantes
+  variant = "default", // Nueva prop para diferentes variantes
 }) => {
   // Configuraciones específicas por variante
   const getVariantClasses = () => {
@@ -12,13 +12,13 @@ const ModalContenedor = ({
         return {
           maxWidth: "max-w-4xl", // Más ancho para cursos
           maxHeight: "max-h-[90vh]",
-          overflow: "overflow-hidden" // Sin overflow para controlar internamente
+          overflow: "overflow-hidden", // Sin overflow para controlar internamente
         };
       default:
         return {
           maxWidth,
           maxHeight,
-          overflow: "overflow-y-auto" // Cambiado a auto para permitir scroll si es necesario
+          overflow: "overflow-y-auto", // Cambiado a auto para permitir scroll si es necesario
         };
     }
   };
@@ -34,7 +34,11 @@ const ModalContenedor = ({
         onClick={(e) => e.stopPropagation()} // Previene cierre al hacer click en el modal
       >
         {/* Área de contenido con padding y flex-1 para ocupar espacio disponible */}
-        <div className={variant === "curso" ? "flex-1 flex flex-col" : "flex-1 p-6"}>
+        <div
+          className={
+            variant === "curso" ? "flex-1 flex flex-col" : "flex-1 p-6"
+          }
+        >
           {children}
         </div>
       </div>

@@ -1,6 +1,10 @@
 // Frontend/src/components/ui/FiltroOrden.jsx
 import { useState } from "react";
-import { IconArrowsSort, IconSearch, IconChevronDown } from "@tabler/icons-react";
+import {
+  IconArrowsSort,
+  IconSearch,
+  IconChevronDown,
+} from "@tabler/icons-react";
 import classNames from "classnames";
 
 const FiltroOrden = ({
@@ -39,7 +43,7 @@ const FiltroOrden = ({
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <IconSearch size={20} className="text-texto/75" />
         </div>
-        
+
         {/* Input de búsqueda con el mismo estilo que Input.jsx */}
         <input
           type="text"
@@ -56,7 +60,7 @@ const FiltroOrden = ({
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <IconArrowsSort size={20} className="text-texto/75" />
         </div>
-        
+
         {/* Select de campo */}
         <select
           value={ordenCampo}
@@ -75,14 +79,14 @@ const FiltroOrden = ({
             </option>
           ))}
         </select>
-        
+
         {/* Icono chevron derecho */}
         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-          <IconChevronDown 
-            size={20} 
+          <IconChevronDown
+            size={20}
             className={`text-texto/75 transition-transform ${
               isCampoOpen ? "rotate-180" : "rotate-0"
-            }`} 
+            }`}
           />
         </div>
       </div>
@@ -103,14 +107,14 @@ const FiltroOrden = ({
             Descendente
           </option>
         </select>
-        
+
         {/* Icono chevron derecho */}
         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-          <IconChevronDown 
-            size={20} 
+          <IconChevronDown
+            size={20}
             className={`text-texto/75 transition-transform ${
               isDirOpen ? "rotate-180" : "rotate-0"
-            }`} 
+            }`}
           />
         </div>
       </div>

@@ -34,10 +34,7 @@ const Avatar = ({ fotoUrl, nombre = "Usuario", size = 20, className = "" }) => {
         <>
           {/* Indicador de carga mientras se carga la imagen */}
           {!loaded && (
-            <IconLoader2
-              className="animate-spin text-texto"
-              size={size * 2}
-            />
+            <IconLoader2 className="animate-spin text-texto" size={size * 2} />
           )}
           {/* Imagen del avatar con loading state */}
           <img

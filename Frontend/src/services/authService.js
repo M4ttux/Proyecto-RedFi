@@ -1,4 +1,3 @@
-// src/services/authService.js
 import { supabase } from "../supabase/client";
 
 // Registro de cuenta (email + password)
@@ -21,7 +20,9 @@ export const registerUser = async ({ email, password }) => {
 
   if (error) {
     if (error.message.includes("User already registered")) {
-      throw new Error("Este correo ya está registrado. Intente iniciar sesión.");
+      throw new Error(
+        "Este correo ya está registrado. Intente iniciar sesión."
+      );
     }
     throw new Error("Error al registrar el usuario.");
   }
@@ -42,14 +43,15 @@ export const loginUser = async ({ email, password }) => {
 
   if (error) {
     if (error.message.includes("Invalid login credentials")) {
-      throw new Error("Credenciales incorrectas. Revisa tu email o contraseña.");
+      throw new Error(
+        "Credenciales incorrectas. Revisa tu email o contraseña."
+      );
     }
     throw new Error("Error al iniciar sesión.");
   }
 
   return data;
 };
-
 
 // Logout
 export const logoutUser = async () => {

@@ -81,8 +81,12 @@ const ModalZonaMultiProveedor = ({
             {zonaInfo.departamento || "Zona seleccionada"}
           </p>
           <p className="hidden sm:block text-sm text-texto mt-1">
-            Se {proveedores.length === 1 ? "encontró" : "encontraron"} <strong>{proveedores.length} {proveedores.length === 1 ? "proveedor" : "proveedores"}</strong> en
-            esta área
+            Se {proveedores.length === 1 ? "encontró" : "encontraron"}{" "}
+            <strong>
+              {proveedores.length}{" "}
+              {proveedores.length === 1 ? "proveedor" : "proveedores"}
+            </strong>{" "}
+            en esta área
           </p>
         </div>
       )}
@@ -201,8 +205,7 @@ const ModalZonaMultiProveedor = ({
       {/* Instrucciones de uso para el usuario */}
       <div className="mt-3 text-center">
         <p className="text-sm text-texto/75 italic">
-          Haz clic en "Ver más" para ver más información de cada
-          proveedor.
+          Haz clic en "Ver más" para ver más información de cada proveedor.
         </p>
       </div>
     </ModalContenedor>

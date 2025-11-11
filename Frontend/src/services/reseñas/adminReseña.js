@@ -17,7 +17,11 @@ export const obtenerReseñasAdmin = async (mostrarAlerta = () => {}) => {
 };
 
 // Actualiza una reseña existente por ID (vista admin)
-export const actualizarReseñaAdmin = async (id, datos, mostrarAlerta = () => {}) => {
+export const actualizarReseñaAdmin = async (
+  id,
+  datos,
+  mostrarAlerta = () => {}
+) => {
   const { error } = await supabase
     .from("reseñas")
     .update({
@@ -35,10 +39,7 @@ export const actualizarReseñaAdmin = async (id, datos, mostrarAlerta = () => {}
 
 // Elimina una reseña por ID (vista admin)
 export const eliminarReseñaAdmin = async (id, mostrarAlerta = () => {}) => {
-  const { error } = await supabase
-    .from("reseñas")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("reseñas").delete().eq("id", id);
 
   if (error) {
     mostrarAlerta("Error al eliminar reseña como admin");

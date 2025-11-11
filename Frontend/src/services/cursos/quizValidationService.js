@@ -30,22 +30,30 @@ export const validarQuiz = (preguntas) => {
 
     // Validar opciones
     if (!Array.isArray(opciones) || opciones.length !== 3) {
-      errors.push(`La pregunta ${preguntaNum} debe tener exactamente 3 opciones`);
+      errors.push(
+        `La pregunta ${preguntaNum} debe tener exactamente 3 opciones`
+      );
       return;
     }
 
     // Validar que todas las opciones tengan texto
     opciones.forEach((opcion, opcionIndex) => {
-      const textoOpcion = opcion.texto || opcion.opcion || '';
+      const textoOpcion = opcion.texto || opcion.opcion || "";
       if (!textoOpcion || textoOpcion.trim() === "") {
-        errors.push(`La opción ${opcionIndex + 1} de la pregunta ${preguntaNum} no puede estar vacía`);
+        errors.push(
+          `La opción ${
+            opcionIndex + 1
+          } de la pregunta ${preguntaNum} no puede estar vacía`
+        );
       }
     });
 
     // Validar que haya exactamente una respuesta correcta
-    const correctas = opciones.filter(opcion => opcion.es_correcta);
+    const correctas = opciones.filter((opcion) => opcion.es_correcta);
     if (correctas.length !== 1) {
-      errors.push(`La pregunta ${preguntaNum} debe tener exactamente una respuesta correcta`);
+      errors.push(
+        `La pregunta ${preguntaNum} debe tener exactamente una respuesta correcta`
+      );
     }
   });
 
@@ -60,11 +68,9 @@ export const crearPreguntaVacia = () => ({
   opciones: [
     { texto: "", es_correcta: false },
     { texto: "", es_correcta: false },
-    { texto: "", es_correcta: false }
-  ]
+    { texto: "", es_correcta: false },
+  ],
 });
-
-
 
 /**
  * Valida una pregunta individual
@@ -77,32 +83,46 @@ export const validarPregunta = (pregunta, numeroPregunta) => {
   }
 
   if (pregunta.pregunta && pregunta.pregunta.length > 200) {
-    errors.push(`La pregunta ${numeroPregunta} no puede tener más de 200 caracteres`);
+    errors.push(
+      `La pregunta ${numeroPregunta} no puede tener más de 200 caracteres`
+    );
   }
 
   // Obtener opciones independientemente de la estructura (quiz_opciones vs opciones)
   const opciones = pregunta.quiz_opciones || pregunta.opciones || [];
 
   if (!Array.isArray(opciones) || opciones.length !== 3) {
-    errors.push(`La pregunta ${numeroPregunta} debe tener exactamente 3 opciones`);
+    errors.push(
+      `La pregunta ${numeroPregunta} debe tener exactamente 3 opciones`
+    );
     return errors;
   }
 
   // Validar opciones
   opciones.forEach((opcion, index) => {
-    const textoOpcion = opcion.texto || opcion.opcion || '';
+    const textoOpcion = opcion.texto || opcion.opcion || "";
     if (!textoOpcion || textoOpcion.trim() === "") {
-      errors.push(`La opción ${index + 1} de la pregunta ${numeroPregunta} no puede estar vacía`);
+      errors.push(
+        `La opción ${
+          index + 1
+        } de la pregunta ${numeroPregunta} no puede estar vacía`
+      );
     }
     if (textoOpcion && textoOpcion.length > 100) {
-      errors.push(`La opción ${index + 1} de la pregunta ${numeroPregunta} no puede tener más de 100 caracteres`);
+      errors.push(
+        `La opción ${
+          index + 1
+        } de la pregunta ${numeroPregunta} no puede tener más de 100 caracteres`
+      );
     }
   });
 
   // Validar respuesta correcta
-  const correctas = opciones.filter(opcion => opcion.es_correcta);
+  const correctas = opciones.filter((opcion) => opcion.es_correcta);
   if (correctas.length !== 1) {
-    errors.push(`La pregunta ${numeroPregunta} debe tener exactamente una respuesta correcta`);
+    errors.push(
+      `La pregunta ${numeroPregunta} debe tener exactamente una respuesta correcta`
+    );
   }
 
   return errors;

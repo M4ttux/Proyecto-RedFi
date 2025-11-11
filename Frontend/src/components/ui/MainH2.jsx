@@ -9,10 +9,16 @@ const H2 = ({
 }) => {
   // Detecta si se aplicaron estilos personalizados para evitar duplicados
   const hasCustomSize = /\btext-(xs|sm|base|lg|xl|\d+xl)\b/.test(className);
-  const hasCustomWeight = /\bfont-(thin|light|normal|medium|semibold|bold|extrabold|black)\b/.test(className);
+  const hasCustomWeight =
+    /\bfont-(thin|light|normal|medium|semibold|bold|extrabold|black)\b/.test(
+      className
+    );
   const hasCustomMargin = /\bmb-\d+\b/.test(className);
-  const hasCustomTextAlign = /\btext-(left|center|right|justify)\b/.test(className);
-  const hasCustomJustify = /\bjustify-(start|center|end|between|around|evenly)\b/.test(className);
+  const hasCustomTextAlign = /\btext-(left|center|right|justify)\b/.test(
+    className
+  );
+  const hasCustomJustify =
+    /\bjustify-(start|center|end|between|around|evenly)\b/.test(className);
 
   // Controla si aplica flexbox (se puede deshabilitar con variant="noflex")
   const applyFlex = variant !== "noflex";
@@ -31,7 +37,9 @@ const H2 = ({
       {...props}
     >
       {/* Icono opcional con comportamiento responsivo y menor tamaño */}
-      {Icon && <Icon size={32} className="hidden sm:inline-block text-acento" />}
+      {Icon && (
+        <Icon size={32} className="hidden sm:inline-block text-acento" />
+      )}
       {/* Contenido del encabezado */}
       {children}
     </h2>

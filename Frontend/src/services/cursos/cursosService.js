@@ -1,5 +1,10 @@
 import { supabase } from "../../supabase/client";
-import { subirMiniatura, actualizarMiniatura, eliminarMiniatura, eliminarArchivosDelCurso } from "./cursoUploadService";
+import {
+  subirMiniatura,
+  actualizarMiniatura,
+  eliminarMiniatura,
+  eliminarArchivosDelCurso,
+} from "./cursoUploadService";
 
 /**
  * Servicio principal para operaciones CRUD de cursos
@@ -14,7 +19,7 @@ export const obtenerCursos = async (mostrarAlerta = () => {}) => {
     const { data, error } = await supabase
       .from("cursos")
       .select("*")
-      .order("titulo", { ascending: true })
+      .order("titulo", { ascending: true });
 
     console.log("Respuesta de Supabase - data:", data, "error:", error);
 
@@ -27,7 +32,7 @@ export const obtenerCursos = async (mostrarAlerta = () => {}) => {
       mostrarAlerta("Error al obtener los cursos.");
       throw error;
     }
-    
+
     return data || [];
   } catch (error) {
     console.error("Error al obtener cursos:", error);
@@ -65,7 +70,7 @@ export const obtenerCursoPorId = async (cursoId, mostrarAlerta = () => {}) => {
       }
       throw error;
     }
-    
+
     return data;
   } catch (error) {
     console.error("Error al obtener curso:", error);
@@ -77,7 +82,11 @@ export const obtenerCursoPorId = async (cursoId, mostrarAlerta = () => {}) => {
 /**
  * Crea un nuevo curso
  */
-export const crearCurso = async (cursoData, miniaturaFile, mostrarAlerta = () => {}) => {
+export const crearCurso = async (
+  cursoData,
+  miniaturaFile,
+  mostrarAlerta = () => {}
+) => {
   try {
     // Validar que se proporcione miniatura (es obligatoria)
     if (!miniaturaFile) {
@@ -86,19 +95,25 @@ export const crearCurso = async (cursoData, miniaturaFile, mostrarAlerta = () =>
 
     // Generar un ID temporal para la carpeta de la miniatura
     const tempId = crypto.randomUUID();
-    
+
     // Subir miniatura primero usando el ID temporal
-    const miniaturaUrl = await subirMiniatura(miniaturaFile, tempId, mostrarAlerta);
-    
+    const miniaturaUrl = await subirMiniatura(
+      miniaturaFile,
+      tempId,
+      mostrarAlerta
+    );
+
     // Crear curso con la URL de la miniatura ya disponible
     const { data: nuevoCurso, error } = await supabase
       .from("cursos")
-      .insert([{
-        titulo: cursoData.titulo,
-        descripcion: cursoData.descripcion,
-        video_youtube_url: cursoData.video_youtube_url,
-        miniatura_url: miniaturaUrl
-      }])
+      .insert([
+        {
+          titulo: cursoData.titulo,
+          descripcion: cursoData.descripcion,
+          video_youtube_url: cursoData.video_youtube_url,
+          miniatura_url: miniaturaUrl,
+        },
+      ])
       .select()
       .single();
 
@@ -107,7 +122,10 @@ export const crearCurso = async (cursoData, miniaturaFile, mostrarAlerta = () =>
       try {
         await eliminarMiniatura(miniaturaUrl, mostrarAlerta);
       } catch (cleanupError) {
-        console.warn("No se pudo limpiar la miniatura tras error:", cleanupError);
+        console.warn(
+          "No se pudo limpiar la miniatura tras error:",
+          cleanupError
+        );
       }
       throw error;
     }
@@ -116,22 +134,29 @@ export const crearCurso = async (cursoData, miniaturaFile, mostrarAlerta = () =>
     if (tempId !== nuevoCurso.id) {
       try {
         // Subir de nuevo con el ID correcto
-        const miniaturaUrlCorrecta = await subirMiniatura(miniaturaFile, nuevoCurso.id, mostrarAlerta);
-        
+        const miniaturaUrlCorrecta = await subirMiniatura(
+          miniaturaFile,
+          nuevoCurso.id,
+          mostrarAlerta
+        );
+
         // Eliminar la imagen con ID temporal
         await eliminarMiniatura(miniaturaUrl, mostrarAlerta);
-        
+
         // Actualizar el curso con la URL correcta
         const { error: updateError } = await supabase
           .from("cursos")
           .update({ miniatura_url: miniaturaUrlCorrecta })
           .eq("id", nuevoCurso.id);
-          
+
         if (updateError) throw updateError;
-        
+
         return { ...nuevoCurso, miniatura_url: miniaturaUrlCorrecta };
       } catch (moveError) {
-        console.warn("Error al reorganizar miniatura, manteniendo la original:", moveError);
+        console.warn(
+          "Error al reorganizar miniatura, manteniendo la original:",
+          moveError
+        );
         // Si falla mover, mantener la imagen original
         return nuevoCurso;
       }
@@ -148,9 +173,20 @@ export const crearCurso = async (cursoData, miniaturaFile, mostrarAlerta = () =>
 /**
  * Actualiza un curso existente
  */
-export const actualizarCurso = async (cursoId, cursoData, miniaturaFile, miniaturaAnterior = null, mostrarAlerta = () => {}) => {
+export const actualizarCurso = async (
+  cursoId,
+  cursoData,
+  miniaturaFile,
+  miniaturaAnterior = null,
+  mostrarAlerta = () => {}
+) => {
   try {
-    const miniaturaUrl = await actualizarMiniatura(miniaturaAnterior, miniaturaFile, cursoId, mostrarAlerta);
+    const miniaturaUrl = await actualizarMiniatura(
+      miniaturaAnterior,
+      miniaturaFile,
+      cursoId,
+      mostrarAlerta
+    );
 
     // Actualizar curso
     const { data, error } = await supabase
@@ -159,7 +195,7 @@ export const actualizarCurso = async (cursoId, cursoData, miniaturaFile, miniatu
         titulo: cursoData.titulo,
         descripcion: cursoData.descripcion,
         video_youtube_url: cursoData.video_youtube_url,
-        miniatura_url: miniaturaUrl
+        miniatura_url: miniaturaUrl,
       })
       .eq("id", cursoId)
       .select()
@@ -181,27 +217,27 @@ export const actualizarCurso = async (cursoId, cursoData, miniaturaFile, miniatu
 export const eliminarCurso = async (cursoId, mostrarAlerta = () => {}) => {
   try {
     console.log("Iniciando eliminación del curso:", cursoId);
-    
+
     // 1. Eliminar todos los archivos del curso del storage (toda la carpeta)
     try {
       await eliminarArchivosDelCurso(cursoId, mostrarAlerta);
       console.log("Archivos del curso eliminados del storage");
     } catch (deleteError) {
-      console.warn("No se pudieron eliminar los archivos del curso:", deleteError);
+      console.warn(
+        "No se pudieron eliminar los archivos del curso:",
+        deleteError
+      );
       // No fallar el proceso si no se pueden eliminar los archivos
     }
-    
+
     // 2. Eliminar el curso de la base de datos
-    const { error } = await supabase
-      .from("cursos")
-      .delete()
-      .eq("id", cursoId);
+    const { error } = await supabase.from("cursos").delete().eq("id", cursoId);
 
     if (error) {
       console.error("Error al eliminar curso de la BD:", error);
       throw error;
     }
-    
+
     console.log("Curso eliminado completamente");
     return true;
   } catch (error) {
@@ -210,4 +246,3 @@ export const eliminarCurso = async (cursoId, mostrarAlerta = () => {}) => {
     throw new Error("Error al eliminar el curso");
   }
 };
-

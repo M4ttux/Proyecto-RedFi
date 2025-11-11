@@ -31,7 +31,7 @@ const ModalAgregarReseña = ({
   const [comentario, setComentario] = useState("");
   const [estrellas, setEstrellas] = useState(5);
   const [loading, setLoading] = useState(false);
-  
+
   // Control del flujo de pasos del formulario (1: Ubicación, 2: Proveedor, 3: Calificación, 4: Comentario)
   const [pasoActual, setPasoActual] = useState(1);
 
@@ -355,9 +355,7 @@ const ModalAgregarReseña = ({
     <div className="space-y-4">
       {/* Instrucciones para el comentario */}
       <div className="text-center">
-        <MainH3 className="text-center justify-center">
-          Cuéntanos más
-        </MainH3>
+        <MainH3 className="text-center justify-center">Cuéntanos más</MainH3>
         <p className="text-texto">Comparte tu experiencia con otros usuarios</p>
       </div>
 

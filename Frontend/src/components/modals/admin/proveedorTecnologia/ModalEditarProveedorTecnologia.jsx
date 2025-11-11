@@ -19,7 +19,7 @@ const ModalEditarProveedorTecnologia = ({
   // Estados para las opciones y selecciones
   const [todasLasTecnologias, setTodasLasTecnologias] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState([]);
-  
+
   // Estado de carga para operaciones asíncronas
   const [cargando, setCargando] = useState(false);
   const { mostrarError, mostrarExito } = useAlerta();
@@ -81,14 +81,17 @@ const ModalEditarProveedorTecnologia = ({
       <div className="bg-texto/5 rounded-lg p-4 mb-6">
         <div className="flex items-center gap-2">
           <span className="font-bold">Proveedor:</span>
-          <span>
-            {proveedor.proveedor}
-          </span>
+          <span>{proveedor.proveedor}</span>
         </div>
       </div>
 
       {/* Formulario de edición */}
-      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         {/* Selector de tecnologías con estado actual */}
         <div className="mb-6">
           <CheckboxDropdown

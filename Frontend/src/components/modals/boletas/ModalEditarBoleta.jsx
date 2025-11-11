@@ -17,8 +17,18 @@ import { useAlerta } from "../../../context/AlertaContext";
 // Helpers en español para trabajar con la fecha base del período
 const aIndiceMes = (mes) => {
   const nombres = [
-    "enero","febrero","marzo","abril","mayo","junio",
-    "julio","agosto","septiembre","octubre","noviembre","diciembre"
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
   ];
   if (!mes) return 0;
   if (!isNaN(mes)) return Math.max(0, Math.min(11, parseInt(mes, 10) - 1));
@@ -28,7 +38,9 @@ const aIndiceMes = (mes) => {
 
 const aFechaISO = (fecha) => {
   const dos = (n) => String(n).padStart(2, "0");
-  return `${fecha.getFullYear()}-${dos(fecha.getMonth() + 1)}-${dos(fecha.getDate())}`;
+  return `${fecha.getFullYear()}-${dos(fecha.getMonth() + 1)}-${dos(
+    fecha.getDate()
+  )}`;
 };
 
 const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
@@ -67,8 +79,18 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
 
   // Opciones disponibles para el selector de mes
   const meses = [
-    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
   ];
 
   // Opciones disponibles para el selector de proveedor
@@ -101,7 +123,8 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
   // --- Fecha base del período (1° del mes/año) y min para inputs ---
   const indiceMes = aIndiceMes(form.mes);
   const anioNumero = parseInt(form.anio, 10);
-  const fechaBase = form.mes && form.anio ? new Date(anioNumero, indiceMes, 1) : null;
+  const fechaBase =
+    form.mes && form.anio ? new Date(anioNumero, indiceMes, 1) : null;
   const minISO = fechaBase ? aFechaISO(fechaBase) : undefined;
 
   // Procesa la actualización de la boleta con los cambios realizados
@@ -110,23 +133,32 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
     setLoading(true);
     try {
       // Validaciones de fechas contra el período
-      const fechaVenc = form.vencimiento ? new Date(form.vencimiento + "T12:00:00") : null;
-      const fechaPromo = form.promoHasta ? new Date(form.promoHasta + "T12:00:00") : null;
+      const fechaVenc = form.vencimiento
+        ? new Date(form.vencimiento + "T12:00:00")
+        : null;
+      const fechaPromo = form.promoHasta
+        ? new Date(form.promoHasta + "T12:00:00")
+        : null;
 
       if (fechaBase && fechaVenc && fechaVenc < fechaBase) {
-        mostrarError("La fecha de vencimiento debe ser posterior o igual al período seleccionado.");
+        mostrarError(
+          "La fecha de vencimiento debe ser posterior o igual al período seleccionado."
+        );
         setLoading(false);
         return;
       }
       if (fechaBase && fechaPromo && fechaPromo < fechaBase) {
-        mostrarError("La fecha de promoción debe ser posterior o igual al período seleccionado.");
+        mostrarError(
+          "La fecha de promoción debe ser posterior o igual al período seleccionado."
+        );
         setLoading(false);
         return;
       }
 
       const datosFinales = {
         ...form,
-        proveedor: form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor,
+        proveedor:
+          form.proveedor === "Otro" ? form.proveedorOtro : form.proveedor,
         promo_hasta: form.promoHasta, // mapeo al nombre esperado por el backend si usa snake_case
       };
 
@@ -180,7 +212,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             options={meses}
             label="Mes"
           />
-          
+
           {/* Campo año */}
           <Input
             name="anio"
@@ -189,7 +221,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             placeholder="Año"
             label="Año"
           />
-          
+
           {/* Campo monto */}
           <Input
             name="monto"
@@ -200,7 +232,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             label="Monto"
             icon={IconCurrencyDollar}
           />
-          
+
           {/* Selector de proveedor */}
           <Select
             name="proveedor"
@@ -236,7 +268,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onChange={handleChange}
             label="Fecha de vencimiento"
             icon={IconCalendar}
-            min={minISO}  // 👈 bloqueo a partir del 1° del período
+            min={minISO} // 👈 bloqueo a partir del 1° del período
           />
 
           {/* Campo fin de promoción */}
@@ -247,7 +279,7 @@ const ModalEditarBoleta = ({ boleta, onClose, onActualizar }) => {
             onChange={handleChange}
             label="Fin de promoción"
             icon={IconCalendar}
-            min={minISO}  // 👈 bloqueo a partir del 1° del período
+            min={minISO} // 👈 bloqueo a partir del 1° del período
           />
         </div>
 

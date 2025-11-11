@@ -1,7 +1,10 @@
 import { supabase } from "../../supabase/client";
 
 // Crea el perfil base del usuario recién registrado usando su id de auth
-export const crearPerfil = async ({ nombre, proveedor_preferido }, mostrarAlerta = () => {}) => {
+export const crearPerfil = async (
+  { nombre, proveedor_preferido },
+  mostrarAlerta = () => {}
+) => {
   // Obtiene el usuario autenticado actual desde Supabase Auth
   const {
     data: { user },

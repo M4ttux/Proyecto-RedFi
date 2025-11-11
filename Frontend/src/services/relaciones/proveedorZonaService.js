@@ -3,9 +3,7 @@ import { supabase } from "../../supabase/client";
 
 // Obtener todas las relaciones proveedor-zona
 export const obtenerProveedorZona = async (mostrarAlerta = () => {}) => {
-  const { data, error } = await supabase
-    .from("ZonaProveedor")
-    .select(`
+  const { data, error } = await supabase.from("ZonaProveedor").select(`
       proveedor_id,
       proveedores (id, nombre),
       zona_id,
@@ -21,7 +19,10 @@ export const obtenerProveedorZona = async (mostrarAlerta = () => {}) => {
 };
 
 // Obtener zonas de un proveedor
-export const obtenerZonasPorProveedor = async (proveedorId, mostrarAlerta = () => {}) => {
+export const obtenerZonasPorProveedor = async (
+  proveedorId,
+  mostrarAlerta = () => {}
+) => {
   const { data, error } = await supabase
     .from("ZonaProveedor")
     .select("zona_id")
@@ -87,7 +88,10 @@ export const obtenerProveedoresSinZonas = async (mostrarAlerta = () => {}) => {
 };
 
 // Eliminar todas las relaciones proveedor-zona de un proveedor
-export const eliminarProveedorZona = async (proveedorId, mostrarAlerta = () => {}) => {
+export const eliminarProveedorZona = async (
+  proveedorId,
+  mostrarAlerta = () => {}
+) => {
   const { error } = await supabase
     .from("ZonaProveedor")
     .delete()

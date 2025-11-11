@@ -93,11 +93,11 @@ const Select = ({
             {loading ? (
               <IconLoader2 size={20} className="animate-spin text-texto/75" />
             ) : (
-              <IconChevronDown 
-                size={20} 
+              <IconChevronDown
+                size={20}
                 className={`text-texto/75 transition-transform ${
                   isOpen ? "rotate-180" : "rotate-0"
-                }`} 
+                }`}
               />
             )}
           </div>

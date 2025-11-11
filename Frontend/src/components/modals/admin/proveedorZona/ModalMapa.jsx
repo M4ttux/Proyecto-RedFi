@@ -120,8 +120,8 @@ const ModalMapa = ({ zona, onClose }) => {
 
       {/* Información de la zona */}
       <div className="bg-texto/5 rounded-lg p-3 mb-4 text-sm">
-          <span className="font-medium text-texto/75">Departamento:</span>
-          <span className="ml-2">{zona.departamento}</span>
+        <span className="font-medium text-texto/75">Departamento:</span>
+        <span className="ml-2">{zona.departamento}</span>
       </div>
 
       {/* Contenedor del mapa */}
@@ -135,7 +135,9 @@ const ModalMapa = ({ zona, onClose }) => {
           <div className="absolute inset-0 bg-[#1f2a40] flex items-center justify-center rounded-lg">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 border-2 border-texto/15 border-t-acento rounded-full animate-spin"></div>
-              <span className="text-sm font-bold text-white">Cargando mapa...</span>
+              <span className="text-sm font-bold text-white">
+                Cargando mapa...
+              </span>
             </div>
           </div>
         )}

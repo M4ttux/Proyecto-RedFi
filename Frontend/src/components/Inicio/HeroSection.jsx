@@ -5,11 +5,12 @@ import { useTheme } from "../../context/ThemeContext";
 
 const HeroSection = () => {
   const { currentTheme } = useTheme();
-  
+
   // Selecciona la imagen según el tema
-  const heroImage = currentTheme === "light" 
-    ? "/imgs/hero-placeholder1.png" 
-    : "/imgs/hero-placeholder2.png";
+  const heroImage =
+    currentTheme === "light"
+      ? "/imgs/hero-placeholder1.png"
+      : "/imgs/hero-placeholder2.png";
 
   return (
     <section className="relative flex items-center justify-center px-4 sm:px-6 py-28 bg-secundario">
@@ -23,7 +24,13 @@ const HeroSection = () => {
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-12">
         {/* Texto a la izquierda */}
         <div className="flex-1 text-center lg:text-left">
-          <MainH1 variant="noflex" className="font-bold text-5xl lg:text-6xl leading-tight text-center lg:text-left">Encuentre el <span className="text-acento">mejor internet</span> para su zona.</MainH1>
+          <MainH1
+            variant="noflex"
+            className="font-bold text-5xl lg:text-6xl leading-tight text-center lg:text-left"
+          >
+            Encuentre el <span className="text-acento">mejor internet</span>{" "}
+            para su zona.
+          </MainH1>
           <p className="mt-6 text-lg">
             Visualice qué empresas operan cerca suyo, conozca la experiencia de
             otros usuarios y tome decisiones con confianza.

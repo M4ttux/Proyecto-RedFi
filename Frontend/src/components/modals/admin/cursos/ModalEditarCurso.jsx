@@ -401,7 +401,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                                 <MainButton
                                   type="button"
                                   variant="delete"
-                                  iconAlwaysVisible = {true}
+                                  iconAlwaysVisible={true}
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     eliminarPregunta(preguntaIndex);

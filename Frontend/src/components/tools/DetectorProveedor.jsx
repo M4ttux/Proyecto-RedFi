@@ -25,13 +25,12 @@ const DetectorProveedor = () => {
 
   return (
     <div
-          className={`max-w-xl mx-auto p-8 rounded-lg text-center ${
-            currentTheme === "light"
-              ? "bg-secundario border-2 border-texto/15 shadow-lg"
-              : "bg-texto/5 border border-texto/15"
-          }`}
-        >
-      
+      className={`max-w-xl mx-auto p-8 rounded-lg text-center ${
+        currentTheme === "light"
+          ? "bg-secundario border-2 border-texto/15 shadow-lg"
+          : "bg-texto/5 border border-texto/15"
+      }`}
+    >
       <MainH3 icon={IconWorld}>Tu conexión actual</MainH3>
 
       {cargando && <MainLoader texto="Obteniendo información de red..." />}
@@ -50,7 +49,9 @@ const DetectorProveedor = () => {
           </div>
           <div className="flex items-center gap-2">
             <IconMapPin size={20} className="text-acento" />
-            <span>{datos.city}, {datos.region}, {datos.country}</span>
+            <span>
+              {datos.city}, {datos.region}, {datos.country}
+            </span>
           </div>
         </div>
       )}

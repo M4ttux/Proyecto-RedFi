@@ -15,10 +15,10 @@ import Select from "../../../ui/Select";
 import FileInput from "../../../ui/FileInput";
 import ModalContenedor from "../../../ui/ModalContenedor";
 import { useAlerta } from "../../../../context/AlertaContext";
-import { 
+import {
   crearUsuarioCompleto,
   procesarMensajeError,
-  validarFormularioUsuario
+  validarFormularioUsuario,
 } from "../../../../services/perfil/adminPerfil";
 
 const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
@@ -55,10 +55,10 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
     // Validar formulario usando el servicio
     const errores = validarFormularioUsuario({
       email: email.trim(),
-      nombre: nombre.trim(), 
-      contrasena: contrasena.trim()
+      nombre: nombre.trim(),
+      contrasena: contrasena.trim(),
     });
-    
+
     if (errores.length > 0) {
       mostrarError(errores.join(", "));
       return;
@@ -68,14 +68,17 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
 
     try {
       // Crear usuario completo con imagen usando el servicio consolidado
-      await crearUsuarioCompleto({
-        email: email.trim(),
-        contrasena: contrasena.trim(),
-        nombre: nombre.trim(),
-        rol,
-        plan,
-        proveedor_preferido: proveedorPreferido.trim() || null,
-      }, fotoFile); // Pasar la imagen como segundo parámetro
+      await crearUsuarioCompleto(
+        {
+          email: email.trim(),
+          contrasena: contrasena.trim(),
+          nombre: nombre.trim(),
+          rol,
+          plan,
+          proveedor_preferido: proveedorPreferido.trim() || null,
+        },
+        fotoFile
+      ); // Pasar la imagen como segundo parámetro
 
       mostrarExito(`Usuario ${nombre} creado exitosamente`);
 
@@ -88,7 +91,10 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
       onClose();
     } catch (error) {
       console.error("Error al crear usuario:", error);
-      const mensajeProcesado = procesarMensajeError(error.message || "Error al crear el usuario", email);
+      const mensajeProcesado = procesarMensajeError(
+        error.message || "Error al crear el usuario",
+        email
+      );
       mostrarError(mensajeProcesado);
     } finally {
       setLoading(false);

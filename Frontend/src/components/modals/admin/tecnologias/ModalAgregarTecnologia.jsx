@@ -71,10 +71,10 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
         <Input
           name="tecnologia"
           label={
-              <>
-                Nombre <span className="text-red-600">*</span>
-              </>
-            }
+            <>
+              Nombre <span className="text-red-600">*</span>
+            </>
+          }
           value={formData.tecnologia}
           onChange={handleChange}
           placeholder="Ej. Fibra óptica"
@@ -117,7 +117,7 @@ const ModalAgregarTecnologia = ({ onClose, onActualizar }) => {
             {loading ? "Agregando..." : "Agregar"}
           </MainButton>
         </div>
-        
+
         {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">

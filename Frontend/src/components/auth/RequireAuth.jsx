@@ -9,7 +9,11 @@ const RequireAuth = ({ children }) => {
   if (loading) return null;
 
   // Si hay usuario, mostrar contenido. Si no, redirigir a login
-  return usuario ? children : <Navigate to="/login" state={{ from: location }} replace />;
+  return usuario ? (
+    children
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 };
 
 export default RequireAuth;

@@ -10,7 +10,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
       mostrarError("Debes iniciar sesión para agregar una reseña");
       return;
     }
-    
+
     onAbrirModalReseña();
   };
 

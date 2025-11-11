@@ -51,35 +51,33 @@ const Badge = ({
   // Maneja la visibilidad responsiva del badge
   const displayCls = onlyMobile
     ? "inline-flex sm:hidden" // Solo visible en móvil
-    : (onlyDesktop || collapseOnMobile)
+    : onlyDesktop || collapseOnMobile
     ? "hidden sm:inline-flex" // Solo visible en desktop
     : "inline-flex"; // Siempre visible
 
   // Clases para truncamiento de texto
-  const truncateCls = truncate
-    ? "truncate overflow-hidden text-ellipsis"
-    : "";
+  const truncateCls = truncate ? "truncate overflow-hidden text-ellipsis" : "";
 
   return (
     <Tag
       className={classNames(
-        displayCls,                 // Controla la visibilidad responsiva
-        "items-center gap-1",       // Layout flexbox para icono y texto
+        displayCls, // Controla la visibilidad responsiva
+        "items-center gap-1", // Layout flexbox para icono y texto
         roundedCls,
         sizeCls,
         variantCls,
-        truncate && maxWidth,       // Aplica ancho máximo si truncate está activo
+        truncate && maxWidth, // Aplica ancho máximo si truncate está activo
         className
       )}
-      title={title || (truncate && typeof children === 'string' ? children : '')} // Tooltip automático si hay truncamiento
+      title={
+        title || (truncate && typeof children === "string" ? children : "")
+      } // Tooltip automático si hay truncamiento
       {...props}
     >
       {/* Renderiza icono opcional si se proporciona */}
       {Icon && <Icon size={iconSize} />}
       {/* Contenido del badge con posible truncamiento */}
-      <span className={truncateCls}>
-        {children}
-      </span>
+      <span className={truncateCls}>{children}</span>
     </Tag>
   );
 };

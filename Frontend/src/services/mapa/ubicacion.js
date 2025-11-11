@@ -6,9 +6,9 @@ import maplibregl from "maplibre-gl";
 // Configuración geolocalización
 // ===============================
 const opcionesGeolocalizacion = (esMovil = false) => ({
-  enableHighAccuracy: esMovil,           // Alta precisión solo en móvil
-  timeout: esMovil ? 20000 : 10000,      // Más tiempo en móvil para GPS
-  maximumAge: esMovil ? 30000 : 60000,   // Cache más corto en móvil
+  enableHighAccuracy: esMovil, // Alta precisión solo en móvil
+  timeout: esMovil ? 20000 : 10000, // Más tiempo en móvil para GPS
+  maximumAge: esMovil ? 30000 : 60000, // Cache más corto en móvil
 });
 
 // Tu API key de OpenCage
@@ -63,9 +63,9 @@ const variantesCalle = (calle) => {
   // Variantes útiles: con y sin “avenida”
   const sinTipo = base.replace(/^avenida\s+/i, "");
   const variantes = new Set([
-    base,                  // "avenida independencia"
-    sinTipo,               // "independencia"
-    c,                     // lo que escribió el usuario ("Av. independencia")
+    base, // "avenida independencia"
+    sinTipo, // "independencia"
+    c, // lo que escribió el usuario ("Av. independencia")
   ]);
 
   return Array.from(variantes).filter(Boolean);
@@ -78,7 +78,9 @@ const armarVariantesConsulta = (input) => {
 
   if (numero) {
     for (const vc of vCalles) {
-      variantes.push(`${vc} ${numero}, Corrientes Capital, Corrientes, Argentina`);
+      variantes.push(
+        `${vc} ${numero}, Corrientes Capital, Corrientes, Argentina`
+      );
     }
   }
 
@@ -99,9 +101,17 @@ const scoreCandidate = (r, bounds, input) => {
   const conf = typeof r?.confidence === "number" ? r.confidence : 0;
   let s = 0;
 
-  if (typeof g.lng === "number" && typeof g.lat === "number" && dentroDeCorrientes(bounds, g.lng, g.lat)) s += 100;
+  if (
+    typeof g.lng === "number" &&
+    typeof g.lat === "number" &&
+    dentroDeCorrientes(bounds, g.lng, g.lat)
+  )
+    s += 100;
   if (c.house_number || c.housenumber) s += 80;
-  if ((c.city || c.town || c.village || "").toLowerCase().includes("corrientes")) s += 30;
+  if (
+    (c.city || c.town || c.village || "").toLowerCase().includes("corrientes")
+  )
+    s += 30;
   if ((c.state || "").toLowerCase().includes("corrientes")) s += 20;
 
   const road = (c.road || c.street || c.footway || "").toLowerCase();
@@ -152,7 +162,10 @@ async function geocodeNominatimStreet(street, bounds) {
 
   if (bounds) {
     // Nominatim usa viewbox: west,north,east,south
-    params.set("viewbox", `${bounds.west},${bounds.north},${bounds.east},${bounds.south}`);
+    params.set(
+      "viewbox",
+      `${bounds.west},${bounds.north},${bounds.east},${bounds.south}`
+    );
     params.set("bounded", "1");
   }
 
@@ -172,15 +185,30 @@ async function geocodeNominatimStreet(street, bounds) {
   const lng = parseFloat(hit.lon);
   const lat = parseFloat(hit.lat);
   const house = hit?.address?.house_number || null;
-  const road = hit?.address?.road || hit?.address?.pedestrian || hit?.address?.footway || null;
+  const road =
+    hit?.address?.road ||
+    hit?.address?.pedestrian ||
+    hit?.address?.footway ||
+    null;
 
-  return { lng, lat, display_name: hit.display_name, house_number: house, road };
+  return {
+    lng,
+    lat,
+    display_name: hit.display_name,
+    house_number: house,
+    road,
+  };
 }
 
 // ===============================
 // Buscador principal
 // ===============================
-export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, map) => {
+export const buscarUbicacion = async (
+  input,
+  bounds,
+  mostrarAlerta = () => {},
+  map
+) => {
   if (!input || !input.trim() || !map) return;
 
   try {
@@ -195,14 +223,21 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
       // Filtrar a Corrientes y ordenar por score
       const enCorr = results.filter((r) => {
         const g = r?.geometry || {};
-        return typeof g.lng === "number" && typeof g.lat === "number" && dentroDeCorrientes(bounds, g.lng, g.lat);
+        return (
+          typeof g.lng === "number" &&
+          typeof g.lat === "number" &&
+          dentroDeCorrientes(bounds, g.lng, g.lat)
+        );
       });
       const ordenados = (enCorr.length ? enCorr : results).sort(
         (a, b) => scoreCandidate(b, bounds, q) - scoreCandidate(a, bounds, q)
       );
 
       const top = ordenados[0];
-      if (!mejor || scoreCandidate(top, bounds, q) > scoreCandidate(mejor, bounds, q)) {
+      if (
+        !mejor ||
+        scoreCandidate(top, bounds, q) > scoreCandidate(mejor, bounds, q)
+      ) {
         mejor = top;
       }
 
@@ -216,12 +251,19 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
     // 2) Si no hay altura exacta todavía, intentar Nominatim con variantes
     if (!(mejor?.components?.house_number || mejor?.components?.housenumber)) {
       for (const q of variantes) {
-        const nn = await geocodeNominatimStreet(q.replace(/,\s*Corrientes.*$/i, ""), bounds);
+        const nn = await geocodeNominatimStreet(
+          q.replace(/,\s*Corrientes.*$/i, ""),
+          bounds
+        );
         if (nn && dentroDeCorrientes(bounds, nn.lng, nn.lat)) {
           mejor = {
             geometry: { lng: nn.lng, lat: nn.lat },
             formatted: nn.display_name || q,
-            components: { house_number: nn.house_number, road: nn.road, city: "Corrientes" },
+            components: {
+              house_number: nn.house_number,
+              road: nn.road,
+              city: "Corrientes",
+            },
             _from: "nominatim",
           };
           break;
@@ -230,17 +272,17 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
     }
 
     // 3) Si aún no hay número, probar “barrido” de números vecinos (±2,4,6,8,10) con Nominatim
-    if (numero && !(mejor?.components?.house_number || mejor?.components?.housenumber)) {
+    if (
+      numero &&
+      !(mejor?.components?.house_number || mejor?.components?.housenumber)
+    ) {
       const offsets = [2, 4, 6, 8, 10];
       const { calle } = extraerCalleYNumero(input);
       const vCalles = variantesCalle(calle);
 
       let preciso = null;
       for (const off of offsets) {
-        const candidatos = [
-          numero - off,
-          numero + off,
-        ].filter((n) => n > 0);
+        const candidatos = [numero - off, numero + off].filter((n) => n > 0);
 
         for (const n of candidatos) {
           for (const vc of vCalles) {
@@ -250,7 +292,11 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
               preciso = {
                 geometry: { lng: nn.lng, lat: nn.lat },
                 formatted: nn.display_name || street,
-                components: { house_number: nn.house_number ?? String(n), road: nn.road ?? vc, city: "Corrientes" },
+                components: {
+                  house_number: nn.house_number ?? String(n),
+                  road: nn.road ?? vc,
+                  city: "Corrientes",
+                },
                 _from: "nominatim_sweep",
               };
               break;
@@ -267,25 +313,39 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
 
     // 4) Si no se obtuvo nada util, avisar
     if (!mejor?.geometry?.lat || !mejor?.geometry?.lng) {
-      mostrarAlerta("No se encontró la ubicación ingresada en Corrientes Capital.");
+      mostrarAlerta(
+        "No se encontró la ubicación ingresada en Corrientes Capital."
+      );
       return;
     }
 
     const { lat, lng } = mejor.geometry;
-    const precise = !!(mejor?.components?.house_number || mejor?.components?.housenumber);
+    const precise = !!(
+      mejor?.components?.house_number || mejor?.components?.housenumber
+    );
     const rb = mejor?.bounds;
 
     if (rb?.northeast && rb?.southwest) {
       const sw = [rb.southwest.lng, rb.southwest.lat];
       const ne = [rb.northeast.lng, rb.northeast.lat];
-      map.fitBounds([sw, ne], { padding: 60, maxZoom: precise ? 17 : 15, duration: 800 });
+      map.fitBounds([sw, ne], {
+        padding: 60,
+        maxZoom: precise ? 17 : 15,
+        duration: 800,
+      });
     } else {
-      map.flyTo({ center: [lng, lat], zoom: precise ? 17 : 15, essential: true });
+      map.flyTo({
+        center: [lng, lat],
+        zoom: precise ? 17 : 15,
+        essential: true,
+      });
     }
 
     colocarMarcadorUbicacion(map, [lng, lat]);
     if (!precise) {
-      mostrarAlerta("No se encontró el número exacto; se ubicó el mejor tramo de la calle en Corrientes Capital.");
+      mostrarAlerta(
+        "No se encontró el número exacto; se ubicó el mejor tramo de la calle en Corrientes Capital."
+      );
     }
   } catch (error) {
     console.error("Error en la búsqueda:", error);
@@ -296,10 +356,17 @@ export const buscarUbicacion = async (input, bounds, mostrarAlerta = () => {}, m
 // ===============================
 // Geolocalización del usuario
 // ===============================
-export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, map, esMovil = false) => {
+export const manejarUbicacionActual = async (
+  bounds,
+  mostrarAlerta = () => {},
+  map,
+  esMovil = false
+) => {
   return new Promise((resolve) => {
     if (!navigator.geolocation) {
-      mostrarAlerta("La geolocalización no está disponible en este dispositivo.");
+      mostrarAlerta(
+        "La geolocalización no está disponible en este dispositivo."
+      );
       resolve(null);
       return;
     }
@@ -324,8 +391,13 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
           const address = data?.results?.[0]?.components || {};
 
           const ciudad =
-            address.city || address.town || address.village || "una ciudad desconocida";
-          const provincia = (address.state || "una provincia desconocida").toLowerCase();
+            address.city ||
+            address.town ||
+            address.village ||
+            "una ciudad desconocida";
+          const provincia = (
+            address.state || "una provincia desconocida"
+          ).toLowerCase();
 
           console.log("Ubicación detectada:", { ciudad, provincia });
 
@@ -337,7 +409,9 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
             resolve({ lat: latitude, lng: longitude });
           } else {
             mostrarAlerta(
-              `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${address.state || "provincia desconocida"}.`
+              `Red-Fi solo está disponible en Corrientes. Estás en ${ciudad}, ${
+                address.state || "provincia desconocida"
+              }.`
             );
             resolve(null);
           }
@@ -353,10 +427,12 @@ export const manejarUbicacionActual = async (bounds, mostrarAlerta = () => {}, m
         let mensaje = "No se pudo obtener tu ubicación.";
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            mensaje = "Permiso de ubicación denegado. Habilita la geolocalización en tu navegador.";
+            mensaje =
+              "Permiso de ubicación denegado. Habilita la geolocalización en tu navegador.";
             break;
           case error.POSITION_UNAVAILABLE:
-            mensaje = "Ubicación no disponible. Si estás en un emulador, configura una ubicación mock.";
+            mensaje =
+              "Ubicación no disponible. Si estás en un emulador, configura una ubicación mock.";
             break;
           case error.TIMEOUT:
             mensaje = "Tiempo de espera agotado. Intenta nuevamente.";
@@ -414,10 +490,16 @@ export const eliminarMarcadorUbicacion = (map) => {
 // ===============================
 // Coordenadas si está en Corrientes
 // ===============================
-export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = () => {}, esMovil = false) => {
+export const obtenerCoordenadasSiEstanEnCorrientes = (
+  bounds,
+  mostrarAlerta = () => {},
+  esMovil = false
+) => {
   return new Promise((resolve) => {
     if (!navigator.geolocation) {
-      mostrarAlerta("La geolocalización no está disponible en este dispositivo.");
+      mostrarAlerta(
+        "La geolocalización no está disponible en este dispositivo."
+      );
       resolve(null);
       return;
     }
@@ -446,7 +528,9 @@ export const obtenerCoordenadasSiEstanEnCorrientes = (bounds, mostrarAlerta = ()
             resolve({ lat: latitude, lng: longitude });
           } else {
             mostrarAlerta(
-              `Estás fuera de Corrientes. Estás en ${address.state || "una provincia desconocida"}.`
+              `Estás fuera de Corrientes. Estás en ${
+                address.state || "una provincia desconocida"
+              }.`
             );
             resolve(null);
           }

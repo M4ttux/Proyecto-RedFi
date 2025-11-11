@@ -19,8 +19,18 @@ import { useAlerta } from "../../../context/AlertaContext";
 // Helpers para manejar fecha base del período y formato YYYY-MM-DD
 const aIndiceMes = (mes) => {
   const nombres = [
-    "enero","febrero","marzo","abril","mayo","junio",
-    "julio","agosto","septiembre","octubre","noviembre","diciembre"
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
   ];
   if (!mes) return 0;
   if (!isNaN(mes)) return Math.max(0, Math.min(11, parseInt(mes, 10) - 1));
@@ -30,10 +40,16 @@ const aIndiceMes = (mes) => {
 
 const aFechaISO = (fecha) => {
   const dosDigitos = (n) => String(n).padStart(2, "0");
-  return `${fecha.getFullYear()}-${dosDigitos(fecha.getMonth() + 1)}-${dosDigitos(fecha.getDate())}`;
+  return `${fecha.getFullYear()}-${dosDigitos(
+    fecha.getMonth() + 1
+  )}-${dosDigitos(fecha.getDate())}`;
 };
 
-const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificaciones }) => {
+const ModalAgregarBoleta = ({
+  onClose,
+  onBoletaAgregada,
+  onActualizarNotificaciones,
+}) => {
   // Estado del formulario con datos de la boleta
   const [form, setForm] = useState({
     mes: "",
@@ -124,16 +140,24 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
       }
 
       // Validación de fechas contra el período
-      const fechaVenc = form.vencimiento ? new Date(form.vencimiento + "T12:00:00") : null;
-      const fechaPromo = form.promoHasta ? new Date(form.promoHasta + "T12:00:00") : null;
+      const fechaVenc = form.vencimiento
+        ? new Date(form.vencimiento + "T12:00:00")
+        : null;
+      const fechaPromo = form.promoHasta
+        ? new Date(form.promoHasta + "T12:00:00")
+        : null;
 
       if (fechaBase && fechaVenc && fechaVenc < fechaBase) {
-        mostrarError("La fecha de vencimiento debe ser posterior o igual al período seleccionado.");
+        mostrarError(
+          "La fecha de vencimiento debe ser posterior o igual al período seleccionado."
+        );
         setLoading(false);
         return;
       }
       if (fechaBase && fechaPromo && fechaPromo < fechaBase) {
-        mostrarError("La fecha de promoción debe ser posterior o igual al período seleccionado.");
+        mostrarError(
+          "La fecha de promoción debe ser posterior o igual al período seleccionado."
+        );
         setLoading(false);
         return;
       }
@@ -214,7 +238,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
           <IconX />
         </MainButton>
       </div>
-      
+
       {/* Formulario de creación de boleta */}
       <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
         {/* Campos principales del formulario */}
@@ -321,7 +345,7 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             onChange={handleChange}
             required
             icon={IconCalendar}
-            min={minISO}   // 👈 restricción
+            min={minISO} // 👈 restricción
           />
 
           <Input
@@ -331,10 +355,10 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             value={form.promoHasta}
             onChange={handleChange}
             icon={IconCalendar}
-            min={minISO}   // 👈 restricción
+            min={minISO} // 👈 restricción
           />
         </div>
-        
+
         {/* Campo de archivo */}
         <FileInput
           id="archivo"
@@ -367,10 +391,11 @@ const ModalAgregarBoleta = ({ onClose, onBoletaAgregada, onActualizarNotificacio
             {loading ? "Guardando..." : "Guardar"}
           </MainButton>
         </div>
-        
+
         <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">
-            Los campos marcados con <span className="text-red-600">*</span> son obligatorios.
+            Los campos marcados con <span className="text-red-600">*</span> son
+            obligatorios.
           </p>
         </div>
       </form>

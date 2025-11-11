@@ -24,7 +24,6 @@ const Usuarios = () => {
     };
     fetchPerfil();
   }, [id]);
-  
 
   if (!perfil) {
     return (
@@ -35,8 +34,6 @@ const Usuarios = () => {
   }
 
   const { nombre, foto_url, proveedor_preferido, rol, plan, reseñas } = perfil;
-
-  
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -72,12 +69,15 @@ const Usuarios = () => {
 
         {/* Reseñas del usuario */}
         <div>
-          <MainH2 className="text-center justify-center">Reseñas publicadas</MainH2>
+          <MainH2 className="text-center justify-center">
+            Reseñas publicadas
+          </MainH2>
 
           {reseñas && reseñas.length > 0 ? (
             <div className="space-y-6">
               {reseñas.map((r) => {
-                const proveedorNombre = r.proveedor_id?.nombre || "Proveedor desconocido";
+                const proveedorNombre =
+                  r.proveedor_id?.nombre || "Proveedor desconocido";
                 const proveedorLogo = r.proveedor_id?.logotipo || null;
 
                 const fecha = r.created_at
@@ -103,7 +103,7 @@ const Usuarios = () => {
                           className="rounded-full border border-acento"
                         />
                         <div>
-                          <MainLinkButton 
+                          <MainLinkButton
                             to={`/proveedores/${r.proveedor_id?.id}`}
                             variant="link"
                           >

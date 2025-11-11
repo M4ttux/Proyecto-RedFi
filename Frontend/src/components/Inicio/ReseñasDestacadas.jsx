@@ -52,7 +52,9 @@ const ReseñasDestacadas = () => {
   return (
     <section className="py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto text-center">
-        <MainH2 className="text-center justify-center mb-8">Reseñas destacadas</MainH2>
+        <MainH2 className="text-center justify-center mb-8">
+          Reseñas destacadas
+        </MainH2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
           {reseñas.map((r, i) => (

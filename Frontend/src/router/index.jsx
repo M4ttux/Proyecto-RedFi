@@ -35,84 +35,84 @@ export const router = createBrowserRouter([
       { path: "informacion-red", element: <DetectorProveedor /> },
       { path: "test-velocidad", element: <TestVelocidad /> },
       { path: "analisis-conexion", element: <AnalisisConexion /> },
-      { 
-        path: "cuenta", 
+      {
+        path: "cuenta",
         element: (
           <RequireAuth>
             <Cuenta />
           </RequireAuth>
-        ), 
+        ),
       },
-      { 
-        path: "editar-perfil", 
+      {
+        path: "editar-perfil",
         element: (
           <RequireAuth>
             <EditarPerfil />
           </RequireAuth>
-        )
+        ),
       },
-      { 
-        path: "cambiar-contraseña", 
+      {
+        path: "cambiar-contraseña",
         element: (
           <RequireAuth>
-            <CambiarContraseña/>
+            <CambiarContraseña />
           </RequireAuth>
-        )
+        ),
       },
       { path: "soporte", element: <Soporte /> },
       { path: "planes", element: <Planes /> },
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
-      { 
-        path: "resenas", 
+      {
+        path: "resenas",
         element: (
           <RequireAuth>
             <Reseñas />
           </RequireAuth>
-        ), 
+        ),
       },
       { path: "proveedores/:id", element: <Proveedores /> },
-      { path: "usuarios/:id" , element: <Usuarios /> },
-      { 
-        path: "boletas", 
+      { path: "usuarios/:id", element: <Usuarios /> },
+      {
+        path: "boletas",
         element: (
           <RequirePlan plan="premium">
             <Boletas />
           </RequirePlan>
-        ), 
+        ),
       },
       // Rutas que requieren plan premium
-      { 
-        path: 'academia', 
+      {
+        path: "academia",
         element: (
           <RequirePlan plan="premium">
-            <AcademyHome/>
+            <AcademyHome />
           </RequirePlan>
         ),
       },
-      { 
-        path: 'academia/curso/:id', 
+      {
+        path: "academia/curso/:id",
         element: (
           <RequirePlan plan="premium">
             <CursoIndividual />
           </RequirePlan>
         ),
       },
-      { 
-        path: "glosario", 
+      {
+        path: "glosario",
         element: (
           <RequirePlan plan="premium">
             <Glosario />
           </RequirePlan>
-        ) 
+        ),
       },
-      { 
-        path: "admin", 
+      {
+        path: "admin",
         element: (
           <RequireAuth>
             <Administrador />
           </RequireAuth>
-        ) 
+        ),
       },
     ],
   },

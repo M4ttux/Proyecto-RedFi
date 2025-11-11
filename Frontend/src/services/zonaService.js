@@ -1,11 +1,11 @@
-// src/services/zonas.js
 import { supabase } from "../supabase/client";
 
 // Obtiene todas las zonas con sus proveedores y tecnologías relacionadas
 export const getZonas = async () => {
   const { data, error } = await supabase
     .from("zonas")
-    .select(`
+    .select(
+      `
       *,
       ZonaProveedor (
         proveedores (
@@ -15,7 +15,8 @@ export const getZonas = async () => {
           )
         )
       )
-    `)
+    `
+    )
     .order("departamento", { ascending: true });
 
   if (error) {

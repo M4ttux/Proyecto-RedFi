@@ -13,7 +13,7 @@ import MainH2 from "../../../ui/MainH2";
 import Input from "../../../ui/Input";
 import Select from "../../../ui/Select";
 import FileInput from "../../../ui/FileInput";
-import { 
+import {
   editarUsuario,
   subirImagenPerfil,
   eliminarImagenPerfilPorURL,
@@ -21,7 +21,6 @@ import {
   obtenerUsuarioCompletoPorId,
 } from "../../../../services/perfil/adminPerfil";
 import { useAlerta } from "../../../../context/AlertaContext";
-
 
 const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
   // Estados del formulario
@@ -39,14 +38,14 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
   const { mostrarExito, mostrarError } = useAlerta();
 
   // Opciones para selects
-  const rolesOptions = cargandoInicial 
+  const rolesOptions = cargandoInicial
     ? [{ value: "", label: "Cargando..." }]
     : [
         { value: "user", label: "Usuario" },
         { value: "admin", label: "Administrador" },
       ];
 
-  const planesOptions = cargandoInicial 
+  const planesOptions = cargandoInicial
     ? [{ value: "", label: "Cargando..." }]
     : [
         { value: "basico", label: "Básico" },
@@ -134,7 +133,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
 
       // Manejo completo de imagen: nueva, eliminar o mantener
       const imagenOriginal = perfil.foto_url;
-      
+
       // Caso 1: Usuario eliminó la imagen (no hay preview ni archivo)
       if (!previewUrl && !fotoFile && imagenOriginal) {
         console.log("Eliminando imagen del usuario");
@@ -148,15 +147,15 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
         }
       }
       // Caso 2: Usuario subió nueva imagen
-      else if (fotoFile && previewUrl?.startsWith('data:')) {
+      else if (fotoFile && previewUrl?.startsWith("data:")) {
         console.log("Subiendo nueva imagen para usuario ID:", perfil.id);
         try {
           // 1. Subir nueva imagen PRIMERO
           const nuevaFotoUrl = await subirImagenPerfil(fotoFile, perfil.id);
           console.log("Nueva imagen subida:", nuevaFotoUrl);
-          
+
           datosActualizados.foto_url = nuevaFotoUrl;
-          
+
           // 2. Eliminar imagen antigua DESPUÉS del éxito
           if (imagenOriginal && imagenOriginal !== nuevaFotoUrl) {
             try {
@@ -189,7 +188,10 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
       onClose();
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
-      const mensajeProcesado = procesarMensajeError(error.message || "Error al actualizar el usuario", email);
+      const mensajeProcesado = procesarMensajeError(
+        error.message || "Error al actualizar el usuario",
+        email
+      );
       mostrarError(mensajeProcesado);
     } finally {
       setLoading(false);
@@ -236,7 +238,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             showCounter={true}
             disabled={loading || cargandoInicial}
           />
-          
+
           {/* Email */}
           <Input
             label={
@@ -247,13 +249,15 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={cargandoInicial ? "Cargando..." : "usuario@ejemplo.com"}
+            placeholder={
+              cargandoInicial ? "Cargando..." : "usuario@ejemplo.com"
+            }
             required
             icon={IconMail}
             disabled={loading || cargandoInicial}
           />
         </div>
-        
+
         <div className="space-y-2 md:space-y-4">
           <div className="flex gap-3">
             <div className="flex-1">
@@ -285,14 +289,16 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
               />
             </div>
           </div>
-          
+
           {/* Proveedor preferido */}
           <Input
             label="Proveedor preferido"
             type="text"
             value={proveedorPreferido}
             onChange={(e) => setProveedorPreferido(e.target.value)}
-            placeholder={cargandoInicial ? "Cargando..." : "Telecom, Movistar, etc."}
+            placeholder={
+              cargandoInicial ? "Cargando..." : "Telecom, Movistar, etc."
+            }
             icon={IconBuilding}
             disabled={loading || cargandoInicial}
           />

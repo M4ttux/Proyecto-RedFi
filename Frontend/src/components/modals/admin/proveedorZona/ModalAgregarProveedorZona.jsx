@@ -6,14 +6,17 @@ import CheckboxDropdown from "../../../ui/CheckboxDropdown";
 import Select from "../../../ui/Select";
 import { IconX } from "@tabler/icons-react";
 import { useAlerta } from "../../../../context/AlertaContext";
-import { obtenerProveedoresSinZonas, actualizarZonasProveedor } from "../../../../services/relaciones/proveedorZonaService";
+import {
+  obtenerProveedoresSinZonas,
+  actualizarZonasProveedor,
+} from "../../../../services/relaciones/proveedorZonaService";
 import { getZonas } from "../../../../services/zonaService";
 
 const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
   // Estados para las opciones de selección
   const [proveedores, setProveedores] = useState([]);
   const [zonas, setZonas] = useState([]);
-  
+
   // Estados para las selecciones del usuario
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
   const [zonasSeleccionadas, setZonasSeleccionadas] = useState([]);
@@ -84,14 +87,22 @@ const ModalAgregarProveedorZona = ({ onClose, onActualizar }) => {
       </div>
 
       {/* Formulario de asignación */}
-      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         {/* Selector de proveedor */}
         <div className="mb-6">
           <Select
             label="Proveedor"
             value={proveedorSeleccionado}
             onChange={(val) => setProveedorSeleccionado(val)}
-            options={[{ id: "", nombre: "Seleccionar proveedor" }, ...proveedores]}
+            options={[
+              { id: "", nombre: "Seleccionar proveedor" },
+              ...proveedores,
+            ]}
             getOptionValue={(opt) => opt.id}
             getOptionLabel={(opt) => opt.nombre}
             disabled={loading}

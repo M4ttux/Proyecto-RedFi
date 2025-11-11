@@ -41,9 +41,7 @@ const MobileBottomNav = () => {
     setMostrarMenu(menu === "menu");
   };
 
-  const mainNavigationItems = [
-    { path: "/", label: "Inicio", icon: IconHome },
-  ];
+  const mainNavigationItems = [{ path: "/", label: "Inicio", icon: IconHome }];
 
   const isActive = (path) => location.pathname === path;
 
@@ -58,7 +56,7 @@ const MobileBottomNav = () => {
         }`}
       >
         <div className="flex justify-around items-center py-3 px-2">
-          {/* Main Navigation Items usando MainLinkButton */}
+          {/* Main Navigation Items*/}
           {mainNavigationItems.map(({ path, label, icon: Icon }) => (
             <MainLinkButton
               key={path}
@@ -108,8 +106,8 @@ const MobileBottomNav = () => {
             {mostrarHerramientas && (
               <>
                 {/* Overlay para cerrar el dropdown en móvil */}
-                <div 
-                  className="fixed inset-0 z-40 lg:hidden" 
+                <div
+                  className="fixed inset-0 z-40 lg:hidden"
                   onClick={() => setMostrarHerramientas(false)}
                 />
                 <div
@@ -119,86 +117,88 @@ const MobileBottomNav = () => {
                       : "bg-fondo text-texto border border-texto/15"
                   }`}
                 >
-                <MainLinkButton
-                  to="/herramientas"
-                  onClick={() => setMostrarHerramientas(false)}
-                  variant="navbar"
-                  className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                    location.pathname === "/herramientas" ? "!text-acento" : ""
-                  }`}
-                >
-                  Todas las herramientas
-                </MainLinkButton>
-
-                {/* Grupo indentado */}
-                <div className="ml-2 pl-3 mt-1 space-y-1 border-l border-texto/15">
                   <MainLinkButton
-                    to="/mapa"
+                    to="/herramientas"
                     onClick={() => setMostrarHerramientas(false)}
                     variant="navbar"
                     className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                      location.pathname === "/mapa" ? "!text-acento" : ""
-                    }`}
-                  >
-                    Mapa
-                  </MainLinkButton>
-
-                  <MainLinkButton
-                    to="/informacion-red"
-                    onClick={() => setMostrarHerramientas(false)}
-                    variant="navbar"
-                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                      location.pathname === "/informacion-red"
+                      location.pathname === "/herramientas"
                         ? "!text-acento"
                         : ""
                     }`}
                   >
-                    Información de red
+                    Todas las herramientas
                   </MainLinkButton>
 
-                  <MainLinkButton
-                    to="/test-velocidad"
-                    onClick={() => setMostrarHerramientas(false)}
-                    variant="navbar"
-                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                      location.pathname === "/test-velocidad"
-                        ? "!text-acento"
-                        : ""
-                    }`}
-                  >
-                    Test de velocidad
-                  </MainLinkButton>
+                  {/* Grupo indentado */}
+                  <div className="ml-2 pl-3 mt-1 space-y-1 border-l border-texto/15">
+                    <MainLinkButton
+                      to="/mapa"
+                      onClick={() => setMostrarHerramientas(false)}
+                      variant="navbar"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        location.pathname === "/mapa" ? "!text-acento" : ""
+                      }`}
+                    >
+                      Mapa
+                    </MainLinkButton>
 
-                  <MainLinkButton
-                    to="/analisis-conexion"
-                    onClick={() => setMostrarHerramientas(false)}
-                    variant="navbar"
-                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                      location.pathname === "/analisis-conexion"
-                        ? "!text-acento"
-                        : ""
-                    }`}
-                  >
-                    Análisis de conexión
-                  </MainLinkButton>
+                    <MainLinkButton
+                      to="/informacion-red"
+                      onClick={() => setMostrarHerramientas(false)}
+                      variant="navbar"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        location.pathname === "/informacion-red"
+                          ? "!text-acento"
+                          : ""
+                      }`}
+                    >
+                      Información de red
+                    </MainLinkButton>
 
-                  <MainLinkButton
-                    to="/soporte"
-                    onClick={() => setMostrarHerramientas(false)}
-                    variant="navbar"
-                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                      location.pathname === "/soporte" ? "!text-acento" : ""
-                    }`}
-                  >
-                    Soporte
-                  </MainLinkButton>
+                    <MainLinkButton
+                      to="/test-velocidad"
+                      onClick={() => setMostrarHerramientas(false)}
+                      variant="navbar"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        location.pathname === "/test-velocidad"
+                          ? "!text-acento"
+                          : ""
+                      }`}
+                    >
+                      Test de velocidad
+                    </MainLinkButton>
+
+                    <MainLinkButton
+                      to="/analisis-conexion"
+                      onClick={() => setMostrarHerramientas(false)}
+                      variant="navbar"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        location.pathname === "/analisis-conexion"
+                          ? "!text-acento"
+                          : ""
+                      }`}
+                    >
+                      Análisis de conexión
+                    </MainLinkButton>
+
+                    <MainLinkButton
+                      to="/soporte"
+                      onClick={() => setMostrarHerramientas(false)}
+                      variant="navbar"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        location.pathname === "/soporte" ? "!text-acento" : ""
+                      }`}
+                    >
+                      Soporte
+                    </MainLinkButton>
+                  </div>
                 </div>
-              </div>
               </>
             )}
           </div>
 
-          {/* Notifications Icon for Mobile usando MainButton */}
+          {/* Notifications Icon para Mobile*/}
           {!loading && usuario && (
             <div className="relative">
               <MainButton
@@ -218,7 +218,9 @@ const MobileBottomNav = () => {
                 iconSize={22}
                 iconAlwaysVisible={true}
               >
-                <span className="text-xs mt-1 font-medium flex items-center gap-1">Alertas</span>
+                <span className="text-xs mt-1 font-medium flex items-center gap-1">
+                  Alertas
+                </span>
                 {notificaciones.length > 0 && (
                   <span className="absolute -top-0 -right-0 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
                     {notificaciones.length}
@@ -226,55 +228,54 @@ const MobileBottomNav = () => {
                 )}
               </MainButton>
 
-             {mostrarNotis && (
+              {mostrarNotis && (
                 <>
                   {/* Overlay para cerrar el dropdown en móvil */}
-                  <div 
-                    className="fixed inset-0 z-40 lg:hidden" 
+                  <div
+                    className="fixed inset-0 z-40 lg:hidden"
                     onClick={() => setMostrarNotis(false)}
                   />
                   <div
                     className={`fixed bottom-24 left-4 right-4 z-50 rounded-lg shadow-lg p-4 space-y-2 
                       sm:absolute sm:bottom-full sm:right-0 sm:left-auto sm:w-72 mb-2 ${
-                      currentTheme === "light"
-                      ? "bg-fondo border border-texto/15 text-texto"
-                      : "bg-fondo text-texto border border-texto/15"
-                  }`}
-                >
-                  {notificaciones.length === 0 ? (
-                    <p className="italic text-center">Sin notificaciones</p>
-                  ) : (
-                    notificaciones.map((msg, i) => (
-                      <div
-                        key={i}
-                        className={`border-b last:border-b-0 flex justify-between items-center gap-2 ${
-                          currentTheme === "light"
-                            ? "border-texto/15"
-                            : "border-texto/15"
-                        }`}
-                      >
-                        <span className="break-words">{msg}</span>
-                        <MainButton
-                          onClick={() =>
-                            setNotificaciones((prev) =>
-                              prev.filter((_, idx) => idx !== i)
-                            )
-                          }
-                          variant="cross"
-                          title="Cerrar"
-                          icon={IconX}
-                          iconSize={20}
-                          className="leading-none p-0"
-                          iconAlwaysVisible={true}
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
+                        currentTheme === "light"
+                          ? "bg-fondo border border-texto/15 text-texto"
+                          : "bg-fondo text-texto border border-texto/15"
+                      }`}
+                  >
+                    {notificaciones.length === 0 ? (
+                      <p className="italic text-center">Sin notificaciones</p>
+                    ) : (
+                      notificaciones.map((msg, i) => (
+                        <div
+                          key={i}
+                          className={`border-b last:border-b-0 flex justify-between items-center gap-2 ${
+                            currentTheme === "light"
+                              ? "border-texto/15"
+                              : "border-texto/15"
+                          }`}
+                        >
+                          <span className="break-words">{msg}</span>
+                          <MainButton
+                            onClick={() =>
+                              setNotificaciones((prev) =>
+                                prev.filter((_, idx) => idx !== i)
+                              )
+                            }
+                            variant="cross"
+                            title="Cerrar"
+                            icon={IconX}
+                            iconSize={20}
+                            className="leading-none p-0"
+                            iconAlwaysVisible={true}
+                          />
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </>
               )}
             </div>
-            
           )}
 
           {/* More Menu Button usando MainButton */}
@@ -286,8 +287,8 @@ const MobileBottomNav = () => {
               }}
               variant="navbar"
               className={`flex flex-col items-center py-1 px-2 min-w-[60px] !bg-transparent ${
-                currentTheme === "light" ? "!text-texto" : "!text-texto",
-                mostrarMenu ? "!text-acento !scale-110" : ""
+                (currentTheme === "light" ? "!text-texto" : "!text-texto",
+                mostrarMenu ? "!text-acento !scale-110" : "")
               }`}
               icon={loading ? undefined : IconDots}
               iconSize={22}
@@ -307,94 +308,92 @@ const MobileBottomNav = () => {
             {mostrarMenu && !loading && (
               <>
                 {/* Overlay para cerrar el dropdown en móvil */}
-                <div 
-                  className="fixed inset-0 z-40 lg:hidden" 
+                <div
+                  className="fixed inset-0 z-40 lg:hidden"
                   onClick={() => setMostrarMenu(false)}
                 />
                 <div
                   className={`absolute bottom-full right-2 mb-2 w-56 max-w-[calc(100vw-1rem)] rounded-lg shadow-lg z-50 p-2 ${
                     currentTheme === "light"
                       ? "bg-fondo border border-texto/15 text-texto"
-                        : "bg-fondo text-texto border border-texto/15"
+                      : "bg-fondo text-texto border border-texto/15"
                   }`}
                 >
-                {/* Cambiar tema usando MainButton */}
-                <MainButton
-                  onClick={() => {
-                    toggleTheme();
-                    setMostrarMenu(false);
-                  }}
-                  variant="navbar"
-                  className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
-                    currentTheme === "light"
-                      ? " !text-texto"
-                      : " !text-texto"
-                  }`}
-                  icon={currentTheme === "light" ? IconSun : IconMoon}
-                  iconSize={20}
-                >
-                  <span>Cambiar tema</span>
-                </MainButton>
+                  {/* Cambiar tema usando MainButton */}
+                  <MainButton
+                    onClick={() => {
+                      toggleTheme();
+                      setMostrarMenu(false);
+                    }}
+                    variant="navbar"
+                    className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
+                      currentTheme === "light" ? " !text-texto" : " !text-texto"
+                    }`}
+                    icon={currentTheme === "light" ? IconSun : IconMoon}
+                    iconSize={20}
+                  >
+                    <span>Cambiar tema</span>
+                  </MainButton>
 
-                {usuario && (
-                  <>
-                    {/* Perfil usando MainLinkButton */}
+                  {usuario && (
+                    <>
+                      {/* Perfil*/}
+                      <MainLinkButton
+                        to="/cuenta"
+                        onClick={() => setMostrarMenu(false)}
+                        variant="navbar"
+                        className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
+                          isActive("/cuenta") ? "!text-acento" : ""
+                        }`}
+                      >
+                        <IconUser size={20} />
+                        <span>Perfil</span>
+                      </MainLinkButton>
+
+                      {/* Cerrar sesión*/}
+                      <MainButton
+                        onClick={async () => {
+                          await logoutUser();
+                          setMostrarMenu(false);
+                        }}
+                        variant="danger"
+                        className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                          currentTheme === "light"
+                            ? "!bg-transparent !text-red-600"
+                            : "!bg-transparent !text-red-400"
+                        }`}
+                        icon={IconLogout}
+                        iconSize={20}
+                      >
+                        <span>Cerrar sesión</span>
+                      </MainButton>
+                    </>
+                  )}
+
+                  {!usuario && (
+                    /* Login */
                     <MainLinkButton
-                      to="/cuenta"
+                      to="/login"
                       onClick={() => setMostrarMenu(false)}
-                      variant="navbar"
-                      className={`w-full !justify-start !px-4 !py-3 !rounded-lg ${
-                        isActive("/cuenta") ? "!text-acento" : ""
+                      variant="accent"
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        currentTheme === "light"
+                          ? "!bg-transparent !text-orange-600"
+                          : "!bg-transparent !text-acento"
                       }`}
                     >
                       <IconUser size={20} />
-                      <span>Perfil</span>
+                      <span>Iniciar sesión</span>
                     </MainLinkButton>
-
-                    {/* Cerrar sesión usando MainButton */}
-                    <MainButton
-                      onClick={async () => {
-                        await logoutUser();
-                        setMostrarMenu(false);
-                      }}
-                      variant="danger"
-                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                        currentTheme === "light"
-                          ? "!bg-transparent !text-red-600"
-                          : "!bg-transparent !text-red-400"
-                      }`}
-                      icon={IconLogout}
-                      iconSize={20}
-                    >
-                      <span>Cerrar sesión</span>
-                    </MainButton>
-                  </>
-                )}
-
-                {!usuario && (
-                  /* Login usando MainLinkButton */
-                  <MainLinkButton
-                    to="/login"
-                    onClick={() => setMostrarMenu(false)}
-                    variant="accent"
-                    className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
-                      currentTheme === "light"
-                        ? "!bg-transparent !text-orange-600"
-                        : "!bg-transparent !text-acento"
-                    }`}
-                  >
-                    <IconUser size={20} />
-                    <span>Iniciar sesión</span>
-                  </MainLinkButton>
-                )}
-              </div>
+                  )}
+                </div>
               </>
             )}
           </div>
         </div>
       </nav>
 
-      {/* Mobile Bottom Padding to prevent content overlap */}
+      {/* Mobile Bottom Padding para prevenir el contenido overlap */}
       <div className="lg:hidden h-20"></div>
     </>
   );

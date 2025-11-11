@@ -2,12 +2,12 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { IconLoader2 } from "@tabler/icons-react";
 
-const MainLoader = ({ 
-  texto = "", 
-  className = "", 
-  size = "medium", 
+const MainLoader = ({
+  texto = "",
+  className = "",
+  size = "medium",
   variant = "inline",
-  visible = true 
+  visible = true,
 }) => {
   // Estado interno para controlar visibilidad con animaciones
   const [isVisible, setIsVisible] = useState(visible);
@@ -29,7 +29,7 @@ const MainLoader = ({
   const sizeConfig = {
     small: { icon: 20, text: "text-sm" },
     medium: { icon: 24, text: "text-base" },
-    large: { icon: 42, text: "text-lg sm:text-xl font-bold" }
+    large: { icon: 42, text: "text-lg sm:text-xl font-bold" },
   };
 
   // Obtiene la configuración del tamaño actual con fallback a medium
@@ -43,7 +43,9 @@ const MainLoader = ({
       <div
         className={classNames(
           "fixed inset-0 z-45 flex items-center justify-center transition-opacity duration-300",
-          visible ? "opacity-75 pointer-events-auto" : "opacity-0 pointer-events-none",
+          visible
+            ? "opacity-75 pointer-events-auto"
+            : "opacity-0 pointer-events-none",
           className
         )}
         style={{
@@ -52,10 +54,18 @@ const MainLoader = ({
         }}
       >
         <div className="flex flex-col items-center justify-center gap-3 text-texto text-center px-4">
-          <IconLoader2 size={currentSize.icon} className="animate-spin text-texto" />
+          <IconLoader2
+            size={currentSize.icon}
+            className="animate-spin text-texto"
+          />
           {/* Texto opcional con estilos dinámicos */}
           {texto && (
-            <p className={classNames(currentSize.text, "tracking-wide text-center")}>
+            <p
+              className={classNames(
+                currentSize.text,
+                "tracking-wide text-center"
+              )}
+            >
               {texto}
             </p>
           )}
@@ -66,12 +76,22 @@ const MainLoader = ({
 
   // Variante inline (por defecto) - se integra en el flujo del documento
   return (
-    <div className={classNames("flex flex-col items-center justify-center gap-3 text-texto text-center w-full", className)}>
+    <div
+      className={classNames(
+        "flex flex-col items-center justify-center gap-3 text-texto text-center w-full",
+        className
+      )}
+    >
       {/* Spinner animado con tamaño dinámico */}
       <IconLoader2 size={currentSize.icon} className="animate-spin mx-auto" />
       {/* Texto opcional con estilos según tamaño */}
       {texto && (
-        <span className={classNames(currentSize.text, "font-medium text-center w-full")}>
+        <span
+          className={classNames(
+            currentSize.text,
+            "font-medium text-center w-full"
+          )}
+        >
           {texto}
         </span>
       )}

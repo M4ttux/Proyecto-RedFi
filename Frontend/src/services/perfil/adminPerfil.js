@@ -18,7 +18,11 @@ export const obtenerPerfilesAdmin = async (mostrarAlerta = () => {}) => {
 };
 
 // Actualiza solo plan (y opcionalmente rol) de un usuario
-export const actualizarPlanUsuario = async (usuarioId, nuevoPlan, nuevoRol = null) => {
+export const actualizarPlanUsuario = async (
+  usuarioId,
+  nuevoPlan,
+  nuevoRol = null
+) => {
   const actualizacion = { plan: nuevoPlan };
   if (nuevoRol) actualizacion.rol = nuevoRol;
 
@@ -79,7 +83,7 @@ export const subirImagenPerfil = async (archivo, userId) => {
   const carpetaUsuario = `${userId}`;
   const nombreArchivo = `perfil-${Date.now()}`;
   const rutaCompleta = `${carpetaUsuario}/${nombreArchivo}`;
-  
+
   const { error: uploadError } = await supabase.storage
     .from("perfiles")
     .upload(rutaCompleta, archivo, {
@@ -93,9 +97,7 @@ export const subirImagenPerfil = async (archivo, userId) => {
   }
 
   // Obtener URL pública
-  const { data } = supabase.storage
-    .from("perfiles")
-    .getPublicUrl(rutaCompleta);
+  const { data } = supabase.storage.from("perfiles").getPublicUrl(rutaCompleta);
 
   return data.publicUrl;
 };
@@ -140,54 +142,61 @@ export const eliminarImagenPerfilPorURL = async (imageUrl) => {
  * @param {string} email - Email para contexto
  * @returns {string} Mensaje de error procesado
  */
-export const procesarMensajeError = (errorMessage, email = '') => {
+export const procesarMensajeError = (errorMessage, email = "") => {
   // Detectar errores comunes y convertirlos a español
-  if (errorMessage.includes("A user with this email address has already been registered")) {
+  if (
+    errorMessage.includes(
+      "A user with this email address has already been registered"
+    )
+  ) {
     return `El email ${email} ya está registrado en el sistema. Por favor, usa un email diferente.`;
   }
-  
+
   if (errorMessage.includes("Invalid email")) {
     return "El formato del email no es válido. Verifica que esté escrito correctamente.";
   }
-  
+
   if (errorMessage.includes("Password should be at least 6 characters")) {
     return "La contraseña debe tener al menos 6 caracteres.";
   }
-  
+
   if (errorMessage.includes("Unable to validate email address")) {
     return "No se pudo validar el email. Verifica que el email esté escrito correctamente.";
   }
-  
+
   if (errorMessage.includes("Signup is disabled")) {
     return "El registro de usuarios está deshabilitado temporalmente.";
   }
-  
+
   if (errorMessage.includes("user_profiles_rol_check")) {
     return "El rol seleccionado no es válido. Selecciona 'Usuario' o 'Administrador'.";
   }
-  
+
   if (errorMessage.includes("violates check constraint")) {
     return "Los datos ingresados no cumplen con las restricciones del sistema. Verifica la información.";
   }
-  
+
   if (errorMessage.includes("Formato de imagen no soportado")) {
     return "El formato de la imagen no es compatible. Usa archivos JPG, PNG o WEBP.";
   }
-  
+
   if (errorMessage.includes("supera los 300 KB")) {
     return "La imagen es muy grande. El tamaño máximo permitido es 300 KB.";
   }
-  
+
   if (errorMessage.includes("resolución máxima permitida")) {
     return "La imagen es muy grande. La resolución máxima permitida es 500x500 píxeles.";
   }
-  
+
   if (errorMessage.includes("Error al subir la imagen")) {
     return "No se pudo subir la imagen. Intenta nuevamente con otra imagen.";
   }
-  
+
   // Para otros errores, usar el mensaje original pero mejorado
-  return errorMessage.replace("Error al crear usuario en auth: ", "Error al crear usuario: ");
+  return errorMessage.replace(
+    "Error al crear usuario en auth: ",
+    "Error al crear usuario: "
+  );
 };
 
 /**
@@ -226,30 +235,41 @@ export const validarFormularioUsuario = (datos) => {
  * @param {File|null} imagenArchivo - Archivo de imagen opcional
  * @returns {Object} Usuario creado con credenciales
  */
-export const crearUsuarioCompleto = async (datosUsuario, imagenArchivo = null) => {
-  const { email, contrasena, nombre, rol = 'user', plan = 'basico', proveedor_preferido } = datosUsuario;
-  
+export const crearUsuarioCompleto = async (
+  datosUsuario,
+  imagenArchivo = null
+) => {
+  const {
+    email,
+    contrasena,
+    nombre,
+    rol = "user",
+    plan = "basico",
+    proveedor_preferido,
+  } = datosUsuario;
+
   // Validaciones básicas
   if (!email || !nombre) {
-    throw new Error('Email y nombre son campos obligatorios');
+    throw new Error("Email y nombre son campos obligatorios");
   }
 
   if (!contrasena || contrasena.length < 6) {
-    throw new Error('La contraseña debe tener al menos 6 caracteres');
+    throw new Error("La contraseña debe tener al menos 6 caracteres");
   }
 
   try {
     // 1. Crear usuario en auth.users usando Admin API
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
-      email,
-      password: contrasena,
-      email_confirm: true, // Auto-confirmar email
-      user_metadata: {
-        nombre,
-        rol,
-        plan
-      }
-    });
+    const { data: authUser, error: authError } =
+      await supabaseAdmin.auth.admin.createUser({
+        email,
+        password: contrasena,
+        email_confirm: true, // Auto-confirmar email
+        user_metadata: {
+          nombre,
+          rol,
+          plan,
+        },
+      });
 
     if (authError) {
       throw new Error(`Error al crear usuario en auth: ${authError.message}`);
@@ -263,7 +283,7 @@ export const crearUsuarioCompleto = async (datosUsuario, imagenArchivo = null) =
 
     // 3. Crear perfil en user_profiles
     const { data: perfil, error: perfilError } = await supabaseAdmin
-      .from('user_profiles')
+      .from("user_profiles")
       .insert({
         id: authUser.user.id, // Usar el ID del usuario auth
         nombre,
@@ -272,7 +292,7 @@ export const crearUsuarioCompleto = async (datosUsuario, imagenArchivo = null) =
         plan,
         proveedor_preferido,
         foto_url,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       })
       .select()
       .single();
@@ -288,18 +308,15 @@ export const crearUsuarioCompleto = async (datosUsuario, imagenArchivo = null) =
       usuario: perfil,
       credenciales: {
         email,
-        contrasena
+        contrasena,
       },
-      auth_id: authUser.user.id
+      auth_id: authUser.user.id,
     };
-
   } catch (error) {
-    console.error('Error en crearUsuarioCompleto:', error);
+    console.error("Error en crearUsuarioCompleto:", error);
     throw error;
   }
 };
-
-
 
 /**
  * Obtener usuario completo por ID (incluyendo email de auth.users)
@@ -310,9 +327,9 @@ export const obtenerUsuarioCompletoPorId = async (userId) => {
   try {
     // Obtener perfil
     const { data: perfil, error: perfilError } = await supabaseAdmin
-      .from('user_profiles')
-      .select('*')
-      .eq('id', userId)
+      .from("user_profiles")
+      .select("*")
+      .eq("id", userId)
       .single();
 
     if (perfilError) {
@@ -320,10 +337,11 @@ export const obtenerUsuarioCompletoPorId = async (userId) => {
     }
 
     // Obtener email del auth.users
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(userId);
+    const { data: authUser, error: authError } =
+      await supabaseAdmin.auth.admin.getUserById(userId);
 
     if (authError) {
-      console.warn('Error al obtener email del usuario:', authError.message);
+      console.warn("Error al obtener email del usuario:", authError.message);
       // Si no se puede obtener el email, devolver el perfil sin email
       return perfil;
     }
@@ -331,10 +349,10 @@ export const obtenerUsuarioCompletoPorId = async (userId) => {
     // Combinar datos del perfil con el email
     return {
       ...perfil,
-      email: authUser.user.email
+      email: authUser.user.email,
     };
   } catch (error) {
-    console.error('Error en obtenerUsuarioCompletoPorId:', error);
+    console.error("Error en obtenerUsuarioCompletoPorId:", error);
     throw error;
   }
 };
@@ -349,11 +367,11 @@ export const editarUsuario = async (userId, datosActualizados) => {
   try {
     // Actualizar perfil en user_profiles
     const { data: perfil, error: perfilError } = await supabaseAdmin
-      .from('user_profiles')
+      .from("user_profiles")
       .update({
         ...datosActualizados,
       })
-      .eq('id', userId)
+      .eq("id", userId)
       .select()
       .single();
 
@@ -363,26 +381,24 @@ export const editarUsuario = async (userId, datosActualizados) => {
 
     // Si se actualiza el email, también actualizar en auth
     if (datosActualizados.email) {
-      const { error: authError } = await supabaseAdmin.auth.admin.updateUserById(
-        userId,
-        {
+      const { error: authError } =
+        await supabaseAdmin.auth.admin.updateUserById(userId, {
           email: datosActualizados.email,
           user_metadata: {
             nombre: datosActualizados.nombre || perfil.nombre,
             rol: datosActualizados.rol || perfil.rol,
-            plan: datosActualizados.plan || perfil.plan
-          }
-        }
-      );
+            plan: datosActualizados.plan || perfil.plan,
+          },
+        });
 
       if (authError) {
-        console.warn('Error al actualizar email en auth:', authError.message);
+        console.warn("Error al actualizar email en auth:", authError.message);
       }
     }
 
     return perfil;
   } catch (error) {
-    console.error('Error en editarUsuario:', error);
+    console.error("Error en editarUsuario:", error);
     throw error;
   }
 };
@@ -398,23 +414,29 @@ export const eliminarUsuarioCompleto = async (userId) => {
 
     // 1. Obtener boletas del usuario para eliminar sus imágenes
     const { data: boletas, error: boletasError } = await supabaseAdmin
-      .from('boletas')
-      .select('*')
-      .eq('user_id', userId);
+      .from("boletas")
+      .select("*")
+      .eq("user_id", userId);
 
     if (boletasError) {
-      console.warn('Error al obtener boletas del usuario:', boletasError.message);
+      console.warn(
+        "Error al obtener boletas del usuario:",
+        boletasError.message
+      );
     }
 
     // 2. Eliminar todas las boletas del usuario de la base de datos
     if (boletas && boletas.length > 0) {
       const { error: deleteBoletasError } = await supabaseAdmin
-        .from('boletas')
+        .from("boletas")
         .delete()
-        .eq('user_id', userId);
+        .eq("user_id", userId);
 
       if (deleteBoletasError) {
-        console.warn('Error al eliminar boletas de la base de datos:', deleteBoletasError.message);
+        console.warn(
+          "Error al eliminar boletas de la base de datos:",
+          deleteBoletasError.message
+        );
       } else {
         console.log(`Eliminadas ${boletas.length} boletas de la base de datos`);
       }
@@ -422,76 +444,94 @@ export const eliminarUsuarioCompleto = async (userId) => {
 
     // 3. Eliminar todos los archivos del usuario en el bucket 'perfiles'
     try {
-      const { data: archivosPerfiles, error: listPerfilesError } = await supabaseAdmin.storage
-        .from('perfiles')
-        .list(userId);
+      const { data: archivosPerfiles, error: listPerfilesError } =
+        await supabaseAdmin.storage.from("perfiles").list(userId);
 
-      if (!listPerfilesError && archivosPerfiles && archivosPerfiles.length > 0) {
-        const rutasPerfiles = archivosPerfiles.map(archivo => `${userId}/${archivo.name}`);
+      if (
+        !listPerfilesError &&
+        archivosPerfiles &&
+        archivosPerfiles.length > 0
+      ) {
+        const rutasPerfiles = archivosPerfiles.map(
+          (archivo) => `${userId}/${archivo.name}`
+        );
         const { error: removePerfilesError } = await supabaseAdmin.storage
-          .from('perfiles')
+          .from("perfiles")
           .remove(rutasPerfiles);
 
         if (removePerfilesError) {
-          console.warn('Error al eliminar archivos de perfiles:', removePerfilesError.message);
+          console.warn(
+            "Error al eliminar archivos de perfiles:",
+            removePerfilesError.message
+          );
         } else {
-          console.log(`Eliminados ${rutasPerfiles.length} archivos del bucket perfiles`);
+          console.log(
+            `Eliminados ${rutasPerfiles.length} archivos del bucket perfiles`
+          );
         }
       }
     } catch (error) {
-      console.warn('Error al eliminar archivos de perfiles:', error.message);
+      console.warn("Error al eliminar archivos de perfiles:", error.message);
     }
 
     // 4. Eliminar todos los archivos del usuario en el bucket 'boletas'
     try {
-      const { data: archivosBoletas, error: listBoletasError } = await supabaseAdmin.storage
-        .from('boletas')
-        .list(userId);
+      const { data: archivosBoletas, error: listBoletasError } =
+        await supabaseAdmin.storage.from("boletas").list(userId);
 
       if (!listBoletasError && archivosBoletas && archivosBoletas.length > 0) {
-        const rutasBoletas = archivosBoletas.map(archivo => `${userId}/${archivo.name}`);
+        const rutasBoletas = archivosBoletas.map(
+          (archivo) => `${userId}/${archivo.name}`
+        );
         const { error: removeBoletasError } = await supabaseAdmin.storage
-          .from('boletas')
+          .from("boletas")
           .remove(rutasBoletas);
 
         if (removeBoletasError) {
-          console.warn('Error al eliminar archivos de boletas:', removeBoletasError.message);
+          console.warn(
+            "Error al eliminar archivos de boletas:",
+            removeBoletasError.message
+          );
         } else {
-          console.log(`Eliminados ${rutasBoletas.length} archivos del bucket boletas`);
+          console.log(
+            `Eliminados ${rutasBoletas.length} archivos del bucket boletas`
+          );
         }
       }
     } catch (error) {
-      console.warn('Error al eliminar archivos de boletas:', error.message);
+      console.warn("Error al eliminar archivos de boletas:", error.message);
     }
 
     // 5. Eliminar perfil de user_profiles
     const { error: perfilError } = await supabaseAdmin
-      .from('user_profiles')
+      .from("user_profiles")
       .delete()
-      .eq('id', userId);
+      .eq("id", userId);
 
     if (perfilError) {
       throw new Error(`Error al eliminar perfil: ${perfilError.message}`);
     }
 
-    console.log('Perfil eliminado de la base de datos');
+    console.log("Perfil eliminado de la base de datos");
 
     // 6. Eliminar usuario de auth.users
-    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(
+      userId
+    );
 
     if (authError) {
-      console.warn('Error al eliminar usuario de auth:', authError.message);
+      console.warn("Error al eliminar usuario de auth:", authError.message);
       // No fallar si el perfil ya se eliminó pero el auth falla
     } else {
-      console.log('Usuario eliminado del sistema de autenticación');
+      console.log("Usuario eliminado del sistema de autenticación");
     }
 
-    console.log(`Eliminación completa del usuario ${userId} finalizada exitosamente`);
+    console.log(
+      `Eliminación completa del usuario ${userId} finalizada exitosamente`
+    );
     return true;
   } catch (error) {
-    console.error('Error en eliminarUsuarioCompleto:', error);
+    console.error("Error en eliminarUsuarioCompleto:", error);
     throw error;
   }
 };
-
-

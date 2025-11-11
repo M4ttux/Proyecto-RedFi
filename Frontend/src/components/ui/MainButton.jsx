@@ -52,14 +52,16 @@ const Button = ({
 
   // Configuración de estilos para cada variante del botón
   const variants = {
-    primary: "bg-primario text-white hover:bg-[#336ef0] border-1 border-texto/15",
+    primary:
+      "bg-primario text-white hover:bg-[#336ef0] border-1 border-texto/15",
     accent: "bg-acento text-white hover:bg-[#fca75f] border-1 border-texto/15",
     secondary:
       currentTheme === "light"
         ? "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15"
         : "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15",
     danger: "bg-red-600 text-white hover:bg-red-400 border-1 border-texto/15",
-    disabled: "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15",
+    disabled:
+      "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15",
     cross: "text-texto/75 hover:text-red-400",
     add: "bg-green-700 text-white hover:bg-green-500 border-1 border-texto/15",
     see: "bg-blue-600 text-white hover:bg-blue-400 border-1 border-texto/15",
@@ -77,7 +79,8 @@ const Button = ({
   };
 
   // Estilos específicos para estado de carga
-  const loadingStyles = "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15";
+  const loadingStyles =
+    "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15";
 
   // Mapeo de iconos automáticos según la variante del botón
   const autoIcon =

@@ -1,7 +1,10 @@
 import { supabase } from "../../supabase/client";
 
 // Obtener proveedores que operan en una zona específica
-export const obtenerProveedoresPorZona = async (zonaId, mostrarAlerta = () => {}) => {
+export const obtenerProveedoresPorZona = async (
+  zonaId,
+  mostrarAlerta = () => {}
+) => {
   const { data, error } = await supabase
     .from("proveedores")
     .select(
@@ -26,28 +29,32 @@ export const obtenerProveedoresPorZona = async (zonaId, mostrarAlerta = () => {}
     mostrarAlerta("Error al obtener proveedores por zona");
     throw error;
   }
-  
+
   // Eliminar duplicados basados en ID (por si acaso)
-  const proveedoresUnicos = data?.reduce((acc, proveedor) => {
-    if (!acc.find(p => p.id === proveedor.id)) {
-      acc.push(proveedor);
-    }
-    return acc;
-  }, []) || [];
-  
+  const proveedoresUnicos =
+    data?.reduce((acc, proveedor) => {
+      if (!acc.find((p) => p.id === proveedor.id)) {
+        acc.push(proveedor);
+      }
+      return acc;
+    }, []) || [];
+
   return proveedoresUnicos;
 };
 
 // Determinar en qué zona están unas coordenadas específicas usando geometrías reales
-export const determinarZonaPorCoordenadas = async (lat, lng, mostrarAlerta = () => {}) => {
+export const determinarZonaPorCoordenadas = async (
+  lat,
+  lng,
+  mostrarAlerta = () => {}
+) => {
   try {
     // Usar PostGIS para determinar la zona basada en geometrías reales
     // ST_Contains verifica si el punto está dentro del polígono de la zona
-    const { data, error } = await supabase
-      .rpc('buscar_zona_por_punto', {
-        punto_lat: lat,
-        punto_lng: lng
-      });
+    const { data, error } = await supabase.rpc("buscar_zona_por_punto", {
+      punto_lat: lat,
+      punto_lng: lng,
+    });
 
     if (error) {
       // Fallback: usar geometrías del cliente
@@ -59,7 +66,6 @@ export const determinarZonaPorCoordenadas = async (lat, lng, mostrarAlerta = () 
     }
 
     return await determinarZonaClientSide(lat, lng, mostrarAlerta);
-
   } catch (error) {
     // Fallback a método del cliente
     return await determinarZonaClientSide(lat, lng, mostrarAlerta);
@@ -82,8 +88,11 @@ const determinarZonaClientSide = async (lat, lng, mostrarAlerta) => {
   // Verificar cada zona usando point-in-polygon
   for (const zona of zonas) {
     if (zona.geom && zona.geom.coordinates) {
-      const dentroDeZona = isPointInPolygon([lng, lat], zona.geom.coordinates[0]);
-      
+      const dentroDeZona = isPointInPolygon(
+        [lng, lat],
+        zona.geom.coordinates[0]
+      );
+
       if (dentroDeZona) {
         return zona;
       }
@@ -93,10 +102,10 @@ const determinarZonaClientSide = async (lat, lng, mostrarAlerta) => {
   // Si no se encuentra en ninguna zona específica, verificar si está cerca de alguna
   // Solo usar fallback si está dentro de un rango razonable (ej: 0.0045 grados ≈ 0.5km)
   const MAX_DISTANCE_THRESHOLD = 0.0045; // aproximadamente 0.5km en grados
-  
+
   let menorDistancia = Infinity;
   let zonaMasCercana = null;
-  
+
   for (const zona of zonas) {
     if (zona.geom && zona.geom.coordinates) {
       // Calcular distancia al centroide del polígono
@@ -104,19 +113,19 @@ const determinarZonaClientSide = async (lat, lng, mostrarAlerta) => {
       const distancia = Math.sqrt(
         Math.pow(lat - centroide.lat, 2) + Math.pow(lng - centroide.lng, 2)
       );
-      
+
       if (distancia < menorDistancia) {
         menorDistancia = distancia;
         zonaMasCercana = zona;
       }
     }
   }
-  
+
   // Solo devolver zona si está dentro del umbral de distancia
   if (menorDistancia <= MAX_DISTANCE_THRESHOLD) {
     return zonaMasCercana;
   }
-  
+
   // Si está muy lejos de cualquier zona, devolver null
   return null;
 };
@@ -125,16 +134,16 @@ const determinarZonaClientSide = async (lat, lng, mostrarAlerta) => {
 const isPointInPolygon = (point, polygon) => {
   const [x, y] = point;
   let inside = false;
-  
+
   for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
     const [xi, yi] = polygon[i];
     const [xj, yj] = polygon[j];
-    
-    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
       inside = !inside;
     }
   }
-  
+
   return inside;
 };
 
@@ -143,14 +152,14 @@ const calcularCentroidePoligono = (coordinates) => {
   let totalLat = 0;
   let totalLng = 0;
   const numPoints = coordinates.length;
-  
-  coordinates.forEach(coord => {
+
+  coordinates.forEach((coord) => {
     totalLng += coord[0];
     totalLat += coord[1];
   });
-  
+
   return {
     lat: totalLat / numPoints,
-    lng: totalLng / numPoints
+    lng: totalLng / numPoints,
   };
 };

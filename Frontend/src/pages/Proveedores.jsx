@@ -146,7 +146,7 @@ const Proveedores = () => {
                           className="rounded-full border border-acento"
                         />
                         <div>
-                          <MainLinkButton 
+                          <MainLinkButton
                             to={`/usuarios/${r.user?.id}`}
                             variant="link"
                           >

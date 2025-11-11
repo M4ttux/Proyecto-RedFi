@@ -20,8 +20,9 @@ import { useAlerta } from "../../context/AlertaContext";
 const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   const { mostrarError, mostrarExito } = useAlerta();
   const [modalReseñaAbierto, setModalReseñaAbierto] = useState(false);
-  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] = useState(false);
-  
+  const [modalReseñaCerradaManual, setModalReseñaCerradaManual] =
+    useState(false);
+
   // Estados para modal de zona con múltiples proveedores
   const [modalZonaMultiAbierto, setModalZonaMultiAbierto] = useState(false);
   const [proveedoresZona, setProveedoresZona] = useState([]);
@@ -60,7 +61,11 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     reseñaActiva,
     setReseñaActiva,
     cargarReseñasIniciales,
-  } = useMapaInteractivo(filtros, boundsCorrientes, handleZonaMultiProveedorClick);
+  } = useMapaInteractivo(
+    filtros,
+    boundsCorrientes,
+    handleZonaMultiProveedorClick
+  );
 
   // Notificar cuando el mapa esté listo
   useEffect(() => {
@@ -101,7 +106,10 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
     }
 
     try {
-      const punto = mapRef.current.project([ubicacionActual.lng, ubicacionActual.lat]);
+      const punto = mapRef.current.project([
+        ubicacionActual.lng,
+        ubicacionActual.lat,
+      ]);
       setMarcadorPosicion({
         x: punto.x,
         y: punto.y,
@@ -125,13 +133,13 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       actualizarPosicionMarcador();
     };
 
-    mapRef.current.on('move', handleMapMove);
-    mapRef.current.on('zoom', handleMapMove);
+    mapRef.current.on("move", handleMapMove);
+    mapRef.current.on("zoom", handleMapMove);
 
     return () => {
       if (mapRef.current) {
-        mapRef.current.off('move', handleMapMove);
-        mapRef.current.off('zoom', handleMapMove);
+        mapRef.current.off("move", handleMapMove);
+        mapRef.current.off("zoom", handleMapMove);
       }
     };
   }, [mapRef, actualizarPosicionMarcador]);
@@ -152,7 +160,11 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
 
   // Validar coordenadas seleccionadas y abrir modal
   useEffect(() => {
-    if (coordenadasSeleccionadas && !modalReseñaAbierto && !modalReseñaCerradaManual) {
+    if (
+      coordenadasSeleccionadas &&
+      !modalReseñaAbierto &&
+      !modalReseñaCerradaManual
+    ) {
       const validarYAbrirModal = async () => {
         const valida = await validarUbicacion(coordenadasSeleccionadas);
         if (valida) {
@@ -206,18 +218,16 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
   return (
     <div className="h-full w-full relative">
       {/* Indicador de modo selección activo */}
-      {modoSeleccion && (
-        <IndicadorSeleccion onCancelar={desactivarSeleccion} />
-      )}
+      {modoSeleccion && <IndicadorSeleccion onCancelar={desactivarSeleccion} />}
 
       {/* Marcador de ubicación validada */}
       {marcadorPosicion && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: marcadorPosicion.x,
             top: marcadorPosicion.y,
-            pointerEvents: 'none',
+            pointerEvents: "none",
             zIndex: 20,
           }}
         >
@@ -267,6 +277,6 @@ const MapaInteractivo = ({ filtros, onMapRefReady, setCargandoMapa }) => {
       />
     </div>
   );
-}
+};
 
 export default MapaInteractivo;

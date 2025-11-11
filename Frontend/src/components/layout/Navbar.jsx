@@ -55,8 +55,6 @@ const Navbar = () => {
     return themeData?.texto || "#FFFFFF";
   };
 
-
-
   const openOnly = (menu) => {
     setMostrarHerramientas(menu === "tools");
     setMostrarNotis(menu === "notis");
@@ -91,7 +89,7 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center space-x-4">
-            {/* Navigation Links usando MainLinkButton */}
+            {/* Navigation Links */}
             <MainLinkButton to="/" variant="navbar" className="!px-4 !py-2">
               Inicio
             </MainLinkButton>
@@ -101,7 +99,7 @@ const Navbar = () => {
                 onClick={() => {
                   setMostrarHerramientas((v) => !v);
                   setMostrarNotis(false);
-                  openOnly(mostrarHerramientas ? null : "tools")
+                  openOnly(mostrarHerramientas ? null : "tools");
                 }}
                 variant="navbar"
                 title="Herramientas"
@@ -119,8 +117,8 @@ const Navbar = () => {
               {mostrarHerramientas && (
                 <>
                   {/* Overlay invisible para cerrar el dropdown al hacer clic fuera */}
-                  <div 
-                    className="fixed inset-0 z-40" 
+                  <div
+                    className="fixed inset-0 z-40"
                     onClick={() => setMostrarHerramientas(false)}
                   />
                   <div
@@ -189,13 +187,15 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Botón de tema - toggle directo */}
+            {/* Botón de tema */}
             <MainButton
               onClick={toggleTheme}
               variant="navbar"
               icon={getThemeIcon()}
               iconSize={26}
-              title={`Cambiar a tema ${currentTheme === "light" ? "oscuro" : "claro"}`}
+              title={`Cambiar a tema ${
+                currentTheme === "light" ? "oscuro" : "claro"
+              }`}
             />
 
             {/* Indicador de carga o botones de autenticación */}
@@ -244,8 +244,8 @@ const Navbar = () => {
                   {mostrarNotis && (
                     <>
                       {/* Overlay para cerrar el dropdown al hacer clic fuera */}
-                      <div 
-                        className="fixed inset-0 z-40" 
+                      <div
+                        className="fixed inset-0 z-40"
                         onClick={() => setMostrarNotis(false)}
                       />
                       <div
@@ -255,37 +255,37 @@ const Navbar = () => {
                             : "bg-fondo text-texto border border-texto/15"
                         }`}
                       >
-                      {notificaciones.length === 0 ? (
-                        <p className="italic text-center">
-                          No hay notificaciones
-                        </p>
-                      ) : (
-                        notificaciones.map((msg, i) => (
-                          <div
-                            key={i}
-                            className={`border-b pb-2 last:border-b-0 flex justify-between items-start gap-2 ${
-                              currentTheme === "light"
-                                ? "border-texto/15"
-                                : "border-texto/15"
-                            }`}
-                          >
-                            <span className="break-words">{msg}</span>
-                            <MainButton
-                              onClick={() =>
-                                setNotificaciones((prev) =>
-                                  prev.filter((_, idx) => idx !== i)
-                                )
-                              }
-                              variant="cross"
-                              title="Cerrar"
-                              icon={IconX}
-                              iconSize={20}
-                              className="leading-none p-0"
-                            />
-                          </div>
-                        ))
-                      )}
-                    </div>
+                        {notificaciones.length === 0 ? (
+                          <p className="italic text-center">
+                            No hay notificaciones
+                          </p>
+                        ) : (
+                          notificaciones.map((msg, i) => (
+                            <div
+                              key={i}
+                              className={`border-b pb-2 last:border-b-0 flex justify-between items-start gap-2 ${
+                                currentTheme === "light"
+                                  ? "border-texto/15"
+                                  : "border-texto/15"
+                              }`}
+                            >
+                              <span className="break-words">{msg}</span>
+                              <MainButton
+                                onClick={() =>
+                                  setNotificaciones((prev) =>
+                                    prev.filter((_, idx) => idx !== i)
+                                  )
+                                }
+                                variant="cross"
+                                title="Cerrar"
+                                icon={IconX}
+                                iconSize={20}
+                                className="leading-none p-0"
+                              />
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </>
                   )}
                 </div>
@@ -312,7 +312,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Top Bar - Solo Logo */}
+      {/* Mobile Top Bar */}
       {!esVistaMapa && (
         <nav
           className={`lg:hidden px-4 py-4 ${

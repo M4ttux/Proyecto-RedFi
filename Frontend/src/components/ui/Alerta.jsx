@@ -43,7 +43,7 @@ const Alerta = ({
       // Inicia el proceso de renderizado y animación
       setRenderizar(true);
       setTimeout(() => setVisible(true), 100); // Pequeño delay para animación suave
-      
+
       if (autoOcultar) {
         // Configura timer para auto-ocultar la alerta
         const timer = setTimeout(() => {
@@ -91,7 +91,7 @@ const Alerta = ({
         <Icono size={20} />
         <span className="flex-1 font-bold">{mensaje}</span>
       </div>
-      
+
       {/* Botón para cerrar la alerta manualmente */}
       <MainButton
         onClick={cerrarAlerta}

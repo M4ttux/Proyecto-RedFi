@@ -14,20 +14,20 @@ exports.testSpeedHandler = async () => {
 
     const dlMbps = bpsToMbps(result?.download?.bandwidth);
     const ulMbps = bpsToMbps(result?.upload?.bandwidth);
-    const ping   = result?.ping?.latency ?? null;
+    const ping = result?.ping?.latency ?? null;
 
     return {
       status: 200,
       data: {
         downloadSpeed: Number(dlMbps.toFixed(2)),
-        uploadSpeed:   Number(ulMbps.toFixed(2)),
-        latency:       ping,
-        isp:           result?.isp ?? null,
-        serverName:    result?.server?.name ?? null,
-        interface:     result?.interface?.name ?? null,
-        server:        os.hostname(),
-        os:            process.platform
-      }
+        uploadSpeed: Number(ulMbps.toFixed(2)),
+        latency: ping,
+        isp: result?.isp ?? null,
+        serverName: result?.server?.name ?? null,
+        interface: result?.interface?.name ?? null,
+        server: os.hostname(),
+        os: process.platform,
+      },
     };
   } catch (e) {
     return { status: 400, data: { error: String(e?.message || e) } };

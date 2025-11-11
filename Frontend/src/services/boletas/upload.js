@@ -47,11 +47,13 @@ export const eliminarImagenBoleta = async (urlImagen) => {
   // Extrae la ruta del archivo desde la URL pública completa
   const url = new URL(urlImagen);
   // Decodifica la ruta removiendo el prefijo del storage público
-  const path = decodeURIComponent(url.pathname.split("/storage/v1/object/public/boletas/")[1]);
+  const path = decodeURIComponent(
+    url.pathname.split("/storage/v1/object/public/boletas/")[1]
+  );
 
   // Elimina el archivo del bucket de almacenamiento
   const { error } = await supabase.storage.from("boletas").remove([path]);
-  
+
   // Log de advertencia en lugar de throw para no interrumpir flujo principal
   if (error) {
     console.warn("Error al eliminar imagen:", error.message);

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconArrowLeft, IconSettings } from "@tabler/icons-react"
+import { IconArrowLeft, IconSettings } from "@tabler/icons-react";
 import { getPerfil } from "../services/perfil/getPerfil";
-import {
-  obtenerPerfilesAdmin
-} from "../services/perfil/adminPerfil";
+import { obtenerPerfilesAdmin } from "../services/perfil/adminPerfil";
 import { obtenerProveedoresAdmin } from "../services/proveedores/obtenerProveedor";
 import { eliminarProveedor } from "../services/proveedores/crudProveedor";
 import {
@@ -26,14 +24,9 @@ import {
   eliminarProveedorZona,
 } from "../services/relaciones/proveedorZonaService";
 
-import {
-  obtenerCursos,
-  eliminarCurso,
-} from "../services/cursos";
+import { obtenerCursos, eliminarCurso } from "../services/cursos";
 
-import {
-  eliminarUsuarioCompleto,
-} from "../services/perfil/adminPerfil";
+import { eliminarUsuarioCompleto } from "../services/perfil/adminPerfil";
 
 import ModalEliminar from "../components/modals/ModalEliminar";
 
@@ -88,13 +81,21 @@ const tablasDisponibles = [
   { id: "ZonaProveedor", label: "Proveedor y Zona" },
 ];
 
-const TABLAS_CON_FILTRO_ORDEN = new Set(["user_profiles", "reseñas", "proveedores", "tecnologias", "cursos", "ProveedorTecnologia", "ZonaProveedor"]);
+const TABLAS_CON_FILTRO_ORDEN = new Set([
+  "user_profiles",
+  "reseñas",
+  "proveedores",
+  "tecnologias",
+  "cursos",
+  "ProveedorTecnologia",
+  "ZonaProveedor",
+]);
 
 const Administrador = () => {
   useEffect(() => {
     document.title = "Red-Fi | Administración";
   }, []);
-  
+
   const [perfil, setPerfil] = useState(null);
   const [tablaActual, setTablaActual] = useState("user_profiles");
   const [loading, setLoading] = useState(true);
@@ -120,12 +121,16 @@ const Administrador = () => {
   const [tecnologiaAVer, setTecnologiaAVer] = useState(null);
   const [tecnologiaAEliminar, setTecnologiaAEliminar] = useState(null);
 
-  const [proveedorTecnologiaNuevo, setProveedorTecnologiaNuevo] = useState(false);
-  const [proveedorTecnologiaSeleccionado, setProveedorTecnologiaSeleccionado] = useState(null);
-  const [proveedorTecnologiaAEliminar, setProveedorTecnologiaAEliminar] = useState(null);
+  const [proveedorTecnologiaNuevo, setProveedorTecnologiaNuevo] =
+    useState(false);
+  const [proveedorTecnologiaSeleccionado, setProveedorTecnologiaSeleccionado] =
+    useState(null);
+  const [proveedorTecnologiaAEliminar, setProveedorTecnologiaAEliminar] =
+    useState(null);
 
   const [proveedorZonaNuevo, setProveedorZonaNuevo] = useState(false);
-  const [proveedorZonaSeleccionado, setProveedorZonaSeleccionado] = useState(null);
+  const [proveedorZonaSeleccionado, setProveedorZonaSeleccionado] =
+    useState(null);
   const [proveedorZonaAEliminar, setProveedorZonaAEliminar] = useState(null);
 
   const [cursoNuevo, setCursoNuevo] = useState(false);
@@ -151,7 +156,7 @@ const Administrador = () => {
   // Estados de filtro/orden
   const [filtro, setFiltro] = useState("");
   const [ordenCampo, setOrdenCampo] = useState("nombre"); // default para Perfiles
-  const [ordenDir,   setOrdenDir]   = useState("asc");
+  const [ordenDir, setOrdenDir] = useState("asc");
 
   // Reset y defaults según la tabla con FO
   useEffect(() => {
@@ -200,15 +205,9 @@ const Administrador = () => {
       { value: "estrellas", label: "Puntuación" },
       { value: "comentario", label: "Comentario" },
     ],
-    proveedores: [
-      { value: "nombre", label: "Nombre" },
-    ],
-    tecnologias: [
-      { value: "tecnologia", label: "Tecnología" },
-    ],
-    cursos: [
-      { value: "titulo", label: "Título" },
-    ],
+    proveedores: [{ value: "nombre", label: "Nombre" }],
+    tecnologias: [{ value: "tecnologia", label: "Tecnología" }],
+    cursos: [{ value: "titulo", label: "Título" }],
     ProveedorTecnologia: [
       { value: "proveedor", label: "Proveedor" },
       { value: "tecnologias", label: "Tecnologías" },
@@ -236,24 +235,24 @@ const Administrador = () => {
 
   const _valueForSort = (obj, key) => {
     const v = obj?.[key];
-    
+
     // Lógica especial para rol: admin primero en orden ascendente
     if (key === "rol") {
       if (v === "admin") return "0_admin"; // Admin va primero
       return v ? `1_${v.toLowerCase()}` : "2_sin_rol";
     }
-    
+
     // Lógica especial para plan: premium primero en orden ascendente
     if (key === "plan") {
       if (v === "premium") return "0_premium"; // Premium va primero
       return v ? `1_${v.toLowerCase()}` : "2_sin_plan";
     }
-    
+
     // Lógica especial para proveedor_preferido: ordenar alfabéticamente, sin preferido al final
     if (key === "proveedor_preferido") {
       return v ? v.toLowerCase() : "zzz_sin_proveedor";
     }
-    
+
     if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) {
       return new Date(v).getTime();
     }
@@ -373,7 +372,7 @@ const Administrador = () => {
             };
           }
           const tec = item.tecnologias;
-          if (tec && !acc[id].tecnologias.find(t => t.id === tec.id)) {
+          if (tec && !acc[id].tecnologias.find((t) => t.id === tec.id)) {
             acc[id].tecnologias.push({
               id: tec.id,
               nombre: tec.tecnologia,
@@ -401,7 +400,10 @@ const Administrador = () => {
           if (zonaNombre && !acc[id].zonas.includes(zonaNombre)) {
             acc[id].zonas.push(zonaNombre);
           }
-          if (zonaCompleta && !acc[id].zonasCompletas.find(z => z.id === zonaCompleta.id)) {
+          if (
+            zonaCompleta &&
+            !acc[id].zonasCompletas.find((z) => z.id === zonaCompleta.id)
+          ) {
             acc[id].zonasCompletas.push(zonaCompleta);
           }
           return acc;
@@ -431,7 +433,7 @@ const Administrador = () => {
         const p = await getPerfil();
         setPerfil(p);
         setLoadingAuth(false);
-        
+
         if (p.rol !== "admin") {
           navigate("/cuenta", {
             state: {
@@ -459,7 +461,10 @@ const Administrador = () => {
     return (
       <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
         <div className="max-w-7xl mx-auto space-y-12">
-          <MainLoader texto="Verificando permisos de administrador..." size="large" />
+          <MainLoader
+            texto="Verificando permisos de administrador..."
+            size="large"
+          />
         </div>
       </section>
     );
@@ -471,7 +476,12 @@ const Administrador = () => {
   }
 
   const datosActuales = todosLosDatos[tablaActual] || [];
-  const columnas = generarColumnas(tablaActual, datosActuales, acciones, perfil);
+  const columnas = generarColumnas(
+    tablaActual,
+    datosActuales,
+    acciones,
+    perfil
+  );
 
   // === Filtrado SOLO para Perfiles y Reseñas ===
   const datosFiltrados = (datosActuales ?? []).filter((item) => {
@@ -515,19 +525,13 @@ const Administrador = () => {
     if (tablaActual === "ProveedorTecnologia") {
       const proveedor = item?.proveedor ?? "";
       const tecnologias = (item?.tecnologias || []).join(" ");
-      return (
-        _norm(proveedor).includes(f) ||
-        _norm(tecnologias).includes(f)
-      );
+      return _norm(proveedor).includes(f) || _norm(tecnologias).includes(f);
     }
 
     if (tablaActual === "ZonaProveedor") {
       const proveedor = item?.proveedor ?? "";
       const zonas = (item?.zonas || []).join(" ");
-      return (
-        _norm(proveedor).includes(f) ||
-        _norm(zonas).includes(f)
-      );
+      return _norm(proveedor).includes(f) || _norm(zonas).includes(f);
     }
 
     return true;
@@ -637,21 +641,22 @@ const Administrador = () => {
     : datosActuales;
 
   // Placeholder de búsqueda por tabla
-  const placeholderFO = tablaActual === "user_profiles"
-    ? "Buscar en perfiles…"
-    : tablaActual === "reseñas"
-    ? "Buscar en reseñas…"
-    : tablaActual === "proveedores"
-    ? "Buscar por nombre de proveedor…"
-    : tablaActual === "tecnologias"
-    ? "Buscar por nombre de tecnología…"
-    : tablaActual === "cursos"
-    ? "Buscar por título del curso…"
-    : tablaActual === "ProveedorTecnologia"
-    ? "Buscar por proveedor o tecnología…"
-    : tablaActual === "ZonaProveedor"
-    ? "Buscar por proveedor o zona…"
-    : `Buscar…`;
+  const placeholderFO =
+    tablaActual === "user_profiles"
+      ? "Buscar en perfiles…"
+      : tablaActual === "reseñas"
+      ? "Buscar en reseñas…"
+      : tablaActual === "proveedores"
+      ? "Buscar por nombre de proveedor…"
+      : tablaActual === "tecnologias"
+      ? "Buscar por nombre de tecnología…"
+      : tablaActual === "cursos"
+      ? "Buscar por título del curso…"
+      : tablaActual === "ProveedorTecnologia"
+      ? "Buscar por proveedor o tecnología…"
+      : tablaActual === "ZonaProveedor"
+      ? "Buscar por proveedor o zona…"
+      : `Buscar…`;
 
   return (
     <section className="self-start py-16 px-4 sm:px-6 text-texto w-full">
@@ -687,41 +692,50 @@ const Administrador = () => {
               />
             )}
 
-            <div className="flex justify-center mb-4">{tablaActual === "proveedores" && (
-            <MainButton onClick={() => setProveedorNuevo(true)} variant="add">
-              Agregar Proveedor
-            </MainButton>
-          )}
-          {tablaActual === "user_profiles" && (
-            <MainButton onClick={() => setUsuarioNuevo(true)} variant="add">
-              Agregar Usuario
-            </MainButton>
-          )}
-          {tablaActual === "tecnologias" && (
-            <MainButton onClick={() => setTecnologiaNueva(true)} variant="add">
-              Agregar Tecnología
-            </MainButton>
-          )}
-          {tablaActual === "cursos" && (
-            <MainButton onClick={() => setCursoNuevo(true)} variant="add">
-              Agregar Curso
-            </MainButton>
-          )}
-          {tablaActual === "ProveedorTecnologia" && (
-            <MainButton
-              onClick={() => setProveedorTecnologiaNuevo(true)}
-              variant="add"
-            >
-              Asignar Tecnologías
-            </MainButton>
-          )}
-          {tablaActual === "ZonaProveedor" && (
-            <MainButton onClick={() => setProveedorZonaNuevo(true)} variant="add">
-              Asignar Zonas
-            </MainButton>
-          )}
-
-        </div>
+            <div className="flex justify-center mb-4">
+              {tablaActual === "proveedores" && (
+                <MainButton
+                  onClick={() => setProveedorNuevo(true)}
+                  variant="add"
+                >
+                  Agregar Proveedor
+                </MainButton>
+              )}
+              {tablaActual === "user_profiles" && (
+                <MainButton onClick={() => setUsuarioNuevo(true)} variant="add">
+                  Agregar Usuario
+                </MainButton>
+              )}
+              {tablaActual === "tecnologias" && (
+                <MainButton
+                  onClick={() => setTecnologiaNueva(true)}
+                  variant="add"
+                >
+                  Agregar Tecnología
+                </MainButton>
+              )}
+              {tablaActual === "cursos" && (
+                <MainButton onClick={() => setCursoNuevo(true)} variant="add">
+                  Agregar Curso
+                </MainButton>
+              )}
+              {tablaActual === "ProveedorTecnologia" && (
+                <MainButton
+                  onClick={() => setProveedorTecnologiaNuevo(true)}
+                  variant="add"
+                >
+                  Asignar Tecnologías
+                </MainButton>
+              )}
+              {tablaActual === "ZonaProveedor" && (
+                <MainButton
+                  onClick={() => setProveedorZonaNuevo(true)}
+                  variant="add"
+                >
+                  Asignar Zonas
+                </MainButton>
+              )}
+            </div>
 
             {/* Pasamos props de orden SOLO en Perfiles y Reseñas */}
             <Table
@@ -1062,12 +1076,9 @@ const Administrador = () => {
 
         {/* Ver */}
         {tablaActual === "cursos" && cursoAVer && (
-          <ModalVerCurso
-            curso={cursoAVer}
-            onClose={() => setCursoAVer(null)}
-          />
+          <ModalVerCurso curso={cursoAVer} onClose={() => setCursoAVer(null)} />
         )}
-        
+
         {/* Editar */}
         {tablaActual === "cursos" && cursoSeleccionado && (
           <ModalEditarCurso
@@ -1079,7 +1090,7 @@ const Administrador = () => {
             }}
           />
         )}
-        
+
         {/* Eliminar */}
         {tablaActual === "cursos" && cursoAEliminar && (
           <ModalEliminar

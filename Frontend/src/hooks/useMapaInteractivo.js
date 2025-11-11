@@ -60,7 +60,11 @@ const esperarCapaCargada = (map, layerId, timeout = 5000) => {
  * Hook principal para manejo del mapa interactivo
  * Gestiona inicialización, carga de datos, filtros y eventos de usuario
  */
-export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveedorClick = null) => {
+export const useMapaInteractivo = (
+  filtros,
+  boundsCorrientes,
+  onZonaMultiProveedorClick = null
+) => {
   // Referencias para elementos del mapa
   const mapContainer = useRef(null); // Contenedor DOM del mapa
   const mapRef = useRef(null); // Instancia del mapa MapLibre
@@ -74,7 +78,10 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
   const filtrosNormalizados = useMemo(
     () => ({
       zona: filtros?.zona || { id: "", nombre: "Todas las zonas" },
-      proveedor: filtros?.proveedor || { id: "", nombre: "Todos los proveedores" },
+      proveedor: filtros?.proveedor || {
+        id: "",
+        nombre: "Todos los proveedores",
+      },
       tecnologia: filtros?.tecnologia || "",
       valoracionMin: filtros?.valoracionMin || 0,
     }),
@@ -96,7 +103,12 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
    */
   const manejarClickGlobal = useCallback((e) => {
     // Evita manejo si está activo el modo selección o ya se manejó una zona múltiple
-    if (!mapRef.current || window.modoSeleccionActivo || window.zonaMultipleHandled) return;
+    if (
+      !mapRef.current ||
+      window.modoSeleccionActivo ||
+      window.zonaMultipleHandled
+    )
+      return;
 
     // Obtiene features en el punto clickeado
     const features = mapRef.current.queryRenderedFeatures(e.point);
@@ -291,15 +303,15 @@ export const useMapaInteractivo = (filtros, boundsCorrientes, onZonaMultiProveed
 
   // Retorna estado y referencias del mapa para uso en componentes
   return {
-    mapContainer,           // Ref del contenedor DOM
-    mapRef,                // Ref de la instancia del mapa
-    cargandoMapa,          // Estado de carga inicial
-    mapaListoVisualmente,  // Estado de carga visual completa
-    proveedorActivo,       // Proveedor actualmente seleccionado
-    setProveedorActivo,    // Función para cambiar proveedor activo
-    reseñaActiva,          // Reseña actualmente seleccionada
-    setReseñaActiva,       // Función para cambiar reseña activa
+    mapContainer, // Ref del contenedor DOM
+    mapRef, // Ref de la instancia del mapa
+    cargandoMapa, // Estado de carga inicial
+    mapaListoVisualmente, // Estado de carga visual completa
+    proveedorActivo, // Proveedor actualmente seleccionado
+    setProveedorActivo, // Función para cambiar proveedor activo
+    reseñaActiva, // Reseña actualmente seleccionada
+    setReseñaActiva, // Función para cambiar reseña activa
     cargarReseñasIniciales, // Función para recargar reseñas
-    reseñasCompletasRef,   // Ref con cache de reseñas completas
+    reseñasCompletasRef, // Ref con cache de reseñas completas
   };
 };

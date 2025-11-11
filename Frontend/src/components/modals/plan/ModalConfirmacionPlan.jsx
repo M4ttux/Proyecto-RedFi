@@ -92,7 +92,6 @@ const ModalConfirmacionPlan = ({ usuarioId, nuevoPlan, onClose }) => {
         >
           Confirmar
         </MainButton>
-        
       </div>
     </ModalContenedor>
   );

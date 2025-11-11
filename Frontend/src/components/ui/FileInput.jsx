@@ -27,15 +27,16 @@ const FileInput = ({
   const getAcceptedTypes = () => {
     const acceptLower = accept.toLowerCase();
     const acceptsImages = acceptLower.includes("image");
-    const acceptsPDF = acceptLower.includes("pdf") || acceptLower.includes("application/pdf");
-    
+    const acceptsPDF =
+      acceptLower.includes("pdf") || acceptLower.includes("application/pdf");
+
     return { acceptsImages, acceptsPDF };
   };
 
   // Genera mensaje informativo sobre límites de archivos
   const getLimitMessage = () => {
     const { acceptsImages, acceptsPDF } = getAcceptedTypes();
-    
+
     // Límites específicos para Boletas
     if (esBoletas) {
       if (acceptsImages && acceptsPDF) {
@@ -46,7 +47,7 @@ const FileInput = ({
         return "Máx. 10MB";
       }
     }
-    
+
     // Límites estándar para otros usos
     if (acceptsImages && acceptsPDF) {
       return "Imágenes: máx. 300KB y 500x500px • PDFs: máx. 10MB";
@@ -55,7 +56,7 @@ const FileInput = ({
     } else if (acceptsPDF) {
       return "Máx. 10MB";
     }
-    
+
     return null;
   };
 
@@ -64,12 +65,12 @@ const FileInput = ({
     return new Promise((resolve, reject) => {
       // Validar tamaño de PDF
       if (file.type === "application/pdf") {
-        const maxSizePDF = esBoletas 
-          ? 50 * 1024 * 1024  // 10MB para Boletas
+        const maxSizePDF = esBoletas
+          ? 50 * 1024 * 1024 // 10MB para Boletas
           : 10 * 1024 * 1024; // 10MB estándar
-        
+
         const limitText = esBoletas ? "10MB" : "10MB";
-        
+
         if (file.size > maxSizePDF) {
           reject(`El archivo PDF no puede superar los ${limitText}`);
           return;
@@ -80,15 +81,15 @@ const FileInput = ({
 
       // Validar imágenes
       if (file.type.startsWith("image/")) {
-        const maxSizeImage = esBoletas 
-          ? 800 * 1024  // 800KB para Boletas
+        const maxSizeImage = esBoletas
+          ? 800 * 1024 // 800KB para Boletas
           : 300 * 1024; // 300KB estándar
-          
+
         const maxDimension = esBoletas ? 2000 : 500; // 2000x2000px para Boletas, 500x500px estándar
-        
+
         const sizeText = esBoletas ? "800KB" : "300KB";
         const dimensionText = esBoletas ? "2000x2000" : "500x500";
-        
+
         // Validar tamaño del archivo
         if (file.size > maxSizeImage) {
           reject(`La imagen no puede superar los ${sizeText}`);
@@ -98,22 +99,22 @@ const FileInput = ({
         // Validar dimensiones de la imagen
         const img = new Image();
         const objectUrl = URL.createObjectURL(file);
-        
+
         img.onload = () => {
           URL.revokeObjectURL(objectUrl); // Limpiar memoria
-          
+
           if (img.width > maxDimension || img.height > maxDimension) {
             reject(`La imagen no puede superar los ${dimensionText} píxeles`);
           } else {
             resolve(true);
           }
         };
-        
+
         img.onerror = () => {
           URL.revokeObjectURL(objectUrl);
           reject("Error al cargar la imagen para validación");
         };
-        
+
         img.src = objectUrl;
         return;
       }
@@ -176,7 +177,7 @@ const FileInput = ({
     try {
       // Validar el archivo antes de procesarlo
       await validarArchivo(file);
-      
+
       // Si la validación es exitosa, procesar el archivo
       onChange?.(file);
 
@@ -199,7 +200,7 @@ const FileInput = ({
     } catch (error) {
       // Mostrar mensaje de error y no procesar el archivo
       mostrarError(error);
-      
+
       // Resetear el input para que el usuario pueda seleccionar otro archivo
       if (inputRef.current) {
         inputRef.current.value = "";
@@ -238,9 +239,7 @@ const FileInput = ({
             {label}
           </label>
           {getLimitMessage() && (
-            <p className="text-xs text-texto/75 mb-2">
-              {getLimitMessage()}
-            </p>
+            <p className="text-xs text-texto/75 mb-2">{getLimitMessage()}</p>
           )}
         </div>
       )}
@@ -263,8 +262,14 @@ const FileInput = ({
             // Preview compacto para archivos PDF
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <IconFileTypePdf size={24} className="text-red-500 flex-shrink-0" />
-                <span className="text-sm font-medium truncate" title={obtenerNombreArchivo(internalPreview)}>
+                <IconFileTypePdf
+                  size={24}
+                  className="text-red-500 flex-shrink-0"
+                />
+                <span
+                  className="text-sm font-medium truncate"
+                  title={obtenerNombreArchivo(internalPreview)}
+                >
                   {obtenerNombreArchivo(internalPreview)}
                 </span>
               </div>
@@ -307,7 +312,9 @@ const FileInput = ({
                   alt="Preview"
                   className="w-8 h-8 object-cover rounded border border-texto/15 flex-shrink-0"
                 />
-                <span className="text-sm font-medium truncate">Imagen seleccionada</span>
+                <span className="text-sm font-medium truncate">
+                  Imagen seleccionada
+                </span>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <MainButton

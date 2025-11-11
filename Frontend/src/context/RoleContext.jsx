@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, useRef, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { useAuth } from "./AuthContext";
 import { getPerfil } from "../services/perfil/getPerfil";
 
@@ -114,7 +121,10 @@ export const RoleProvider = ({ children }) => {
       }
     } catch (error) {
       if (reqId === latestReq.current) {
-        console.error("Error al refrescar el perfil del usuario:", error.message);
+        console.error(
+          "Error al refrescar el perfil del usuario:",
+          error.message
+        );
       }
     } finally {
       if (reqId === latestReq.current) setLoadingRole(false);
@@ -125,16 +135,16 @@ export const RoleProvider = ({ children }) => {
   return (
     <RoleContext.Provider
       value={{
-        rol,                // Rol actual del usuario (admin/user)
-        plan,               // Plan actual del usuario (basico/premium)
-        setPlan,            // Función para actualizar el plan directamente
-        loadingRole,        // Estado de carga de los datos de rol
-        esAdmin,            // Función para verificar si es admin
-        esUser,             // Función para verificar si es user
-        esPremium,          // Función para verificar si tiene plan premium
-        esBasico,           // Función para verificar si tiene plan básico
-        tieneAcceso,        // Función para verificar acceso por plan
-        refrescarRol,       // Función para refrescar datos del perfil
+        rol, // Rol actual del usuario (admin/user)
+        plan, // Plan actual del usuario (basico/premium)
+        setPlan, // Función para actualizar el plan directamente
+        loadingRole, // Estado de carga de los datos de rol
+        esAdmin, // Función para verificar si es admin
+        esUser, // Función para verificar si es user
+        esPremium, // Función para verificar si tiene plan premium
+        esBasico, // Función para verificar si tiene plan básico
+        tieneAcceso, // Función para verificar acceso por plan
+        refrescarRol, // Función para refrescar datos del perfil
       }}
     >
       {children}

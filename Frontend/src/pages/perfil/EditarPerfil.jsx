@@ -113,11 +113,13 @@ const EditarPerfil = () => {
         </div>
 
         {/* Card */}
-        <div className={`shadow-lg rounded-lg p-6 max-w-lg mx-auto ${
-          currentTheme === "light"
-            ? "bg-secundario border-2 border-texto/15"
-            : "bg-secundario border border-secundario/50"
-        }`}>
+        <div
+          className={`shadow-lg rounded-lg p-6 max-w-lg mx-auto ${
+            currentTheme === "light"
+              ? "bg-secundario border-2 border-texto/15"
+              : "bg-secundario border border-secundario/50"
+          }`}
+        >
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Avatar */}
             <div className="flex flex-col items-center gap-3">

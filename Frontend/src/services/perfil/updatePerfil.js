@@ -12,7 +12,7 @@ export const updatePerfil = async (fields, mostrarAlerta = () => {}) => {
   // Valida que exista sesión antes de actualizar
   if (userError || !user) {
     mostrarAlerta("Error al obtener el usuario.");
-    throw (userError || new Error("Usuario no autenticado."));
+    throw userError || new Error("Usuario no autenticado.");
   }
 
   // Actualiza la fila del perfil en user_profiles
@@ -43,7 +43,7 @@ export const updatePerfilYFoto = async (
   // Valida que exista sesión
   if (userError || !user) {
     mostrarAlerta("Error al obtener el usuario.");
-    throw (userError || new Error("Usuario no autenticado."));
+    throw userError || new Error("Usuario no autenticado.");
   }
 
   // Validación del nombre
@@ -96,7 +96,9 @@ export const updatePerfilYFoto = async (
         const tooBig = img.width > 500 || img.height > 500;
         URL.revokeObjectURL(url);
         if (tooBig) {
-          reject(new Error("La resolución máxima permitida es 500x500 píxeles."));
+          reject(
+            new Error("La resolución máxima permitida es 500x500 píxeles.")
+          );
         } else {
           resolve(true);
         }

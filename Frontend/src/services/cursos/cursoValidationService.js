@@ -7,23 +7,23 @@
  */
 export const validarMiniatura = (file) => {
   const errors = [];
-  
+
   // Validar tamaño (máximo 100KB)
   if (file.size > 100 * 1024) {
     errors.push("La miniatura no puede pesar más de 100KB");
   }
-  
+
   // Validar tipo de archivo
-  if (!file.type.startsWith('image/')) {
+  if (!file.type.startsWith("image/")) {
     errors.push("El archivo debe ser una imagen");
   }
-  
+
   // Validar formato
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
   if (!allowedTypes.includes(file.type)) {
     errors.push("Solo se permiten archivos JPG, PNG o WebP");
   }
-  
+
   return errors;
 };
 
@@ -59,8 +59,9 @@ export const validarUrlYoutube = (url) => {
     return "La URL de YouTube no puede tener más de 200 caracteres";
   }
 
-  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[a-zA-Z0-9_-]{11}$/;
-  
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[a-zA-Z0-9_-]{11}$/;
+
   if (!youtubeRegex.test(url)) {
     return "URL de YouTube no válida. Formatos permitidos: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID";
   }

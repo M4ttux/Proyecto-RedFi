@@ -23,13 +23,13 @@ const GlosarioBuscador = () => {
   const [error, setError] = useState(null);
   const [leyendo, setLeyendo] = useState(false);
 
-  // Estado para la sección "Explora todos..." (colapsable)
+  // Estado para la sección "Explora todos..."
   const [mostrarExplora, setMostrarExplora] = useState(false);
 
   // Ref al contenedor del bloque expandible
   const refExplora = useRef(null);
 
-  // Ref al bloque de resultados (para scrollear hacia arriba cuando se selecciona un concepto)
+  // Ref al bloque de resultados
   const refResultado = useRef(null);
 
   // Cuando se abre el colapsable, scrollear hasta él
@@ -39,7 +39,7 @@ const GlosarioBuscador = () => {
     }
   }, [mostrarExplora]);
 
-  // Lista de conceptos ordenada alfabéticamente (memo para performance)
+  // Lista de conceptos ordenada alfabéticamente
   const todosLosConceptos = useMemo(
     () => Object.keys(conceptosRed).sort((a, b) => a.localeCompare(b, "es")),
     []
@@ -82,7 +82,10 @@ const GlosarioBuscador = () => {
       // 👇 cuando hay resultado, scrollear hacia arriba para mostrarlo
       setTimeout(() => {
         if (refResultado.current) {
-          refResultado.current.scrollIntoView({ behavior: "smooth", block: "start" });
+          refResultado.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       }, 200);
     } catch (err) {
@@ -302,7 +305,7 @@ const GlosarioBuscador = () => {
         </div>
       </div>
 
-      {/* Sección: Explora todos los conceptos (colapsable) */}
+      {/* Sección: Explora todos los conceptos */}
       <div className="mt-12" ref={refExplora}>
         <div className="flex justify-center">
           <MainButton

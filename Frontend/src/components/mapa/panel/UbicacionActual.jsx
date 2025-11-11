@@ -3,10 +3,12 @@ import MainButton from "../../ui/MainButton";
 import { useUbicacionActual } from "../../../hooks/useUbicacionActual";
 
 const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
-  const { cargandoUbicacion, marcadorVisible, handleUbicacionActual, eliminarMarcador } = useUbicacionActual(
-    boundsCorrientes,
-    mapRef
-  );
+  const {
+    cargandoUbicacion,
+    marcadorVisible,
+    handleUbicacionActual,
+    eliminarMarcador,
+  } = useUbicacionActual(boundsCorrientes, mapRef);
 
   return (
     <div className="relative">
@@ -22,7 +24,7 @@ const UbicacionActual = ({ mapRef, boundsCorrientes }) => {
         >
           Mi Ubicación
         </MainButton>
-        
+
         {marcadorVisible && (
           <MainButton
             onClick={eliminarMarcador}

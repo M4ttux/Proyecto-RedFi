@@ -1,11 +1,14 @@
-import {  useState } from "react";
+import { useState } from "react";
 import MainButton from "../../../ui/MainButton";
 import MainH2 from "../../../ui/MainH2";
 import Input from "../../../ui/Input";
 import Textarea from "../../../ui/Textarea";
 import FileInput from "../../../ui/FileInput";
 import { IconX } from "@tabler/icons-react";
-import { crearProveedor, actualizarProveedor } from "../../../../services/proveedores/crudProveedor";
+import {
+  crearProveedor,
+  actualizarProveedor,
+} from "../../../../services/proveedores/crudProveedor";
 import { subirLogoProveedor } from "../../../../services/proveedores/logoProveedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import ModalContenedor from "../../../ui/ModalContenedor";
@@ -51,13 +54,13 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
       });
 
       let logoUrl = null;
-      
+
       // 2. Subir logotipo solo si se seleccionó uno
       if (logoFile) {
         console.log("Subiendo logo para proveedor ID:", nuevoProveedor.id);
         logoUrl = await subirLogoProveedor(nuevoProveedor.id, logoFile);
         console.log("Logo subido con URL:", logoUrl);
-        
+
         // 3. Actualizar proveedor con la URL del logo
         await actualizarProveedor(nuevoProveedor.id, {
           logotipo: logoUrl,
@@ -129,7 +132,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
             />
           </div>
         </div>
-        
+
         <Textarea
           label="Descripción"
           name="descripcion"
@@ -141,7 +144,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
           maxLength={200}
           showCounter={true}
         />
-        
+
         <FileInput
           label="Logotipo"
           value={logoFile}
@@ -154,7 +157,9 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
 
         {/* Selector de color con múltiples interfaces */}
         <div>
-          <label className="block text-texto mb-1">Color <span className="text-red-600">*</span></label>
+          <label className="block text-texto mb-1">
+            Color <span className="text-red-600">*</span>
+          </label>
           <div className="flex items-center gap-4">
             <Input
               type="color"

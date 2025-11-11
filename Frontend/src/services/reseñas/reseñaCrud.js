@@ -22,7 +22,9 @@ export const obtenerReseñas = async (mostrarAlerta = () => {}) => {
 // Crea una nueva reseña asociada al usuario autenticado
 export const crearReseña = async (reseñaData, mostrarAlerta = () => {}) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const datosReseña = {
@@ -39,7 +41,8 @@ export const crearReseña = async (reseñaData, mostrarAlerta = () => {}) => {
     const { data: reseñaCompleta, error } = await supabase
       .from("reseñas")
       .insert([datosReseña])
-      .select(`
+      .select(
+        `
         *,
         user_profiles:usuario_id(nombre, foto_url),
         proveedores (
@@ -47,7 +50,8 @@ export const crearReseña = async (reseñaData, mostrarAlerta = () => {}) => {
           ProveedorTecnologia(tecnologias(*)),
           ZonaProveedor(zonas(*))
         )
-      `)
+      `
+      )
       .single();
 
     if (error) throw error;

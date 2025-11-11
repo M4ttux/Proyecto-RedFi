@@ -6,7 +6,10 @@ import Textarea from "../../../ui/Textarea";
 import FileInput from "../../../ui/FileInput";
 import { IconX } from "@tabler/icons-react";
 import { actualizarProveedor } from "../../../../services/proveedores/crudProveedor";
-import { subirLogoProveedor, eliminarLogoPorURL } from "../../../../services/proveedores/logoProveedor";
+import {
+  subirLogoProveedor,
+  eliminarLogoPorURL,
+} from "../../../../services/proveedores/logoProveedor";
 import { useAlerta } from "../../../../context/AlertaContext";
 import ModalContenedor from "../../../ui/ModalContenedor";
 
@@ -14,7 +17,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
   // Estados del formulario con información actual del proveedor
   const [form, setForm] = useState({ ...proveedor });
   const [loading, setLoading] = useState(false);
-  
+
   // Estados para manejo del logo
   const [logoFile, setLogoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -101,20 +104,20 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           await eliminarLogoPorURL(logoOriginal);
           console.log("Logo eliminado del bucket");
         }
-      } 
+      }
       // Caso 2: Subir nueva imagen
       else if (logoFile && logoFile !== null) {
         // Verificar si realmente es un archivo nuevo seleccionado por el usuario
-        const esArchivoNuevoSeleccionado = previewUrl?.startsWith('data:');
-        
+        const esArchivoNuevoSeleccionado = previewUrl?.startsWith("data:");
+
         console.log("Es archivo nuevo:", esArchivoNuevoSeleccionado);
-        
+
         if (esArchivoNuevoSeleccionado) {
           console.log("Subiendo nueva imagen para proveedor ID:", proveedor.id);
           // 1. Subir nueva imagen PRIMERO (usando ID del proveedor)
           logoUrl = await subirLogoProveedor(proveedor.id, logoFile);
           console.log("Nueva imagen subida:", logoUrl);
-          
+
           // 2. Eliminar imagen antigua DESPUÉS del éxito
           if (logoOriginal && logoOriginal !== logoUrl) {
             try {
@@ -141,7 +144,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
         ...restoForm,
         logotipo: logoUrl,
       });
-      
+
       mostrarExito("Proveedor actualizado correctamente");
       onActualizar?.();
       onClose();
@@ -201,7 +204,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             />
           </div>
         </div>
-        
+
         <Textarea
           label="Descripción"
           name="descripcion"
@@ -213,7 +216,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           maxLength={200}
           showCounter={true}
         />
-        
+
         <FileInput
           label="Logotipo"
           id="logo"
@@ -240,10 +243,12 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
           accept="image/*"
           disabled={loading}
         />
-        
+
         {/* Selector de color con preview */}
         <div>
-          <label className="block text-texto mb-1">Color <span className="text-red-600">*</span></label>
+          <label className="block text-texto mb-1">
+            Color <span className="text-red-600">*</span>
+          </label>
           <div className="flex items-center gap-4">
             {/* Picker visual de color */}
             <Input
@@ -312,7 +317,7 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
             {loading ? "Guardando..." : "Guardar cambios"}
           </MainButton>
         </div>
-        
+
         {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">

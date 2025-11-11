@@ -64,8 +64,8 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
               <span className="text-sm font-medium text-texto/75 uppercase tracking-wide">
                 Rol:
               </span>
-              <Badge 
-                size="md" 
+              <Badge
+                size="md"
                 variant={obtenerVarianteBadge("rol", rol)}
                 className="font-semibold"
               >
@@ -73,14 +73,14 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
               </Badge>
             </div>
           </div>
-          
+
           <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-texto/75 uppercase tracking-wide">
                 Plan:
               </span>
-              <Badge 
-                size="md" 
+              <Badge
+                size="md"
                 variant={obtenerVarianteBadge("plan", plan)}
                 className="font-semibold"
               >
@@ -93,9 +93,9 @@ const ModalVerPerfil = ({ perfil, onClose }) => {
 
       {/* Botón de cierre */}
       <div className="flex justify-center">
-        <MainButton 
-          variant="primary" 
-          className="w-full flex-1" 
+        <MainButton
+          variant="primary"
+          className="w-full flex-1"
           onClick={onClose}
         >
           Cerrar

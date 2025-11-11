@@ -3,12 +3,15 @@ import { supabase } from "../../supabase/client";
 // Obtiene todas las reseñas del usuario autenticado con datos de proveedor y perfil
 export const obtenerReseñasUsuario = async (mostrarAlerta = () => {}) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const { data, error } = await supabase
       .from("reseñas")
-      .select(`
+      .select(
+        `
         *,
         proveedores (
           *,
@@ -16,7 +19,8 @@ export const obtenerReseñasUsuario = async (mostrarAlerta = () => {}) => {
           ZonaProveedor(zonas(*))
         ),
         user_profiles(nombre, foto_url)
-      `)
+      `
+      )
       .eq("usuario_id", user.id)
       .order("created_at", { ascending: false });
 
@@ -29,9 +33,15 @@ export const obtenerReseñasUsuario = async (mostrarAlerta = () => {}) => {
 };
 
 // Actualiza una reseña del usuario autenticado por su ID
-export const actualizarReseña = async (id, reseñaData, mostrarAlerta = () => {}) => {
+export const actualizarReseña = async (
+  id,
+  reseñaData,
+  mostrarAlerta = () => {}
+) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const { data, error } = await supabase
@@ -43,14 +53,16 @@ export const actualizarReseña = async (id, reseñaData, mostrarAlerta = () => {
       })
       .eq("id", id)
       .eq("usuario_id", user.id)
-      .select(`
+      .select(
+        `
         *,
         proveedores (
           *,
           ProveedorTecnologia(tecnologias(*)),
           ZonaProveedor(zonas(*))
         )
-      `)
+      `
+      )
       .single();
 
     if (error) throw error;
@@ -64,7 +76,9 @@ export const actualizarReseña = async (id, reseñaData, mostrarAlerta = () => {
 // Elimina una reseña del usuario autenticado por su ID
 export const eliminarReseña = async (id, mostrarAlerta = () => {}) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error("Usuario no autenticado");
 
     const { error } = await supabase

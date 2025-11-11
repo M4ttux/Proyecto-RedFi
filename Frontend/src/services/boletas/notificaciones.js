@@ -19,9 +19,7 @@ const calcularDiferencias = (fechaObjetivo, ahora = new Date()) => {
   const horas = Math.floor(
     (diferenciaMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   );
-  const minutos = Math.floor(
-    (diferenciaMs % (1000 * 60 * 60)) / (1000 * 60)
-  );
+  const minutos = Math.floor((diferenciaMs % (1000 * 60 * 60)) / (1000 * 60));
   return { diferenciaMs, dias, horas, minutos };
 };
 
@@ -51,7 +49,7 @@ export const obtenerNotificacionesBoletas = async (userId) => {
   const ahora = new Date();
   const alertas = [];
 
-  //  1) VENCIMIENTO (7 días o menos) 
+  //  1) VENCIMIENTO (7 días o menos)
   data.forEach((b) => {
     const fechaVencimiento = aFechaMedianoche(b.vencimiento);
     if (!fechaVencimiento || isNaN(fechaVencimiento)) return;
@@ -68,7 +66,7 @@ export const obtenerNotificacionesBoletas = async (userId) => {
     }
   });
 
-  //  2) PROMOCIÓN (7 días o menos) 
+  //  2) PROMOCIÓN (7 días o menos)
   data.forEach((b) => {
     const fechaPromo = aFechaMedianoche(b.promoHasta ?? b.promo_hasta);
     if (!fechaPromo || isNaN(fechaPromo)) return;
@@ -87,7 +85,7 @@ export const obtenerNotificacionesBoletas = async (userId) => {
     }
   });
 
-  //  3) AUMENTO DE PRECIO 
+  //  3) AUMENTO DE PRECIO
   const ordenadas = [...data].sort(
     (a, b) => new Date(b.vencimiento) - new Date(a.vencimiento)
   );

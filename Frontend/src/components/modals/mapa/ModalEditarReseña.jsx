@@ -97,67 +97,65 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
 
       {/* Formulario de edición de reseña */}
       <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4">
-          {/* Información del proveedor (solo lectura) */}
-          <div>
-            <label className="block font-medium text-texto mb-2">
-              Proveedor
-            </label>
-            <div className="w-full px-3 py-2 bg-texto/5 border border-texto/15 rounded-lg text-texto">
-              {(() => {
-                const proveedor = proveedores.find(
-                  (p) => p.id === formData.proveedor_id
-                );
-                if (!proveedor) return "Cargando...";
-                return `${proveedor.nombre}${
-                  proveedor.tecnologia ? ` (${proveedor.tecnologia})` : ""
-                }`;
-              })()}
-            </div>
+        {/* Información del proveedor (solo lectura) */}
+        <div>
+          <label className="block font-medium text-texto mb-2">Proveedor</label>
+          <div className="w-full px-3 py-2 bg-texto/5 border border-texto/15 rounded-lg text-texto">
+            {(() => {
+              const proveedor = proveedores.find(
+                (p) => p.id === formData.proveedor_id
+              );
+              if (!proveedor) return "Cargando...";
+              return `${proveedor.nombre}${
+                proveedor.tecnologia ? ` (${proveedor.tecnologia})` : ""
+              }`;
+            })()}
           </div>
+        </div>
 
-          {/* Sistema de calificación con estrellas */}
-          <div>
-            <label className="block font-medium text-texto mb-2">
-              Calificación
-            </label>
-            <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  onClick={() => handleStarClick(star)}
-                  className="text-2xl hover:scale-105 transition"
-                  disabled={loading}
-                >
-                  {star <= formData.estrellas ? (
-                    <IconCarambolaFilled size={24} />
-                  ) : (
-                    <IconCarambola size={24} />
-                  )}
-                </button>
-              ))}
-            </div>
+        {/* Sistema de calificación con estrellas */}
+        <div>
+          <label className="block font-medium text-texto mb-2">
+            Calificación
+          </label>
+          <div className="flex gap-1 text-yellow-600 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15 w-fit">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => handleStarClick(star)}
+                className="text-2xl hover:scale-105 transition"
+                disabled={loading}
+              >
+                {star <= formData.estrellas ? (
+                  <IconCarambolaFilled size={24} />
+                ) : (
+                  <IconCarambola size={24} />
+                )}
+              </button>
+            ))}
           </div>
+        </div>
 
-          {/* Campo de comentario (obligatorio) */}
-          <div>
-            <Textarea
-              label={
+        {/* Campo de comentario (obligatorio) */}
+        <div>
+          <Textarea
+            label={
               <>
                 Comentario <span className="text-red-600">*</span>
               </>
             }
-              name="comentario"
-              value={formData.comentario}
-              onChange={handleChange}
-              required
-              rows={4}
-              placeholder="Escribe tu experiencia con este proveedor..."
-              disabled={loading}
-              maxLength={200}
-              showCounter={true}
-            />
-          </div>
+            name="comentario"
+            value={formData.comentario}
+            onChange={handleChange}
+            required
+            rows={4}
+            placeholder="Escribe tu experiencia con este proveedor..."
+            disabled={loading}
+            maxLength={200}
+            showCounter={true}
+          />
+        </div>
 
         {/* Botones de acción */}
         <div className="flex gap-3">
@@ -179,7 +177,7 @@ const ModalEditarReseña = ({ isOpen, onClose, reseña, onSave }) => {
             {loading ? "Guardando..." : "Guardar"}
           </MainButton>
         </div>
-        
+
         {/* Nota informativa sobre campos obligatorios */}
         <div className="text-center mt-6">
           <p className="text-sm text-texto/75 italic">

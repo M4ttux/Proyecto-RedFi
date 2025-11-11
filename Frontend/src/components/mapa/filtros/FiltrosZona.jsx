@@ -14,19 +14,18 @@ const FiltrosZona = ({
   cargandoProveedores,
   cargandoTecnologias,
 }) => {
-
   // Hook para filtros dinámicos que actualizan opciones según selección
-  const {
-    zonasDisponibles,
-    proveedoresDisponibles,
-    tecnologiasDisponibles,
-  } = useFiltrosDinamicos(zonas, proveedores, tecnologiasUnicas, filtros);
-  
+  const { zonasDisponibles, proveedoresDisponibles, tecnologiasDisponibles } =
+    useFiltrosDinamicos(zonas, proveedores, tecnologiasUnicas, filtros);
+
   // Aplicar filtros seleccionados al mapa
   const aplicarFiltros = () => {
     onFiltrar({
       zona: filtros.zona || { id: "", nombre: "Todas las zonas" },
-      proveedor: filtros.proveedor || { id: "", nombre: "Todos los proveedores" },
+      proveedor: filtros.proveedor || {
+        id: "",
+        nombre: "Todos los proveedores",
+      },
       tecnologia: filtros.tecnologia || "",
       valoracionMin: filtros.valoracionMin || 0,
     });
@@ -53,7 +52,9 @@ const FiltrosZona = ({
           label="Zona"
           value={filtros.zona?.id || ""}
           onChange={(id) => {
-            const zona = zonasDisponibles.find((z) => String(z.id) === String(id)) || {
+            const zona = zonasDisponibles.find(
+              (z) => String(z.id) === String(id)
+            ) || {
               id: "",
               nombre: "Todas las zonas",
             };

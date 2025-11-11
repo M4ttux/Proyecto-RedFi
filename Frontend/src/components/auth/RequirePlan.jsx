@@ -21,14 +21,19 @@ const RequirePlan = ({ children, plan = "basico", redirectTo = "/planes" }) => {
     if (sinAcceso && !alertaMostrada.current) {
       // Mensajes personalizados por ruta
       const mensajesPorRuta = {
-        "/academia": "La Academia está disponible solo para usuarios Premium. ¡Actualiza tu plan para acceder!",
-        "/glosario": "El Glosario está disponible solo para usuarios Premium. ¡Actualiza tu plan!",
-        "/boletas": "Las Boletas están disponibles solo para usuarios Premium. ¡Actualiza tu plan!",
+        "/academia":
+          "La Academia está disponible solo para usuarios Premium. ¡Actualiza tu plan para acceder!",
+        "/glosario":
+          "El Glosario está disponible solo para usuarios Premium. ¡Actualiza tu plan!",
+        "/boletas":
+          "Las Boletas están disponibles solo para usuarios Premium. ¡Actualiza tu plan!",
       };
 
       const mensaje =
         mensajesPorRuta[location.pathname] ||
-        `Esta función requiere plan ${plan.charAt(0).toUpperCase() + plan.slice(1)}. ¡Actualiza tu plan para acceder!`;
+        `Esta función requiere plan ${
+          plan.charAt(0).toUpperCase() + plan.slice(1)
+        }. ¡Actualiza tu plan para acceder!`;
 
       mostrarAdvertencia(mensaje, {
         duracion: 6000,

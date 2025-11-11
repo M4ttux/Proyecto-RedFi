@@ -40,36 +40,34 @@ const CheckboxDropdown = ({
 
   // Genera texto inteligente para mostrar opciones seleccionadas
   const getDisplayText = () => {
-    const selectedOptions = options.filter((opt) => 
+    const selectedOptions = options.filter((opt) =>
       value.includes(getOptionValue(opt))
     );
-    
+
     if (selectedOptions.length === 0) {
       return "Seleccionar...";
     }
-    
+
     if (selectedOptions.length === 1) {
       return getOptionLabel(selectedOptions[0]);
     }
-    
+
     if (selectedOptions.length <= 2) {
       // Muestra hasta 2 opciones separadas por coma
       return selectedOptions.map(getOptionLabel).join(", ");
     }
-    
+
     // Para más de 2 opciones, muestra la primera + contador
-    return `${getOptionLabel(selectedOptions[0])} y ${selectedOptions.length - 1} más`;
+    return `${getOptionLabel(selectedOptions[0])} y ${
+      selectedOptions.length - 1
+    } más`;
   };
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
       {/* Label opcional del dropdown */}
-      {label && (
-        <label className="block text-texto mb-1">
-          {label}
-        </label>
-      )}
-      
+      {label && <label className="block text-texto mb-1">{label}</label>}
+
       {/* Botón principal que abre/cierra el dropdown */}
       <button
         type="button"
@@ -87,7 +85,10 @@ const CheckboxDropdown = ({
           {getDisplayText()}
         </span>
         {/* Icono de chevron para indicar dropdown */}
-        <IconChevronDown size={18} className="text-texto/75 flex-shrink-0 ml-2" />
+        <IconChevronDown
+          size={18}
+          className="text-texto/75 flex-shrink-0 ml-2"
+        />
       </button>
 
       {/* Panel desplegable con opciones de checkbox */}

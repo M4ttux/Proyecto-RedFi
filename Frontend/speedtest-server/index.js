@@ -18,7 +18,10 @@ const CHUNK = Buffer.alloc(64 * KB); // se reutiliza para no crecer en RAM
 
 // Descarga: stream de N MB para medir "download" del usuario
 app.get("/speedtest/download", (req, res) => {
-  const sizeMb = Math.min(Math.max(parseInt(req.query.size || "25", 10), 5), 200); // 5..200 MB
+  const sizeMb = Math.min(
+    Math.max(parseInt(req.query.size || "25", 10), 5),
+    200
+  ); // 5..200 MB
   const total = sizeMb * MB;
 
   res.setHeader("Content-Type", "application/octet-stream");

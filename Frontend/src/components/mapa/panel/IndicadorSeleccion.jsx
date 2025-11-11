@@ -28,4 +28,4 @@ const IndicadorSeleccion = ({ onCancelar }) => {
   );
 };
 
-export default IndicadorSeleccion; 
+export default IndicadorSeleccion;

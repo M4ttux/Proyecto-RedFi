@@ -16,7 +16,7 @@ const TablaSelector = ({ tablas, tablaActual, setTablaActual }) => {
           className="text-sm font-bold"
         />
       </div>
-      
+
       {/* Vista desktop - Botones */}
       <div className="hidden lg:flex justify-center gap-2 flex-wrap">
         {tablas.map((t) => (

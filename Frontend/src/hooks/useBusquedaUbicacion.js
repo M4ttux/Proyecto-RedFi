@@ -71,10 +71,14 @@ export const useBusquedaUbicacion = (boundsCorrientes, mapRef) => {
             if (boundsParam) params.set("bounds", boundsParam); // Restringe a límites si están disponibles
 
             // Realiza la petición a OpenCage API
-            fetch(`https://api.opencagedata.com/geocode/v1/json?${params.toString()}`)
+            fetch(
+              `https://api.opencagedata.com/geocode/v1/json?${params.toString()}`
+            )
               .then((res) => res.json())
               .then((data) => {
-                const results = Array.isArray(data?.results) ? data.results : [];
+                const results = Array.isArray(data?.results)
+                  ? data.results
+                  : [];
 
                 // Filtra solo ubicaciones dentro de los límites de Corrientes Capital
                 const dentro = results.filter((r) => {
@@ -142,12 +146,12 @@ export const useBusquedaUbicacion = (boundsCorrientes, mapRef) => {
 
   // Retorna estado y funciones para el manejo de búsqueda de ubicaciones
   return {
-    input,                        // Valor actual del input de búsqueda
-    sugerencias,                  // Array de sugerencias filtradas
-    handleInputChange,            // Función para manejar cambios en el input
-    handleBuscar,                 // Función para ejecutar búsqueda directa
+    input, // Valor actual del input de búsqueda
+    sugerencias, // Array de sugerencias filtradas
+    handleInputChange, // Función para manejar cambios en el input
+    handleBuscar, // Función para ejecutar búsqueda directa
     handleSeleccionarSugerencia, // Función para seleccionar una sugerencia
-    handleLimpiarBusqueda,       // Función para limpiar búsqueda y marcadores
-    setSugerencias,              // Setter directo para control externo de sugerencias
+    handleLimpiarBusqueda, // Función para limpiar búsqueda y marcadores
+    setSugerencias, // Setter directo para control externo de sugerencias
   };
 };

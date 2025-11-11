@@ -9,7 +9,7 @@ import MainLoader from "../ui/MainLoader";
 import Table from "../ui/Table";
 import { useAlerta } from "../../context/AlertaContext";
 
-// >>> NUEVO: control de filtro + orden
+// Control de filtro + orden
 import FiltroOrden from "../ui/FiltroOrden";
 
 const BoletaHistorial = ({ boletas, recargarBoletas }) => {
@@ -21,7 +21,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   const [eliminando, setEliminando] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
 
-  // >>> NUEVO: estados de filtro + orden
+  // estados de filtro + orden
   const [filtro, setFiltro] = useState("");
   const [ordenCampo, setOrdenCampo] = useState("fecha_carga"); // por defecto: más recientes
   const [ordenDir, setOrdenDir] = useState("desc");
@@ -75,31 +75,34 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
     return <span title={formatoLargo}>{formatoCorto}</span>;
   };
 
-  // >>> NUEVO: helpers de filtro/orden
+  // Helpers de filtro/orden
   const norm = (v) => (v ?? "").toString().toLowerCase();
   const textoPeriodo = (b) => `${b?.mes ?? ""} ${b?.anio ?? ""}`.trim();
   const valorOrden = (b, campo) => {
     if (campo === "periodo") {
-      // año y mes como número (anio-mes) para ordenar correctamente
+      // Año y mes como número para ordenar correctamente
       const y = Number(b?.anio) || 0;
       const m = Number(b?.mes) || 0;
       return y * 100 + m;
     }
     if (campo === "monto") return Number(b?.monto) || 0;
     if (campo === "proveedor") return norm(b?.proveedor);
-    if (campo === "fecha_carga" || campo === "vencimiento" || campo === "promo_hasta") {
+    if (
+      campo === "fecha_carga" ||
+      campo === "vencimiento" ||
+      campo === "promo_hasta"
+    ) {
       const val = b?.[campo];
       if (!val) return 0;
-      // algunos vienen como "YYYY-MM-DD", para tooltip le agregaste T12:00:00 en render; acá no hace falta
       return new Date(val).getTime();
     }
-    // fallback: intenta directo
     const v = b?.[campo];
-    if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) return new Date(v).getTime();
+    if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v))
+      return new Date(v).getTime();
     return typeof v === "string" ? norm(v) : v;
   };
 
-  // >>> NUEVO: derivar boletas filtradas + ordenadas
+  // Derivar boletas filtradas + ordenadas
   const boletasFiltradas = (boletas ?? []).filter((b) => {
     const f = norm(filtro);
     if (!f) return true;
@@ -127,9 +130,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "proveedor",
       label: "PROVEEDOR",
       renderCell: (b) => (
-        <div className="font-bold text-texto">
-          {b.proveedor || "—"}
-        </div>
+        <div className="font-bold text-texto">{b.proveedor || "—"}</div>
       ),
     },
     {
@@ -137,7 +138,9 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       label: "PERÍODO",
       renderCell: (b) => (
         <div className="space-y-1">
-          <span className="font-semibold text-texto/75">{b.mes || "—"} {b.anio || "—"}</span>
+          <span className="font-semibold text-texto/75">
+            {b.mes || "—"} {b.anio || "—"}
+          </span>
         </div>
       ),
     },
@@ -161,7 +164,9 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           </div>
           <div className="flex items-center gap-1">
             <span className="font-semibold text-red-600">Vence:</span>
-            {formatearFechaConTooltip(b.vencimiento ? b.vencimiento + "T12:00:00" : null)}
+            {formatearFechaConTooltip(
+              b.vencimiento ? b.vencimiento + "T12:00:00" : null
+            )}
           </div>
           {b.promo_hasta && (
             <div className="flex items-center gap-1">
@@ -222,7 +227,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
         </div>
       ) : (
         <>
-          {/* >>> NUEVO: Filtro + Orden para boletas */}
+          {/* Filtro + Orden para boletas */}
           <FiltroOrden
             filtro={filtro}
             setFiltro={setFiltro}
@@ -237,7 +242,6 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
           <Table
             columns={columnas}
             data={boletasOrdenadas}
-            // si implementaste header clickeable en Table.jsx:
             ordenCampo={ordenCampo}
             ordenDir={ordenDir}
             onSortChange={(campo, dir) => {

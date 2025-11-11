@@ -43,12 +43,8 @@ const Mapa = () => {
   });
 
   // Hook para validación de ubicación
-  const {
-    ubicacionActual,
-    zonaActual,
-    ubicacionValida,
-    cargandoUbicacion,
-  } = useValidacionUbicacion(BOUNDS_CORRIENTES);
+  const { ubicacionActual, zonaActual, ubicacionValida, cargandoUbicacion } =
+    useValidacionUbicacion(BOUNDS_CORRIENTES);
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -107,11 +103,11 @@ const Mapa = () => {
   return (
     <div className="h-[calc(100vh-75px)] w-full relative">
       {cargandoMapa && (
-        <MainLoader 
-          texto="Cargando mapa..." 
-          variant="overlay" 
-          size="large" 
-          visible={cargandoMapa} 
+        <MainLoader
+          texto="Cargando mapa..."
+          variant="overlay"
+          size="large"
+          visible={cargandoMapa}
         />
       )}
 
@@ -122,9 +118,11 @@ const Mapa = () => {
       >
         <aside
           className={`hidden lg:block lg:col-span-3 h-full z-10 overflow-y-auto lg:p-4
-          ${theme === "light"
-            ? "bg-secundario border border-secundario/50 shadow-lg"
-            : "bg-fondo border border-texto/15"}`}
+          ${
+            theme === "light"
+              ? "bg-secundario border border-secundario/50 shadow-lg"
+              : "bg-fondo border border-texto/15"
+          }`}
         >
           <PanelControlMapa
             boundsCorrientes={BOUNDS_CORRIENTES}

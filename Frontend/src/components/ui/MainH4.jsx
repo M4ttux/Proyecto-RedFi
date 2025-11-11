@@ -31,7 +31,9 @@ const H4 = ({
       {...props}
     >
       {/* Icono opcional con el tamaño más pequeño de todos los encabezados */}
-      {Icon && <Icon size={20} className="hidden sm:inline-block mr-2 text-acento" />}
+      {Icon && (
+        <Icon size={20} className="hidden sm:inline-block mr-2 text-acento" />
+      )}
       {/* Contenido del encabezado */}
       {children}
     </h4>

@@ -55,13 +55,15 @@ const Textarea = ({
       {showCounter && maxLength && (
         <div className="flex justify-between items-center mt-1">
           <div></div> {/* Espaciador para alinear el contador a la derecha */}
-          <p className={`text-sm ${
-            (value?.length || 0) > maxLength * 0.9 
-              ? (value?.length || 0) >= maxLength 
-                ? "text-red-600 font-medium" 
-                : "text-yellow-600 font-medium"
-              : "text-texto/75"
-          }`}>
+          <p
+            className={`text-sm ${
+              (value?.length || 0) > maxLength * 0.9
+                ? (value?.length || 0) >= maxLength
+                  ? "text-red-600 font-medium"
+                  : "text-yellow-600 font-medium"
+                : "text-texto/75"
+            }`}
+          >
             {value?.length || 0}/{maxLength}
           </p>
         </div>

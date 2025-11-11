@@ -16,8 +16,8 @@ const RadioButton = ({
   // Configuración de tamaños
   const sizeMap = {
     sm: "w-3 h-3",
-    md: "w-4 h-4", 
-    lg: "w-5 h-5"
+    md: "w-4 h-4",
+    lg: "w-5 h-5",
   };
 
   return (
@@ -42,7 +42,7 @@ const RadioButton = ({
           {...props}
         />
       </div>
-      
+
       {/* Solo mostrar label si no está oculto y existe */}
       {label && !hideLabel && (
         <label
@@ -60,10 +60,12 @@ const RadioButton = ({
           {label}
         </label>
       )}
-      
+
       {/* Label de screen reader siempre presente para accesibilidad */}
       <span className="sr-only">
-        {checked ? "Opción correcta seleccionada" : "Seleccionar como opción correcta"}
+        {checked
+          ? "Opción correcta seleccionada"
+          : "Seleccionar como opción correcta"}
       </span>
     </div>
   );

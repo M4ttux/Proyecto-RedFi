@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { IconX, IconPlus, IconTrash, IconBulb, IconChevronDown } from "@tabler/icons-react";
+import {
+  IconX,
+  IconPlus,
+  IconTrash,
+  IconBulb,
+  IconChevronDown,
+} from "@tabler/icons-react";
 import MainH2 from "../../../ui/MainH2";
 import MainH3 from "../../../ui/MainH3";
 import MainH4 from "../../../ui/MainH4";
@@ -61,8 +67,6 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
     setPreviewMiniatura(URL.createObjectURL(file));
   };
 
-
-
   // Manejo de preguntas del quiz
   const agregarPregunta = () => {
     if (preguntas.length < 10) {
@@ -76,13 +80,17 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
     if (preguntas.length > 1) {
       const nuevasPreguntas = preguntas.filter((_, i) => i !== index);
       setPreguntas(nuevasPreguntas);
-      
+
       // Ajustar el índice de la pregunta expandida
       if (preguntaExpandida >= index) {
-        setPreguntaExpandida(preguntaExpandida > 0 ? preguntaExpandida - 1 : -1);
+        setPreguntaExpandida(
+          preguntaExpandida > 0 ? preguntaExpandida - 1 : -1
+        );
       }
       if (preguntaExpandida >= nuevasPreguntas.length) {
-        setPreguntaExpandida(nuevasPreguntas.length > 0 ? nuevasPreguntas.length - 1 : -1);
+        setPreguntaExpandida(
+          nuevasPreguntas.length > 0 ? nuevasPreguntas.length - 1 : -1
+        );
       }
     }
   };
@@ -190,249 +198,255 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
           onSubmit={(e) => e.preventDefault()}
           className="space-y-2 md:space-y-4"
         >
-        {step === 1 ? (
-          // Paso 1: Datos básicos
-          <div>
-            {/* Título */}
-            <Input
-              label={
-                <>
-                  Titulo <span className="text-red-600">*</span>
-                </>
-              }
-              name="titulo"
-              value={titulo}
-              onChange={(e) => setTitulo(e.target.value)}
-              placeholder="Ej: Cómo solucionar problemas de internet"
-              required
-              maxLength={100}
-              showCounter
-            />
+          {step === 1 ? (
+            // Paso 1: Datos básicos
+            <div>
+              {/* Título */}
+              <Input
+                label={
+                  <>
+                    Titulo <span className="text-red-600">*</span>
+                  </>
+                }
+                name="titulo"
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
+                placeholder="Ej: Cómo solucionar problemas de internet"
+                required
+                maxLength={100}
+                showCounter
+              />
 
-            {/* Descripción */}
-            <Textarea
-              label={
-                <>
-                  Descripción <span className="text-red-600">*</span>
-                </>
-              }
-              name="descripcion"
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-              placeholder="Describe de qué trata el curso..."
-              required
-              maxLength={500}
-              showCounter
-              rows={4}
-            />
+              {/* Descripción */}
+              <Textarea
+                label={
+                  <>
+                    Descripción <span className="text-red-600">*</span>
+                  </>
+                }
+                name="descripcion"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+                placeholder="Describe de qué trata el curso..."
+                required
+                maxLength={500}
+                showCounter
+                rows={4}
+              />
 
-            {/* URL de YouTube */}
-            <Input
-              label={
-                <>
-                  URL del video de YouTube{" "}
-                  <span className="text-red-600">*</span>
-                </>
-              }
-              name="videoUrl"
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
-              placeholder="https://www.youtube.com/watch?v=..."
-              maxLength={200}
-              showCounter
-              required
-            />
+              {/* URL de YouTube */}
+              <Input
+                label={
+                  <>
+                    URL del video de YouTube{" "}
+                    <span className="text-red-600">*</span>
+                  </>
+                }
+                name="videoUrl"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                maxLength={200}
+                showCounter
+                required
+              />
 
-            {/* Miniatura */}
-            <FileInput
-              label={
-                <>
-                  Miniatura del curso <span className="text-red-600">*</span>
-                </>
-              }
-              accept="image/*"
-              onChange={handleFileChange}
-              value={miniatura}
-              previewUrl={previewMiniatura}
-              setPreviewUrl={setPreviewMiniatura}
-              disabled={loading}
-              hideRemoveButton={true}
-            />
-          </div>
-        ) : (
-          // Paso 2: Quiz
-          <div className="space-y-2 md:space-y-4">
-            {/* Header del quiz - sticky */}
-            <div className="sticky top-0 bg-secundario z-10 pb-4 border-b border-texto/10 mb-4">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                <div className="flex items-center gap-3">
-                  <MainH3 className="mb-0">Quiz del curso</MainH3>
-                  <Badge variant="accent" size="sm">
-                    {preguntas.length}/10 preguntas
-                  </Badge>
-                </div>
-                <MainButton
-                  type="button"
-                  variant="accent"
-                  onClick={agregarPregunta}
-                  disabled={preguntas.length >= 10}
-                  iconSize={16}
-                  className="w-full sm:w-auto"
-                >
-                  <IconPlus />
-                  Agregar pregunta
-                </MainButton>
-              </div>
+              {/* Miniatura */}
+              <FileInput
+                label={
+                  <>
+                    Miniatura del curso <span className="text-red-600">*</span>
+                  </>
+                }
+                accept="image/*"
+                onChange={handleFileChange}
+                value={miniatura}
+                previewUrl={previewMiniatura}
+                setPreviewUrl={setPreviewMiniatura}
+                disabled={loading}
+                hideRemoveButton={true}
+              />
             </div>
-
-            {/* Lista de preguntas con scroll */}
-            <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
-              {preguntas.map((pregunta, preguntaIndex) => {
-              const estaExpandida = preguntaExpandida === preguntaIndex;
-              const tieneContenido = pregunta.pregunta.trim() !== '';
-              const tieneOpcionesCompletas = pregunta.opciones.some(op => op.texto.trim() !== '');
-              
-              return (
-                <div
-                  key={preguntaIndex}
-                  className="border border-texto/15 rounded-lg overflow-hidden"
-                >
-                  {/* Header del acordeón */}
-                  <div 
-                    className="flex justify-between items-center p-2 cursor-pointer bg-texto/5 transition-colors"
-                    onClick={() => setPreguntaExpandida(estaExpandida ? -1 : preguntaIndex)}
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="font-bold">
-                        Pregunta {preguntaIndex + 1}
-                      </span>
-                      
-
-                      
-                      {/* Preview del contenido cuando está colapsado */}
-                      {!estaExpandida && tieneContenido && (
-                        <span className="text-sm text-texto/75 truncate max-w-[150px] md:max-w-[200px]">
-                          {pregunta.pregunta}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                      {preguntas.length > 1 && (
-                        <MainButton
-                          type="button"
-                          variant="delete"
-                          iconAlwaysVisible = {true}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            eliminarPregunta(preguntaIndex);
-                          }}
-                          title={`Eliminar pregunta ${preguntaIndex + 1}`}
-                        >
-                        </MainButton>
-                      )}
-                      
-                      <IconChevronDown 
-                        size={20} 
-                        className={`text-texto/75 transition-transform ${
-                          estaExpandida ? "rotate-180" : "rotate-0"
-                        }`} 
-                      />
-                    </div>
+          ) : (
+            // Paso 2: Quiz
+            <div className="space-y-2 md:space-y-4">
+              {/* Header del quiz - sticky */}
+              <div className="sticky top-0 bg-secundario z-10 pb-4 border-b border-texto/10 mb-4">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                  <div className="flex items-center gap-3">
+                    <MainH3 className="mb-0">Quiz del curso</MainH3>
+                    <Badge variant="accent" size="sm">
+                      {preguntas.length}/10 preguntas
+                    </Badge>
                   </div>
+                  <MainButton
+                    type="button"
+                    variant="accent"
+                    onClick={agregarPregunta}
+                    disabled={preguntas.length >= 10}
+                    iconSize={16}
+                    className="w-full sm:w-auto"
+                  >
+                    <IconPlus />
+                    Agregar pregunta
+                  </MainButton>
+                </div>
+              </div>
 
-                  {/* Contenido expandible */}
-                  {estaExpandida && (
-                    <div className="p-4 space-y-4 border-t border-texto/10">
-                      <Textarea
-                        label={
-                          <>
-                            Pregunta <span className="text-red-600">*</span>
-                          </>
-                        }
-                        value={pregunta.pregunta}
-                        onChange={(e) =>
-                          actualizarPregunta(
-                            preguntaIndex,
-                            "pregunta",
-                            e.target.value
+              {/* Lista de preguntas con scroll */}
+              <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
+                {preguntas.map((pregunta, preguntaIndex) => {
+                  const estaExpandida = preguntaExpandida === preguntaIndex;
+                  const tieneContenido = pregunta.pregunta.trim() !== "";
+                  const tieneOpcionesCompletas = pregunta.opciones.some(
+                    (op) => op.texto.trim() !== ""
+                  );
+
+                  return (
+                    <div
+                      key={preguntaIndex}
+                      className="border border-texto/15 rounded-lg overflow-hidden"
+                    >
+                      {/* Header del acordeón */}
+                      <div
+                        className="flex justify-between items-center p-2 cursor-pointer bg-texto/5 transition-colors"
+                        onClick={() =>
+                          setPreguntaExpandida(
+                            estaExpandida ? -1 : preguntaIndex
                           )
                         }
-                        placeholder="Escribe la pregunta..."
-                        required
-                        maxLength={200}
-                        showCounter
-                        rows={2}
-                      />
+                      >
+                        <div className="flex items-center gap-4">
+                          <span className="font-bold">
+                            Pregunta {preguntaIndex + 1}
+                          </span>
 
-                      <div className="space-y-2">
-                        <MainH4
-                          className="text-sm font-medium text-texto mb-3"
-                          variant="noflex"
-                        >
-                          Opciones de respuesta <span className="text-red-600">*</span>
-                        </MainH4>
-                        {pregunta.opciones.map((opcion, opcionIndex) => (
-                          <div
-                            key={opcionIndex}
-                            className="w-full"
-                          >
-                            {/* Contenedor principal con radio button al costado del input */}
-                            <div className="flex items-start gap-3 w-full">
-                              <div className="flex-shrink-0 pt-2">
-                                <RadioButton
-                                  id={`radio_${preguntaIndex}_${opcionIndex}`}
-                                  name={`correcta_${preguntaIndex}`}
-                                  checked={opcion.es_correcta}
-                                  onChange={() =>
-                                    actualizarOpcion(
-                                      preguntaIndex,
-                                      opcionIndex,
-                                      "es_correcta",
-                                      true
-                                    )
-                                  }
-                                  hideLabel={true}
-                                  size="md"
-                                  title="Marcar como respuesta correcta"
-                                />
-                              </div>
-                              
-                              <div className="flex-1 min-w-0">
-                                <Input
-                                  placeholder={`Opción ${opcionIndex + 1}`}
-                                  value={opcion.texto}
-                                  onChange={(e) =>
-                                    actualizarOpcion(
-                                      preguntaIndex,
-                                      opcionIndex,
-                                      "texto",
-                                      e.target.value
-                                    )
-                                  }
-                                  className="w-full"
-                                  required
-                                  maxLength={100}
-                                  showCounter
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                        <div className="text-xs text-texto/75 bg-texto/5 p-2 rounded border border-texto/10 flex items-start gap-2">
-                          <IconBulb size={14} className="flex-shrink-0 text-acento" />
-                          <span><strong>Tip:</strong> Marca la opción correcta
-                          seleccionando el círculo correspondiente</span>
+                          {/* Preview del contenido cuando está colapsado */}
+                          {!estaExpandida && tieneContenido && (
+                            <span className="text-sm text-texto/75 truncate max-w-[150px] md:max-w-[200px]">
+                              {pregunta.pregunta}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          {preguntas.length > 1 && (
+                            <MainButton
+                              type="button"
+                              variant="delete"
+                              iconAlwaysVisible={true}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                eliminarPregunta(preguntaIndex);
+                              }}
+                              title={`Eliminar pregunta ${preguntaIndex + 1}`}
+                            ></MainButton>
+                          )}
+
+                          <IconChevronDown
+                            size={20}
+                            className={`text-texto/75 transition-transform ${
+                              estaExpandida ? "rotate-180" : "rotate-0"
+                            }`}
+                          />
                         </div>
                       </div>
+
+                      {/* Contenido expandible */}
+                      {estaExpandida && (
+                        <div className="p-4 space-y-4 border-t border-texto/10">
+                          <Textarea
+                            label={
+                              <>
+                                Pregunta <span className="text-red-600">*</span>
+                              </>
+                            }
+                            value={pregunta.pregunta}
+                            onChange={(e) =>
+                              actualizarPregunta(
+                                preguntaIndex,
+                                "pregunta",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Escribe la pregunta..."
+                            required
+                            maxLength={200}
+                            showCounter
+                            rows={2}
+                          />
+
+                          <div className="space-y-2">
+                            <MainH4
+                              className="text-sm font-medium text-texto mb-3"
+                              variant="noflex"
+                            >
+                              Opciones de respuesta{" "}
+                              <span className="text-red-600">*</span>
+                            </MainH4>
+                            {pregunta.opciones.map((opcion, opcionIndex) => (
+                              <div key={opcionIndex} className="w-full">
+                                {/* Contenedor principal con radio button al costado del input */}
+                                <div className="flex items-start gap-3 w-full">
+                                  <div className="flex-shrink-0 pt-2">
+                                    <RadioButton
+                                      id={`radio_${preguntaIndex}_${opcionIndex}`}
+                                      name={`correcta_${preguntaIndex}`}
+                                      checked={opcion.es_correcta}
+                                      onChange={() =>
+                                        actualizarOpcion(
+                                          preguntaIndex,
+                                          opcionIndex,
+                                          "es_correcta",
+                                          true
+                                        )
+                                      }
+                                      hideLabel={true}
+                                      size="md"
+                                      title="Marcar como respuesta correcta"
+                                    />
+                                  </div>
+
+                                  <div className="flex-1 min-w-0">
+                                    <Input
+                                      placeholder={`Opción ${opcionIndex + 1}`}
+                                      value={opcion.texto}
+                                      onChange={(e) =>
+                                        actualizarOpcion(
+                                          preguntaIndex,
+                                          opcionIndex,
+                                          "texto",
+                                          e.target.value
+                                        )
+                                      }
+                                      className="w-full"
+                                      required
+                                      maxLength={100}
+                                      showCounter
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            <div className="text-xs text-texto/75 bg-texto/5 p-2 rounded border border-texto/10 flex items-start gap-2">
+                              <IconBulb
+                                size={14}
+                                className="flex-shrink-0 text-acento"
+                              />
+                              <span>
+                                <strong>Tip:</strong> Marca la opción correcta
+                                seleccionando el círculo correspondiente
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
+          )}
         </form>
       </div>
 
