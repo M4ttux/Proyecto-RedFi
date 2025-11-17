@@ -61,7 +61,7 @@ const Button = ({
     disabled:
       "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15",
     cross: "text-texto/75 hover:text-red-400",
-    add: "bg-green-700 text-white hover:bg-green-500 border-1 border-texto/15",
+    add: "bg-green-700 text-white hover:bg-green-600 border-1 border-texto/15",
     see: "bg-blue-600 text-white hover:bg-blue-400 border-1 border-texto/15",
     edit: "bg-yellow-600 text-[#1a1a1a] hover:bg-yellow-400 border-1 border-texto/15",
     delete: "bg-red-900 text-white hover:bg-red-600 border-1 border-texto/15",

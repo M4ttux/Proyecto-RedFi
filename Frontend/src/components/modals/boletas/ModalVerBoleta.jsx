@@ -8,8 +8,11 @@ import {
 import MainButton from "../../ui/MainButton";
 import MainH2 from "../../ui/MainH2";
 import ModalContenedor from "../../ui/ModalContenedor";
+import { useTheme } from "../../../context/ThemeContext";
 
 const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
+  const { currentTheme } = useTheme();
+  
   // Verifica que existe la boleta antes de renderizar
   if (!boleta) return null;
 
@@ -30,23 +33,42 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
 
     if (diferencia > 0) {
       diferenciaTexto = (
-        <span className="flex items-center gap-1 font-bold text-green-700/75">
-          <IconTrendingUp size={16} />
-          Subió ${diferencia.toFixed(2)} (+{porcentaje}%)
-        </span>
+        <div className="font-bold">
+          {/* Versión completa para pantallas grandes */}
+          <span className="hidden sm:flex items-center gap-2">
+            <IconTrendingUp size={16} />
+            Subió ${diferencia.toFixed(2)} (+{porcentaje}%)
+          </span>
+          {/* Versión simplificada para pantallas pequeñas */}
+          <span className="sm:hidden">
+            Subió ${diferencia.toFixed(2)}
+          </span>
+        </div>
       );
-      diferenciaColor = "text-green-700";
+      diferenciaColor = currentTheme === 'light' ? 'text-green-800' : 'text-green-400';
     } else if (diferencia < 0) {
       diferenciaTexto = (
-        <span className="flex items-center gap-1 font-bold text-red-600/75">
-          <IconTrendingDown size={16} />
-          Bajó ${Math.abs(diferencia).toFixed(2)} ({porcentaje}%)
-        </span>
+        <div className="font-bold">
+          {/* Versión completa para pantallas grandes */}
+          <span className="hidden sm:flex items-center gap-2">
+            <IconTrendingDown size={16} />
+            Bajó ${Math.abs(diferencia).toFixed(2)} ({porcentaje}%)
+          </span>
+          {/* Versión simplificada para pantallas pequeñas */}
+          <span className="sm:hidden">
+            Bajó ${Math.abs(diferencia).toFixed(2)}
+          </span>
+        </div>
       );
-      diferenciaColor = "text-red-600";
+      diferenciaColor = currentTheme === 'light' ? 'text-red-800' : 'text-red-400';
     } else {
-      diferenciaTexto = `Sin cambios (0%)`;
-      diferenciaColor = "text-yellow-600";
+      diferenciaTexto = (
+        <div className="font-bold">
+          <span className="hidden sm:inline">Sin cambios (0%)</span>
+          <span className="sm:hidden">Sin cambios</span>
+        </div>
+      );
+      diferenciaColor = currentTheme === 'light' ? 'text-yellow-800' : 'text-yellow-400';
     }
   }
 
@@ -95,110 +117,146 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
         </MainButton>
       </div>
 
-      {/* Contenido principal con información y vista previa */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        {/* Información detallada de la boleta */}
-        <div className="space-y-3 ml-0 sm:ml-5 text-xl">
-          <p>
-            <strong>Mes:</strong>{" "}
-            <span className="text-texto/75">{boleta.mes}</span>
-          </p>
-          <p>
-            <strong>Año:</strong>{" "}
-            <span className="text-texto/75">{boleta.anio}</span>
-          </p>
-          <p>
-            <strong>Monto:</strong>{" "}
-            <span className="text-texto/75">${montoActual.toFixed(2)}</span>
-          </p>
-          {/* Comparación con boleta anterior del mismo proveedor */}
-          <p className={diferenciaColor}>
-            <strong>Diferencia:</strong> {diferenciaTexto}
-          </p>
-          <p>
-            <strong>Proveedor:</strong>{" "}
-            <span className="text-texto/75">{boleta.proveedor}</span>
-          </p>
-          <p>
-            <strong>Vencimiento:</strong>{" "}
-            <span
-              className="text-texto/75"
-              title={new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
-            >
-              {new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-              })}
-            </span>
-          </p>
+      {/* Contenido principal organizado como tabla */}
+      <div className="space-y-6">
+        {/* Tabla de información principal */}
+        <div className="bg-secundario rounded-lg border border-texto/15 overflow-hidden">
+          <div className="bg-primario text-white px-4 py-3">
+            <h3 className="font-semibold text-lg">Información de la Boleta</h3>
+          </div>
+          
+          <div className="divide-y divide-texto/15">
+            {/* Período */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="font-medium text-texto/80">Período</span>
+              <span className="font-semibold text-acento">{boleta.mes} {boleta.anio}</span>
+            </div>
+            
+            {/* Proveedor */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="font-medium text-texto/80">Proveedor</span>
+              <span className="font-semibold">{boleta.proveedor}</span>
+            </div>
+            
+            {/* Monto */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="font-medium text-texto/80">Monto</span>
+              <span className="font-semibold text-acento">${montoActual.toFixed(2)}</span>
+            </div>
+            
+            {/* Diferencia */}
+            <div className="px-4 py-3">
+              <div className="flex flex-row justify-between sm:items-center gap-1 sm:gap-0">
+                <span className="font-medium text-texto/80">Diferencia</span>
+                <div className={diferenciaColor}>{diferenciaTexto}</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {/* Fecha de fin de promoción (opcional) */}
-          {boleta.promo_hasta && (
-            <p className="text-yellow-600">
-              <strong>Promoción hasta:</strong>{" "}
-              <span
-                className="text-yellow-600/75"
-                title={new Date(boleta.promo_hasta).toLocaleDateString(
-                  "es-AR",
-                  {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                  }
-                )}
+        {/* Tabla de fechas importantes */}
+        <div className="bg-secundario rounded-lg border border-texto/15 overflow-hidden">
+          <div className="bg-primario text-white px-4 py-3">
+            <h3 className="font-semibold text-lg">Fechas Importantes</h3>
+          </div>
+          
+          <div className="divide-y divide-texto/15">
+            {/* Vencimiento */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="font-medium text-texto/80">Vencimiento</span>
+              <span 
+                className={`font-semibold ${currentTheme === 'light' ? 'text-red-800' : 'text-red-400'}`}
+                title={new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
               >
-                {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
+                {new Date(boleta.vencimiento).toLocaleDateString("es-AR", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "numeric",
                 })}
               </span>
-            </p>
-          )}
+            </div>
+            
+            {/* Promoción hasta (opcional) */}
+            {boleta.promo_hasta && (
+              <div className="px-4 py-3 flex justify-between items-center">
+                <span className="font-medium text-texto/80">Promoción hasta</span>
+                <span 
+                  className={`font-semibold ${currentTheme === 'light' ? 'text-yellow-700' : 'text-yellow-400'}`}
+                  title={new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                >
+                  {new Date(boleta.promo_hasta).toLocaleDateString("es-AR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Vista previa y descarga del archivo adjunto */}
-        <div className="flex flex-col items-center gap-4">
-          {boleta.url_imagen ? (
-            <>
-              {/* Muestra vista previa según el tipo de archivo */}
-              {esPDF(boleta.url_imagen) ? (
-                // Vista previa para archivos PDF
-                <div className="flex flex-col items-center gap-3 p-6 border border-dashed rounded-lg">
-                  <IconFileTypePdf size={80} className="text-red-500" />
-                  <p className="text-sm text-center font-medium break-all max-w-xs">
-                    {obtenerNombreArchivo(boleta.url_imagen)}
-                  </p>
+        {/* Sección de archivo adjunto */}
+        <div className="bg-secundario rounded-lg border border-texto/15 overflow-hidden">
+          <div className="bg-primario text-white px-4 py-3">
+            <h3 className="font-semibold text-lg">Archivo Adjunto</h3>
+          </div>
+          
+          <div className="p-4">
+            {boleta.url_imagen ? (
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {/* Vista previa del archivo */}
+                <div className="flex-shrink-0">
+                  {esPDF(boleta.url_imagen) ? (
+                    // Vista previa para archivos PDF
+                    <div className="flex flex-col items-center gap-2 p-4 border border-dashed border-texto/30 rounded-lg bg-texto/5">
+                      <IconFileTypePdf size={48} className="text-red-500" />
+                      <p className="text-xs text-center font-medium text-texto/70 max-w-[120px] truncate">
+                        {obtenerNombreArchivo(boleta.url_imagen)}
+                      </p>
+                    </div>
+                  ) : (
+                    // Vista previa para imágenes
+                    <img
+                      src={boleta.url_imagen}
+                      alt="Boleta"
+                      className="max-h-[80px] sm:max-h-[120px] object-contain rounded border"
+                    />
+                  )}
                 </div>
-              ) : (
-                // Vista previa para imágenes
-                <img
-                  src={boleta.url_imagen}
-                  alt="Boleta"
-                  className="max-h-[100px] md:max-h-[200px] object-contain rounded border"
-                />
-              )}
-              {/* Botón de descarga del archivo */}
-              <MainButton
-                onClick={descargarArchivo}
-                variant="accent"
-                className="flex items-center gap-2"
-              >
-                <IconDownload size={18} />
-                Descargar
-              </MainButton>
-            </>
-          ) : (
-            /* Mensaje cuando no hay archivo adjunto */
-            <div className="text-center text-gray-400 italic border border-dashed p-6 rounded max-w-xs">
-              ❌ El usuario no cargó un archivo de la boleta.
-            </div>
-          )}
+                
+                {/* Información y botón de descarga */}
+                <div className="flex-1 text-center sm:text-left">
+                  <p className="text-sm text-texto/70 mb-3">
+                    {esPDF(boleta.url_imagen) ? 'Archivo PDF disponible para descarga' : 'Imagen de la boleta disponible'}
+                  </p>
+                  <MainButton
+                    onClick={descargarArchivo}
+                    variant="accent"
+                    className="flex items-center gap-2 mx-auto sm:mx-0"
+                  >
+                    <IconDownload size={18} />
+                    Descargar
+                  </MainButton>
+                </div>
+              </div>
+            ) : (
+              /* Mensaje cuando no hay archivo adjunto */
+              <div className="text-center py-6">
+                <div className="text-4xl mb-2">📄</div>
+                <p className="text-texto/50 italic">
+                  No se cargó archivo para esta boleta
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
