@@ -108,7 +108,7 @@ const TestVelocidad = () => {
     return (
       <div className="flex flex-col items-center">
         {/* Contenedor del medidor circular */}
-        <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+        <div className="relative h-32 w-32 sm:h-50 sm:w-50">
           {/* Anillo de progreso con gradiente cónico */}
           <div
             className="absolute inset-0 rounded-full"
@@ -121,13 +121,10 @@ const TestVelocidad = () => {
           <div
             className="absolute inset-4 rounded-full flex flex-col items-center justify-center text-center"
             style={{
-              backgroundColor:
-                currentTheme === "light"
-                  ? "var(--color-fondo)"
-                  : "rgba(0,0,0,0.5)",
+              backgroundColor: "rgba(0,0,0,0.5)",
             }}
           >
-            <span className="text-xl font-bold sm:text-2xl">
+            <span className="text-xl font-bold sm:text-2xl text-white">
               {mostrarValor}
             </span>
           </div>

@@ -58,11 +58,11 @@ const PanelControlMapa = ({
             {ubicacionValida ? (
               <IconCheck size={16} className="text-green-700" />
             ) : (
-              <IconAlertCircle size={16} className="text-red-500" />
+              <IconAlertCircle size={16} className="text-red-900" />
             )}
             <span
               className={`font-medium text-sm ${
-                ubicacionValida ? "text-green-700" : "text-red-500"
+                ubicacionValida ? "text-green-700" : "text-red-900"
               }`}
             >
               {ubicacionValida

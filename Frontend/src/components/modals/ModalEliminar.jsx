@@ -43,7 +43,7 @@ const ModalEliminar = ({
       .split(new RegExp(`(${wordToHighlight})`, "gi"))
       .map((part, index) =>
         part.toLowerCase() === wordToHighlight.toLowerCase() ? (
-          <span key={index} className="text-red-600 font-bold">
+          <span key={index} className="text-red-800 font-bold">
             {part}
           </span>
         ) : (

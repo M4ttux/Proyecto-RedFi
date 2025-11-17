@@ -399,7 +399,7 @@ export const generarColumnas = (
               href={row.video_youtube_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-red-600 hover:underline"
+              className="flex items-center gap-1 text-red-800 hover:underline"
               title="Ver en YouTube"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

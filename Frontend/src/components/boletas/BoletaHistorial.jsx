@@ -8,6 +8,7 @@ import MainButton from "../ui/MainButton";
 import MainLoader from "../ui/MainLoader";
 import Table from "../ui/Table";
 import { useAlerta } from "../../context/AlertaContext";
+import { useTheme } from "../../context/ThemeContext";
 
 // Control de filtro + orden
 import FiltroOrden from "../ui/FiltroOrden";
@@ -20,6 +21,7 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   const [boletaAEliminar, setBoletaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
+  const { currentTheme } = useTheme();
 
   // estados de filtro + orden
   const [filtro, setFiltro] = useState("");
@@ -157,20 +159,20 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
       id: "fechas",
       label: "FECHAS IMPORTANTES",
       renderCell: (b) => (
-        <div className="space-y-1 text-xs">
+        <div className="space-y-1">
           <div className="flex items-center gap-1">
-            <span className="font-semibold text-green-700">Carga:</span>
+            <span className={`font-semibold ${currentTheme === 'light' ? 'text-green-800' : 'text-green-400'}`}>Carga:</span>
             {formatearFechaConTooltip(b.fecha_carga)}
           </div>
           <div className="flex items-center gap-1">
-            <span className="font-semibold text-red-600">Vence:</span>
+            <span className={`font-semibold ${currentTheme === 'light' ? 'text-red-800' : 'text-red-400'}`}>Vence:</span>
             {formatearFechaConTooltip(
               b.vencimiento ? b.vencimiento + "T12:00:00" : null
             )}
           </div>
           {b.promo_hasta && (
             <div className="flex items-center gap-1">
-              <span className="font-semibold text-yellow-600">Promo:</span>
+              <span className={`font-semibold ${currentTheme === 'light' ? 'text-yellow-700' : 'text-yellow-400'}`}>Promo:</span>
               {formatearFechaConTooltip(b.promo_hasta + "T12:00:00")}
             </div>
           )}

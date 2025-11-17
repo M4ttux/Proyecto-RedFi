@@ -222,7 +222,7 @@ const MobileBottomNav = () => {
                   Alertas
                 </span>
                 {notificaciones.length > 0 && (
-                  <span className="absolute -top-0 -right-0 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
+                  <span className="absolute -top-0 -right-0 bg-red-900 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-[16px] flex items-center justify-center">
                     {notificaciones.length}
                   </span>
                 )}

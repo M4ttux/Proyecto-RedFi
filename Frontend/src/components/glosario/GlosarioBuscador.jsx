@@ -204,7 +204,7 @@ const GlosarioBuscador = () => {
       {cargando && (
         <p className="mt-4 text-blue-400 font-bold">Buscando en Wikipedia...</p>
       )}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && <p className="mt-4 text-red-400">{error}</p>}
 
       {/* Resultado de Wikipedia con opciones de interacción */}
       {resultado && (
