@@ -212,7 +212,7 @@ const Reseñas = () => {
         <div className="text-center mb-8">
           <MainH1 icon={IconStars}>Mis reseñas</MainH1>
           <p className="text-lg">
-            Administre todas las reseñas que ha publicado.
+            Administra todas las reseñas que has publicado.
           </p>
         </div>
 

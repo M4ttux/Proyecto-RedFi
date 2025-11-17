@@ -28,12 +28,12 @@ const HeroSection = () => {
             variant="noflex"
             className="font-bold text-5xl lg:text-6xl leading-tight text-center lg:text-left"
           >
-            Encuentre el <span className="text-acento">mejor internet</span>{" "}
-            para su zona.
+            Encuentra el <span className="text-acento">mejor internet</span>{" "}
+            para tu zona.
           </MainH1>
           <p className="mt-6 text-lg">
-            Visualice qué empresas operan cerca suyo, conozca la experiencia de
-            otros usuarios y tome decisiones con confianza.
+            Visualiza qué empresas operan cerca tuyo, conoce la experiencia de
+            otros usuarios y toma decisiones con confianza.
           </p>
           <MainLinkButton
             to="/mapa"

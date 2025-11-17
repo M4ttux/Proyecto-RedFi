@@ -105,8 +105,8 @@ const Cuenta = () => {
                 Gestionar boletas
               </MainH3>
               <p>
-                Visualize y administre sus boletas, reciba alertas antes del
-                vencimiento y revise los aumentos mes a mes.
+                Visualiza y administra tus boletas, recibe alertas antes del
+                vencimiento y revisa los aumentos mes a mes.
               </p>
             </MainLinkButton>
           </div>
@@ -129,7 +129,7 @@ const Cuenta = () => {
                 Mis reseñas
               </MainH3>
               <p>
-                Visualize y administre todas las reseñas que has publicado sobre
+                Visualiza y administra todas las reseñas que has publicado sobre
                 diferentes proveedores.
               </p>
             </MainLinkButton>
@@ -141,8 +141,8 @@ const Cuenta = () => {
                 Editar perfil
               </MainH3>
               <p>
-                Actualice tanto su foto de perfil como su nombre completo y
-                otros detalles importantes asociados a su cuenta de Red-Fi.
+                Actualiza tanto tu foto de perfil como tu nombre completo y
+                otros detalles importantes asociados a tu cuenta de Red-Fi.
               </p>
             </MainLinkButton>
           </div>
@@ -152,7 +152,7 @@ const Cuenta = () => {
               <MainH3 className="text-center justify-center">
                 Gestionar plan
               </MainH3>
-              <p>Gestione su plan y descubra nuestros beneficios.</p>
+              <p>Gestiona tu plan y descubre nuestros beneficios.</p>
             </MainLinkButton>
           </div>
 

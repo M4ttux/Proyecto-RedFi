@@ -170,7 +170,7 @@ const WifiScanner = () => {
             onChange={(e) => {
               setNombreZona(e.target.value);
             }}
-            placeholder="Escribí el nombre de la zona (ej: Comedor)"
+            placeholder="Escribe el nombre de la zona (ej: Comedor)"
             required
             maxLength={20}
             showCounter={true}

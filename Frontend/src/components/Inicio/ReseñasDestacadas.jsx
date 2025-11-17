@@ -73,7 +73,7 @@ const ReseñasDestacadas = () => {
               />
               <p className="text-acento font-bold mb-2">{r.nombre}</p>
 
-              <p className="text-texto mb-4">{r.comentario}</p>
+              <p className="text-texto mb-4 text-left">{r.comentario}</p>
 
               <div className="flex gap-1 text-yellow-600 justify-center bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
                 {Array.from({ length: 5 }, (_, idx) =>

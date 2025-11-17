@@ -22,7 +22,7 @@ const preguntas = [
   {
     titulo: "¿Qué tipo de proveedores aparecen?",
     contenido:
-      "Aparecen tanto grandes empresas como ISPs locales que operan en Corrientes. Vos decidís cuál te conviene más.",
+      "Aparecen tanto grandes empresas como ISPs locales que operan en Corrientes. Tú decides cuál te conviene más.",
   },
   {
     titulo: "¿Qué puedo hacer con las boletas?",

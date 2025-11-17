@@ -43,7 +43,7 @@ const features = [
       </>
     ),
     descripcion:
-      "Guarde sus boletas, reciba notificaciones antes del vencimiento y revise si hubo aumentos mes a mes.",
+      "Guarda tus boletas, recibe notificaciones antes del vencimiento y revisa si hubo aumentos mes a mes.",
   },
 ];
 
@@ -80,7 +80,7 @@ const Caracteristicas = () => {
               <MainH3 className="text-acento text-center justify-center">
                 {f.titulo}
               </MainH3>
-              <p className="text-texto leading-relaxed">{f.descripcion}</p>
+              <p className="text-texto leading-relaxed text-left">{f.descripcion}</p>
             </div>
           ))}
         </div>

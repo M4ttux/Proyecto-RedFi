@@ -58,7 +58,7 @@ const AcademyHome = () => {
 
         <div className="text-center mb-8">
           <MainH2 className="text-center justify-center">
-            Acceda a nuestros cursos
+            Accede a nuestros cursos
           </MainH2>
         </div>
 

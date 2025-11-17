@@ -87,9 +87,9 @@ const Planes = () => {
     <section className="py-16 px-4 sm:px-6 text-texto w-full">
       <div className="max-w-7xl mx-auto space-y-12 mb-8">
         <div className="text-center mb-8">
-          <MainH1 icon={IconReceiptDollar}>Elija su plan Red-Fi</MainH1>
+          <MainH1 icon={IconReceiptDollar}>Elige tu plan Red-Fi</MainH1>
           <p className="text-lg">
-            Compare los planes y seleccione el que mejor se adapte a sus
+            Compara los planes y selecciona el que mejor se adapte a tus
             necesidades.
           </p>
         </div>
@@ -140,7 +140,7 @@ const Planes = () => {
                 Plan Premium
               </MainH2>
               <p className="text-texto mb-4">
-                Acceda a todos los beneficios de Red-Fi sin límites de uso y sin
+                Accede a todos los beneficios de Red-Fi sin límites de uso y sin
                 anuncios.
               </p>
               {renderBeneficios(beneficiosPremium)}
