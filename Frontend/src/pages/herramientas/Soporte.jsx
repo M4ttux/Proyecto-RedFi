@@ -83,31 +83,31 @@ const Soporte = () => {
             >
               <MainH2 className="mb-4">Información rápida</MainH2>
               <div className="space-y-3">
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">¿Qué es Red-Fi?</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>¿Qué es Red-Fi?</MainH3>
                   <p className="text-sm text-texto">
                     Una plataforma comunitaria que te ayuda a elegir el mejor
                     proveedor de Internet basándose en reseñas reales de
                     usuarios.
                   </p>
                 </div>
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Herramientas principales</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>Herramientas principales</MainH3>
                   <p className="text-sm text-texto">
                     Mapa de cobertura con reseñas por zona, test de velocidad y
                     comparador de proveedores basado en experiencias reales.
                   </p>
                 </div>
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">¿Cómo funciona?</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>¿Cómo funciona?</MainH3>
                   <p className="text-sm text-texto">
                     Los usuarios escriben reseñas honestas sobre sus
                     proveedores, clasificadas por zonas geográficas para
                     ayudarte a decidir.
                   </p>
                 </div>
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Completamente gratuito</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>Completamente gratuito</MainH3>
                   <p className="text-sm text-texto">
                     Consulta reseñas, usa el mapa de cobertura y realiza tests
                     de velocidad sin costo alguno.
@@ -126,31 +126,31 @@ const Soporte = () => {
             >
               <MainH2 className="mb-4">Soluciones técnicas comunes</MainH2>
               <div className="space-y-3">
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Internet muy lento</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>Internet muy lento</MainH3>
                   <p className="text-sm text-texto">
                     Realiza un test de velocidad, reinicia el router, usa cable
                     ethernet y verifica si otros usuarios reportan problemas
                     similares en tu zona.
                   </p>
                 </div>
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Problemas de WiFi</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>Problemas de WiFi</MainH3>
                   <p className="text-sm text-texto">
                     Ubica el router en lugar central y alto, cambia a banda 5GHz
                     si está disponible y evita interferencias de
                     electrodomésticos.
                   </p>
                 </div>
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Elegir nuevo proveedor</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>Elegir nuevo proveedor</MainH3>
                   <p className="text-sm text-texto">
                     Consulta nuestro mapa, lee reseñas de tu zona específica y
                     compara velocidades reales reportadas por otros usuarios.
                   </p>
                 </div>
-                <div className="p-3 rounded-lg border border-texto/15">
-                  <MainH3 className="mb-1">Problemas gaming/streaming</MainH3>
+                <div className="p-4 rounded-lg border border-texto/15">
+                  <MainH3>Problemas gaming/streaming</MainH3>
                   <p className="text-sm text-texto">
                     Usa conexión por cable, cierra aplicaciones innecesarias y
                     verifica que tu ping sea menor a 50ms en nuestro test.

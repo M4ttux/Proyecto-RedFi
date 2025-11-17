@@ -54,7 +54,7 @@ const Button = ({
   const variants = {
     primary:
       "bg-primario text-white hover:bg-[#336ef0] border-1 border-texto/15",
-    accent: "bg-acento text-white hover:bg-[#fca75f] border-1 border-texto/15",
+    accent: "bg-acento text-[#1a1a1a] hover:bg-[#fca75f] border-1 border-texto/15",
     secondary:
       currentTheme === "light"
         ? "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15"

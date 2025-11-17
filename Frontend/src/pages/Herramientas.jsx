@@ -27,8 +27,7 @@ const Herramientas = () => {
                 Mapa de Red-Fi
               </MainH3>
               <p>
-                Explora qué proveedores ofrecen servicio en tu zona, lee reseñas
-                de otros usuarios y deja tu propia opinión sobre tu experiencia.
+                Explora proveedores por zona y comparte tu experiencia.
               </p>
             </MainLinkButton>
           </div>
@@ -38,8 +37,7 @@ const Herramientas = () => {
                 Información de red
               </MainH3>
               <p>
-                Conoce tu IP pública, ubicación aproximada y detalles técnicos
-                de tu conexión actual.
+                Consulta tu IP pública, ubicación y datos técnicos de tu conexión.
               </p>
             </MainLinkButton>
           </div>
@@ -49,8 +47,7 @@ const Herramientas = () => {
                 Test de velocidad
               </MainH3>
               <p>
-                Medí la velocidad real de de conexión a Internet en pocos
-                segundos.
+                Mide la velocidad real de tu conexión a Internet en segundos.
               </p>
             </MainLinkButton>
           </div>
@@ -60,8 +57,7 @@ const Herramientas = () => {
                 Análisis de conexión por zonas
               </MainH3>
               <p>
-                Simula un análisis Wi-Fi en tu hogar para identificar las zonas
-                con mejor o peor señal.
+                Analiza la calidad Wi-Fi en diferentes zonas de tu hogar.
               </p>
             </MainLinkButton>
           </div>
@@ -69,8 +65,7 @@ const Herramientas = () => {
             <MainLinkButton to="/soporte" variant="card">
               <MainH3 className="text-center justify-center">Soporte</MainH3>
               <p>
-                Encuentra soluciones a problemas comunes de conexión y habla con
-                nuestro chatbot de soporte.
+                Resuelve problemas de conexión con nuestro chatbot de soporte.
               </p>
             </MainLinkButton>
           </div>

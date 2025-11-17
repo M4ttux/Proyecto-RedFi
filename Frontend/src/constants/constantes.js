@@ -1,5 +1,5 @@
 // Duración en milisegundos para mostrar alertas/notificaciones
-export const DURACION_ALERTA = 3000;
+export const DURACION_ALERTA = 5000;
 
 // Límites geográficos de la ciudad de Corrientes, Argentina
 // Define el área de cobertura del mapa para proveedores de internet
