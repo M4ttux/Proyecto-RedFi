@@ -56,22 +56,18 @@ const Button = ({
       "bg-primario text-white hover:bg-[#336ef0] border-1 border-texto/15",
     accent: "bg-acento text-[#1a1a1a] hover:bg-[#fca75f] border-1 border-texto/15",
     secondary:
-      currentTheme === "light"
-        ? "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15"
-        : "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15",
-    danger: "bg-red-600 text-white hover:bg-red-400 border-1 border-texto/15",
+      "bg-texto/15 text-texto hover:bg-texto/30 border-1 border-texto/15",
+    danger: "bg-red-500 text-white hover:bg-red-400 border-1 border-texto/15",
     disabled:
       "bg-gray-400 text-gray-700 cursor-not-allowed border-1 border-texto/15",
     cross: "text-texto/75 hover:text-red-400",
     add: "bg-green-700 text-white hover:bg-green-500 border-1 border-texto/15",
     see: "bg-blue-600 text-white hover:bg-blue-400 border-1 border-texto/15",
     edit: "bg-yellow-600 text-white hover:bg-yellow-400 border-1 border-texto/15",
-    delete: "bg-red-600 text-white hover:bg-red-400 border-1 border-texto/15",
+    delete: "bg-red-500 text-white hover:bg-red-400 border-1 border-texto/15",
     toggle: active
-      ? "bg-primario border-1 border-texto/15 text-white hover:bg-[#336ef0]"
-      : currentTheme === "light"
-      ? "bg-secundario border-1 border-texto/15 text-texto hover:bg-[#d2e4ff]"
-      : "bg-secundario border-1 border-texto/15 text-texto hover:bg-[#2a3955]",
+      ? "bg-texto/15 border-1 border-texto/15 text-texto hover:bg-texto/30"
+      : "bg-primario border-1 border-texto/15 text-white hover:bg-[#336ef0]",
     "toggle-tabs": active
       ? "border-acento text-acento"
       : "border-transparent text-texto/75 hover:text-texto",

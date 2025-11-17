@@ -11,10 +11,10 @@ import { DURACION_ALERTA } from "../../constants/constantes";
 
 // Estilos CSS para cada tipo de alerta
 const estilos = {
-  error: "text-red-700 border-red-700/50",
-  exito: "text-green-700 border-green-700/50",
-  info: "text-blue-700 border-blue-700/50",
-  advertencia: "text-yellow-700 border-yellow-700/50",
+  error: "text-texto border-red-700/50",
+  exito: "text-texto  border-green-700/50",
+  info: "text-texto  border-blue-700/50",
+  advertencia: "text-texto  border-yellow-700/50",
 };
 
 // Iconos correspondientes a cada tipo de alerta
@@ -23,6 +23,22 @@ const iconos = {
   exito: IconCircleCheck,
   info: IconInfoCircle,
   advertencia: IconAlertTriangle,
+};
+
+// Colores para los iconos según el tipo de alerta
+const coloresIconos = {
+  error: "text-red-500",
+  exito: "text-green-500",
+  info: "text-blue-500",
+  advertencia: "text-yellow-500",
+};
+
+// Títulos para cada tipo de alerta
+const titulos = {
+  error: "Error",
+  exito: "Éxito",
+  info: "Información",
+  advertencia: "Advertencia",
 };
 
 const Alerta = ({
@@ -86,10 +102,15 @@ const Alerta = ({
       ${estilos[tipo] || estilos.error}
     `}
     >
-      {/* Contenido principal de la alerta con icono y mensaje */}
-      <div className="flex items-center gap-2">
-        <Icono size={20} />
-        <span className="flex-1 font-bold">{mensaje}</span>
+      {/* Contenido principal de la alerta con icono, título y mensaje */}
+      <div className="flex-1">
+        <div className="flex items-center gap-3 mb-1">
+          <Icono size={20} className={coloresIconos[tipo] || coloresIconos.error} />
+          <div className="font-bold">
+            {titulos[tipo] || titulos.error}
+          </div>
+        </div>
+        <div className="ml-8">{mensaje}</div>
       </div>
 
       {/* Botón para cerrar la alerta manualmente */}
