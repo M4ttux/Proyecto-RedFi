@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   IconX,
-  IconAlertCircle,
+  IconCircleXFilled,
   IconCircleCheck,
   IconInfoCircle,
   IconAlertTriangle,
@@ -11,15 +11,15 @@ import { DURACION_ALERTA } from "../../constants/constantes";
 
 // Estilos CSS para cada tipo de alerta
 const estilos = {
-  error: "text-texto border-red-700/50",
-  exito: "text-texto  border-green-700/50",
-  info: "text-texto  border-blue-700/50",
-  advertencia: "text-texto  border-yellow-700/50",
+  error: "text-texto border-red-500",
+  exito: "text-texto  border-green-500",
+  info: "text-texto  border-blue-500",
+  advertencia: "text-texto  border-yellow-500",
 };
 
 // Iconos correspondientes a cada tipo de alerta
 const iconos = {
-  error: IconAlertCircle,
+  error: IconCircleXFilled,
   exito: IconCircleCheck,
   info: IconInfoCircle,
   advertencia: IconAlertTriangle,

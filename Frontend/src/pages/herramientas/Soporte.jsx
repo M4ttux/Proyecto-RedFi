@@ -250,6 +250,7 @@ const Soporte = () => {
                           ? "bg-primario text-white text-right border-2 border-texto/15"
                           : "bg-primario text-texto text-right"
                       }`}
+                      style={{ whiteSpace: "pre-line" }}
                     >
                       {m.texto}
                     </div>
@@ -281,7 +282,7 @@ const Soporte = () => {
                         onClick={() => manejarSeleccion(op)}
                         disabled={escribiendo}
                         variant={
-                          op.texto === "Volver al inicio"
+                          op.texto === "Volver al menú principal" || op.texto === "Volver a ayuda técnica" || op.texto === "Volver a problemas de conexión"
                             ? "secondary"
                             : "primary"
                         }

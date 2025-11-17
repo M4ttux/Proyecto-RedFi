@@ -84,7 +84,7 @@ export const flujoConversacion = {
       {
         texto: "¿Cómo hacer el test?",
         respuesta:
-          "Para realizar un test de velocidad preciso: 1) Ve a la sección 'Herramientas' y selecciona 'Test de Velocidad', 2) Cierra aplicaciones que usen Internet (streaming, descargas, etc.), 3) Si es posible, conéctate por cable Ethernet en lugar de WiFi, 4) Haz clic en 'Iniciar Test' y espera a que termine completamente, 5) Realiza varios tests en diferentes momentos para obtener un promedio real.",
+          "Para realizar un test de velocidad preciso:\n\n1) Ve a la sección 'Herramientas' y selecciona 'Test de Velocidad'\n2) Cierra aplicaciones que usen Internet (streaming, descargas, etc.)\n3) Si es posible, conéctate por cable Ethernet en lugar de WiFi\n4) Haz clic en 'Iniciar Test' y espera a que termine completamente\n5) Realiza varios tests en diferentes momentos para obtener un promedio real",
       },
       {
         texto: "¿Cómo interpretar resultados?",
@@ -94,7 +94,7 @@ export const flujoConversacion = {
       {
         texto: "Resultados muy bajos",
         respuesta:
-          "Si tu velocidad es muy baja: 1) Reinicia tu router desconectándolo 30 segundos, 2) Conéctate por cable Ethernet directamente, 3) Si usas WiFi, acércate al router, 4) Cierra todos los dispositivos y aplicaciones que no estés usando, 5) Verifica que no haya descargas automáticas activas, 6) Si la velocidad sigue siendo menor al 50% de lo contratado, contacta a tu proveedor con evidencia de los tests.",
+          "Si tu velocidad es muy baja:\n\n1) Reinicia tu router desconectándolo 30 segundos\n2) Conéctate por cable Ethernet directamente\n3) Si usas WiFi, acércate al router\n4) Cierra todos los dispositivos y aplicaciones que no estés usando\n5) Verifica que no haya descargas automáticas activas\n6) Si la velocidad sigue siendo menor al 50% de lo contratado, contacta a tu proveedor con evidencia de los tests",
       },
       { texto: "Volver a ayuda técnica", siguiente: "ayuda_tecnica" },
     ],
@@ -106,7 +106,7 @@ export const flujoConversacion = {
       {
         texto: "¿Cómo agregar información?",
         respuesta:
-          "Para contribuir con información al mapa: 1) Ve a la sección 'Mapa' en Red-Fi, 2) Explora las zonas disponibles en Corrientes, 3) Busca tu proveedor o zona de interés, 4) Si tienes cuenta, puedes escribir una reseña seleccionando el proveedor correspondiente, 5) Califica tu experiencia y describe detalladamente tu experiencia para ayudar a otros usuarios de tu zona.",
+          "Para contribuir con información al mapa:\n\n1) Ve a la sección 'Mapa' en Red-Fi\n2) Explora las zonas disponibles en Corrientes\n3) Busca tu proveedor o zona de interés\n4) Si tienes cuenta, puedes escribir una reseña seleccionando el proveedor correspondiente\n5) Califica tu experiencia y describe detalladamente tu experiencia para ayudar a otros usuarios de tu zona",
       },
       { texto: "Volver a ayuda técnica", siguiente: "ayuda_tecnica" },
     ],
@@ -118,7 +118,7 @@ export const flujoConversacion = {
       {
         texto: "¿Cómo escribir una reseña?",
         respuesta:
-          "Para escribir una reseña útil: 1) Crea una cuenta en Red-Fi si aún no tienes una, 2) Ve a la sección de reseñas o encuentra el proveedor en el mapa, 3) Selecciona 'Escribir reseña', 4) Califica del 1 al 5 estrellas basándote en tu experiencia general, 5) Describe específicamente tu experiencia: velocidades reales vs prometidas, estabilidad, atención al cliente, 6) Menciona tu zona aproximada en Corrientes y el plan que tienes.",
+          "Para escribir una reseña útil:\n\n1) Crea una cuenta en Red-Fi si aún no tienes una\n2) Ve a la sección de reseñas o encuentra el proveedor en el mapa\n3) Selecciona 'Escribir reseña'\n4) Califica del 1 al 5 estrellas basándote en tu experiencia general\n5) Describe específicamente tu experiencia: velocidades reales vs prometidas, estabilidad, atención al cliente\n6) Menciona tu zona aproximada en Corrientes y el plan que tienes",
       },
       {
         texto: "¿Qué incluir en la reseña?",
@@ -155,12 +155,12 @@ export const flujoConversacion = {
       {
         texto: "Diagnóstico rápido",
         respuesta:
-          "Pasos para diagnosticar lentitud: 1) Realiza un test de velocidad en Red-Fi para medir tu velocidad real, 2) Reinicia el router desconectándolo 30 segundos, 3) Conéctate por cable Ethernet si es posible, 4) Cierra todas las aplicaciones y dispositivos que no estés usando, 5) Compara los resultados con lo que tienes contratado, 6) Verifica en nuestro mapa si otros usuarios en tu zona reportan problemas similares.",
+          "Pasos para diagnosticar lentitud:\n\n1) Realiza un test de velocidad en Red-Fi para medir tu velocidad real\n2) Reinicia el router desconectándolo 30 segundos\n3) Conéctate por cable Ethernet si es posible\n4) Cierra todas las aplicaciones y dispositivos que no estés usando\n5) Compara los resultados con lo que tienes contratado\n6) Verifica en nuestro mapa si otros usuarios en tu zona reportan problemas similares",
       },
       {
         texto: "Optimizar conexión WiFi",
         respuesta:
-          "Para mejorar tu WiFi: 1) Acércate físicamente al router, 2) Cambia a la banda de 5GHz si tu router la tiene disponible, 3) Evita interferencias alejando el router de microondas, teléfonos inalámbricos y otros routers, 4) Actualiza los controladores (drivers) de tu tarjeta WiFi, 5) Cambia el canal del router en la configuración, 6) Ubica el router en un lugar alto y central de tu hogar.",
+          "Para mejorar tu WiFi:\n\n1) Acércate físicamente al router\n2) Cambia a la banda de 5GHz si tu router la tiene disponible\n3) Evita interferencias alejando el router de microondas, teléfonos inalámbricos y otros routers\n4) Actualiza los controladores (drivers) de tu tarjeta WiFi\n5) Cambia el canal del router en la configuración\n6) Ubica el router en un lugar alto y central de tu hogar",
       },
       {
         texto: "Verificar plan contratado",
@@ -181,7 +181,7 @@ export const flujoConversacion = {
       {
         texto: "Verificaciones básicas",
         respuesta:
-          "Verificaciones esenciales cuando no tienes Internet: 1) Revisa que todos los cables estén bien conectados, 2) Verifica las luces del router (deben estar verdes o azules, no rojas), 3) Reinicia el router desconectándolo de la corriente por 30 segundos, 4) Prueba la conexión con diferentes dispositivos (teléfono, computadora), 5) Verifica si el problema es solo tuyo o también afecta a tus vecinos.",
+          "Verificaciones esenciales cuando no tienes Internet:\n\n1) Revisa que todos los cables estén bien conectados\n2) Verifica las luces del router (deben estar verdes o azules, no rojas)\n3) Reinicia el router desconectándolo de la corriente por 30 segundos\n4) Prueba la conexión con diferentes dispositivos (teléfono, computadora)\n5) Verifica si el problema es solo tuyo o también afecta a tus vecinos",
       },
       {
         texto: "Problemas del proveedor",
@@ -313,7 +313,7 @@ export const flujoConversacion = {
       {
         texto: "Crear cuenta nueva",
         respuesta:
-          "Para registrarte en Red-Fi: 1) Haz clic en el botón 'Registrarse' en la página principal, 2) Completa el formulario con tu email, contraseña, nombre y proveedor actual (opcional), 3) Envía el formulario - tu cuenta se crea inmediatamente, 4) Ahora puedes escribir reseñas, cambiar tu plan y acceder a todas las funciones disponibles según tu plan elegido.",
+          "Para registrarte en Red-Fi:\n\n1) Haz clic en el botón 'Registrarse' en la página principal\n2) Completa el formulario con tu email, contraseña, nombre y proveedor actual (opcional)\n3) Envía el formulario - tu cuenta se crea inmediatamente\n4) Ahora puedes escribir reseñas, cambiar tu plan y acceder a todas las funciones disponibles según tu plan elegido",
       },
       {
         texto: "Problemas de acceso",
@@ -337,7 +337,7 @@ export const flujoConversacion = {
       {
         texto: "¿Cómo elegir proveedor?",
         respuesta:
-          "Para elegir el mejor proveedor usando Red-Fi: 1) Consulta nuestro mapa de cobertura ingresando tu dirección específica, 2) Lee las reseñas de usuarios de tu zona, no solo el promedio general, 3) Compara velocidades reales reportadas versus las prometidas por cada proveedor, 4) Evalúa la calidad de atención al cliente según experiencias de otros usuarios, 5) Considera la estabilidad del servicio y frecuencia de cortes reportados, 6) Analiza la relación precio-calidad basándote en experiencias reales, no solo en precios publicitados.",
+          "Para elegir el mejor proveedor usando Red-Fi:\n\n1) Consulta nuestro mapa de cobertura ingresando tu dirección específica\n2) Lee las reseñas de usuarios de tu zona, no solo el promedio general\n3) Compara velocidades reales reportadas versus las prometidas por cada proveedor\n4) Evalúa la calidad de atención al cliente según experiencias de otros usuarios\n5) Considera la estabilidad del servicio y frecuencia de cortes reportados\n6) Analiza la relación precio-calidad basándote en experiencias reales, no solo en precios publicitados",
       },
       {
         texto: "Interpretar reseñas",

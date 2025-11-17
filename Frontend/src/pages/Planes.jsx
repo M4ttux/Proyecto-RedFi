@@ -6,6 +6,7 @@ import {
   IconCheck,
   IconReceiptDollar,
   IconArrowLeft,
+  IconX,
 } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
@@ -58,10 +59,17 @@ const Planes = () => {
           key={i}
           className={`flex items-center ${!b.disponible ? "opacity-75" : ""}`}
         >
-          <IconCheck
-            size={18}
-            className={`${b.disponible ? "text-acento" : "text-texto"} mr-2`}
-          />
+          {b.disponible ? (
+            <IconCheck
+              size={18}
+              className="text-acento mr-2"
+            />
+          ) : (
+            <IconX
+              size={18}
+              className="opacity-75 mr-2"
+            />
+          )}
           {b.texto}
         </li>
       ))}

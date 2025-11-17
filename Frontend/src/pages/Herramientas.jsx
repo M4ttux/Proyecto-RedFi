@@ -14,10 +14,7 @@ const Herramientas = () => {
         <div className="text-center mb-8">
           <MainH1 icon={IconTool}>Herramientas Red-Fi</MainH1>
           <p className="text-lg">
-            Descubrí nuestras herramientas de Red-Fi diseñadas para mejorar tu
-            experiencia de conexión: desde mapas colaborativos con reseñas,
-            hasta tests de velocidad y análisis de cobertura en tu hogar. ¡Proba
-            cada una y optimiza tu red!
+            Herramientas para evaluar, comparar y gestionar tu conexión a internet.
           </p>
         </div>
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
