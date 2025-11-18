@@ -16,6 +16,12 @@ export const crearProveedor = async (
     .single();
 
   if (error) {
+    // Detecta si el error es por exceder el límite de caracteres
+    if (error.code === "23514") {
+      const mensajeError = "No puedes superar el límite de caracteres";
+      mostrarAlerta(mensajeError);
+      throw new Error(mensajeError);
+    }
     mostrarAlerta("Error al agregar el proveedor.");
     throw error;
   }
@@ -37,6 +43,12 @@ export const actualizarProveedor = async (
     .eq("id", proveedorId);
 
   if (errorUpdate) {
+    // Detecta si el error es por exceder el límite de caracteres
+    if (errorUpdate.code === "23514") {
+      const mensajeError = "No puedes superar el límite de caracteres";
+      mostrarAlerta(mensajeError);
+      throw new Error(mensajeError);
+    }
     console.error(errorUpdate);
     mostrarAlerta("Error al actualizar el proveedor.");
     throw errorUpdate;

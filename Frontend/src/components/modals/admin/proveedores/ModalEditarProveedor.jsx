@@ -143,13 +143,13 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
       await actualizarProveedor(proveedor.id, {
         ...restoForm,
         logotipo: logoUrl,
-      });
+      }, mostrarError);
 
       mostrarExito("Proveedor actualizado correctamente");
       onActualizar?.();
       onClose();
     } catch (error) {
-      mostrarError("Error al actualizar proveedor: " + error.message);
+      console.error("Error al actualizar proveedor:", error);
     } finally {
       setLoading(false);
     }

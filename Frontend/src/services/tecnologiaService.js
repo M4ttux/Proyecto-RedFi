@@ -25,7 +25,13 @@ export const editarTecnologia = async (
     .eq("id", id);
 
   if (error) {
-    mostrarAlerta("Error al editar la tecnología");
+    // Detecta si el error es por exceder el límite de caracteres
+    if (error.message?.includes("tecnologias_descripcion_check") || 
+        error.message?.includes("check constraint")) {
+      mostrarAlerta("No puedes superar el límite de caracteres");
+    } else {
+      mostrarAlerta("Error al editar la tecnología");
+    }
     throw error;
   }
 };
@@ -48,7 +54,13 @@ export const agregarTecnologia = async (
   const { error } = await supabase.from("tecnologias").insert([nuevaTecno]);
 
   if (error) {
-    mostrarAlerta("Error al agregar la tecnología");
+    // Detecta si el error es por exceder el límite de caracteres
+    if (error.message?.includes("tecnologias_descripcion_check") || 
+        error.message?.includes("check constraint")) {
+      mostrarAlerta("No puedes superar el límite de caracteres");
+    } else {
+      mostrarAlerta("Error al agregar la tecnología");
+    }
     throw error;
   }
 };

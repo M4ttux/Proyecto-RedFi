@@ -65,10 +65,21 @@ export const actualizarReseña = async (
       )
       .single();
 
-    if (error) throw error;
+    if (error) {
+      // Detecta si el error es por exceder el límite de caracteres
+      if (error.code === "23514") {
+        const mensajeError = "No puedes superar el límite de caracteres";
+        mostrarAlerta(mensajeError);
+        throw new Error(mensajeError);
+      }
+      throw error;
+    }
     return data;
   } catch (error) {
-    mostrarAlerta(`Error al actualizar reseña: ${error.message}`);
+    // Solo mostrar el error genérico si no es un error de check constraint
+    if (error.code !== "23514" && error.message !== "No puedes superar el límite de caracteres") {
+      mostrarAlerta(`Error al actualizar reseña: ${error.message}`);
+    }
     throw error;
   }
 };

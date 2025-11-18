@@ -888,7 +888,7 @@ const Administrador = () => {
                 await precargarDatos();
                 setReseñaSeleccionada(null);
               } catch (e) {
-                mostrarError("Error al actualizar reseña: " + e.message);
+                console.error("Error al actualizar reseña:", e);
               }
             }}
           />

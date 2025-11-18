@@ -51,7 +51,7 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
       const nuevoProveedor = await crearProveedor({
         ...form,
         logotipo: null, // Inicialmente sin logo
-      });
+      }, mostrarError);
 
       let logoUrl = null;
 
@@ -64,18 +64,14 @@ const ModalAgregarProveedor = ({ onClose, onActualizar }) => {
         // 3. Actualizar proveedor con la URL del logo
         await actualizarProveedor(nuevoProveedor.id, {
           logotipo: logoUrl,
-        });
+        }, mostrarError);
       }
 
       mostrarExito("Proveedor creado exitosamente");
       onActualizar?.();
       onClose();
     } catch (error) {
-      console.error("Error general:", error);
-      mostrarError(
-        "Error al crear proveedor: " +
-          (error.message || error.error_description || "Error desconocido")
-      );
+      console.error("Error al crear proveedor:", error);
     } finally {
       setLoading(false);
     }

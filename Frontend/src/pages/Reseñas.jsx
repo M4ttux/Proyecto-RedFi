@@ -71,7 +71,8 @@ const Reseñas = () => {
     try {
       const reseñaActualizada = await actualizarReseña(
         reseñaEditando.id,
-        formData
+        formData,
+        mostrarError
       );
       setReseñas(
         reseñas.map((r) => (r.id === reseñaEditando.id ? reseñaActualizada : r))
@@ -81,7 +82,6 @@ const Reseñas = () => {
       mostrarExito("Reseña actualizada correctamente.");
     } catch (error) {
       console.error("Error al actualizar reseña:", error);
-      mostrarError("Error al actualizar la reseña.");
     }
   };
 

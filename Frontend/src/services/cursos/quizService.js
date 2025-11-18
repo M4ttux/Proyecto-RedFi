@@ -1,10 +1,6 @@
 import { supabase } from "../../supabase/client";
 
 /**
- * Servicio principal para operaciones CRUD de quiz
- */
-
-/**
  * Obtiene todas las preguntas de un quiz por curso ID
  */
 export const obtenerQuizPorCurso = async (
