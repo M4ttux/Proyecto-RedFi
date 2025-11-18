@@ -70,7 +70,7 @@ const ModalAgregarProveedorTecnologia = ({ onClose, onActualizar }) => {
   };
 
   return (
-    <ModalContenedor onClose={onClose}>
+    <ModalContenedor onClose={onClose} variant="dropdown">
       {/* Encabezado del modal */}
       <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Asignar tecnologías</MainH2>

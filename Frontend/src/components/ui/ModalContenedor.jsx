@@ -14,6 +14,12 @@ const ModalContenedor = ({
           maxHeight: "max-h-[90vh]",
           overflow: "overflow-hidden", // Sin overflow para controlar internamente
         };
+      case "dropdown":
+        return {
+          maxWidth,
+          maxHeight,
+          overflow: "overflow-visible", // Permite que dropdowns se muestren fuera del modal
+        };
       default:
         return {
           maxWidth,

@@ -282,17 +282,6 @@ const ModalEditarProveedor = ({ proveedor, onClose, onActualizar }) => {
                 required
               />
             </div>
-
-            {/* Preview del color seleccionado */}
-            <div
-              className="w-10 h-10 rounded border border-texto/15"
-              style={{
-                backgroundColor: /^#[0-9A-Fa-f]{6}$/.test(form.color || "")
-                  ? form.color
-                  : "#000000",
-              }}
-              title={`Color: ${form.color}`}
-            />
           </div>
         </div>
 
