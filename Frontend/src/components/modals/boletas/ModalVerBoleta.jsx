@@ -121,7 +121,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
       <div className="space-y-6">
         {/* Tabla de información principal */}
         <div className="bg-secundario rounded-lg border border-texto/15 overflow-hidden">
-          <div className="bg-primario text-white px-4 py-3">
+          <div className="bg-texto/5 text-texto px-4 py-3">
             <h3 className="font-semibold text-lg">Información de la Boleta</h3>
           </div>
           
@@ -156,7 +156,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
 
         {/* Tabla de fechas importantes */}
         <div className="bg-secundario rounded-lg border border-texto/15 overflow-hidden">
-          <div className="bg-primario text-white px-4 py-3">
+          <div className="bg-texto/5 text-texto  px-4 py-3">
             <h3 className="font-semibold text-lg">Fechas Importantes</h3>
           </div>
           
@@ -205,7 +205,7 @@ const ModalVerBoleta = ({ boleta, onClose, boletaAnterior }) => {
 
         {/* Sección de archivo adjunto */}
         <div className="bg-secundario rounded-lg border border-texto/15 overflow-hidden">
-          <div className="bg-primario text-white px-4 py-3">
+          <div className="bg-texto/5 text-texto px-4 py-3">
             <h3 className="font-semibold text-lg">Archivo Adjunto</h3>
           </div>
           

@@ -9,13 +9,13 @@ const SIZE_MAP = {
 
 // Configuración de variantes de color y estilo
 const VARIANT_MAP = {
-  accent: "bg-acento/50 text-texto font-bold",
+  accent: "bg-acento/50 text-[#1a1a1a] font-bold",
   muted: "bg-texto/15 text-texto font-bold",
   success: "bg-green-500/15 text-green-600",
   danger: "bg-red-500/15 text-red-600",
   info: "bg-blue-500/15 text-blue-600",
-  admin: "bg-acento text-texto font-bold",
-  premium: "bg-acento text-texto font-bold",
+  admin: "bg-acento text-[#1a1a1a] font-bold",
+  premium: "bg-acento text-[#1a1a1a] font-bold",
 };
 
 const Badge = ({

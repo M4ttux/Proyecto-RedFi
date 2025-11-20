@@ -150,7 +150,7 @@ export const flujoConversacion = {
 
   internet_lento: {
     mensaje:
-      "La lentitud de Internet puede tener varias causas. Te ayudo a identificar y solucionar el problema:",
+      "La lentitud de Internet puede tener varias causas. Te ayudo a identificar y solucionar el problema",
     opciones: [
       {
         texto: "Diagnóstico rápido",
