@@ -42,7 +42,7 @@ const ModalContenedor = ({
         {/* Área de contenido con padding y flex-1 para ocupar espacio disponible */}
         <div
           className={
-            variant === "curso" ? "flex-1 flex flex-col" : "flex-1 p-6"
+            variant === "curso" ? "flex-1 flex flex-col p-6" : "flex-1 p-6"
           }
         >
           {children}

@@ -18,6 +18,8 @@ const CambiarContraseña = () => {
   const [form, setForm] = useState({ nueva: "", repetir: "" });
   const { mostrarError, mostrarExito } = useAlerta();
   const [loading, setLoading] = useState(false);
+  const [nuevaInvalida, setNuevaInvalida] = useState(false);
+  const [repetirInvalida, setRepetirInvalida] = useState(false);
 
   useEffect(() => {
     document.title = "Red-Fi | Cambiar contraseña";
@@ -26,29 +28,58 @@ const CambiarContraseña = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    
+    // Limpiar estado de error al escribir
+    if (name === "nueva" && nuevaInvalida) {
+      setNuevaInvalida(false);
+    }
+    if (name === "repetir" && repetirInvalida) {
+      setRepetirInvalida(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    if (form.nueva !== form.repetir) {
-      mostrarError("Las contraseñas no coinciden");
-      setLoading(false);
+    // Validación de contraseña nueva
+    if (!form.nueva || form.nueva.length < 6) {
+      mostrarError("La contraseña debe tener al menos 6 caracteres.");
+      setNuevaInvalida(true);
+      if (!form.repetir) setRepetirInvalida(true);
       return;
     }
+
+    // Validación de confirmación
+    if (!form.repetir) {
+      mostrarError("Debes repetir la contraseña.");
+      setRepetirInvalida(true);
+      return;
+    }
+
+    // Validación de coincidencia
+    if (form.nueva !== form.repetir) {
+      mostrarError("Las contraseñas no coinciden.");
+      setNuevaInvalida(true);
+      setRepetirInvalida(true);
+      return;
+    }
+
+    setNuevaInvalida(false);
+    setRepetirInvalida(false);
+    setLoading(true);
 
     try {
       await cambiarPassword(form.nueva);
       mostrarExito("Contraseña cambiada con éxito");
       setForm({ nueva: "", repetir: "" });
 
-      setTimeout(() => navigate("/cuenta"), 1500);
     } catch (err) {
       mostrarError(err.message);
+      setNuevaInvalida(true);
+      setRepetirInvalida(true);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -68,7 +99,7 @@ const CambiarContraseña = () => {
               : "bg-secundario border border-secundario/50"
           }`}
         >
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <Input
               label={
                 <>
@@ -84,6 +115,7 @@ const CambiarContraseña = () => {
               required
               disabled={loading}
               loading={loading}
+              isInvalid={nuevaInvalida}
             />
 
             <Input
@@ -101,6 +133,7 @@ const CambiarContraseña = () => {
               required
               disabled={loading}
               loading={loading}
+              isInvalid={repetirInvalida}
             />
 
             <MainButton
@@ -112,7 +145,7 @@ const CambiarContraseña = () => {
             >
               {loading ? "Guardando..." : "Guardar nueva contraseña"}
             </MainButton>
-            <div className="text-center mt-6">
+            <div className="text-center mt-4">
               <p className="text-sm text-texto/75 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.

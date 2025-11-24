@@ -84,6 +84,13 @@ export const cambiarPassword = async (nuevaPassword) => {
   const { error } = await supabase.auth.updateUser({ password: nuevaPassword });
 
   if (error) {
-    throw new Error("Error al actualizar la contraseña: " + error.message);
+    // Traducir mensajes de error específicos
+    let mensajeError = error.message;
+    
+    if (error.message.includes("New password should be different from the old password")) {
+      mensajeError = "La nueva contraseña debe ser diferente a la actual.";
+    }
+    
+    throw new Error(mensajeError);
   }
 };

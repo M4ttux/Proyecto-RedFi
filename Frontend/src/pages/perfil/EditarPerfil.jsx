@@ -30,6 +30,7 @@ const EditarPerfil = () => {
   const [preview, setPreview] = useState(null);
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [nombreInvalido, setNombreInvalido] = useState(false);
 
   useEffect(() => {
     document.title = "Red-Fi | Editar Perfil";
@@ -69,8 +70,12 @@ const EditarPerfil = () => {
     cargarProveedores();
   }, [usuario]);
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.name === "nombre" && nombreInvalido) {
+      setNombreInvalido(false);
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -85,6 +90,21 @@ const EditarPerfil = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validación del nombre
+    if (!form.nombre.trim()) {
+      mostrarError("El nombre es obligatorio.");
+      setNombreInvalido(true);
+      return;
+    }
+
+    if (form.nombre.trim().length < 3) {
+      mostrarError("El nombre debe tener al menos 3 caracteres.");
+      setNombreInvalido(true);
+      return;
+    }
+
+    setNombreInvalido(false);
     setLoading(true);
 
     try {
@@ -101,6 +121,9 @@ const EditarPerfil = () => {
         "No se pudo actualizar el perfil.";
       mostrarError(msg);
       console.error("Error completo:", err);
+      
+      // Marcar el campo como inválido si hay error
+      setNombreInvalido(true);
     } finally {
       setLoading(false);
     }
@@ -167,6 +190,7 @@ const EditarPerfil = () => {
               disabled={loading}
               maxLength={40}
               showCounter={true}
+              isInvalid={nombreInvalido}
             />
 
             <Select
@@ -208,7 +232,7 @@ const EditarPerfil = () => {
               </MainButton>
             </div>
 
-            <div className="text-center mt-6">
+            <div className="text-center mt-4">
               <p className="text-sm text-texto/75 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.

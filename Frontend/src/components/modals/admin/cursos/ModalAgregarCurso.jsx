@@ -178,7 +178,7 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
   return (
     <ModalContenedor onClose={onClose} variant="curso">
       {/* Encabezado fijo */}
-      <div className="flex justify-between items-center p-6 flex-shrink-0">
+      <div className="flex justify-between items-center mb-6">
         <MainH2 className="mb-0">Agregar curso</MainH2>
         <MainButton
           onClick={onClose}
@@ -193,10 +193,10 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
       </div>
 
       {/* Contenido scrolleable */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
+      <div className="flex-1 overflow-y-auto">
         <form
           onSubmit={(e) => e.preventDefault()}
-          className="space-y-2 md:space-y-4"
+          className="space-y-2 md:space-y-4 mb-4"
         >
           {step === 1 ? (
             // Paso 1: Datos básicos
@@ -450,8 +450,8 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
         </form>
       </div>
 
-      {/* Botones de acción fijos */}
-      <div className="flex gap-3 px-6 py-4 flex-shrink-0">
+      {/* Botones de acción */}
+      <div className="flex gap-3">
         {step === 1 ? (
           <>
             <MainButton
@@ -496,7 +496,8 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
           </>
         )}
       </div>
-      <div className="text-center py-4">
+
+      <div className="text-center mt-6">
         <p className="text-sm text-texto/75 italic">
           Los campos marcados con <span className="text-red-600">*</span> son
           obligatorios.
