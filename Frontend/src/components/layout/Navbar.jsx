@@ -66,6 +66,12 @@ const Navbar = () => {
     };
 
     cargarPerfil();
+
+    // Escuchar evento de actualización de perfil
+    const handler = () => cargarPerfil();
+    window.addEventListener("perfil-actualizado", handler);
+    
+    return () => window.removeEventListener("perfil-actualizado", handler);
   }, [usuario]);
 
   const getLogoColorPrincipal = () => {

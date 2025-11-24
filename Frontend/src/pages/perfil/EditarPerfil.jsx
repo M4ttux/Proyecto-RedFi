@@ -90,6 +90,9 @@ const EditarPerfil = () => {
     try {
       await updatePerfilYFoto({ ...form, preview });
       mostrarExito("Perfil actualizado correctamente.");
+      
+      // Disparar evento para actualizar la navbar
+      window.dispatchEvent(new CustomEvent("perfil-actualizado"));
     } catch (err) {
       const msg =
         err?.response?.data?.message ||

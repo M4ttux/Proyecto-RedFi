@@ -410,7 +410,7 @@ const MobileBottomNav = () => {
                           setMostrarMenu(false);
                         }}
                         variant="danger"
-                        className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                        className={`w-full !justify-start !px-4 !py-3 !rounded-none !border-none ${
                           currentTheme === "light"
                             ? "!bg-transparent !text-red-600"
                             : "!bg-transparent !text-red-400"

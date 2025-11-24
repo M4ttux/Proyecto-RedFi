@@ -179,6 +179,9 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
 
       mostrarExito(`Usuario ${nombre} actualizado exitosamente`);
 
+      // Disparar evento para actualizar la navbar si es el usuario logueado
+      window.dispatchEvent(new CustomEvent("perfil-actualizado"));
+
       // Actualizar lista de usuarios en el componente padre
       if (onActualizar) {
         onActualizar();
