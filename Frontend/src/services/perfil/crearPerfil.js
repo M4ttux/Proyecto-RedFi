@@ -5,6 +5,11 @@ export const crearPerfil = async (
   { nombre, proveedor_preferido },
   mostrarAlerta = () => {}
 ) => {
+  // Validaciones básicas
+  if (!nombre || nombre.trim().length < 3) {
+    throw new Error("El nombre debe tener al menos 3 caracteres");
+  }
+
   // Obtiene el usuario autenticado actual desde Supabase Auth
   const {
     data: { user },

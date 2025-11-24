@@ -34,6 +34,9 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
 
   // Estados de control
   const [loading, setLoading] = useState(false);
+  const [nombreInvalido, setNombreInvalido] = useState(false);
+  const [emailInvalido, setEmailInvalido] = useState(false);
+  const [contrasenaInvalida, setContrasenaInvalida] = useState(false);
 
   const { mostrarError, mostrarExito } = useAlerta();
 
@@ -51,18 +54,12 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
   // Crear usuario
   const handleCrearUsuario = async (e) => {
     e.preventDefault();
+    if (!email.trim() || !nombre.trim() || !contrasena.trim()) return;
 
-    // Validar formulario usando el servicio
-    const errores = validarFormularioUsuario({
-      email: email.trim(),
-      nombre: nombre.trim(),
-      contrasena: contrasena.trim(),
-    });
-
-    if (errores.length > 0) {
-      mostrarError(errores.join(", "));
-      return;
-    }
+    // Resetear estados de validación
+    setNombreInvalido(false);
+    setEmailInvalido(false);
+    setContrasenaInvalida(false);
 
     setLoading(true);
 
@@ -96,6 +93,12 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
         email
       );
       mostrarError(mensajeProcesado);
+
+      // Marcar campos como inválidos según el error
+      const errorMsg = error.message || "";
+      if (errorMsg.includes("nombre")) setNombreInvalido(true);
+      if (errorMsg.includes("email") || errorMsg.includes("Email")) setEmailInvalido(true);
+      if (errorMsg.includes("contraseña")) setContrasenaInvalida(true);
     } finally {
       setLoading(false);
     }
@@ -131,12 +134,16 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
             }
             type="text"
             value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            onChange={(e) => {
+              setNombre(e.target.value);
+              if (nombreInvalido) setNombreInvalido(false);
+            }}
             placeholder="Tu nombre completo"
             required
             icon={IconUser}
             maxLength={40}
             showCounter={true}
+            isInvalid={nombreInvalido}
           />
           {/* Email */}
           <Input
@@ -147,10 +154,14 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
             }
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="usuario@ejemplo.com"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (emailInvalido) setEmailInvalido(false);
+            }}
+            placeholder="ejemplo@ejemplo.com"
             required
             icon={IconMail}
+            isInvalid={emailInvalido}
           />
 
           {/* Contraseña */}
@@ -162,10 +173,14 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
             }
             type="password"
             value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
+            onChange={(e) => {
+              setContrasena(e.target.value);
+              if (contrasenaInvalida) setContrasenaInvalida(false);
+            }}
             placeholder="Mínimo 6 caracteres"
             required
             icon={IconLock}
+            isInvalid={contrasenaInvalida}
           />
         </div>
         <div className="space-y-2 md:space-y-4">
@@ -233,7 +248,6 @@ const ModalAgregarPerfil = ({ onClose, onActualizar }) => {
             variant="primary"
             loading={loading}
             disabled={loading}
-            onClick={handleCrearUsuario}
             className="flex-1"
           >
             Crear usuario

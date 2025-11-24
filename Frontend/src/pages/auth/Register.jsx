@@ -33,6 +33,9 @@ const Register = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [emailInvalido, setEmailInvalido] = useState(false);
+  const [passwordInvalido, setPasswordInvalido] = useState(false);
+  const [nombreInvalido, setNombreInvalido] = useState(false);
   const navigate = useNavigate();
   const { mostrarError, mostrarExito } = useAlerta();
   const { refrescarRol } = useRole();
@@ -62,12 +65,24 @@ const Register = () => {
     ...proveedores.map((nombre) => ({ value: nombre, label: nombre })),
   ];
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    // Limpiar estado de validación al escribir
+    if (name === "email" && emailInvalido) setEmailInvalido(false);
+    if (name === "password" && passwordInvalido) setPasswordInvalido(false);
+    if (name === "nombre" && nombreInvalido) setNombreInvalido(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // Resetear estados de validación
+    setEmailInvalido(false);
+    setPasswordInvalido(false);
+    setNombreInvalido(false);
 
     const { email, password, nombre, proveedor_preferido } = form;
 
@@ -76,6 +91,11 @@ const Register = () => {
     } catch (err) {
       mostrarError(err.message);
       setLoading(false);
+
+      // Marcar campos como inválidos según el error
+      const errorMsg = err.message || "";
+      if (errorMsg.includes("email") || errorMsg.includes("correo")) setEmailInvalido(true);
+      if (errorMsg.includes("contraseña") || errorMsg.includes("password")) setPasswordInvalido(true);
       return;
     }
 
@@ -89,9 +109,13 @@ const Register = () => {
       setTimeout(() => navigate("/cuenta"), 1500);
     } catch (err) {
       mostrarError(
-        "El usuario fue registrado, pero falló la creación del perfil."
+        err.message || "El usuario fue registrado, pero falló la creación del perfil."
       );
       setLoading(false);
+
+      // Marcar nombre como inválido si falla la creación del perfil
+      const errorMsg = err.message || "";
+      if (errorMsg.includes("nombre")) setNombreInvalido(true);
     }
   };
 
@@ -119,11 +143,12 @@ const Register = () => {
               }
               name="email"
               type="email"
-              placeholder="tu@email.com"
+              placeholder="ejemplo@ejemplo.com"
               icon={IconMail}
               value={form.email}
               onChange={handleChange}
               required
+              isInvalid={emailInvalido}
             />
             <Input
               label={
@@ -133,11 +158,12 @@ const Register = () => {
               }
               name="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="Mínimo 6 caracteres"
               icon={IconLock}
               value={form.password}
               onChange={handleChange}
               required
+              isInvalid={passwordInvalido}
             />
             <Input
               label={
@@ -153,6 +179,7 @@ const Register = () => {
               required
               maxLength={40}
               showCounter={true}
+              isInvalid={nombreInvalido}
             />
             <Select
               label="Proveedor actual"
@@ -175,7 +202,7 @@ const Register = () => {
             >
               {loading ? "Creando cuenta..." : "Crear Cuenta"}
             </MainButton>
-            <div className="text-center mt-6">
+            <div className="text-center mt-4">
               <p className="text-sm text-texto/75 italic">
                 Los campos marcados con <span className="text-red-600">*</span>{" "}
                 son obligatorios.

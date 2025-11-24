@@ -4,6 +4,7 @@ import {
   IconUser,
   IconMail,
   IconShield,
+  IconLock,
   IconCrown,
   IconBuilding,
 } from "@tabler/icons-react";
@@ -26,6 +27,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
   // Estados del formulario
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
+  const [contrasena, setContrasena] = useState("");
   const [rol, setRol] = useState("user");
   const [plan, setPlan] = useState("basico");
   const [proveedorPreferido, setProveedorPreferido] = useState("");
@@ -35,6 +37,9 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
   // Estados de control
   const [loading, setLoading] = useState(false);
   const [cargandoInicial, setCargandoInicial] = useState(true);
+  const [nombreInvalido, setNombreInvalido] = useState(false);
+  const [emailInvalido, setEmailInvalido] = useState(false);
+  const [contrasenaInvalida, setContrasenaInvalida] = useState(false);
   const { mostrarExito, mostrarError } = useAlerta();
 
   // Opciones para selects
@@ -66,6 +71,7 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
           setProveedorPreferido(usuarioCompleto.proveedor_preferido || "");
           setPreviewUrl(usuarioCompleto.foto_url || null);
           setFotoFile(null);
+          setContrasena(""); // No mostrar contraseña actual
         } catch (error) {
           console.error("Error al cargar usuario:", error);
           mostrarError("Error al cargar los datos del usuario");
@@ -89,35 +95,15 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
     cargarUsuarioCompleto();
   }, [perfil, mostrarError]);
 
-  // Validaciones básicas
-  const validarFormulario = () => {
-    const errores = [];
-
-    if (!email.trim()) {
-      errores.push("El email es obligatorio");
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errores.push("El email no tiene un formato válido");
-    }
-
-    if (!nombre.trim()) {
-      errores.push("El nombre es obligatorio");
-    } else if (nombre.trim().length < 2) {
-      errores.push("El nombre debe tener al menos 2 caracteres");
-    }
-
-    return errores;
-  };
-
   // Editar usuario
   const handleEditarUsuario = async (e) => {
     e.preventDefault();
+    if (!email.trim() || !nombre.trim()) return;
 
-    // Validar formulario
-    const errores = validarFormulario();
-    if (errores.length > 0) {
-      mostrarError(errores.join(", "));
-      return;
-    }
+    // Resetear estados de validación
+    setNombreInvalido(false);
+    setEmailInvalido(false);
+    setContrasenaInvalida(false);
 
     setLoading(true);
 
@@ -130,6 +116,11 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
         plan,
         proveedor_preferido: proveedorPreferido.trim() || null,
       };
+
+      // Agregar contraseña solo si se proporcionó
+      if (contrasena.trim()) {
+        datosActualizados.contrasena = contrasena.trim();
+      }
 
       // Manejo completo de imagen: nueva, eliminar o mantener
       const imagenOriginal = perfil.foto_url;
@@ -196,6 +187,12 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
         email
       );
       mostrarError(mensajeProcesado);
+
+      // Marcar campos como inválidos según el error
+      const errorMsg = error.message || "";
+      if (errorMsg.includes("nombre")) setNombreInvalido(true);
+      if (errorMsg.includes("email") || errorMsg.includes("Email")) setEmailInvalido(true);
+      if (errorMsg.includes("contraseña")) setContrasenaInvalida(true);
     } finally {
       setLoading(false);
     }
@@ -233,13 +230,17 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             }
             type="text"
             value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            onChange={(e) => {
+              setNombre(e.target.value);
+              if (nombreInvalido) setNombreInvalido(false);
+            }}
             placeholder={cargandoInicial ? "Cargando..." : "Tu nombre completo"}
             required
             icon={IconUser}
             maxLength={40}
             showCounter={true}
             disabled={loading || cargandoInicial}
+            isInvalid={nombreInvalido}
           />
 
           {/* Email */}
@@ -251,13 +252,32 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             }
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (emailInvalido) setEmailInvalido(false);
+            }}
             placeholder={
               cargandoInicial ? "Cargando..." : "usuario@ejemplo.com"
             }
             required
             icon={IconMail}
             disabled={loading || cargandoInicial}
+            isInvalid={emailInvalido}
+          />
+
+          {/* Contraseña */}
+          <Input
+            label="Nueva contraseña"
+            type="password"
+            value={contrasena}
+            onChange={(e) => {
+              setContrasena(e.target.value);
+              if (contrasenaInvalida) setContrasenaInvalida(false);
+            }}
+            placeholder={cargandoInicial ? "Cargando..." : "Dejar vacío para no cambiar (mínimo 6 caracteres)"}
+            icon={IconLock}
+            disabled={loading || cargandoInicial}
+            isInvalid={contrasenaInvalida}
           />
         </div>
 
@@ -333,7 +353,6 @@ const ModalEditarPerfil = ({ perfil, onClose, onActualizar }) => {
             variant="primary"
             loading={loading}
             disabled={loading || cargandoInicial}
-            onClick={handleEditarUsuario}
             className="flex-1"
           >
             Actualizar usuario

@@ -27,6 +27,8 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [loginAttempted, setLoginAttempted] = useState(false);
+  const [emailInvalido, setEmailInvalido] = useState(false);
+  const [passwordInvalido, setPasswordInvalido] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { mostrarError } = useAlerta();
@@ -53,13 +55,23 @@ const Login = () => {
     }
   }, [usuario, loginAttempted, navigate, from]);
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    // Limpiar estado de validación al escribir
+    if (name === "email" && emailInvalido) setEmailInvalido(false);
+    if (name === "password" && passwordInvalido) setPasswordInvalido(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setLoginAttempted(false);
+
+    // Resetear estados de validación
+    setEmailInvalido(false);
+    setPasswordInvalido(false);
 
     try {
       await loginUser(form);
@@ -72,6 +84,10 @@ const Login = () => {
       mostrarError(err.message);
       setLoginAttempted(false);
       setLoading(false);
+
+      // Marcar ambos campos como inválidos en caso de error de login
+      setEmailInvalido(true);
+      setPasswordInvalido(true);
     }
   };
 
@@ -103,6 +119,7 @@ const Login = () => {
               onChange={handleChange}
               required
               icon={IconMail}
+              isInvalid={emailInvalido}
             />
             <Input
               label="Contraseña"
@@ -113,6 +130,7 @@ const Login = () => {
               onChange={handleChange}
               required
               icon={IconLock}
+              isInvalid={passwordInvalido}
             />
             <MainButton
               type="submit"

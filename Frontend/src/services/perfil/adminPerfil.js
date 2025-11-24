@@ -253,6 +253,10 @@ export const crearUsuarioCompleto = async (
     throw new Error("Email y nombre son campos obligatorios");
   }
 
+  if (nombre.length < 3) {
+    throw new Error("El nombre debe tener al menos 3 caracteres");
+  }
+
   if (!contrasena || contrasena.length < 6) {
     throw new Error("La contraseña debe tener al menos 6 caracteres");
   }
@@ -364,12 +368,28 @@ export const obtenerUsuarioCompletoPorId = async (userId) => {
  * @returns {Object} Usuario actualizado
  */
 export const editarUsuario = async (userId, datosActualizados) => {
+  // Validaciones básicas
+  if (datosActualizados.nombre && datosActualizados.nombre.length < 3) {
+    throw new Error("El nombre debe tener al menos 3 caracteres");
+  }
+
+  if (datosActualizados.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datosActualizados.email)) {
+    throw new Error("El formato del email no es válido");
+  }
+
+  if (datosActualizados.contrasena && datosActualizados.contrasena.length < 6) {
+    throw new Error("La contraseña debe tener al menos 6 caracteres");
+  }
+
   try {
+    // Extraer contraseña de datosActualizados para manejarla por separado
+    const { contrasena, ...datosPerfilActualizados } = datosActualizados;
+
     // Actualizar perfil en user_profiles
     const { data: perfil, error: perfilError } = await supabaseAdmin
       .from("user_profiles")
       .update({
-        ...datosActualizados,
+        ...datosPerfilActualizados,
       })
       .eq("id", userId)
       .select()
@@ -379,20 +399,33 @@ export const editarUsuario = async (userId, datosActualizados) => {
       throw new Error(`Error al actualizar perfil: ${perfilError.message}`);
     }
 
-    // Si se actualiza el email, también actualizar en auth
+    // Preparar datos para actualizar en auth
+    const authUpdateData = {
+      user_metadata: {
+        nombre: datosActualizados.nombre || perfil.nombre,
+        rol: datosActualizados.rol || perfil.rol,
+        plan: datosActualizados.plan || perfil.plan,
+      },
+    };
+
+    // Si se actualiza el email, agregarlo
     if (datosActualizados.email) {
+      authUpdateData.email = datosActualizados.email;
+    }
+
+    // Si se proporciona contraseña, agregarla
+    if (contrasena) {
+      authUpdateData.password = contrasena;
+    }
+
+    // Actualizar en auth si hay cambios
+    if (datosActualizados.email || contrasena) {
       const { error: authError } =
-        await supabaseAdmin.auth.admin.updateUserById(userId, {
-          email: datosActualizados.email,
-          user_metadata: {
-            nombre: datosActualizados.nombre || perfil.nombre,
-            rol: datosActualizados.rol || perfil.rol,
-            plan: datosActualizados.plan || perfil.plan,
-          },
-        });
+        await supabaseAdmin.auth.admin.updateUserById(userId, authUpdateData);
 
       if (authError) {
-        console.warn("Error al actualizar email en auth:", authError.message);
+        console.warn("Error al actualizar auth:", authError.message);
+        throw new Error(`Error al actualizar credenciales: ${authError.message}`);
       }
     }
 
