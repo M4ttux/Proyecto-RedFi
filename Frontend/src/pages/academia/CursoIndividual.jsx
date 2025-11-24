@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  IconArrowLeft,
+  IconArrowBack,
   IconBook2,
   IconPlayerPlay,
   IconClipboardCheck,
@@ -196,7 +196,7 @@ const CursoIndividual = () => {
             Curso no encontrado
           </MainH2>
           <MainLinkButton to="/academia" variant="primary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver a la Academia
           </MainLinkButton>
         </div>
@@ -445,7 +445,7 @@ const CursoIndividual = () => {
         {/* Botón volver a Academia */}
         <div className="text-center">
           <MainLinkButton to="/academia" variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver a la Academia
           </MainLinkButton>
         </div>

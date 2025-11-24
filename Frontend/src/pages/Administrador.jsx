@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconArrowLeft, IconSettings } from "@tabler/icons-react";
+import { IconArrowBack, IconSettings } from "@tabler/icons-react";
 import { getPerfil } from "../services/perfil/getPerfil";
 import { obtenerPerfilesAdmin } from "../services/perfil/adminPerfil";
 import { obtenerProveedoresAdmin } from "../services/proveedores/obtenerProveedor";
@@ -757,7 +757,7 @@ const Administrador = () => {
 
             <div className="text-center mt-6">
               <MainLinkButton to="/" variant="secondary">
-                <IconArrowLeft />
+                <IconArrowBack />
                 Volver al inicio
               </MainLinkButton>
             </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { cambiarPassword } from "../../services/authService";
-import { IconLock, IconUserEdit, IconArrowLeft } from "@tabler/icons-react";
+import { IconLock, IconUserEdit, IconArrowBack } from "@tabler/icons-react";
 
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
@@ -138,11 +138,11 @@ const CambiarContraseña = () => {
             disabled={loading}
             variant="secondary"
           >
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver a editar perfil
           </MainLinkButton>
           <MainLinkButton to="/cuenta" disabled={loading} variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver al perfil
           </MainLinkButton>
         </div>

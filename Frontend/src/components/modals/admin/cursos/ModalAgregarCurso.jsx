@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   IconX,
-  IconPlus,
+  IconCirclePlus,
   IconTrash,
   IconBulb,
   IconChevronDown,
@@ -287,7 +287,7 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
                     iconSize={16}
                     className="w-full sm:w-auto"
                   >
-                    <IconPlus />
+                    <IconCirclePlus />
                     Agregar pregunta
                   </MainButton>
                 </div>

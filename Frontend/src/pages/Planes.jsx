@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import {
   IconCheck,
   IconReceiptDollar,
-  IconArrowLeft,
+  IconArrowBack,
   IconX,
 } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
@@ -172,7 +172,7 @@ const Planes = () => {
       {/* Botón volver al perfil */}
       <div className="text-center">
         <MainLinkButton to="/cuenta" variant="secondary">
-          <IconArrowLeft />
+          <IconArrowBack />
           Volver al perfil
         </MainLinkButton>
       </div>

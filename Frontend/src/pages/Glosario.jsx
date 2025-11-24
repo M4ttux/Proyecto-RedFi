@@ -1,5 +1,5 @@
 import MainH1 from "../components/ui/MainH1";
-import { IconSearch, IconArrowLeft } from "@tabler/icons-react";
+import { IconSearch, IconArrowBack } from "@tabler/icons-react";
 import GlosarioBuscador from "../components/glosario/GlosarioBuscador";
 import MainLinkButton from "../components/ui/MainLinkButton";
 
@@ -18,7 +18,7 @@ const Glosario = () => {
       {/* Botón volver al perfil */}
       <div className="text-center">
         <MainLinkButton to="/cuenta" variant="secondary">
-          <IconArrowLeft />
+          <IconArrowBack />
           Volver al perfil
         </MainLinkButton>
       </div>

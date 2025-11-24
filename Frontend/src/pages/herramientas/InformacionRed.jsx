@@ -1,7 +1,7 @@
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import MainH1 from "../../components/ui/MainH1";
 import MainH3 from "../../components/ui/MainH3";
-import { IconRadar2, IconArrowLeft } from "@tabler/icons-react";
+import { IconRadar2, IconArrowBack } from "@tabler/icons-react";
 import DetectorProveedor from "../../components/tools/DetectorProveedor";
 import { useTheme } from "../../context/ThemeContext";
 import { useEffect } from "react";
@@ -58,7 +58,7 @@ const InformacionRed = () => {
         {/* Botón volver a herramientas */}
         <div className="text-center">
           <MainLinkButton to="/herramientas" variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver a herramientas
           </MainLinkButton>
         </div>

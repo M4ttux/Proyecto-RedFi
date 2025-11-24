@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import MainLinkButton from "../../components/ui/MainLinkButton";
 import MainH1 from "../../components/ui/MainH1";
 import MainH3 from "../../components/ui/MainH3";
-import { IconAccessPoint, IconArrowLeft } from "@tabler/icons-react";
+import { IconAccessPoint, IconArrowBack } from "@tabler/icons-react";
 import WifiScanner from "../../components/tools/WifiScanner";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -64,7 +64,7 @@ const AnalisisConexion = () => {
         {/* Botón volver a herramientas */}
         <div className="text-center">
           <MainLinkButton to="/herramientas" variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver a herramientas
           </MainLinkButton>
         </div>

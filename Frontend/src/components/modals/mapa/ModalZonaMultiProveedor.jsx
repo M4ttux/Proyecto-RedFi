@@ -1,6 +1,6 @@
 import {
   IconX,
-  IconArrowRight,
+  IconExternalLink,
   IconCarambolaFilled,
   IconCarambola,
 } from "@tabler/icons-react";
@@ -180,7 +180,7 @@ const ModalZonaMultiProveedor = ({
                   to={`/proveedores/${proveedor.id}`}
                   variant="primary"
                   className="flex items-center gap-2 px-4 py-2"
-                  icon={IconArrowRight}
+                  icon={IconExternalLink}
                   iconSize={16}
                   iconPosition="right"
                 >

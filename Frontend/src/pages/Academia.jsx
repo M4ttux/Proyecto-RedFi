@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   IconBook2,
-  IconArrowLeft,
+  IconArrowBack,
   IconSchool,
   IconCalendarWeek,
   IconTools,
@@ -17,7 +17,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useAlerta } from "../context/AlertaContext";
 import { obtenerCursos } from "../services/cursos";
 
-const AcademyHome = () => {
+const Academia = () => {
   const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentTheme } = useTheme();
@@ -123,7 +123,7 @@ const AcademyHome = () => {
           </div>
         )}
 
-        <div className="text-center max-w-2xl mx-auto mb-6">
+        <div className="text-center max-w-2xl mx-auto mt-18 mb-6">
           <MainH2 className="text-center justify-center">
             ¿Por qué elegir la Academia Red-Fi?
           </MainH2>
@@ -162,12 +162,14 @@ const AcademyHome = () => {
           </div>
         </div>
 
-        <ReseñasDestacadas />
+        <div className="mt-8">
+          <ReseñasDestacadas />
+        </div>
 
         {/* Botón volver al perfil */}
         <div className="text-center">
           <MainLinkButton to="/cuenta" variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver al perfil
           </MainLinkButton>
         </div>
@@ -176,4 +178,4 @@ const AcademyHome = () => {
   );
 };
 
-export default AcademyHome;
+export default Academia;

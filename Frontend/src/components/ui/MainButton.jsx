@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import {
   IconLoader2,
-  IconPlus,
+  IconCirclePlus,
   IconEye,
   IconEdit,
   IconTrash,
@@ -82,7 +82,7 @@ const Button = ({
   const autoIcon =
     !Icon &&
     {
-      add: IconPlus,
+      add: IconCirclePlus,
       see: IconEye,
       edit: IconEdit,
       delete: IconTrash,

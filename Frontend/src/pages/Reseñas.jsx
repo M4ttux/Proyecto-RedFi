@@ -12,9 +12,9 @@ import {
   IconCalendar,
   IconLoader2,
   IconStars,
-  IconArrowLeft,
+  IconArrowBack,
   IconMap,
-  IconPlus,
+  IconCirclePlus,
 } from "@tabler/icons-react";
 import ModalEditarReseña from "../components/modals/mapa/ModalEditarReseña";
 import ModalEliminar from "../components/modals/ModalEliminar";
@@ -284,12 +284,12 @@ const Reseñas = () => {
         <div className="flex flex-row gap-4 justify-center">
           {reseñas.length > 0 && (
             <MainLinkButton to="/mapa" variant="accent" className="flex-1">
-              <IconPlus />
+              <IconCirclePlus />
               Agregar reseña
             </MainLinkButton>
           )}
           <MainLinkButton to="/cuenta" variant="secondary" className="flex-1">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver al perfil
           </MainLinkButton>
         </div>

@@ -2,21 +2,21 @@ import {
   IconX,
   IconCarambolaFilled,
   IconCarambola,
-  IconArrowRight,
+  IconExternalLink,
 } from "@tabler/icons-react";
 import MainH2 from "../../ui/MainH2";
+import MainH3 from "../../ui/MainH3";
 import MainButton from "../../ui/MainButton";
 import Avatar from "../../ui/Avatar";
 import ModalContenedor from "../../ui/ModalContenedor";
 import MainLinkButton from "../../ui/MainLinkButton";
-import Badge from "../../ui/Badge";
 
 const ModalReseña = ({ reseña, onClose }) => {
-  // Obtiene el ID del usuario para navegación al perfil
-  const userId = reseña?.usuario_id;
-
   // Verifica que existe la reseña antes de renderizar
   if (!reseña) return null;
+
+  // Obtiene el ID del usuario para navegación al perfil
+  const userId = reseña?.usuario_id;
 
   // Procesa el nombre del usuario desde diferentes estructuras de datos posibles
   let nombreBruto =
@@ -43,11 +43,33 @@ const ModalReseña = ({ reseña, onClose }) => {
     reseña.proveedor?.nombre ||
     `Proveedor ID: ${reseña.proveedor_id}`;
 
+  // Obtiene el ID del proveedor para navegación
+  const proveedorId =
+    reseña.proveedor_id ||
+    reseña.proveedores?.id ||
+    reseña.proveedor?.id;
+
   // Obtiene la URL de la foto de perfil del usuario
   const fotoUrl =
     reseña?.user_profiles?.foto_url ||
     reseña?.user_profiles?.user?.foto_perfil ||
     null;
+
+  // Obtiene el logo del proveedor
+  const proveedorLogo =
+    reseña?.proveedores?.logotipo ||
+    reseña?.proveedor?.logotipo ||
+    reseña?.logotipo ||
+    null;
+
+  // Formatea la fecha de creación de la reseña
+  const fechaReseña = reseña.created_at
+    ? new Date(reseña.created_at).toLocaleDateString("es-AR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Fecha desconocida";
 
   // Renderiza el sistema de estrellas con calificación específica de la reseña
   const renderStars = (promedio) => {
@@ -57,89 +79,124 @@ const ModalReseña = ({ reseña, onClose }) => {
     for (let i = 1; i <= 5; i++) {
       stars.push(
         i <= promedioRedondeado ? (
-          <IconCarambolaFilled key={i} size={24} className="text-yellow-600" />
+          <IconCarambolaFilled key={i} size={18} className="text-yellow-600" />
         ) : (
-          <IconCarambola key={i} size={24} className="text-texto/75" />
+          <IconCarambola key={i} size={18} className="text-texto/75" />
         )
       );
     }
 
-    return (
-      <div className="flex items-center gap-1">
-        <div className="flex gap-1">{stars}</div>
-        <span className="text-sm text-texto/75 ml-1">
-          ({promedio ? Number(promedio).toFixed(1) : "0.0"})
-        </span>
-      </div>
-    );
+    return <div className="flex gap-1">{stars}</div>;
   };
 
   return (
     <ModalContenedor onClose={onClose}>
-      {/* Botón de cierre del modal */}
-      <MainButton
-        onClick={onClose}
-        variant="cross"
-        title="Cerrar"
-        className="absolute top-3 right-3"
-      >
-        <IconX size={24} />
-      </MainButton>
-
-      {/* Avatar del usuario que escribió la reseña */}
-      <div className="flex justify-center mb-4">
-        <Avatar fotoUrl={fotoUrl} nombre={nombre} size={20} />
-      </div>
-
-      {/* Nombre del usuario */}
-      <MainH2 className="text-center justify-center">{nombre}</MainH2>
-
-      {/* Calificación con estrellas de la reseña */}
-      <div className="mb-4 flex justify-center">
-        {renderStars(reseña.estrellas)}
-      </div>
-
-      {/* Badge con información del proveedor evaluado */}
-      <div className="mb-4 flex justify-center">
-        <Badge
-          size="md"
-          bgClass="bg-texto/5"
-          textClass="text-texto"
-          className="border border-texto/15 truncate max-w-[90%] sm:max-w-[420px]"
-          title={proveedor}
-        >
-          Proveedor: <span className="font-bold ml-1">{proveedor}</span>
-        </Badge>
-      </div>
-
-      {/* Comentario completo de la reseña */}
-      <div className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 mb-6 max-h-[300px] overflow-y-auto">
-        <p className="text-center leading-relaxed whitespace-pre-wrap break-words">
-          {reseña.comentario}
-        </p>
-      </div>
-
-      {/* Botones de acción */}
-      <div className="flex gap-3">
+      {/* Encabezado del modal */}
+      <div className="flex justify-between items-center mb-6">
+        <MainH2 className="mb-0">Reseña</MainH2>
         <MainButton
-          type="button"
-          variant="secondary"
           onClick={onClose}
-          className="flex-1"
+          type="button"
+          variant="cross"
+          title="Cerrar modal"
+          className="px-0"
         >
-          Cerrar
+          <IconX size={24} />
         </MainButton>
+      </div>
 
-        <div className="flex-1">
-          <MainLinkButton
-            to={`/usuarios/${userId}`}
-            className="w-full px-4 py-2"
-            icon={IconArrowRight}
-            iconSize={16}
-            iconPosition="right"
+      <div className="space-y-6">
+        {/* Sección del proveedor */}
+        <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            {/* Logo del proveedor */}
+            <div className="flex-shrink-0">
+              <Avatar
+                fotoUrl={proveedorLogo}
+                nombre={proveedor}
+                size={16}
+                className="rounded-full"
+              />
+            </div>
+
+            {/* Información del proveedor */}
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-xs uppercase tracking-wide text-texto/75 mb-1">
+                Proveedor
+              </p>
+              <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <MainH3 className="text-xl mb-0 justify-center sm:justify-start">
+                  {proveedor}
+                </MainH3>
+                <MainLinkButton
+                  to={`/proveedores/${proveedorId}`}
+                  variant="link"
+                  className="p-1"
+                  icon={IconExternalLink}
+                  iconSize={18}
+                  title="Ver perfil del proveedor"
+                />
+              </div>
+            </div>
+
+            {/* Calificación con estrellas */}
+            <div className="flex-shrink-0 flex flex-col sm:flex-row items-center gap-2 bg-texto/5 px-4 py-2 rounded-full border border-texto/15">
+              {renderStars(reseña.estrellas)}
+              <span className="text-sm font-bold text-texto">
+                ({reseña.estrellas})
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Sección del usuario que hizo la reseña */}
+        <div className="bg-texto/5 border border-texto/15 rounded-lg p-4">
+          <div className="flex items-center gap-4 mb-4">
+            {/* Avatar del usuario */}
+            <div className="flex-shrink-0">
+              <Avatar fotoUrl={fotoUrl} nombre={nombre} size={14} />
+            </div>
+
+            {/* Información del usuario */}
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <MainH3 className="text-lg mb-0 justify-start">{nombre}</MainH3>
+                <MainLinkButton
+                  to={`/usuarios/${userId}`}
+                  variant="link"
+                  className="p-1"
+                  icon={IconExternalLink}
+                  iconSize={18}
+                  title="Ver perfil del usuario"
+                />
+              </div>
+              <p className="text-xs text-texto/75 mt-1">{fechaReseña}</p>
+            </div>
+          </div>
+
+          {/* Comentario */}
+          <div>
+            <p className="text-xs uppercase tracking-wide text-texto/75 mb-2">
+              Comentario
+            </p>
+            <div className="bg-texto/10 rounded-lg px-4 py-3 max-h-[200px] overflow-y-auto">
+              <p className="leading-relaxed whitespace-pre-wrap break-words text-left text-texto">
+                {reseña.comentario}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Botón de acción */}
+        <div className="w-full">
+          <MainButton
+            type="button"
+            variant="primary"
+            onClick={onClose}
+            className="w-full"
           >
-            Ver perfil
-          </MainLinkButton>
+            Cerrar
+          </MainButton>
         </div>
       </div>
     </ModalContenedor>

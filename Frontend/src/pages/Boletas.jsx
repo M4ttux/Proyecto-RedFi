@@ -7,7 +7,7 @@ import MainButton from "../components/ui/MainButton";
 import MainLinkButton from "../components/ui/MainLinkButton";
 import MainH1 from "../components/ui/MainH1";
 import { useAlerta } from "../context/AlertaContext";
-import { IconArrowLeft, IconReceipt2 } from "@tabler/icons-react";
+import { IconArrowBack, IconReceipt2 } from "@tabler/icons-react";
 import { useTheme } from "../context/ThemeContext";
 
 const Boletas = () => {
@@ -66,7 +66,7 @@ const Boletas = () => {
         {/* Botón volver al perfil */}
         <div className="text-center">
           <MainLinkButton to="/cuenta" variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver al perfil
           </MainLinkButton>
         </div>

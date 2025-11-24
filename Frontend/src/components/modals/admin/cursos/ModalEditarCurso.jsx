@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import {
   IconX,
-  IconPlus,
+  IconCirclePlus,
   IconBulb,
   IconChevronDown,
 } from "@tabler/icons-react";
@@ -352,7 +352,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                         iconSize={16}
                         className="w-full sm:w-auto"
                       >
-                        <IconPlus />
+                        <IconCirclePlus />
                         Agregar pregunta
                       </MainButton>
                     </div>

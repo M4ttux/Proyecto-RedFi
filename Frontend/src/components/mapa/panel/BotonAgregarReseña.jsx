@@ -1,6 +1,6 @@
 import { useAlerta } from "../../../context/AlertaContext";
 import MainButton from "../../ui/MainButton";
-import { IconPlus } from "@tabler/icons-react";
+import { IconCirclePlus } from "@tabler/icons-react";
 
 const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
   const { mostrarError } = useAlerta();
@@ -21,7 +21,7 @@ const BotonAgregarReseña = ({ usuario, onAbrirModalReseña }) => {
         disabled={!usuario}
         variant={usuario ? "add" : "disabled"}
         className="w-full"
-        icon={IconPlus}
+        icon={IconCirclePlus}
         title={
           usuario
             ? "Agregar reseña"

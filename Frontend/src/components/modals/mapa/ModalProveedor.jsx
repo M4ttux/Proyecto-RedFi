@@ -2,7 +2,7 @@ import {
   IconX,
   IconCarambolaFilled,
   IconCarambola,
-  IconArrowRight,
+  IconExternalLink,
 } from "@tabler/icons-react";
 import MainButton from "../../ui/MainButton";
 import MainLinkButton from "../../ui/MainLinkButton";
@@ -148,7 +148,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
           <MainLinkButton
             to={`/proveedores/${proveedor.id}`}
             className="w-full px-4 py-2"
-            icon={IconArrowRight}
+            icon={IconExternalLink}
             iconSize={16}
             iconPosition="right"
           >

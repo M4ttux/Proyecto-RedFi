@@ -5,7 +5,7 @@ export const obtenerReseñasAdmin = async (mostrarAlerta = () => {}) => {
   const { data, error } = await supabase
     .from("reseñas")
     .select(
-      "id, estrellas, comentario, usuario_id, user_profiles(nombre, foto_url), proveedor_id, proveedores(nombre)"
+      "id, estrellas, comentario, created_at, usuario_id, user_profiles(nombre, foto_url), proveedor_id, proveedores(id, nombre, logotipo)"
     )
     .order("user_profiles(nombre)", { ascending: true });
 

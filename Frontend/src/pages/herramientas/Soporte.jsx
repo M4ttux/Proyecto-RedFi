@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { IconMessageChatbot, IconX, IconArrowLeft } from "@tabler/icons-react";
+import { IconMessageChatbot, IconX, IconArrowBack } from "@tabler/icons-react";
 import MainH1 from "../../components/ui/MainH1";
 import MainH2 from "../../components/ui/MainH2";
 import MainH3 from "../../components/ui/MainH3";
@@ -174,7 +174,7 @@ const Soporte = () => {
           {/* Botón para volver a herramientas */}
           <div className="text-center">
             <MainLinkButton to="/herramientas" variant="secondary">
-              <IconArrowLeft />
+              <IconArrowBack />
               Volver a herramientas
             </MainLinkButton>
           </div>

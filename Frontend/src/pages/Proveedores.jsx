@@ -5,7 +5,7 @@ import {
   IconCarambola,
   IconCarambolaFilled,
   IconExternalLink,
-  IconArrowLeft,
+  IconArrowBack,
 } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
@@ -185,7 +185,7 @@ const Proveedores = () => {
       {/* Botón volver al mapa */}
       <div className="text-center">
         <MainLinkButton to="/mapa" variant="secondary">
-          <IconArrowLeft />
+          <IconArrowBack />
           Volver al mapa
         </MainLinkButton>
       </div>

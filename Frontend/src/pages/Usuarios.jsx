@@ -5,7 +5,7 @@ import { obtenerPerfilPorId } from "../services/perfil/getPerfil";
 import {
   IconCarambola,
   IconCarambolaFilled,
-  IconArrowLeft,
+  IconArrowBack,
 } from "@tabler/icons-react";
 import MainH1 from "../components/ui/MainH1";
 import MainH2 from "../components/ui/MainH2";
@@ -142,7 +142,7 @@ const Usuarios = () => {
       {/* Botón volver al mapa */}
       <div className="text-center">
         <MainLinkButton to="/mapa" variant="secondary">
-          <IconArrowLeft />
+          <IconArrowBack />
           Volver al mapa
         </MainLinkButton>
       </div>

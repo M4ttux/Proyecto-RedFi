@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { IconArrowLeft, IconGauge } from "@tabler/icons-react";
+import { IconArrowBack, IconGauge } from "@tabler/icons-react";
 import MainH1 from "../../components/ui/MainH1";
 import MainButton from "../../components/ui/MainButton";
 import MainLinkButton from "../../components/ui/MainLinkButton";
@@ -186,7 +186,7 @@ const TestVelocidad = () => {
         {/* Navegación de regreso */}
         <div className="text-center">
           <MainLinkButton to="/herramientas" variant="secondary">
-            <IconArrowLeft />
+            <IconArrowBack />
             Volver a herramientas
           </MainLinkButton>
         </div>
