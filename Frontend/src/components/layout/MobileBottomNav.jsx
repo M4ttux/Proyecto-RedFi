@@ -435,7 +435,7 @@ const MobileBottomNav = () => {
                       to="/login"
                       onClick={() => setMostrarMenu(false)}
                       variant="accent"
-                      className={`w-full !justify-start !px-4 !py-3 !rounded-none ${
+                      className={`w-full !justify-start !px-4 !py-3 !rounded-none !border-none ${
                         currentTheme === "light"
                           ? "!bg-transparent !text-orange-600"
                           : "!bg-transparent !text-acento"
