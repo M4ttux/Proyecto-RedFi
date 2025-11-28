@@ -99,6 +99,54 @@
 - Error boundaries para manejo robusto de errores
 - Context providers para estado global (Auth, Theme, Alerts, Roles)
 
+## 📦 Instalación
+
+### **Requisitos Previos**
+- Node.js 18+ instalado
+- npm o yarn como gestor de paquetes
+- Cuenta de Supabase configurada
+
+### **Instalación del Frontend**
+```bash
+# Navegar a la carpeta del frontend
+cd Frontend
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+```
+
+### **Instalación del Servidor de Speed Test**
+```bash
+# Navegar a la carpeta del speedtest-server
+cd Frontend/speedtest-server
+
+# Instalar dependencias
+npm install
+
+# Iniciar el servidor
+npm start
+```
+
+### **Variables de Entorno**
+Crear un archivo `.env` en la carpeta `Frontend` con las siguientes variables:
+```env
+# URL de tu proyecto Supabase
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+
+# Clave anónima de Supabase (para operaciones públicas)
+VITE_SUPABASE_ANON_KEY=tu_clave_anonima_de_supabase
+
+# Clave Service Role de Supabase (para operaciones administrativas)
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_de_supabase
+VITE_SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_de_supabase
+
+# URL del servidor de Speed Test (por defecto localhost:8000)
+VITE_SPEEDTEST_API_URL=http://localhost:8000/
+```
+
 ## 🛡️ Seguridad
 
 ### **Row Level Security (RLS)**
