@@ -9,7 +9,7 @@ import Input from "../../components/ui/Input";
 
 import { useAlerta } from "../../context/AlertaContext";
 import { useTheme } from "../../context/ThemeContext";
-import { supabase } from "../../supabase/client";
+import { recuperarPassword } from "../../services/authService";
 
 const Password = () => {
   useEffect(() => {
@@ -29,34 +29,15 @@ const Password = () => {
 
     try {
       const redirectUrl = `${window.location.origin}/restablecer-contrasena`;
-      console.log("Redirect URL:", redirectUrl); // Para debug
       
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl,
-      });
-
-      if (error) throw error;
+      await recuperarPassword(email, redirectUrl);
 
       setEmailEnviado(true);
       mostrarExito(
         "Se ha enviado un correo electrónico con las instrucciones para restablecer tu contraseña."
       );
     } catch (err) {
-      // Traducir mensajes de error de Supabase al español
-      let mensajeError = "Error al enviar el correo de recuperación";
-      
-      if (err.message) {
-        if (err.message.includes("For security purposes, you can only request this after")) {
-          // Extraer los segundos del mensaje
-          const match = err.message.match(/after (\d+) seconds/);
-          const segundos = match ? match[1] : "unos";
-          mensajeError = `Por seguridad, solo puedes solicitar esto después de ${segundos} segundos.`;
-        } else {
-          mensajeError = err.message;
-        }
-      }
-      
-      mostrarError(mensajeError);
+      mostrarError(err.message);
     } finally {
       setLoading(false);
     }

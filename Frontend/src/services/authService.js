@@ -94,3 +94,57 @@ export const cambiarPassword = async (nuevaPassword) => {
     throw new Error(mensajeError);
   }
 };
+
+// Solicitar recuperación de contraseña por email
+export const recuperarPassword = async (email, redirectUrl) => {
+  if (!email) {
+    throw new Error("El correo electrónico es obligatorio.");
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error("El correo electrónico no es válido.");
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: redirectUrl,
+  });
+
+  if (error) {
+    // Traducir mensajes de error específicos
+    let mensajeError = "Error al enviar el correo de recuperación";
+    
+    if (error.message.includes("For security purposes, you can only request this after")) {
+      // Extraer los segundos del mensaje
+      const match = error.message.match(/after (\d+) seconds/);
+      const segundos = match ? match[1] : "unos";
+      mensajeError = `Por seguridad, solo puedes solicitar esto después de ${segundos} segundos.`;
+    } else if (error.message) {
+      mensajeError = error.message;
+    }
+    
+    throw new Error(mensajeError);
+  }
+};
+
+// Restablecer contraseña (usado en la vista de restablecimiento)
+export const restablecerPassword = async (nuevaPassword) => {
+  if (!nuevaPassword || nuevaPassword.length < 6) {
+    throw new Error("La contraseña debe tener al menos 6 caracteres.");
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password: nuevaPassword,
+  });
+
+  if (error) {
+    // Traducir mensajes de error específicos
+    let mensajeError = error.message || "Error al actualizar la contraseña";
+    
+    if (error.message.includes("New password should be different from the old password")) {
+      mensajeError = "La nueva contraseña debe ser diferente a la actual.";
+    }
+    
+    throw new Error(mensajeError);
+  }
+};

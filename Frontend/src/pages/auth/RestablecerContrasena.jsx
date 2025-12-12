@@ -8,7 +8,7 @@ import Input from "../../components/ui/Input";
 
 import { useAlerta } from "../../context/AlertaContext";
 import { useTheme } from "../../context/ThemeContext";
-import { supabase } from "../../supabase/client";
+import { obtenerSesionActual, restablecerPassword, logoutUser } from "../../services/authService";
 
 const RestablecerContrasena = () => {
   useEffect(() => {
@@ -27,9 +27,7 @@ const RestablecerContrasena = () => {
   // Verificar que el usuario tenga una sesión válida desde el enlace de recuperación
   useEffect(() => {
     const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const session = await obtenerSesionActual();
       if (!session) {
         mostrarError(
           "Sesión inválida o expirada. Por favor, solicita un nuevo enlace de recuperación."
@@ -62,7 +60,7 @@ const RestablecerContrasena = () => {
   useEffect(() => {
     return () => {
       if (!passwordChanged) {
-        supabase.auth.signOut();
+        logoutUser();
       }
     };
   }, [passwordChanged]);
@@ -83,17 +81,13 @@ const RestablecerContrasena = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: password,
-      });
-
-      if (error) throw error;
+      await restablecerPassword(password);
 
       // Marcar que la contraseña fue cambiada
       setPasswordChanged(true);
 
       // Cerrar sesión después de cambiar la contraseña
-      await supabase.auth.signOut();
+      await logoutUser();
 
       mostrarExito(
         "Contraseña actualizada exitosamente. Inicia sesión con tu nueva contraseña."

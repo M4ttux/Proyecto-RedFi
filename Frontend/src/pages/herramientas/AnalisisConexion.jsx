@@ -31,7 +31,7 @@ const AnalisisConexion = () => {
               : "bg-texto/5 border border-texto/15"
           }`}
         >
-          <MainH3>¿Como funciona el análisis de conexión por zonas?</MainH3>
+          <MainH3>¿Cómo funciona el análisis de conexión por zonas?</MainH3>
           <p>
             Su funcionalidad es "escanear" la calidad de tu conexión Wi-Fi en
             diferentes zonas de tu hogar. El objetivo es ayudarte a encontrar la
