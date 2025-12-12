@@ -134,7 +134,7 @@ const Login = () => {
             />
             
             {/* Enlace de recuperación de contraseña */}
-            <div className="text-left">
+            <div className="text-center">
               <MainLinkButton 
                 to="/recuperar-contrasena" 
                 variant="link"

@@ -1,5 +1,6 @@
+import { useState } from "react";
 import classNames from "classnames";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconLoader2, IconEye, IconEyeOff } from "@tabler/icons-react";
 
 const Input = ({
   label,
@@ -21,6 +22,9 @@ const Input = ({
   max,
   showCounter = false,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordInput = type === "password";
+  const inputType = isPasswordInput && showPassword ? "text" : type;
   return (
     <div className="space-y-1 relative">
       {/* Label opcional del input */}
@@ -60,7 +64,7 @@ const Input = ({
           <input
             id={name}
             name={name}
-            type={type}
+            type={inputType}
             value={loading ? "" : value ?? ""}
             onChange={(e) => {
               // Validación de longitud para inputs numéricos
@@ -90,12 +94,14 @@ const Input = ({
               "w-full bg-texto/5 text-texto rounded-lg border transition",
               "focus:outline-none focus:ring-1",
               Icon ? "pl-10" : "pl-3", // Padding izquierdo según icono
-              loading || isInvalid || endIconAction ? "pr-10" : "pr-3", // Padding derecho según estado
+              loading || isInvalid || endIconAction || isPasswordInput ? "pr-10" : "pr-3", // Padding derecho según estado
               "py-2",
               (disabled || loading) && "cursor-not-allowed opacity-70",
               isInvalid
                 ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                 : "border-texto/15 focus:border-acento focus:ring-acento",
+              // Ocultar controles nativos de password en navegadores
+              isPasswordInput && "[&::-ms-reveal]:hidden [&::-ms-clear]:hidden",
               className
             )}
           />
@@ -106,7 +112,23 @@ const Input = ({
           {loading ? (
             /* Spinner de carga */
             <IconLoader2 size={20} className="animate-spin text-texto/75" />
-          ) : isInvalid ? null : endIconAction ? (
+          ) : isInvalid ? null : isPasswordInput ? (
+            /* Botón para mostrar/ocultar contraseña */
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              tabIndex={0}
+              className="text-texto/75 hover:text-texto transition focus:outline-none"
+            >
+              {showPassword ? (
+                <IconEyeOff size={20} />
+              ) : (
+                <IconEye size={20} />
+              )}
+            </button>
+          ) : endIconAction ? (
             /* Botón de acción personalizable */
             <button
               type="button"
