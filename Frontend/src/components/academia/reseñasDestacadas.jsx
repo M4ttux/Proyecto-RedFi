@@ -9,7 +9,6 @@ const reseñas = [
       "¡Los cursos de la Academia de Red-Fi son excelentes! Me ayudaron a entender mi red y aplicar mejoras reales en casa.",
     estrellas: 5,
     imagen: "/imgs/avatars/academia/ethan.jpg",
-    fecha: "15-03-2025",
   },
   {
     nombre: "Sofía Benítez",
@@ -17,7 +16,6 @@ const reseñas = [
       "Pude estudiar a mi ritmo y aplicar todo en mi trabajo como técnica de soporte. Súper claro y útil.",
     estrellas: 4,
     imagen: "/imgs/avatars/academia/sofia.jpg",
-    fecha: "22-03-2025",
   },
   {
     nombre: "Lucas Herrera",
@@ -25,14 +23,13 @@ const reseñas = [
       "El curso de ciberseguridad fue muy completo. Me dio herramientas clave para arrancar en redes.",
     estrellas: 5,
     imagen: "/imgs/avatars/academia/lucas.jpg",
-    fecha: "10-04-2025",
   },
 ];
 
 const ReseñasDestacadas = () => {
   const { currentTheme } = useTheme();
   return (
-    <section className="py-16 px-4 sm:px-6">
+    <section className="py-16">
       <div className="text-center max-w-2xl mx-auto mb-6">
         <MainH2 className="text-center justify-center">
           Historias de estudiantes
@@ -57,7 +54,7 @@ const ReseñasDestacadas = () => {
               />
               <p className="text-acento font-bold mb-2">{r.nombre}</p>
 
-              <p className="text-texto mb-4">{r.comentario}</p>
+              <p className="text-texto mb-4 text-left">{r.comentario}</p>
 
               <div className="flex gap-1 text-yellow-600 justify-center mb-4 bg-texto/5 font-bold px-3 py-1 rounded-full border border-texto/15">
                 {Array.from({ length: 5 }, (_, idx) =>
@@ -68,7 +65,6 @@ const ReseñasDestacadas = () => {
                   )
                 )}
               </div>
-              <p className="text-texto">{r.fecha}</p>
             </div>
           ))}
         </div>

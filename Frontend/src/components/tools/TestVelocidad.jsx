@@ -45,6 +45,12 @@ const TestVelocidad = () => {
     }
   };
 
+  // Reinicia los resultados del test
+  const reiniciarResultados = () => {
+    setResultados(null);
+    setProgreso({ descarga: 0, subida: 0, latencia: 0 });
+  };
+
   // Formatea números para mostrar con precisión decimal
   const formatNumber = (value) => {
     if (value == null || isNaN(value)) return "?";
@@ -105,6 +111,16 @@ const TestVelocidad = () => {
     const ringColor =
       resultados && !loading ? "var(--color-acento)" : "var(--color-primario)";
 
+    // Determina el estilo del gradiente según el estado
+    const gradientStyle = (() => {
+      if (progress === 0 && !loading && !resultados) {
+        // Estado inicial: anillo completo en azul
+        return `conic-gradient(var(--color-primario) 100%)`;
+      }
+      // Durante el test o con resultados: muestra el progreso coloreado
+      return `conic-gradient(${ringColor} ${progress}%, ${backgroundRing} 0)`;
+    })();
+
     return (
       <div className="flex flex-col items-center">
         {/* Contenedor del medidor circular */}
@@ -113,7 +129,7 @@ const TestVelocidad = () => {
           <div
             className="absolute inset-0 rounded-full"
             style={{
-              background: `conic-gradient(${ringColor} ${progress}%, ${backgroundRing} 0)`,
+              background: gradientStyle,
               transform: "rotate(-90deg)", // Inicia desde arriba
             }}
           ></div>
@@ -146,8 +162,8 @@ const TestVelocidad = () => {
           </p>
         </div>
 
-        {/* Botón para iniciar o mostrar estado del test */}
-        <div className="flex justify-center">
+        {/* Botones para iniciar o reiniciar el test */}
+        <div className="flex justify-center gap-4">
           <MainButton
             onClick={iniciarTest}
             variant="primary"
@@ -155,6 +171,14 @@ const TestVelocidad = () => {
             className="px-6 py-3"
           >
             {loading ? "Midiendo..." : "Iniciar test"}
+          </MainButton>
+          <MainButton
+            onClick={reiniciarResultados}
+            variant="secondary"
+            disabled={loading}
+            className="px-6 py-3"
+          >
+            Reiniciar
           </MainButton>
         </div>
 

@@ -94,7 +94,7 @@ const Proveedores = () => {
           </div>
 
           {/* Descripción breve */}
-          <p className="text-sm text-texto mt-4 max-w-xl mx-auto leading-relaxed">
+          <p className="text-texto mt-4 max-w-xl mx-auto leading-relaxed text-left">
             {proveedor.descripcion ||
               "Proveedor destacado en Corrientes por su cobertura, estabilidad y servicio al cliente. Red-Fi lo destaca por su presencia activa en múltiples zonas urbanas y rurales."}
           </p>

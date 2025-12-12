@@ -155,7 +155,7 @@ const WifiScanner = () => {
 
   return (
     <div
-      className={`p-8 rounded-lg mx-auto text-texto max-w-xl relative ${
+      className={`p-4 sm:p-8 rounded-lg mx-auto text-texto max-w-xl relative ${
         currentTheme === "light"
           ? "bg-secundario border-2 border-texto/15 shadow-lg"
           : "bg-texto/5 border border-texto/15"
@@ -260,7 +260,8 @@ const WifiScanner = () => {
                   onClick={() => eliminarZona(zona)}
                   variant="delete"
                   iconSize={18}
-                  className="p-1"
+                  className="w-10 h-10 min-w-[40px] min-h-[40px] p-1"
+                  iconAlwaysVisible={true}
                   title={`Eliminar resultados de ${zona}`}
                 />
               </li>
