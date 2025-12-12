@@ -132,6 +132,18 @@ const Login = () => {
               icon={IconLock}
               isInvalid={passwordInvalido}
             />
+            
+            {/* Enlace de recuperación de contraseña */}
+            <div className="text-left">
+              <MainLinkButton 
+                to="/recuperar-contrasena" 
+                variant="link"
+                className="text-sm"
+              >
+                ¿Has olvidado tu contraseña?
+              </MainLinkButton>
+            </div>
+            
             <MainButton
               type="submit"
               variant="primary"

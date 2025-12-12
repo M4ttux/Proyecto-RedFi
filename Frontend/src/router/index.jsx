@@ -6,6 +6,8 @@ import Soporte from "../pages/herramientas/Soporte";
 import Cuenta from "../pages/Cuenta";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
+import Password from "../pages/auth/Password";
+import RestablecerContrasena from "../pages/auth/RestablecerContrasena";
 import Proveedores from "../pages/Proveedores";
 import Usuarios from "../pages/Usuarios";
 import Mapa from "../pages/Mapa";
@@ -61,6 +63,8 @@ export const router = createBrowserRouter([
       },
       { path: "soporte", element: <Soporte /> },
       { path: "planes", element: <Planes /> },
+      { path: "recuperar-contrasena", element: <Password /> },
+      { path: "restablecer-contrasena", element: <RestablecerContrasena /> },
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
       {
