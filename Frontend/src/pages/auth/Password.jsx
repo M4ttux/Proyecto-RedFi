@@ -112,7 +112,7 @@ const Password = () => {
               <p className="text-lg font-semibold">
                 ¡Correo enviado!
               </p>
-              <p className="text-sm text-texto/70">
+              <p className="text-texto text-left">
                 Revisa tu bandeja de entrada y sigue las instrucciones para
                 restablecer tu contraseña.
               </p>
@@ -150,8 +150,6 @@ const Password = () => {
             </MainLinkButton>
           </div>
         )}
-
-        
       </div>
     </div>
   );

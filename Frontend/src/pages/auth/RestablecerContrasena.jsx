@@ -161,9 +161,9 @@ const RestablecerContrasena = () => {
               icon={IconLock}
             />
 
-            <div className="mt-4 p-3 bg-primario/10 border border-primario/30 rounded-lg">
-              <p className="text-sm text-center">
-                ⚠️ Debes restablecer tu contraseña para continuar
+            <div className="mt-4 p-3">
+              <p className="text-sm text-center text-texto/70 italic">
+                Debes restablecer tu contraseña para continuar
               </p>
             </div>
 
