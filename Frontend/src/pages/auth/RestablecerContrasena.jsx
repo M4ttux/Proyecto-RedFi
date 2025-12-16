@@ -117,7 +117,7 @@ const RestablecerContrasena = () => {
       <div className="w-full max-w-7xl">
         {/* Título */}
         <div className="w-full text-center mb-8">
-          <MainH1 icon={IconKey}>Restablecer Contraseña</MainH1>
+          <MainH1 icon={IconKey}>Restablecer contraseña</MainH1>
           <p className="text-lg">
             Por seguridad, debes establecer una nueva contraseña.
           </p>

@@ -48,7 +48,7 @@ const Password = () => {
       <div className="w-full max-w-7xl">
         {/* Título */}
         <div className="w-full text-center mb-8">
-          <MainH1 icon={IconKey}>Recuperar Contraseña</MainH1>
+          <MainH1 icon={IconKey}>Recuperar contraseña</MainH1>
           <p className="text-lg">
             Ingresa tu correo electrónico y te enviaremos las instrucciones.
           </p>
