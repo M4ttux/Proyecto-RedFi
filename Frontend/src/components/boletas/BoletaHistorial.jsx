@@ -220,12 +220,14 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
         <MainLoader texto="Cargando boletas..." size="large" />
       ) : boletas.length === 0 ? (
         <div className="text-center py-16">
+          <div className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-8">
           <MainH3 className="text-center justify-center">
             No tienes boletas cargadas.
           </MainH3>
           <p className="text-texto mb-4">
             Comienza cargando tus boletas para poder verlas aquí.
           </p>
+          </div>
         </div>
       ) : (
         <>

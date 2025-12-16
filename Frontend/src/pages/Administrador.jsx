@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconArrowBack, IconSettings } from "@tabler/icons-react";
+import { IconArrowBack, IconSettings, IconCirclePlus } from "@tabler/icons-react";
 import { getPerfil } from "../services/perfil/getPerfil";
 import { obtenerPerfilesAdmin } from "../services/perfil/adminPerfil";
 import { obtenerProveedoresAdmin } from "../services/proveedores/obtenerProveedor";
@@ -704,6 +704,15 @@ const Administrador = () => {
               {tablaActual === "user_profiles" && (
                 <MainButton onClick={() => setUsuarioNuevo(true)} variant="add">
                   Agregar Usuario
+                </MainButton>
+              )}
+              {tablaActual === "reseñas" && (
+                <MainButton
+                  onClick={() => navigate("/mapa")}
+                  variant="accent"
+                >
+                  <IconCirclePlus />
+                  Agregar Reseña
                 </MainButton>
               )}
               {tablaActual === "tecnologias" && (

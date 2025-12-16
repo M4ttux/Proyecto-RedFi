@@ -220,7 +220,7 @@ const Reseñas = () => {
           <div className="text-center py-16">
             <div className="backdrop-blur-md bg-secundario border border-secundario/50 shadow-lg rounded-lg p-8">
               <MainH3 className="text-center justify-center">
-                No tienes reseñas publicadas
+                No tienes reseñas publicadas.
               </MainH3>
               <p className="text-texto mb-6">
                 Comienza compartiendo tu experiencia con diferentes proveedores

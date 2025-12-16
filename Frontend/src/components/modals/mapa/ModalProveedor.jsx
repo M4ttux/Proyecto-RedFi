@@ -130,7 +130,7 @@ const ModalProveedor = ({ proveedor, onClose }) => {
       </div>
 
       {/* Descripción del proveedor */}
-      <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-center leading-relaxed mb-6">
+      <p className="text-texto bg-texto/5 border border-texto/15 rounded-lg px-4 py-4 text-left leading-relaxed mb-6">
         {proveedor.descripcion || "Este proveedor aún no tiene descripción."}
       </p>
 

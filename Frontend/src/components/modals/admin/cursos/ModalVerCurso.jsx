@@ -216,20 +216,21 @@ const ModalVerCurso = ({ curso, onClose }) => {
                 </div>
               ) : (
                 <>
-                  {/* Lista de preguntas en acordeón */}
-                  {quiz.map((pregunta, index) => {
-                    const estaExpandida = preguntaExpandida === index;
-                    const opciones =
-                      pregunta.quiz_opciones || pregunta.opciones || [];
-                    const opcionCorrecta = opciones.find(
-                      (op) => op.es_correcta
-                    );
+                  {/* Lista de preguntas en acordeón con scroll */}
+                  <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
+                    {quiz.map((pregunta, index) => {
+                      const estaExpandida = preguntaExpandida === index;
+                      const opciones =
+                        pregunta.quiz_opciones || pregunta.opciones || [];
+                      const opcionCorrecta = opciones.find(
+                        (op) => op.es_correcta
+                      );
 
-                    return (
-                      <div
-                        key={pregunta.id || index}
-                        className="border border-texto/15 rounded-lg overflow-hidden"
-                      >
+                      return (
+                        <div
+                          key={pregunta.id || index}
+                          className="border border-texto/15 rounded-lg overflow-hidden"
+                        >
                         {/* Header del acordeón */}
                         <div
                           className="flex justify-between items-center p-2 cursor-pointer bg-texto/5 transition-colors"
@@ -238,7 +239,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
                           }
                         >
                           <div className="flex items-center gap-4">
-                            <div className="bg-acento text-texto w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                            <div className="bg-acento text-[#1a1a1a] w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
                               {index + 1}
                             </div>
 
@@ -281,14 +282,14 @@ const ModalVerCurso = ({ curso, onClose }) => {
                                   key={opcion.id || opcionIndex}
                                   className={`flex items-center gap-3 p-3 rounded-lg border ${
                                     opcion.es_correcta
-                                      ? "border-green-700/50 bg-green-600/20"
+                                      ? "border-green-700/50 bg-green-700/20"
                                       : "border-texto/10 bg-texto/5"
                                   }`}
                                 >
                                   <div
                                     className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                                       opcion.es_correcta
-                                        ? "border-green-500 bg-green-500"
+                                        ? "border-green-700 bg-green-700"
                                         : "border-texto/30"
                                     }`}
                                   >
@@ -306,7 +307,7 @@ const ModalVerCurso = ({ curso, onClose }) => {
                                     {opcion.opcion || opcion.texto}
                                   </span>
                                   {opcion.es_correcta && (
-                                    <span className="ml-auto text-xs font-bold text-green-600 whitespace-nowrap">
+                                    <span className="ml-auto text-xs font-bold text-texto/75 whitespace-nowrap">
                                       ✓ Correcta
                                     </span>
                                   )}
@@ -315,9 +316,10 @@ const ModalVerCurso = ({ curso, onClose }) => {
                             </div>
                           </div>
                         )}
-                      </div>
-                    );
-                  })}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </>
               )}
             </div>
