@@ -165,7 +165,7 @@ export const flujoConversacion = {
       {
         texto: "Verificar plan contratado",
         respuesta:
-          "Revisa si el problema es con tu plan: 1) Compara la velocidad real del test con la velocidad contratada, 2) Si obtienes menos del 70% de lo contratado consistentemente, tienes motivos para reclamar, 3) Verifica si tu plan tiene límites de datos o restricciones horarias, 4) Pregunta a tu proveedor sobre mejoras de infraestructura en tu zona, 5) Consulta las reseñas en Red-Fi para ver si otros usuarios tienen mejor experiencia con otros proveedores en tu área.",
+          "Revisa si el problema es con tu plan: \n\n1) Compara la velocidad real del test con la velocidad contratada\n2) Si obtienes menos del 70% de lo contratado consistentemente, tienes motivos para reclamar\n3) Verifica si tu plan tiene límites de datos o restricciones horarias\n4) Pregunta a tu proveedor sobre mejoras de infraestructura en tu zona\n5) Consulta las reseñas en Red-Fi para ver si otros usuarios tienen mejor experiencia con otros proveedores en tu área.",
       },
       {
         texto: "Volver a problemas de conexión",
@@ -186,12 +186,12 @@ export const flujoConversacion = {
       {
         texto: "Problemas del proveedor",
         respuesta:
-          "Si sospechas que el problema es de tu proveedor: 1) Consulta la página web o redes sociales de tu proveedor para reportes de cortes, 2) Llama al número de soporte técnico que aparece en tu factura, 3) Pregunta a vecinos cercanos si tienen el mismo problema, 4) Revisa nuestro mapa de Red-Fi para ver reportes recientes en tu zona, 5) Considera usar datos móviles temporalmente mientras se resuelve el problema.",
+          "Si sospechas que el problema es de tu proveedor: \n\n1) Consulta la página web o redes sociales de tu proveedor para reportes de cortes\n2) Llama al número de soporte técnico que aparece en tu factura\n3) Pregunta a vecinos cercanos si tienen el mismo problema\n4) Revisa nuestro mapa de Red-Fi para ver reportes recientes en tu zona\n5) Considera usar datos móviles temporalmente mientras se resuelve el problema.",
       },
       {
         texto: "Router con fallas",
         respuesta:
-          "Si el router puede estar fallando: 1) Verifica que todas las luces del router estén en su estado normal (consulta el manual), 2) Intenta un reset completo del router presionando el botón pequeño por 10 segundos, 3) Si es posible, actualiza el firmware del router, 4) Prueba conectar un dispositivo directamente al módem (saltándote el router), 5) Si el router tiene varios años, podría necesitar reemplazo.",
+          "Si el router puede estar fallando: \n\n1) Verifica que todas las luces del router estén en su estado normal (consulta el manual)\n2) Intenta un reset completo del router presionando el botón pequeño por 10 segundos\n3) Si es posible, actualiza el firmware del router\n4) Prueba conectar un dispositivo directamente al módem (saltándote el router)\n5) Si el router tiene varios años, podría necesitar reemplazo.",
       },
       {
         texto: "Volver a problemas de conexión",
@@ -207,17 +207,17 @@ export const flujoConversacion = {
       {
         texto: "No aparece mi red WiFi",
         respuesta:
-          "Si no encuentras tu red WiFi: 1) Reinicia el router y espera 2-3 minutos, 2) Verifica que el WiFi esté activado en el router (busca un botón o switch físico), 3) En tu dispositivo, actualiza la lista de redes disponibles, 4) Revisa si el nombre de red (SSID) está configurado como oculto, 5) Intenta acercarte mucho al router, 6) Verifica que tu dispositivo no esté en modo avión.",
+          "Si no encuentras tu red WiFi: \n\n1) Reinicia el router y espera 2-3 minutos\n2) Verifica que el WiFi esté activado en el router (busca un botón o switch físico)\n3) En tu dispositivo, actualiza la lista de redes disponibles\n4) Revisa si el nombre de red (SSID) está configurado como oculto\n5) Intenta acercarte mucho al router\n6) Verifica que tu dispositivo no esté en modo avión.",
       },
       {
         texto: "Señal muy débil",
         respuesta:
-          "Para mejorar la señal WiFi: 1) Coloca el router en un lugar alto y central de tu hogar, 2) Evita obstáculos como paredes gruesas, muebles metálicos o espejos, 3) Aleja el router de electrodomésticos que puedan causar interferencias, 4) Si tu casa es grande, considera comprar un repetidor WiFi o sistema mesh, 5) Actualiza el router si tiene más de 5 años, ya que la tecnología ha mejorado considerablemente.",
+          "Para mejorar la señal WiFi: \n\n1) Coloca el router en un lugar alto y central de tu hogar\n2) Evita obstáculos como paredes gruesas, muebles metálicos o espejos\n3) Aleja el router de electrodomésticos que puedan causar interferencias\n4) Si tu casa es grande, considera comprar un repetidor WiFi o sistema mesh\n5) Actualiza el router si tiene más de 5 años, ya que la tecnología ha mejorado considerablemente.",
       },
       {
         texto: "Se desconecta constantemente",
         respuesta:
-          "Si tu WiFi se desconecta frecuentemente: 1) Elimina la red guardada en tu dispositivo y vuelve a conectarte ingresando la contraseña, 2) Actualiza los controladores de la tarjeta WiFi de tu dispositivo, 3) Intenta cambiar entre las bandas de 2.4GHz y 5GHz, 4) Revisa la configuración de ahorro de energía en tu dispositivo, 5) Reinicia la configuración de red de tu dispositivo, 6) El problema puede ser interferencia de otros routers cercanos.",
+          "Si tu WiFi se desconecta frecuentemente: \n\n1) Elimina la red guardada en tu dispositivo y vuelve a conectarte ingresando la contraseña\n2) Actualiza los controladores de la tarjeta WiFi de tu dispositivo\n3) Intenta cambiar entre las bandas de 2.4GHz y 5GHz\n4) Revisa la configuración de ahorro de energía en tu dispositivo\n5) Reinicia la configuración de red de tu dispositivo\n6) El problema puede ser interferencia de otros routers cercanos.",
       },
       {
         texto: "Volver a problemas de conexión",
@@ -233,17 +233,17 @@ export const flujoConversacion = {
       {
         texto: "Identificar la causa",
         respuesta:
-          "Para identificar qué causa los cortes: 1) Anota los horarios exactos y duración de los cortes durante una semana, 2) Observa si afecta solo el WiFi o también la conexión por cable, 3) Nota si los cortes coinciden con el uso de electrodomésticos como aire acondicionado o microondas, 4) Pregunta a vecinos si experimentan lo mismo, 5) Revisa las redes sociales de tu proveedor y nuestro mapa para reportes en tu zona.",
+          "Para identificar qué causa los cortes: \n\n1) Anota los horarios exactos y duración de los cortes durante una semana\n2) Observa si afecta solo el WiFi o también la conexión por cable\n3) Nota si los cortes coinciden con el uso de electrodomésticos como aire acondicionado o microondas\n4) Pregunta a vecinos si experimentan lo mismo\n5) Revisa las redes sociales de tu proveedor y nuestro mapa para reportes en tu zona.",
       },
       {
         texto: "Soluciones temporales",
         respuesta:
-          "Mientras resuelves el problema principal: 1) Mantén datos móviles disponibles como respaldo, 2) Si trabajas desde casa, considera un router 4G/5G de emergencia, 3) Descarga contenido importante cuando tengas conexión estable, 4) Identifica puntos de acceso WiFi públicos confiables cerca de tu ubicación, 5) Configura tu teléfono como punto de acceso para emergencias.",
+          "Mientras resuelves el problema principal: \n\n1) Mantén datos móviles disponibles como respaldo\n2) Si trabajas desde casa, considera un router 4G/5G de emergencia\n3) Descarga contenido importante cuando tengas conexión estable\n4) Identifica puntos de acceso WiFi públicos confiables cerca de tu ubicación\n5) Configura tu teléfono como punto de acceso para emergencias.",
       },
       {
         texto: "Contactar al proveedor",
         respuesta:
-          "Al contactar a tu proveedor por cortes frecuentes: 1) Presenta la documentación de fechas y horarios de los cortes, 2) Solicita compensación o descuento por el mal servicio, 3) Pregunta específicamente sobre planes de mejora de infraestructura en tu zona, 4) Si no resuelven el problema, considera cambiar de proveedor consultando las reseñas en Red-Fi, 5) Deja tu experiencia documentada en una reseña para ayudar a otros usuarios.",
+          "Al contactar a tu proveedor por cortes frecuentes: \n\n1) Presenta la documentación de fechas y horarios de los cortes\n2) Solicita compensación o descuento por el mal servicio\n3) Pregunta específicamente sobre planes de mejora de infraestructura en tu zona\n4) Si no resuelven el problema, considera cambiar de proveedor consultando las reseñas en Red-Fi\n5) Deja tu experiencia documentada en una reseña para ayudar a otros usuarios.",
       },
       {
         texto: "Volver a problemas de conexión",
@@ -259,17 +259,17 @@ export const flujoConversacion = {
       {
         texto: "Lag alto en videojuegos",
         respuesta:
-          "Para reducir el lag en gaming: 1) Siempre usa conexión por cable Ethernet en lugar de WiFi, 2) Cierra completamente todas las aplicaciones que consuman Internet, 3) Si tu router lo permite, configura QoS (Quality of Service) para priorizar tu dispositivo de gaming, 4) Selecciona servidores geográficamente cercanos en los juegos, 5) Verifica que tu ping sea menor a 50ms en el test de Red-Fi, 6) Considera cambiar a un plan con menor latencia si el problema persiste.",
+          "Para reducir el lag en gaming: \n\n1) Siempre usa conexión por cable Ethernet en lugar de WiFi\n2) Cierra completamente todas las aplicaciones que consuman Internet\n3) Si tu router lo permite, configura QoS (Quality of Service) para priorizar tu dispositivo de gaming\n4) Selecciona servidores geográficamente cercanos en los juegos\n5) Verifica que tu ping sea menor a 50ms en el test de Red-Fi\n6) Considera cambiar a un plan con menor latencia si el problema persiste.",
       },
       {
         texto: "Streaming con interrupciones",
         respuesta:
-          "Para mejorar el streaming (como Twitch o YouTube): 1) Verifica que tengas suficiente velocidad de subida (al menos 5 Mbps para 1080p), 2) Si tienes problemas, reduce temporalmente la calidad de transmisión, 3) Usa codificación por hardware si tu equipo lo permite, 4) Cierra todos los programas innecesarios que consuman ancho de banda, 5) Transmite por cable Ethernet, no WiFi, 6) Si planeas hacer streaming profesional, considera un plan con mayor velocidad de subida.",
+          "Para mejorar el streaming (como Twitch o YouTube): \n\n1) Verifica que tengas suficiente velocidad de subida (al menos 5 Mbps para 1080p)\n2) Si tienes problemas, reduce temporalmente la calidad de transmisión\n3) Usa codificación por hardware si tu equipo lo permite\n4) Cierra todos los programas innecesarios que consuman ancho de banda\n5) Transmite por cable Ethernet, no WiFi\n6) Si planeas hacer streaming profesional, considera un plan con mayor velocidad de subida.",
       },
       {
         texto: "Videos se ven mal (Netflix, YouTube)",
         respuesta:
-          "Para mejorar la calidad de video en streaming: 1) Verifica que tengas al menos 25 Mbps de descarga para contenido 4K, 2) Reinicia la aplicación de streaming completamente, 3) Revisa la configuración de calidad en la aplicación (puede estar limitada), 4) Prueba el mismo contenido en otro dispositivo para descartar problemas del equipo, 5) Limpia la caché de la aplicación, 6) Si el problema persiste con buena velocidad, contacta al servicio de streaming y a tu proveedor de Internet.",
+          "Para mejorar la calidad de video en streaming: \n\n1) Verifica que tengas al menos 25 Mbps de descarga para contenido 4K\n2) Reinicia la aplicación de streaming completamente\n3) Revisa la configuración de calidad en la aplicación (puede estar limitada)\n4) Prueba el mismo contenido en otro dispositivo para descartar problemas del equipo\n5) Limpia la caché de la aplicación\n6) Si el problema persiste con buena velocidad, contacta al servicio de streaming y a tu proveedor de Internet.",
       },
       {
         texto: "Volver a problemas de conexión",
@@ -318,12 +318,12 @@ export const flujoConversacion = {
       {
         texto: "Problemas de acceso",
         respuesta:
-          "Si no puedes acceder a tu cuenta: 1) Verifica que estés usando el email y contraseña correctos, 2) Intenta desde otro navegador o dispositivo para descartar problemas del navegador, 3) Asegúrate de que las cookies estén habilitadas en tu navegador, 4) Si creaste la cuenta recientemente, intenta recordar exactamente los datos que usaste.",
+          "Si no puedes acceder a tu cuenta: \n\n1) Verifica que estés usando el email y contraseña correctos\n2) Intenta desde otro navegador o dispositivo para descartar problemas del navegador\n3) Asegúrate de que las cookies estén habilitadas en tu navegador\n4) Si creaste la cuenta recientemente, intenta recordar exactamente los datos que usaste.",
       },
       {
         texto: "Actualizar perfil",
         respuesta:
-          "Para mantener tu perfil actualizado: 1) Ve a 'Mi Cuenta' desde el menú de usuario, 2) Selecciona 'Editar perfil' para cambiar tu información personal y foto, 3) Usa 'Cambiar contraseña' si necesitas actualizar tu contraseña, 4) En 'Gestionar plan' puedes cambiar entre plan básico y premium según tus necesidades.",
+          "Para mantener tu perfil actualizado: \n\n1) Ve a 'Mi Cuenta' desde el menú de usuario\n2) Selecciona 'Editar perfil' para cambiar tu información personal y foto\n3) Usa 'Cambiar contraseña' si necesitas actualizar tu contraseña\n4) En 'Gestionar plan' puedes cambiar entre plan básico y premium según tus necesidades.",
       },
       { texto: "Volver al menú principal", siguiente: "inicio" },
     ],
@@ -347,12 +347,12 @@ export const flujoConversacion = {
       {
         texto: "Cambiar de proveedor",
         respuesta:
-          "Proceso recomendado para cambiar de proveedor: 1) Investiga a fondo las opciones usando Red-Fi, enfocándote en tu zona específica, 2) Verifica disponibilidad real en tu dirección exacta contactando directamente, 3) Lee reseñas detalladas de usuarios cercanos geográficamente, 4) Documenta los problemas con tu proveedor actual (velocidades, cortes, etc.), 5) Programa la instalación del nuevo servicio ANTES de cancelar el actual, 6) Una vez que confirmes que el nuevo servicio funciona bien, procede a cancelar el anterior.",
+          "Proceso recomendado para cambiar de proveedor: \n\n1) Investiga a fondo las opciones usando Red-Fi, enfocándote en tu zona específica\n2) Verifica disponibilidad real en tu dirección exacta contactando directamente\n3) Lee reseñas detalladas de usuarios cercanos geográficamente\n4) Documenta los problemas con tu proveedor actual (velocidades, cortes, etc.)\n5) Programa la instalación del nuevo servicio ANTES de cancelar el actual\n6) Una vez que confirmes que el nuevo servicio funciona bien, procede a cancelar el anterior.",
       },
       {
         texto: "Reportar problemas",
         respuesta:
-          "Cómo reportar problemas efectivamente: 1) Documenta los problemas con tests de velocidad realizados en diferentes momentos, 2) Escribe una reseña detallada en Red-Fi especificando fechas, horarios y tipo de problemas, 3) Contacta primero el soporte técnico de tu proveedor con evidencia documentada, 4) Si no obtienes solución, considera presentar reclamo en organismos de defensa del consumidor, 5) Mantén tu reseña actualizada para que otros usuarios sepan el estado actual del servicio, 6) Considera cambiar de proveedor si los problemas persisten sin solución.",
+          "Cómo reportar problemas efectivamente: \n\n1) Documenta los problemas con tests de velocidad realizados en diferentes momentos\n2) Escribe una reseña detallada en Red-Fi especificando fechas, horarios y tipo de problemas\n3) Contacta primero el soporte técnico de tu proveedor con evidencia documentada\n4) Si no obtienes solución, considera presentar reclamo en organismos de defensa del consumidor\n5) Mantén tu reseña actualizada para que otros usuarios sepan el estado actual del servicio\n6) Considera cambiar de proveedor si los problemas persisten sin solución.",
       },
       { texto: "Volver al menú principal", siguiente: "inicio" },
     ],
