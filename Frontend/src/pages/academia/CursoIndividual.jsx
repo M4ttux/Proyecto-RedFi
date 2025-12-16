@@ -327,7 +327,7 @@ const CursoIndividual = () => {
                       className="bg-texto/5 border border-texto/10 rounded-lg p-6"
                     >
                       <div className="flex items-start gap-4 mb-4">
-                        <div className="bg-acento text-texto w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                        <div className="bg-acento text-[#1a1a1a] w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">
                           {index + 1}
                         </div>
                         <div className="flex-1">
@@ -408,6 +408,16 @@ const CursoIndividual = () => {
                                     <span className="flex-1">
                                       {opcion.opcion}
                                     </span>
+                                    {showResult && isCorrect && (
+                                      <span className="text-texto/75 font-semibold text-sm">
+                                        Correcta
+                                      </span>
+                                    )}
+                                    {showResult && isSelected && !isCorrect && (
+                                      <span className="text-texto/75 font-semibold text-sm">
+                                        Incorrecta
+                                      </span>
+                                    )}
                                   </div>
                                 </button>
                               );
@@ -420,21 +430,23 @@ const CursoIndividual = () => {
 
                   {/* Quiz Actions */}
                   <div className="flex justify-center gap-4">
-                    {!quizEnviado ? (
-                      <MainButton
-                        onClick={enviarQuiz}
-                        variant="primary"
-                        disabled={
-                          Object.keys(respuestas).length !== quiz.length
-                        }
-                      >
-                        Enviar Quiz
-                      </MainButton>
-                    ) : (
-                      <MainButton onClick={reiniciarQuiz} variant="secondary">
-                        Intentar de nuevo
-                      </MainButton>
-                    )}
+                    <MainButton
+                      onClick={enviarQuiz}
+                      variant="primary"
+                      disabled={
+                        quizEnviado ||
+                        Object.keys(respuestas).length !== quiz.length
+                      }
+                    >
+                      Enviar Quiz
+                    </MainButton>
+                    <MainButton
+                      onClick={reiniciarQuiz}
+                      variant="secondary"
+                      disabled={Object.keys(respuestas).length === 0}
+                    >
+                      Reiniciar
+                    </MainButton>
                   </div>
                 </>
               )}
