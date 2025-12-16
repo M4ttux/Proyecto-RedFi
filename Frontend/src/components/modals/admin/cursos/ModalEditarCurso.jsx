@@ -159,7 +159,17 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
       });
     }
 
-    nuevasPreguntas[preguntaIndex][opcionesKey][opcionIndex][campo] = valor;
+    // Si estamos actualizando el texto, asegurarnos de actualizar ambas propiedades
+    if (campo === "texto") {
+      nuevasPreguntas[preguntaIndex][opcionesKey][opcionIndex].texto = valor;
+      // Si existe la propiedad 'opcion', también actualizarla para mantener consistencia
+      if ('opcion' in nuevasPreguntas[preguntaIndex][opcionesKey][opcionIndex]) {
+        nuevasPreguntas[preguntaIndex][opcionesKey][opcionIndex].opcion = valor;
+      }
+    } else {
+      nuevasPreguntas[preguntaIndex][opcionesKey][opcionIndex][campo] = valor;
+    }
+
     setPreguntas(nuevasPreguntas);
   };
 
@@ -482,9 +492,7 @@ const ModalEditarCurso = ({ curso, onClose, onActualizar }) => {
                                           placeholder={`Opción ${
                                             opcionIndex + 1
                                           }`}
-                                          value={
-                                            opcion.texto || opcion.opcion || ""
-                                          }
+                                          value={opcion.texto ?? opcion.opcion ?? ""}
                                           onChange={(e) =>
                                             actualizarOpcion(
                                               preguntaIndex,

@@ -141,6 +141,21 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
     }
   };
 
+  // Validar si todas las preguntas están completas
+  const validarPreguntasCompletas = () => {
+    return preguntas.every((pregunta) => {
+      // Verificar que la pregunta esté escrita
+      const preguntaCompleta = pregunta.pregunta.trim() !== "";
+
+      // Verificar que las 3 opciones estén completas
+      const opcionesCompletas = pregunta.opciones.every(
+        (opcion) => opcion.texto.trim() !== ""
+      );
+
+      return preguntaCompleta && opcionesCompletas;
+    });
+  };
+
   const handleSubmit = async () => {
     if (!validarDatosBasicos()) return;
 
@@ -488,7 +503,7 @@ const ModalAgregarCurso = ({ onClose, onActualizar }) => {
               variant="primary"
               onClick={handleSubmit}
               loading={loading}
-              disabled={loading}
+              disabled={loading || !validarPreguntasCompletas()}
               className="flex-1"
             >
               {loading ? "Creando..." : "Crear curso"}

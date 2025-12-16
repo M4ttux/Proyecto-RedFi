@@ -7,6 +7,7 @@
  */
 export const validarQuiz = (preguntas) => {
   const errors = [];
+  const preguntasSinRespuestaCorrecta = [];
 
   if (!Array.isArray(preguntas) || preguntas.length === 0) {
     errors.push("Debe haber al menos una pregunta");
@@ -51,11 +52,23 @@ export const validarQuiz = (preguntas) => {
     // Validar que haya exactamente una respuesta correcta
     const correctas = opciones.filter((opcion) => opcion.es_correcta);
     if (correctas.length !== 1) {
-      errors.push(
-        `La pregunta ${preguntaNum} debe tener exactamente una respuesta correcta`
-      );
+      preguntasSinRespuestaCorrecta.push(preguntaNum);
     }
   });
+
+  // Agregar error de respuestas correctas de forma agrupada
+  if (preguntasSinRespuestaCorrecta.length > 0) {
+    if (preguntasSinRespuestaCorrecta.length === 1) {
+      errors.push(
+        `La pregunta <strong>${preguntasSinRespuestaCorrecta[0]}</strong> debe tener exactamente una respuesta correcta`
+      );
+    } else {
+      const numerosPreguntas = preguntasSinRespuestaCorrecta.join(", ");
+      errors.push(
+        `Las preguntas <strong>${numerosPreguntas}</strong> deben tener exactamente una respuesta correcta`
+      );
+    }
+  }
 
   return errors;
 };

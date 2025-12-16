@@ -89,6 +89,9 @@ const Alerta = ({
   // Selecciona el icono según el tipo de alerta
   const Icono = iconos[tipo] || iconos.error;
 
+  // Detectar si el mensaje contiene HTML (específicamente etiquetas permitidas como <strong>)
+  const contieneHTML = /<(strong|b|em|i|u)>/i.test(mensaje);
+
   return (
     <div
       className={`
@@ -110,7 +113,11 @@ const Alerta = ({
             {titulos[tipo] || titulos.error}
           </div>
         </div>
-        <div className="ml-8">{mensaje}</div>
+        {contieneHTML ? (
+          <div className="ml-8" dangerouslySetInnerHTML={{ __html: mensaje }} />
+        ) : (
+          <div className="ml-8">{mensaje}</div>
+        )}
       </div>
 
       {/* Botón para cerrar la alerta manualmente */}
