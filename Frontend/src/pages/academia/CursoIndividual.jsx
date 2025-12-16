@@ -307,8 +307,8 @@ const CursoIndividual = () => {
                       <div
                         className={`mt-4 p-3 rounded-lg ${
                           resultadoQuiz.porcentaje >= 70
-                            ? "bg-green-500/10 border border-green-500/30 text-green-700"
-                            : "bg-red-500/10 border border-red-500/30 text-red-700"
+                            ? "bg-green-500/10 border border-green-500/30 text-texto/75"
+                            : "bg-red-500/10 border border-red-500/30 text-texto/75"
                         }`}
                       >
                         <p className="font-medium">
@@ -348,10 +348,10 @@ const CursoIndividual = () => {
                               if (showResult) {
                                 if (isCorrect) {
                                   buttonClass +=
-                                    "border-green-500 bg-green-500/10 text-green-700";
+                                    "border-green-500 bg-green-500/10 text-texto/75";
                                 } else if (isSelected && !isCorrect) {
                                   buttonClass +=
-                                    "border-red-500 bg-red-500/10 text-red-700";
+                                    "border-red-500 bg-red-500/10 text-texto/75";
                                 } else {
                                   buttonClass +=
                                     "border-texto/20 bg-texto/5 text-texto/75";
@@ -377,11 +377,11 @@ const CursoIndividual = () => {
                                     <div
                                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                                         showResult && isCorrect
-                                          ? "border-green-500 bg-green-500"
+                                          ? "border-green-700 bg-green-700"
                                           : showResult &&
                                             isSelected &&
                                             !isCorrect
-                                          ? "border-red-500 bg-red-500"
+                                          ? "border-red-700 bg-red-700"
                                           : isSelected
                                           ? "border-acento bg-acento"
                                           : "border-texto/30"
