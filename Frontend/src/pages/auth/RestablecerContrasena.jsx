@@ -90,7 +90,7 @@ const RestablecerContrasena = () => {
       await logoutUser();
 
       mostrarExito(
-        "Contraseña actualizada exitosamente. Inicia sesión con tu nueva contraseña."
+        "Contraseña actualizada exitosamente. Iniciá sesión con tu nueva contraseña."
       );
       setTimeout(() => {
         navigate("/login");
@@ -119,7 +119,7 @@ const RestablecerContrasena = () => {
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconKey}>Restablecer contraseña</MainH1>
           <p className="text-lg">
-            Por seguridad, debes establecer una nueva contraseña.
+            Por seguridad, debés establecer una nueva contraseña.
           </p>
         </div>
 
@@ -157,7 +157,7 @@ const RestablecerContrasena = () => {
 
             <div className="mt-4 p-3">
               <p className="text-sm text-center text-texto/70 italic">
-                Debes restablecer tu contraseña para continuar
+                Debés restablecer tu contraseña para continuar
               </p>
             </div>
 

@@ -50,7 +50,7 @@ const Password = () => {
         <div className="w-full text-center mb-8">
           <MainH1 icon={IconKey}>Recuperar contraseña</MainH1>
           <p className="text-lg">
-            Ingresa tu correo electrónico y te enviaremos las instrucciones.
+            Ingresá tu correo electrónico y te enviaremos las instrucciones.
           </p>
         </div>
 
@@ -94,7 +94,7 @@ const Password = () => {
                 ¡Correo enviado!
               </p>
               <p className="text-texto text-left">
-                Revisa tu bandeja de entrada y sigue las instrucciones para
+                Revisá tu bandeja de entrada y seguí las instrucciones para
                 restablecer tu contraseña.
               </p>
               <MainButton
@@ -114,7 +114,7 @@ const Password = () => {
             <div className="w-full border-t border-texto/15"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-fondo text-texto">Si no recibes el correo, revisa tu carpeta de spam.</span>
+            <span className="px-2 bg-fondo text-texto">Si no recibís el correo, revisá tu carpeta de spam.</span>
           </div>
         </div>
 
