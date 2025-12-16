@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { IconUserEdit } from "@tabler/icons-react";
+import { IconUserEdit, IconLock } from "@tabler/icons-react";
 import { obtenerProveedores } from "../../services/proveedores/obtenerProveedor";
 import { getPerfil } from "../../services/perfil/getPerfil";
 import { updatePerfilYFoto } from "../../services/perfil/updatePerfil";
@@ -248,6 +248,7 @@ const EditarPerfil = () => {
             variant="secondary"
             disabled={loading}
           >
+            <IconLock />
             Cambiar contraseña
           </MainLinkButton>
         </div>
