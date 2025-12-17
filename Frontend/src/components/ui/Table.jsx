@@ -54,13 +54,14 @@ const Table = ({
           <thead className="bg-texto/5">
             <tr>
               {columns.map((col) => {
-                const clickable = !!onSortChange && col.id !== "acciones";
+                const clickable = !!onSortChange && col.id !== "acciones" && col.id !== "mapa" && col.id !== "miniatura" && col.id !== "descripcion_curso" && col.id !== "video_curso" && col.id !== "avatar_usuario" && col.id !== "avatar_proveedor" && col.id !== "descripcion_proveedor" && col.id !== "sitio_web" && col.id !== "color" && col.id !== "descripcion_tecnologia"; 
                 return (
                   <th
                     key={col.id}
                     className={classNames(
                       headerBaseClasses,
-                      clickable && headerClickableClasses
+                      clickable && headerClickableClasses,
+                      col.className
                     )}
                     onClick={() => clickable && handleHeaderClick(col)}
                     aria-sort={
@@ -99,7 +100,8 @@ const Table = ({
                     <td
                       key={col.id}
                       className={classNames(
-                        "px-6 py-4 text-texto text-sm font-semibold"
+                        "px-6 py-4 text-texto text-sm font-semibold",
+                        col.className
                       )}
                     >
                       {typeof col.renderCell === "function"

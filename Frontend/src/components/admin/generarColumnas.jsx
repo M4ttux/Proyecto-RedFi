@@ -24,7 +24,7 @@ export const generarColumnas = (
     columnasBase.push(
       // Columna de avatar del usuario
       {
-        id: "avatar",
+        id: "avatar_usuario",
         label: "AVATAR",
         renderCell: (row) => (
           <Avatar fotoUrl={row.foto_url} nombre={row.nombre} size={8} />
@@ -32,7 +32,7 @@ export const generarColumnas = (
       },
       // Columna de nombre del usuario
       {
-        id: "nombre",
+        id: "nombre_usuario",
         label: "NOMBRE",
         renderCell: (row) => row.nombre,
       },
@@ -104,7 +104,7 @@ export const generarColumnas = (
     columnasBase.push(
       // Columna de logotipo del proveedor
       {
-        id: "avatar",
+        id: "avatar_proveedor",
         label: "AVATAR",
         renderCell: (row) => (
           <Avatar fotoUrl={row.logotipo} nombre={row.nombre} size={8} />
@@ -112,13 +112,13 @@ export const generarColumnas = (
       },
       // Columna de nombre del proveedor
       {
-        id: "nombre",
+        id: "nombre_proveedor",
         label: "NOMBRE",
         renderCell: (row) => row.nombre,
       },
       // Columna de descripción del proveedor
       {
-        id: "descripcion",
+        id: "descripcion_proveedor",
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
@@ -174,7 +174,7 @@ export const generarColumnas = (
       // Columna de usuario que escribió la reseña
       {
         id: "user_profiles",
-        label: "USUARIOS",
+        label: "Nombre",
         renderCell: (row) => row.user_profiles?.nombre || "—",
       },
       // Columna de proveedor reseñado
@@ -231,7 +231,7 @@ export const generarColumnas = (
       },
       // Columna de descripción de la tecnología
       {
-        id: "descripcion",
+        id: "descripcion_tecnologia",
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
@@ -250,7 +250,7 @@ export const generarColumnas = (
     columnasBase.push(
       // Columna de nombre del proveedor
       {
-        id: "proveedor",
+        id: "proveedor_tecnologia",
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
@@ -287,7 +287,7 @@ export const generarColumnas = (
     columnasBase.push(
       // Columna de nombre del proveedor
       {
-        id: "proveedor",
+        id: "proveedor_zona",
         label: "PROVEEDOR",
         renderCell: (row) => row.proveedor || "—",
       },
@@ -322,7 +322,7 @@ export const generarColumnas = (
           }
 
           return (
-            <div className="flex gap-3 sm:justify-center justify-start">
+            <div className="flex gap-2 sm:justify-center justify-start flex-wrap max-w-[200px] sm:max-w-[300px]">
               {row.zonasCompletas.map((zona, i) => (
                 <IconoMapa
                   key={zona.id || i}
@@ -370,7 +370,7 @@ export const generarColumnas = (
       },
       // Columna de descripción del curso
       {
-        id: "descripcion",
+        id: "descripcion_curso",
         label: "DESCRIPCIÓN",
         renderCell: (row) => (
           <div
@@ -383,7 +383,7 @@ export const generarColumnas = (
       },
       // Columna de video de YouTube
       {
-        id: "video_youtube",
+        id: "video_curso",
         label: "VIDEO",
         renderCell: (row) => {
           if (!row.video_youtube_url) return "—";
@@ -433,13 +433,14 @@ export const generarColumnas = (
     columnasBase.push({
       id: "acciones",
       label: "ACCIONES",
+      className: tabla === "ZonaProveedor" || tabla === "ProveedorTecnologia" ? "min-w-[200px]" : "",
       renderCell: (row) => {
         // Oculta el botón "Ver" para tablas especificas que no necesitan vista de detalle
         const ocultarVer =
           tabla === "ProveedorTecnologia" || tabla === "ZonaProveedor";
 
         return (
-          <div className="flex flex-wrap gap-2 lg:gap-2">
+          <div className={`flex gap-2 ${ocultarVer ? '' : 'flex-wrap lg:flex-nowrap'}`}>
             {/* Botón Ver*/}
             {!ocultarVer && acciones.onVer && (
               <MainButton
