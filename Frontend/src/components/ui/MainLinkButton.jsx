@@ -15,7 +15,8 @@ const LinkButton = ({
   iconSize = 24,
   isPremium = false,
   iconPosition = "left",
-  tituloPremium = "", 
+  tituloPremium = "",
+  iconAlwaysVisible = false,
   ...props
 }) => {
   const { plan } = useRole();
@@ -112,7 +113,7 @@ const LinkButton = ({
               <IconLoader2 size={iconSize} className="animate-spin" />
             ) : (
               Icon && (
-                <Icon size={iconSize} className="hidden sm:inline-block" />
+                <Icon size={iconSize} className={iconAlwaysVisible ? "" : "hidden sm:inline-block"} />
               )
             )}
             {/* Contenido del enlace */}
@@ -129,7 +130,7 @@ const LinkButton = ({
               <IconLoader2 size={iconSize} className="animate-spin" />
             ) : (
               Icon && (
-                <Icon size={iconSize} className="hidden sm:inline-block" />
+                <Icon size={iconSize} className={iconAlwaysVisible ? "" : "hidden sm:inline-block"} />
               )
             )}
           </>

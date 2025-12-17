@@ -124,25 +124,26 @@ const ModalReseña = ({ reseña, onClose }) => {
               <p className="text-xs uppercase tracking-wide text-texto/75 mb-1">
                 Proveedor
               </p>
-              <div className="flex items-center gap-2 justify-center sm:justify-start">
+              <div className="flex items-center gap-2 justify-center sm:justify-start flex-wrap">
                 <MainH3 className="text-xl mb-0 justify-center sm:justify-start">
                   {proveedor}
                 </MainH3>
                 <MainLinkButton
                   to={`/proveedores/${proveedorId}`}
                   variant="link"
-                  className="p-1"
+                  className="p-1 flex-shrink-0"
                   icon={IconExternalLink}
                   iconSize={18}
+                  iconAlwaysVisible={true}
                   title="Ver perfil del proveedor"
                 />
               </div>
             </div>
 
             {/* Calificación con estrellas */}
-            <div className="flex-shrink-0 flex flex-col sm:flex-row items-center gap-2 bg-texto/5 px-4 py-2 rounded-full border border-texto/15">
+            <div className="flex-shrink-0 flex items-center gap-2 bg-texto/5 px-4 py-2 rounded-full border border-texto/15">
               {renderStars(reseña.estrellas)}
-              <span className="text-sm font-bold text-texto">
+              <span className="text-sm font-bold text-texto whitespace-nowrap">
                 ({reseña.estrellas})
               </span>
             </div>
@@ -159,14 +160,15 @@ const ModalReseña = ({ reseña, onClose }) => {
 
             {/* Información del usuario */}
             <div className="flex-1">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <MainH3 className="text-lg mb-0 justify-start">{nombre}</MainH3>
                 <MainLinkButton
                   to={`/usuarios/${userId}`}
                   variant="link"
-                  className="p-1"
+                  className="p-1 flex-shrink-0"
                   icon={IconExternalLink}
                   iconSize={18}
+                  iconAlwaysVisible={true}
                   title="Ver perfil del usuario"
                 />
               </div>
