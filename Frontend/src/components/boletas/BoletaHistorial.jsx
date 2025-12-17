@@ -80,11 +80,20 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
   // Helpers de filtro/orden
   const norm = (v) => (v ?? "").toString().toLowerCase();
   const textoPeriodo = (b) => `${b?.mes ?? ""} ${b?.anio ?? ""}`.trim();
+  
+  // Mapeo de nombres de mes a números
+  const mesesMap = {
+    enero: 1, febrero: 2, marzo: 3, abril: 4,
+    mayo: 5, junio: 6, julio: 7, agosto: 8,
+    septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12
+  };
+  
   const valorOrden = (b, campo) => {
     if (campo === "periodo") {
       // Año y mes como número para ordenar correctamente
       const y = Number(b?.anio) || 0;
-      const m = Number(b?.mes) || 0;
+      const mesNombre = norm(b?.mes);
+      const m = mesesMap[mesNombre] || Number(b?.mes) || 0;
       return y * 100 + m;
     }
     if (campo === "monto") return Number(b?.monto) || 0;
