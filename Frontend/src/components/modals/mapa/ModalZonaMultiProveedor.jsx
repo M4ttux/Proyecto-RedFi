@@ -132,7 +132,7 @@ const ModalZonaMultiProveedor = ({
                 </div>
 
                 {/* Calificación promedio con estrellas */}
-                <div className="mb-2 hidden min-[480px]:flex justify-center sm:justify-start">
+                <div className="mb-2 flex justify-center sm:justify-start">
                   {renderStars(promedioCalificacion)}
                 </div>
 

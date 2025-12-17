@@ -24,7 +24,7 @@ const Footer = () => {
 
         <div className="flex justify-center gap-4 mt-2">
           <a
-            href="https://facebook.com"
+            href="https://www.facebook.com/profile.php?id=61585491832056"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-texto transition-transform transform hover:scale-105"
@@ -32,7 +32,7 @@ const Footer = () => {
             <IconBrandFacebook size={24} />
           </a>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/redfiapp123/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-texto transition-transform transform hover:scale-105"
@@ -40,7 +40,7 @@ const Footer = () => {
             <IconBrandInstagram size={24} />
           </a>
           <a
-            href="https://twitter.com"
+            href="https://x.com/Redfiapp25"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-texto transition-transform transform hover:scale-105"
@@ -48,7 +48,7 @@ const Footer = () => {
             <IconBrandX size={24} />
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/red-fi-374b23394/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-texto transition-transform transform hover:scale-105"
