@@ -25,6 +25,7 @@ import MainButton from "../components/ui/MainButton";
 import MainLinkButton from "../components/ui/MainLinkButton";
 import MainLoader from "../components/ui/MainLoader";
 import Table from "../components/ui/Table";
+import FiltroOrden from "../components/ui/FiltroOrden";
 
 import { useAlerta } from "../context/AlertaContext";
 
@@ -37,6 +38,9 @@ const Reseñas = () => {
   const [reseñaEditando, setReseñaEditando] = useState(null);
   const [reseñaAEliminar, setReseñaAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
+  const [filtro, setFiltro] = useState("");
+  const [ordenCampo, setOrdenCampo] = useState("proveedor");
+  const [ordenDir, setOrdenDir] = useState("asc");
   const { mostrarError, mostrarExito } = useAlerta();
   const { currentTheme } = useTheme();
 
@@ -121,6 +125,50 @@ const Reseñas = () => {
     );
   };
 
+  // Opciones de ordenamiento
+  const opcionesOrden = [
+    { value: "proveedor", label: "Proveedor" },
+    { value: "estrellas", label: "Estrellas" },
+    { value: "comentario", label: "Comentario" },
+  ];
+
+  // Normalizar texto para filtrado
+  const _norm = (str) => (str || "").toString().toLowerCase().trim();
+
+  // Filtrado
+  const datosFiltrados = reseñas.filter((r) => {
+    if (!filtro) return true;
+    const f = _norm(filtro);
+    return (
+      _norm(r.proveedores?.nombre).includes(f) ||
+      _norm(r.comentario).includes(f) ||
+      _norm(r.estrellas).includes(f)
+    );
+  });
+
+  // Ordenamiento
+  const datosOrdenados = [...datosFiltrados].sort((a, b) => {
+    let va, vb;
+    
+    if (ordenCampo === "proveedor") {
+      va = _norm(a.proveedores?.nombre || "");
+      vb = _norm(b.proveedores?.nombre || "");
+    } else if (ordenCampo === "estrellas") {
+      va = Number(a.estrellas) || 0;
+      vb = Number(b.estrellas) || 0;
+    } else if (ordenCampo === "comentario") {
+      va = _norm(a.comentario || "");
+      vb = _norm(b.comentario || "");
+    }
+
+    if (va < vb) return ordenDir === "asc" ? -1 : 1;
+    if (va > vb) return ordenDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  // Campos permitidos para ordenamiento
+  const CAMPOS_ORDEN_PERMITIDOS = new Set(["proveedor", "estrellas", "comentario"]);
+
   const columnas = [
     {
       id: "proveedor",
@@ -134,8 +182,8 @@ const Reseñas = () => {
       ),
     },
     {
-      id: "evaluacion",
-      label: "EVALUACIÓN",
+      id: "estrellas",
+      label: "ESTRELLAS",
       renderCell: (r) => (
         <div className="space-y-2">{renderEstrellas(r.estrellas)}</div>
       ),
@@ -234,7 +282,29 @@ const Reseñas = () => {
           </div>
         ) : (
           <>
-            <Table columns={columnas} data={reseñas} />
+            {/* Filtro y Orden */}
+            <FiltroOrden
+              filtro={filtro}
+              setFiltro={setFiltro}
+              ordenCampo={ordenCampo}
+              setOrdenCampo={setOrdenCampo}
+              ordenDir={ordenDir}
+              setOrdenDir={setOrdenDir}
+              opcionesOrden={opcionesOrden}
+              placeholder="Buscar por proveedor, comentario o estrellas..."
+            />
+
+            <Table
+              columns={columnas}
+              data={datosOrdenados}
+              ordenCampo={ordenCampo}
+              ordenDir={ordenDir}
+              onSortChange={(campo, dir) => {
+                if (!CAMPOS_ORDEN_PERMITIDOS.has(campo)) return;
+                setOrdenCampo(campo);
+                setOrdenDir(dir);
+              }}
+            />
 
             {/* Estadísticas */}
             <div className="mt-8 text-center">

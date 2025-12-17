@@ -30,12 +30,12 @@ const BoletaHistorial = ({ boletas, recargarBoletas }) => {
 
   // Opciones de orden disponibles
   const opcionesOrden = [
+    { value: "proveedor", label: "Proveedor" },
+    { value: "periodo", label: "Período (mes/año)" },
+    { value: "monto", label: "Monto" },
     { value: "fecha_carga", label: "Fecha de carga" },
     { value: "vencimiento", label: "Vencimiento" },
     { value: "promo_hasta", label: "Promo hasta" },
-    { value: "monto", label: "Monto" },
-    { value: "proveedor", label: "Proveedor" },
-    { value: "periodo", label: "Período (mes/año)" },
   ];
 
   // Simular tiempo de carga para mejor UX

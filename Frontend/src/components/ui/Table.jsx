@@ -54,7 +54,7 @@ const Table = ({
           <thead className="bg-texto/5">
             <tr>
               {columns.map((col) => {
-                const clickable = !!onSortChange && col.id !== "acciones" && col.id !== "mapa" && col.id !== "miniatura" && col.id !== "descripcion_curso" && col.id !== "video_curso" && col.id !== "avatar_usuario" && col.id !== "avatar_proveedor" && col.id !== "descripcion_proveedor" && col.id !== "sitio_web" && col.id !== "color" && col.id !== "descripcion_tecnologia"; 
+                const clickable = !!onSortChange && col.id !== "acciones" && col.id !== "mapa" && col.id !== "miniatura" && col.id !== "descripcion_curso" && col.id !== "video_curso" && col.id !== "avatar_usuario" && col.id !== "avatar_proveedor" && col.id !== "descripcion_proveedor" && col.id !== "sitio_web" && col.id !== "color" && col.id !== "descripcion_tecnologia" && col.id !== "fechas"; 
                 return (
                   <th
                     key={col.id}
